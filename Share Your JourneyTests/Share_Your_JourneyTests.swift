@@ -6,10 +6,13 @@
 //
 
 import XCTest
+import SwiftUI
+import MapKit
+
 @testable import Share_Your_Journey
 
 class Share_Your_JourneyTests: XCTestCase {
-
+    
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -26,11 +29,14 @@ class Share_Your_JourneyTests: XCTestCase {
         // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
     }
 
+    //First Iteration tests
+    //Second iteration tests
+    //Third iteration tests
+    
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
         self.measure {
             // Put the code you want to measure the time of here.
         }
     }
-
 }

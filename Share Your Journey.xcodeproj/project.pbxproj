@@ -8,12 +8,59 @@
 
 /* Begin PBXBuildFile section */
 		862AA45B27B14D6C001B9312 /* Share_Your_JourneyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862AA45A27B14D6C001B9312 /* Share_Your_JourneyApp.swift */; };
-		862AA45D27B14D6D001B9312 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862AA45C27B14D6D001B9312 /* ContentView.swift */; };
+		862AA45D27B14D6D001B9312 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862AA45C27B14D6D001B9312 /* LoginView.swift */; };
 		862AA45F27B14D6D001B9312 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 862AA45E27B14D6D001B9312 /* Assets.xcassets */; };
 		862AA46227B14D6D001B9312 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 862AA46127B14D6D001B9312 /* Preview Assets.xcassets */; };
 		862AA46C27B14D6D001B9312 /* Share_Your_JourneyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862AA46B27B14D6D001B9312 /* Share_Your_JourneyTests.swift */; };
 		862AA47627B14D6D001B9312 /* Share_Your_JourneyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862AA47527B14D6D001B9312 /* Share_Your_JourneyUITests.swift */; };
 		862AA47827B14D6D001B9312 /* Share_Your_JourneyUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862AA47727B14D6D001B9312 /* Share_Your_JourneyUITestsLaunchTests.swift */; };
+		863CF4FF27BA2A31007B82D4 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863CF4FE27BA2A31007B82D4 /* ChatView.swift */; };
+		863CF50127BA2AD3007B82D4 /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863CF50027BA2AD3007B82D4 /* AddFriendView.swift */; };
+		863CF50827BAF558007B82D4 /* CurrentLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863CF50727BAF558007B82D4 /* CurrentLocationManager.swift */; };
+		8652A16F27BE3EE200ADBB25 /* SendJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652A16E27BE3EE100ADBB25 /* SendJourneyView.swift */; };
+		8652A17227BFEAE900ADBB25 /* SumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652A17127BFEAE900ADBB25 /* SumUpView.swift */; };
+		8652A17527C254C700ADBB25 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652A17427C254C700ADBB25 /* MapView.swift */; };
+		8653A2D4280418EB00852374 /* JourneysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8653A2D3280418EB00852374 /* JourneysView.swift */; };
+		865452AD2809D452008041A8 /* DownloadChangesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865452AC2809D452008041A8 /* DownloadChangesView.swift */; };
+		86573E5C27F783D3003E5CF8 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86573E5B27F783D2003E5CF8 /* VerificationView.swift */; };
+		86573E5E27F8370B003E5CF8 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86573E5D27F8370B003E5CF8 /* ResetPasswordView.swift */; };
+		8663C26027DE0170007EB1E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */; };
+		8663C26127DE0170007EB1E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */; };
+		8663C26227DE0170007EB1E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */; };
+		86640DB227D588DC00F5BE1A /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 86640DB127D588DC00F5BE1A /* FirebaseAnalytics */; };
+		86640DB427D588DC00F5BE1A /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 86640DB327D588DC00F5BE1A /* FirebaseAuth */; };
+		86640DB627D588DC00F5BE1A /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 86640DB527D588DC00F5BE1A /* FirebaseDatabase */; };
+		86640DB827D588DC00F5BE1A /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 86640DB727D588DC00F5BE1A /* FirebaseFirestore */; };
+		86640DBA27D588DC00F5BE1A /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 86640DB927D588DC00F5BE1A /* FirebaseStorage */; };
+		867254DD27B47B7B00DC5001 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867254DC27B47B7B00DC5001 /* StartView.swift */; };
+		8672551C27B80A9000DC5001 /* TabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8672551B27B80A8F00DC5001 /* TabsView.swift */; };
+		8672551E27B80C8A00DC5001 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8672551D27B80C8A00DC5001 /* FriendsView.swift */; };
+		8683852627E94AD40005FEE2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8683852527E94AD30005FEE2 /* NetworkManager.swift */; };
+		86C6493427CC4DCB00891C24 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6493327CC4DCB00891C24 /* PhotoPickerView.swift */; };
+		86C6494827CFAE4300891C24 /* Journey.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86C6494627CFAE4200891C24 /* Journey.xcdatamodeld */; };
+		86C6494C27CFAFD500891C24 /* JourneyDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6494B27CFAFD400891C24 /* JourneyDataManager.swift */; };
+		86C6494E27D036B300891C24 /* SaveJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6494D27D036B300891C24 /* SaveJourneyView.swift */; };
+		86C6495127D045B300891C24 /* UIImageTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6495027D045B200891C24 /* UIImageTransformer.swift */; };
+		86C649F627D1B43A00891C24 /* Journey+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C649F027D1B43800891C24 /* Journey+CoreDataClass.swift */; };
+		86C649F727D1B43A00891C24 /* Journey+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C649F127D1B43A00891C24 /* Journey+CoreDataProperties.swift */; };
+		86C649FA27D1B43A00891C24 /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C649F427D1B43A00891C24 /* Photo+CoreDataClass.swift */; };
+		86C649FB27D1B43A00891C24 /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C649F527D1B43A00891C24 /* Photo+CoreDataProperties.swift */; };
+		86C649FD27D1DF0800891C24 /* SeeJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C649FC27D1DF0700891C24 /* SeeJourneyView.swift */; };
+		86FCCC6028102449005FD678 /* ListWithRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC5F28102449005FD678 /* ListWithRequests.swift */; };
+		86FCCC62281025DD005FD678 /* ListWithFriends.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC61281025DD005FD678 /* ListWithFriends.swift */; };
+		86FCCC652810272B005FD678 /* YourJourneysList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC642810272B005FD678 /* YourJourneysList.swift */; };
+		86FCCC67281027E0005FD678 /* FriendJourneysList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC66281027E0005FD678 /* FriendJourneysList.swift */; };
+		86FCCC6A28102A4B005FD678 /* RunningJourneyModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC6928102A4B005FD678 /* RunningJourneyModeView.swift */; };
+		86FCCC6C28102A75005FD678 /* PausedJourneyModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC6B28102A75005FD678 /* PausedJourneyModeView.swift */; };
+		86FCCC6E28102A9A005FD678 /* StartJourneyModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC6D28102A9A005FD678 /* StartJourneyModeView.swift */; };
+		86FCCC7328102DD9005FD678 /* ListWithDownloadedJourneys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC7228102DD9005FD678 /* ListWithDownloadedJourneys.swift */; };
+		86FCCC7528102E02005FD678 /* ListWithJourneys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC7428102E02005FD678 /* ListWithJourneys.swift */; };
+		86FCCC772810796B005FD678 /* ButtonComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC762810796B005FD678 /* ButtonComponents.swift */; };
+		86FCCC79281079BD005FD678 /* PickerComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC78281079BD005FD678 /* PickerComponents.swift */; };
+		86FCCC7B28107A2F005FD678 /* FieldComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC7A28107A2F005FD678 /* FieldComponents.swift */; };
+		86FCCC7D28107B3B005FD678 /* MultipleButtonsComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC7C28107B3B005FD678 /* MultipleButtonsComponents.swift */; };
+		86FCCC7F28107C00005FD678 /* SubViewComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC7E28107C00005FD678 /* SubViewComponents.swift */; };
+		86FCCC8128107CBF005FD678 /* JourneyPartsComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC8028107CBF005FD678 /* JourneyPartsComponents.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +83,7 @@
 /* Begin PBXFileReference section */
 		862AA45727B14D6C001B9312 /* Share Your Journey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Share Your Journey.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		862AA45A27B14D6C001B9312 /* Share_Your_JourneyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Share_Your_JourneyApp.swift; sourceTree = "<group>"; };
-		862AA45C27B14D6D001B9312 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		862AA45C27B14D6D001B9312 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		862AA45E27B14D6D001B9312 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		862AA46127B14D6D001B9312 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		862AA46727B14D6D001B9312 /* Share Your JourneyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Share Your JourneyTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,6 +91,48 @@
 		862AA47127B14D6D001B9312 /* Share Your JourneyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Share Your JourneyUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		862AA47527B14D6D001B9312 /* Share_Your_JourneyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Share_Your_JourneyUITests.swift; sourceTree = "<group>"; };
 		862AA47727B14D6D001B9312 /* Share_Your_JourneyUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Share_Your_JourneyUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		863CF4FE27BA2A31007B82D4 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		863CF50027BA2AD3007B82D4 /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
+		863CF50727BAF558007B82D4 /* CurrentLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationManager.swift; sourceTree = "<group>"; };
+		8652A16E27BE3EE100ADBB25 /* SendJourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendJourneyView.swift; sourceTree = "<group>"; };
+		8652A17027BFC8EF00ADBB25 /* Share-Your-Journey-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Share-Your-Journey-Info.plist"; sourceTree = SOURCE_ROOT; };
+		8652A17127BFEAE900ADBB25 /* SumUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SumUpView.swift; sourceTree = "<group>"; };
+		8652A17427C254C700ADBB25 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		8653A2D3280418EB00852374 /* JourneysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneysView.swift; sourceTree = "<group>"; };
+		865452AC2809D452008041A8 /* DownloadChangesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadChangesView.swift; sourceTree = "<group>"; };
+		86573E5A27F333DA003E5CF8 /* Share-Your-JourneyUITests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Share-Your-JourneyUITests-Info.plist"; sourceTree = SOURCE_ROOT; };
+		86573E5B27F783D2003E5CF8 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
+		86573E5D27F8370B003E5CF8 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
+		8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		867254DC27B47B7B00DC5001 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
+		8672551B27B80A8F00DC5001 /* TabsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsView.swift; sourceTree = "<group>"; };
+		8672551D27B80C8A00DC5001 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
+		8683852527E94AD30005FEE2 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		86C6493327CC4DCB00891C24 /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
+		86C6494727CFAE4300891C24 /* Journey.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Journey.xcdatamodel; sourceTree = "<group>"; };
+		86C6494B27CFAFD400891C24 /* JourneyDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyDataManager.swift; sourceTree = "<group>"; };
+		86C6494D27D036B300891C24 /* SaveJourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveJourneyView.swift; sourceTree = "<group>"; };
+		86C6495027D045B200891C24 /* UIImageTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageTransformer.swift; sourceTree = "<group>"; };
+		86C649F027D1B43800891C24 /* Journey+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Journey+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		86C649F127D1B43A00891C24 /* Journey+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Journey+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		86C649F427D1B43A00891C24 /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		86C649F527D1B43A00891C24 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		86C649FC27D1DF0700891C24 /* SeeJourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeJourneyView.swift; sourceTree = "<group>"; };
+		86FCCC5F28102449005FD678 /* ListWithRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListWithRequests.swift; sourceTree = "<group>"; };
+		86FCCC61281025DD005FD678 /* ListWithFriends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListWithFriends.swift; sourceTree = "<group>"; };
+		86FCCC642810272B005FD678 /* YourJourneysList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourJourneysList.swift; sourceTree = "<group>"; };
+		86FCCC66281027E0005FD678 /* FriendJourneysList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendJourneysList.swift; sourceTree = "<group>"; };
+		86FCCC6928102A4B005FD678 /* RunningJourneyModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningJourneyModeView.swift; sourceTree = "<group>"; };
+		86FCCC6B28102A75005FD678 /* PausedJourneyModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PausedJourneyModeView.swift; sourceTree = "<group>"; };
+		86FCCC6D28102A9A005FD678 /* StartJourneyModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartJourneyModeView.swift; sourceTree = "<group>"; };
+		86FCCC7228102DD9005FD678 /* ListWithDownloadedJourneys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListWithDownloadedJourneys.swift; sourceTree = "<group>"; };
+		86FCCC7428102E02005FD678 /* ListWithJourneys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListWithJourneys.swift; sourceTree = "<group>"; };
+		86FCCC762810796B005FD678 /* ButtonComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonComponents.swift; sourceTree = "<group>"; };
+		86FCCC78281079BD005FD678 /* PickerComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerComponents.swift; sourceTree = "<group>"; };
+		86FCCC7A28107A2F005FD678 /* FieldComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldComponents.swift; sourceTree = "<group>"; };
+		86FCCC7C28107B3B005FD678 /* MultipleButtonsComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleButtonsComponents.swift; sourceTree = "<group>"; };
+		86FCCC7E28107C00005FD678 /* SubViewComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubViewComponents.swift; sourceTree = "<group>"; };
+		86FCCC8028107CBF005FD678 /* JourneyPartsComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyPartsComponents.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +140,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86640DB627D588DC00F5BE1A /* FirebaseDatabase in Frameworks */,
+				86640DB827D588DC00F5BE1A /* FirebaseFirestore in Frameworks */,
+				86640DB227D588DC00F5BE1A /* FirebaseAnalytics in Frameworks */,
+				86640DBA27D588DC00F5BE1A /* FirebaseStorage in Frameworks */,
+				86640DB427D588DC00F5BE1A /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,7 +189,19 @@
 			isa = PBXGroup;
 			children = (
 				862AA45A27B14D6C001B9312 /* Share_Your_JourneyApp.swift */,
-				862AA45C27B14D6D001B9312 /* ContentView.swift */,
+				8652A17027BFC8EF00ADBB25 /* Share-Your-Journey-Info.plist */,
+				8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */,
+				86C649D727D197B000891C24 /* NSManagedObjectSubclasses */,
+				86C6494F27D0457700891C24 /* Transformers */,
+				86C6493A27CEF10400891C24 /* DataModels */,
+				8652A17327C254A800ADBB25 /* UIKit */,
+				863CF50627BAF509007B82D4 /* Managers */,
+				8683852727E95DDB0005FEE2 /* ViewComponents */,
+				865452AF280B3577008041A8 /* Control */,
+				865452AE280B3570008041A8 /* Account */,
+				865452B2280B358E008041A8 /* Communication */,
+				865452B0280B357F008041A8 /* Journey */,
+				865452B1280B3586008041A8 /* Storage */,
 				862AA45E27B14D6D001B9312 /* Assets.xcassets */,
 				862AA46027B14D6D001B9312 /* Preview Content */,
 			);
@@ -121,10 +227,160 @@
 		862AA47427B14D6D001B9312 /* Share Your JourneyUITests */ = {
 			isa = PBXGroup;
 			children = (
+				86573E5A27F333DA003E5CF8 /* Share-Your-JourneyUITests-Info.plist */,
 				862AA47527B14D6D001B9312 /* Share_Your_JourneyUITests.swift */,
 				862AA47727B14D6D001B9312 /* Share_Your_JourneyUITestsLaunchTests.swift */,
 			);
 			path = "Share Your JourneyUITests";
+			sourceTree = "<group>";
+		};
+		863CF50627BAF509007B82D4 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				863CF50727BAF558007B82D4 /* CurrentLocationManager.swift */,
+				86C6494B27CFAFD400891C24 /* JourneyDataManager.swift */,
+				8683852527E94AD30005FEE2 /* NetworkManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		8652A17327C254A800ADBB25 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				8652A17427C254C700ADBB25 /* MapView.swift */,
+				86C6493327CC4DCB00891C24 /* PhotoPickerView.swift */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		865452AE280B3570008041A8 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				862AA45C27B14D6D001B9312 /* LoginView.swift */,
+				86573E5B27F783D2003E5CF8 /* VerificationView.swift */,
+				86573E5D27F8370B003E5CF8 /* ResetPasswordView.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		865452AF280B3577008041A8 /* Control */ = {
+			isa = PBXGroup;
+			children = (
+				8672551B27B80A8F00DC5001 /* TabsView.swift */,
+			);
+			path = Control;
+			sourceTree = "<group>";
+		};
+		865452B0280B357F008041A8 /* Journey */ = {
+			isa = PBXGroup;
+			children = (
+				86FCCC6828102A26005FD678 /* Start */,
+				8652A17127BFEAE900ADBB25 /* SumUpView.swift */,
+				86C649FC27D1DF0700891C24 /* SeeJourneyView.swift */,
+				865452AC2809D452008041A8 /* DownloadChangesView.swift */,
+			);
+			path = Journey;
+			sourceTree = "<group>";
+		};
+		865452B1280B3586008041A8 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				86FCCC7128102D8E005FD678 /* Journeys */,
+				86C6494D27D036B300891C24 /* SaveJourneyView.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		865452B2280B358E008041A8 /* Communication */ = {
+			isa = PBXGroup;
+			children = (
+				86FCCC5E28102424005FD678 /* Friends */,
+				86FCCC632810263C005FD678 /* Chat */,
+				863CF50027BA2AD3007B82D4 /* AddFriendView.swift */,
+				8652A16E27BE3EE100ADBB25 /* SendJourneyView.swift */,
+			);
+			path = Communication;
+			sourceTree = "<group>";
+		};
+		8683852727E95DDB0005FEE2 /* ViewComponents */ = {
+			isa = PBXGroup;
+			children = (
+				86FCCC762810796B005FD678 /* ButtonComponents.swift */,
+				86FCCC7C28107B3B005FD678 /* MultipleButtonsComponents.swift */,
+				86FCCC78281079BD005FD678 /* PickerComponents.swift */,
+				86FCCC7A28107A2F005FD678 /* FieldComponents.swift */,
+				86FCCC7E28107C00005FD678 /* SubViewComponents.swift */,
+				86FCCC8028107CBF005FD678 /* JourneyPartsComponents.swift */,
+			);
+			path = ViewComponents;
+			sourceTree = "<group>";
+		};
+		86C6493A27CEF10400891C24 /* DataModels */ = {
+			isa = PBXGroup;
+			children = (
+				86C6494627CFAE4200891C24 /* Journey.xcdatamodeld */,
+			);
+			path = DataModels;
+			sourceTree = "<group>";
+		};
+		86C6494F27D0457700891C24 /* Transformers */ = {
+			isa = PBXGroup;
+			children = (
+				86C6495027D045B200891C24 /* UIImageTransformer.swift */,
+			);
+			path = Transformers;
+			sourceTree = "<group>";
+		};
+		86C649D727D197B000891C24 /* NSManagedObjectSubclasses */ = {
+			isa = PBXGroup;
+			children = (
+				86C649F027D1B43800891C24 /* Journey+CoreDataClass.swift */,
+				86C649F127D1B43A00891C24 /* Journey+CoreDataProperties.swift */,
+				86C649F427D1B43A00891C24 /* Photo+CoreDataClass.swift */,
+				86C649F527D1B43A00891C24 /* Photo+CoreDataProperties.swift */,
+			);
+			path = NSManagedObjectSubclasses;
+			sourceTree = "<group>";
+		};
+		86FCCC5E28102424005FD678 /* Friends */ = {
+			isa = PBXGroup;
+			children = (
+				8672551D27B80C8A00DC5001 /* FriendsView.swift */,
+				86FCCC5F28102449005FD678 /* ListWithRequests.swift */,
+				86FCCC61281025DD005FD678 /* ListWithFriends.swift */,
+			);
+			path = Friends;
+			sourceTree = "<group>";
+		};
+		86FCCC632810263C005FD678 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				863CF4FE27BA2A31007B82D4 /* ChatView.swift */,
+				86FCCC642810272B005FD678 /* YourJourneysList.swift */,
+				86FCCC66281027E0005FD678 /* FriendJourneysList.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		86FCCC6828102A26005FD678 /* Start */ = {
+			isa = PBXGroup;
+			children = (
+				867254DC27B47B7B00DC5001 /* StartView.swift */,
+				86FCCC6928102A4B005FD678 /* RunningJourneyModeView.swift */,
+				86FCCC6B28102A75005FD678 /* PausedJourneyModeView.swift */,
+				86FCCC6D28102A9A005FD678 /* StartJourneyModeView.swift */,
+			);
+			path = Start;
+			sourceTree = "<group>";
+		};
+		86FCCC7128102D8E005FD678 /* Journeys */ = {
+			isa = PBXGroup;
+			children = (
+				8653A2D3280418EB00852374 /* JourneysView.swift */,
+				86FCCC7228102DD9005FD678 /* ListWithDownloadedJourneys.swift */,
+				86FCCC7428102E02005FD678 /* ListWithJourneys.swift */,
+			);
+			path = Journeys;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -143,6 +399,13 @@
 			dependencies = (
 			);
 			name = "Share Your Journey";
+			packageProductDependencies = (
+				86640DB127D588DC00F5BE1A /* FirebaseAnalytics */,
+				86640DB327D588DC00F5BE1A /* FirebaseAuth */,
+				86640DB527D588DC00F5BE1A /* FirebaseDatabase */,
+				86640DB727D588DC00F5BE1A /* FirebaseFirestore */,
+				86640DB927D588DC00F5BE1A /* FirebaseStorage */,
+			);
 			productName = "Share Your Journey";
 			productReference = 862AA45727B14D6C001B9312 /* Share Your Journey.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +478,9 @@
 				Base,
 			);
 			mainGroup = 862AA44E27B14D6C001B9312;
+			packageReferences = (
+				86640DB027D588DC00F5BE1A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 862AA45827B14D6C001B9312 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -233,6 +499,7 @@
 			files = (
 				862AA46227B14D6D001B9312 /* Preview Assets.xcassets in Resources */,
 				862AA45F27B14D6D001B9312 /* Assets.xcassets in Resources */,
+				8663C26027DE0170007EB1E8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,6 +507,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8663C26127DE0170007EB1E8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +515,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8663C26227DE0170007EB1E8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -257,8 +526,47 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				862AA45D27B14D6D001B9312 /* ContentView.swift in Sources */,
+				8653A2D4280418EB00852374 /* JourneysView.swift in Sources */,
+				86C649F727D1B43A00891C24 /* Journey+CoreDataProperties.swift in Sources */,
+				86C6494E27D036B300891C24 /* SaveJourneyView.swift in Sources */,
+				8672551E27B80C8A00DC5001 /* FriendsView.swift in Sources */,
+				86FCCC6028102449005FD678 /* ListWithRequests.swift in Sources */,
+				86FCCC7B28107A2F005FD678 /* FieldComponents.swift in Sources */,
+				867254DD27B47B7B00DC5001 /* StartView.swift in Sources */,
+				86C6494C27CFAFD500891C24 /* JourneyDataManager.swift in Sources */,
+				862AA45D27B14D6D001B9312 /* LoginView.swift in Sources */,
+				86FCCC652810272B005FD678 /* YourJourneysList.swift in Sources */,
+				86FCCC6C28102A75005FD678 /* PausedJourneyModeView.swift in Sources */,
+				8672551C27B80A9000DC5001 /* TabsView.swift in Sources */,
+				86FCCC6A28102A4B005FD678 /* RunningJourneyModeView.swift in Sources */,
+				86FCCC7528102E02005FD678 /* ListWithJourneys.swift in Sources */,
+				86C6494827CFAE4300891C24 /* Journey.xcdatamodeld in Sources */,
+				86FCCC7F28107C00005FD678 /* SubViewComponents.swift in Sources */,
+				8652A17527C254C700ADBB25 /* MapView.swift in Sources */,
+				86FCCC7D28107B3B005FD678 /* MultipleButtonsComponents.swift in Sources */,
+				863CF50127BA2AD3007B82D4 /* AddFriendView.swift in Sources */,
+				8683852627E94AD40005FEE2 /* NetworkManager.swift in Sources */,
+				86FCCC62281025DD005FD678 /* ListWithFriends.swift in Sources */,
+				863CF4FF27BA2A31007B82D4 /* ChatView.swift in Sources */,
+				86FCCC79281079BD005FD678 /* PickerComponents.swift in Sources */,
+				865452AD2809D452008041A8 /* DownloadChangesView.swift in Sources */,
+				86C649F627D1B43A00891C24 /* Journey+CoreDataClass.swift in Sources */,
+				8652A17227BFEAE900ADBB25 /* SumUpView.swift in Sources */,
+				86C6495127D045B300891C24 /* UIImageTransformer.swift in Sources */,
+				86FCCC67281027E0005FD678 /* FriendJourneysList.swift in Sources */,
+				863CF50827BAF558007B82D4 /* CurrentLocationManager.swift in Sources */,
 				862AA45B27B14D6C001B9312 /* Share_Your_JourneyApp.swift in Sources */,
+				86C649FA27D1B43A00891C24 /* Photo+CoreDataClass.swift in Sources */,
+				86FCCC8128107CBF005FD678 /* JourneyPartsComponents.swift in Sources */,
+				86FCCC7328102DD9005FD678 /* ListWithDownloadedJourneys.swift in Sources */,
+				86C6493427CC4DCB00891C24 /* PhotoPickerView.swift in Sources */,
+				86FCCC6E28102A9A005FD678 /* StartJourneyModeView.swift in Sources */,
+				86C649FD27D1DF0800891C24 /* SeeJourneyView.swift in Sources */,
+				86FCCC772810796B005FD678 /* ButtonComponents.swift in Sources */,
+				86C649FB27D1B43A00891C24 /* Photo+CoreDataProperties.swift in Sources */,
+				86573E5C27F783D3003E5CF8 /* VerificationView.swift in Sources */,
+				8652A16F27BE3EE200ADBB25 /* SendJourneyView.swift in Sources */,
+				86573E5E27F8370B003E5CF8 /* ResetPasswordView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,9 +730,15 @@
 				DEVELOPMENT_TEAM = S37PCXXY8Q;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Share-Your-Journey-Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Application needs to use the camera for you to take the photo";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Share Your Journey needs to track your location in the background to keep track of your route";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Do you want Share Your Journey application to track your location?";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Application needs access to your photo library to save image in the camera roll";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -451,9 +765,15 @@
 				DEVELOPMENT_TEAM = S37PCXXY8Q;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Share-Your-Journey-Info.plist";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Application needs to use the camera for you to take the photo";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Share Your Journey needs to track your location in the background to keep track of your route";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Do you want Share Your Journey application to track your location?";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Application needs access to your photo library to save image in the camera roll";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -517,6 +837,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = S37PCXXY8Q;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Share-Your-JourneyUITests-Info.plist";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Application needs access to your photo library to save image in the camera roll";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bartoszklimek.Share-Your-JourneyUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -535,6 +857,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = S37PCXXY8Q;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Share-Your-JourneyUITests-Info.plist";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Application needs access to your photo library to save image in the camera roll";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.bartoszklimek.Share-Your-JourneyUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -585,6 +909,58 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		86640DB027D588DC00F5BE1A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		86640DB127D588DC00F5BE1A /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86640DB027D588DC00F5BE1A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		86640DB327D588DC00F5BE1A /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86640DB027D588DC00F5BE1A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		86640DB527D588DC00F5BE1A /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86640DB027D588DC00F5BE1A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		86640DB727D588DC00F5BE1A /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86640DB027D588DC00F5BE1A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		86640DB927D588DC00F5BE1A /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86640DB027D588DC00F5BE1A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		86C6494627CFAE4200891C24 /* Journey.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				86C6494727CFAE4300891C24 /* Journey.xcdatamodel */,
+			);
+			currentVersion = 86C6494727CFAE4300891C24 /* Journey.xcdatamodel */;
+			path = Journey.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 862AA44F27B14D6C001B9312 /* Project object */;
 }

@@ -11,7 +11,8 @@ import SwiftUI
 struct Share_Your_JourneyApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            let context = JourneyDataManager.shared.journeyContainer.viewContext
+            TabsView().environment(\.managedObjectContext, context)
         }
     }
 }
