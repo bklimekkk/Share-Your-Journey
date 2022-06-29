@@ -4,6 +4,7 @@
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="email" optional="YES" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
+        <attribute name="networkProblem" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="photosNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Photo" inverseName="journey" inverseEntity="Photo"/>
     </entity>
@@ -15,7 +16,7 @@
         <relationship name="journey" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Journey" inverseName="photos" inverseEntity="Journey"/>
     </entity>
     <elements>
-        <element name="Journey" positionX="-315.88671875" positionY="12.44140625" width="128" height="118"/>
+        <element name="Journey" positionX="-315.88671875" positionY="12.44140625" width="128" height="119"/>
         <element name="Photo" positionX="-59.6796875" positionY="-89.7421875" width="128" height="104"/>
     </elements>
 </model>

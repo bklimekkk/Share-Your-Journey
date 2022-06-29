@@ -17,7 +17,7 @@ struct EmailTextField: View {
             .keyboardType(.emailAddress)
             .autocapitalization(.none)
             .padding(.vertical, 10)
-            .font(.system(size: 30))
+            .font(.system(size: 20))
     }
 }
 

@@ -63,6 +63,9 @@ struct LoginView: View {
     //Variable controls if user is logged in or logged out.
     @Binding var loggedOut: Bool
     
+    //Variable checks if user uses the application for the first time. If yes, it will show the initial instructions.
+    @AppStorage("showInstructions") var showInstructions: Bool = true
+    
     var body: some View {
         NavigationView {
             ScrollView {
@@ -75,18 +78,18 @@ struct LoginView: View {
                     if register {
                         TextField("Your name", text: $name)
                             .padding(.vertical, 10)
-                            .font(.system(size: 30))
+                            .font(.system(size: 20))
                     }
                     EmailTextField(label: "E-mail address", email: $email)
                     SecureField("Passowrd", text: $password)
                         .padding(.vertical, 10)
-                        .font(.system(size: 30))
+                        .font(.system(size: 20))
                     
                     //If users register themselves, they are supposed to repeat entered password.
                     if register {
                         SecureField("Repeat password", text: $repeatedPassword)
                             .padding(.vertical, 10)
-                            .font(.system(size: 30))
+                            .font(.system(size: 20))
                     }
                     
                     Button {
@@ -98,7 +101,7 @@ struct LoginView: View {
                         //Depending on screen current mode, button will show different message.
                         ButtonView(buttonTitle: register ? "Create Account" : "Login")
                     }
-                    .background(Color.blue)
+                    .background(Color.accentColor)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     
                     //Reset password option shows up only when screen presents logging in functionality.
@@ -131,6 +134,9 @@ struct LoginView: View {
                     ResetPasswordView(resetEmail: $resetEmail)
                 }
             }
+            .sheet(isPresented: $showInstructions, content: {
+                InstructionsView(showInstructions: $showInstructions)
+            })
             .navigationTitle(register ? "Create Account" : "Login")
             
             //Title's property is set in a way that it takes possibly smallest space.

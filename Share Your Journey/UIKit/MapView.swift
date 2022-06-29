@@ -62,7 +62,7 @@ struct MapView: UIViewRepresentable {
             marker.annotation = annotation
             marker.titleVisibility = .hidden
             if annotation.title != "My Location" {
-                marker.markerTintColor = .purple
+                marker.markerTintColor = UIColor(red: 0.36, green: 0.09, blue: 0.92, alpha: 1.00)
                 marker.glyphText = annotation.title as? String
                 marker.canShowCallout = true
                 

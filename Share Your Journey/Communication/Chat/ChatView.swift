@@ -70,7 +70,7 @@ struct ChatView: View {
                 } label: {
                     ButtonView(buttonTitle: "Send journey")
                 }
-                .background(Color.blue)
+                .background(Color.accentColor)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .padding()
             } else {

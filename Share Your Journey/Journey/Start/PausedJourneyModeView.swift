@@ -38,11 +38,12 @@ struct PausedJourneyModeView: View {
             } label: {
                 SymbolButtonView(buttonImage: "play.fill")
             }
-            .background(Color.blue)
+            .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             Spacer()
             Button {
                 alert = .finish
+                
                 if arrayOfPhotos.count > 0 {
                     alertMessage = true
                 } else {

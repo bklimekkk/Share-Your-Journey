@@ -75,7 +75,7 @@ struct FriendsView: View {
             } label: {
                 ButtonView(buttonTitle: "Add a new friend")
             }
-            .background(Color.blue)
+            .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .padding(.horizontal)
         }

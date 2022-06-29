@@ -12,6 +12,8 @@ import Firebase
 //Struct contains code responsible for generating screen showing users journey they want to view.
 struct SeeJourneyView: View {
     
+    @ObservedObject private var network = NetworkManager()
+    
     //Similar variable described in SumUpView struct.
     let layout = [
         GridItem(.flexible()),
@@ -165,10 +167,36 @@ struct SeeJourneyView: View {
                                         } label: {
                                             Image(systemName: "square.and.arrow.down")
                                                 .font(.system(size: 30))
-                                                .foregroundColor(Color.blue)
+                                                .foregroundColor(Color.accentColor)
                                         }
                                         
                                     }
+                                } else if downloadMode && journey.networkProblem {
+                                    Button{
+                                        
+                                        if network.connected {
+                                            createJourney()
+                                            
+                                            for i in journeys {
+                                                if i.name == journey.name {
+                                                    i.networkProblem = false
+                                                    try? context.save()
+                                                    break
+                                                }
+                                            }
+                                            
+                                            
+                                            withAnimation {
+                                                journey.networkProblem = false
+                                            }
+                                        }
+                                        
+                                    } label: {
+                                        Image(systemName: "plus")
+                                            .font(.system(size: 30))
+                                            .foregroundColor(Color.accentColor)
+                                    }
+                                    
                                 }
                                 
                                 //Icons enabling users to choose between walking and driving directions.
@@ -329,6 +357,7 @@ struct SeeJourneyView: View {
         newJourney.name = name
         newJourney.email = FirebaseSetup.firebaseInstance.auth.currentUser?.email
         newJourney.date = Date()
+        newJourney.networkProblem = false
         newJourney.photosNumber = (journey.numberOfPhotos) as NSNumber
         var index = 0
         
@@ -345,5 +374,49 @@ struct SeeJourneyView: View {
         
         //After all journey properties are set, changes need to be saved with context variable's function: save().
         try? context.save()
+    }
+    
+    /**
+     Function is responsible for creating a new journey document in journeys collection in the firestore database. (Function also exists in SaveJourneyView).
+     */
+    func createJourney() {
+        let instanceReference = FirebaseSetup.firebaseInstance
+        instanceReference.db.collection("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? "")/journeys").document(journey.name).setData([
+            "name" : journey.name,
+            "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",
+            "photosNumber" : journey.numberOfPhotos,
+            "date" : Date()
+        ])
+        for index in 0...journey.photosLocations.count - 1 {
+            uploadPhoto(index: index, instanceReference: instanceReference)
+        }
+    }
+    
+    /**
+     Function is responsible for uploading an image to the firebase storage and adding its details to firestore database. (Function also exists in SaveJourneyView).
+     */
+    func uploadPhoto(index: Int, instanceReference: FirebaseSetup) {
+        guard let photo = journey.photos.sorted(by: {$1.number > $0.number}).map({$0.photo})[index].jpegData(compressionQuality: 0.2) else {
+            return
+        }
+        let metaData = StorageMetadata()
+        metaData.contentType = "image/jpeg"
+        let photoReference = "\(instanceReference.auth.currentUser?.email ?? "")/\(journey.name)/\(index)"
+        let storageReference = instanceReference.storage.reference(withPath: photoReference)
+        
+        //Storage is populated with the image.
+        storageReference.putData(photo, metadata: metaData) { metaData, error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+            
+            //Image's details are added to appropriate collection in firetore's database.
+            instanceReference.db.document("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? "")/journeys/\(journey.name)/photos/\(index)").setData([
+                "latitude": journey.photosLocations[index].latitude,
+                "longitude": journey.photosLocations[index].longitude,
+                "photoUrl": photoReference,
+                "photoNumber": index
+            ])
+        }
     }
 }

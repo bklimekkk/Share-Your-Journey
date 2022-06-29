@@ -75,7 +75,7 @@ struct StartView: View {
                         logOut()
                     } label:{
                         Text("Logout")
-                            .font(.system(size: 30))
+                            .font(.system(size: 20))
                     }
                     Spacer()
                 }
@@ -127,7 +127,7 @@ struct StartView: View {
         }
         //Alert is presented only if error occurs
         .alert(alertBody, isPresented: $alertError) {
-            Button("OK", role: .cancel) {
+            Button("Ok", role: .cancel) {
                 alertMessage = false
             }
         }

@@ -29,4 +29,5 @@ struct SingleJourney: Hashable {
     var numberOfPhotos: Int
     var photos: [SinglePhoto]
     var photosLocations: [CLLocationCoordinate2D]
+    var networkProblem: Bool = false
 }

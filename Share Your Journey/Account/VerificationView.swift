@@ -15,19 +15,21 @@ struct VerificationInformation: View {
     //An environment variable responsible for dismissing the sheet after "OK" button is clicked.
     @Environment(\.presentationMode) var presentationMode
     var body: some View {
-        VStack (spacing: 20) {
-            Image(uiImage: UIImage(systemName: "person.fill.checkmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 72)) ?? UIImage())
-      
-        Text("A verification e-mail has been sent to \(email), verify yourself to be able to log in")
-                .font(.system(size: 30))
-            Button{
-                presentationMode.wrappedValue.dismiss()
-            } label:{
-                ButtonView(buttonTitle: "OK")
+        NavigationView {
+            Form {
+                Image(uiImage: UIImage(systemName: "person.fill.checkmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20)) ?? UIImage())
+          
+            Text("A verification e-mail has been sent to \(email), verify yourself to be able to log in.")
             }
-            .background(Color.blue)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .navigationTitle("Verification e-mail")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                    Button("Proceed to app") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            }
         }
-        .padding()
     }
 }

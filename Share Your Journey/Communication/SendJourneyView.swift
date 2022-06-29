@@ -21,35 +21,38 @@ struct SendJourneyView: View {
     //Arrays contains journeys already sent to particular friend an these that haven't been sent yet.
     @State private var sentJourneys: [SingleJourney] = []
     @State private var unsentJourneys: [SingleJourney] = []
+    
     var body: some View {
         VStack {
-            List(unsentJourneys.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
-                HStack {
-                    Text(journey.name)
-                        .padding(.vertical, 30)
-                    Spacer()
-                    Button{
-                        sendJourney(journey: journey)
-                        
-                        //After journey is sent, it needs to be deleted from list that gives user a choice of journeys to send.
-                        deleteFromSendingList(journeyName: journey.name)
-                        
-                    } label:{
-                        Text("Send")
+            
+                List(unsentJourneys.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
+                    HStack {
+                        Text(journey.name)
+                            .padding(.vertical, 30)
+                        Spacer()
+                        Button{
+                            sendJourney(journey: journey)
+                            
+                            //After journey is sent, it needs to be deleted from list that gives user a choice of journeys to send.
+                            deleteFromSendingList(journeyName: journey.name)
+                            
+                        } label:{
+                            Text("Send")
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        .foregroundColor(Color.accentColor)
                     }
-                    .buttonStyle(PlainButtonStyle())
-                    .foregroundColor(Color.blue)
+                    
                 }
-                
-            }
-            .onAppear {
-                prepareJourneysToSend()
-            }
+                .onAppear {
+                    prepareJourneysToSend()
+                }
+            
             Button {
                 presentationMode.wrappedValue.dismiss()
             } label: {
                 ButtonView(buttonTitle: "Done")
-                    .background(Color.blue)
+                    .background(Color.accentColor)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .padding()
             }
@@ -58,7 +61,7 @@ struct SendJourneyView: View {
     
     /**
      Function is responsible for sending entire journey to particular user.
-    */
+     */
     func sendJourney(journey: SingleJourney) {
         
         //Journey is added to relevant collection in the firestore database (without photos references).
@@ -75,15 +78,15 @@ struct SendJourneyView: View {
             if error != nil {
                 print(error!.localizedDescription)
             } else {
-            //All photos details are stored inside document representing particular journey.
-            for i in querySnapshot!.documents.sorted(by: { $0["photoNumber"] as! Int > $1["photoNumber"] as! Int }) {
-                FirebaseSetup.firebaseInstance.db.document("users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(targetEmail)/journeys/\(journey.name)/photos/\(i.documentID)").setData([
-                    "latitude": i.get("latitude") as! CLLocationDegrees,
-                    "longitude": i.get("longitude") as! CLLocationDegrees,
-                    "photoUrl": i.get("photoUrl") as! String,
-                    "photoNumber": i.get("photoNumber") as! Int
-                ])
-            }
+                //All photos details are stored inside document representing particular journey.
+                for i in querySnapshot!.documents.sorted(by: { $0["photoNumber"] as! Int > $1["photoNumber"] as! Int }) {
+                    FirebaseSetup.firebaseInstance.db.document("users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(targetEmail)/journeys/\(journey.name)/photos/\(i.documentID)").setData([
+                        "latitude": i.get("latitude") as! CLLocationDegrees,
+                        "longitude": i.get("longitude") as! CLLocationDegrees,
+                        "photoUrl": i.get("photoUrl") as! String,
+                        "photoNumber": i.get("photoNumber") as! Int
+                    ])
+                }
             }
         }
     }
@@ -99,8 +102,8 @@ struct SendJourneyView: View {
     }
     
     /**
-    Function is responsible for preapring the list from which users can choose a journey to send.
-    */
+     Function is responsible for preapring the list from which users can choose a journey to send.
+     */
     func prepareJourneysToSend() {
         //First of all, all program fetches all user's journeys that were sent to particular friend from firebase database and stores them in first array.
         let ownEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.email
@@ -115,7 +118,7 @@ struct SendJourneyView: View {
                 }
             }
             
-            //Then program fetches all user's journeys and populates another array with journeys that can't be found in the previous array (containing journeys already send). In this way program knows which journeys haven't been sent yet and presents them to user. 
+            //Then program fetches all user's journeys and populates another array with journeys that can't be found in the previous array (containing journeys already send). In this way program knows which journeys haven't been sent yet and presents them to user.
             FirebaseSetup.firebaseInstance.db.collection("users/\(ownEmail ?? "")/friends/\(ownEmail ?? "")/journeys").getDocuments { (snapshot, error) in
                 if error != nil {
                     print(error!.localizedDescription)
@@ -126,7 +129,6 @@ struct SendJourneyView: View {
                         }
                     }
                 }
-                
             }
         }
     }

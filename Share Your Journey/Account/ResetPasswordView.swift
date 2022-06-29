@@ -25,7 +25,7 @@ struct ResetPasswordView: View {
             TextField("Your e-mail address", text: $email)
                 .font(.system(size: 30))
                 .padding(.horizontal, 10)
-      
+            Spacer()
             Button{
                 
                 //Sending a password-reset message to a given email address. 
@@ -39,7 +39,7 @@ struct ResetPasswordView: View {
             } label: {
                 ButtonView(buttonTitle: "Reset password")
             }
-            .background(Color.blue)
+            .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .padding(.horizontal, 10)
         }

@@ -38,7 +38,7 @@ struct DownloadChangesView: View {
             } label: {
                 ButtonView(buttonTitle: "Download")
             }
-            .background(Color.blue)
+            .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
         .alert(isPresented: $showAlert) {

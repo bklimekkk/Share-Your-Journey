@@ -53,7 +53,7 @@ struct DirectionIcons: View {
             } else {
                 Image(systemName: "figure.walk")
                     .font(.system(size: 30))
-                    .foregroundColor(Color.blue)
+                    .foregroundColor(.accentColor)
             }
         }
         .padding(.vertical, 10)
@@ -64,7 +64,7 @@ struct DirectionIcons: View {
             if walking {
                 Image(systemName: "car")
                     .font(.system(size: 30))
-                    .foregroundColor(Color.blue)
+                    .foregroundColor(.accentColor)
             } else {
                 Image(systemName: "car")
                     .font(.system(size: 30))
@@ -88,7 +88,7 @@ struct SumUpFunctionalityButtonsView: View {
             } label: {
                 ButtonView(buttonTitle: "Save journey")
             }
-            .background(Color.blue)
+            .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             Spacer()
             Button {

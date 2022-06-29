@@ -29,7 +29,6 @@ class CurrentLocationManager: NSObject, CLLocationManagerDelegate, ObservableObj
         
         //Application needs to keep track of user's location even if application runs in the background or if the phone is locked.
         manager.requestWhenInUseAuthorization()
-        manager.requestAlwaysAuthorization()
         
         //These two lines (1) show user's location on the map and (2) enable the map show location changes.
         manager.startUpdatingLocation()

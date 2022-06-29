@@ -7,8 +7,12 @@
 
 import SwiftUI
 import FirebaseStorage
+import CoreData
 
 struct SaveJourneyView: View {
+    
+    @FetchRequest(sortDescriptors: []) var downloadedJourneys: FetchedResults<Journey>
+    @Environment(\.managedObjectContext) var context
     
     //Variable is used to check if user's phone is connected to the internet.
     @ObservedObject var network = NetworkManager()
@@ -28,6 +32,16 @@ struct SaveJourneyView: View {
     //Variable is supposed to contain names of all user's journeys.
     @State private var journeys: [String] = []
     
+    //Variables enable changing name of the duplicated journey that is about to be downloaded.
+    @State private var alreadyDownloaded = false
+    @State private var changeName = false
+    @State private var downloadChangedJourney = false
+    @State private var journeyIsDownloaded = false
+    @State private var journeyNewName = ""
+
+    //Variable decides if save button should be disabled.
+    @State private var disableSaveButton = false
+    
     var body: some View {
         VStack {
             Text("Save journey")
@@ -40,9 +54,6 @@ struct SaveJourneyView: View {
                 .font(.system(size: 50))
             Spacer()
             Button{
-                
-                //Operation is possible only with internet connection, so this if statement checks it.
-                if network.connected {
                     
                     //The input field can't be empty and can't contain '-' character.
                     if name == "" || name.contains("-") {
@@ -53,29 +64,73 @@ struct SaveJourneyView: View {
                         errorBody = "A journey with this name already exists in this account."
                         showErrorMessage = true
                         return
+                    } else if !network.connected {
+                        errorBody = "Journey can't be saved because of lack of internet connection."
+                        showErrorMessage = true
+                        return
                     }
                     
-                    createJourney()
+                createJourney(journey: journey, name: name)
                     done = true
                     presentSheet = false
-                } else {
-                    errorBody = "Journey can't be saved because of lack of internet connection."
-                    showErrorMessage = true
-                }
-               
+                
             } label: {
                 ButtonView(buttonTitle: "Save")
             }
-            .background(Color.blue)
+            .disabled(disableSaveButton)
+            .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
         .onAppear {
             populateJourneys()
         }
+        .alert(isPresented: $alreadyDownloaded) {
+            
+            //Alert is triggered if journey with the same name is already downloaded to Core Data.
+            Alert(title: Text("Journey with the same name"),
+                  message: Text("Journey with the same name is already downloaded. Do you want to provide different name to this journey?"),
+                  primaryButton: .default(Text("Ok")) {
+                alreadyDownloaded = false
+                changeName = true
+            },
+                  secondaryButton: .destructive(Text("Cancel")) {
+                alreadyDownloaded = false
+                disableSaveButton = false
+            })
+        }
+        .sheet(isPresented: $changeName, onDismiss: {
+            
+            //Sheet is presented to users if they choose to change duplicated journey's name.
+            if downloadChangedJourney {
+                downloadChangedJourney = false
+                downloadJourney(name: journeyNewName)
+                done = true
+                presentSheet = false
+                withAnimation {
+                    journeyIsDownloaded = true
+                }
+                journeyNewName = ""
+            }
+        }, content: {
+            DownloadChangesView(presentSheet: $changeName, download: $downloadChangedJourney, newName: $journeyNewName)
+        })
+        
         .alert(errorBody, isPresented: $showErrorMessage) {
-            Button("OK", role: .cancel) {
+            Button("Ok", role: .cancel) {
                 showErrorMessage = false
                 errorBody = ""
+            }
+            if errorBody == "Journey can't be saved because of lack of internet connection." {
+                Button("Download the journey") {
+                    disableSaveButton = true
+                    if !downloadedJourneys.map({$0.name}).contains(name) {
+                        downloadJourney(name: name)
+                        done = true
+                        presentSheet = false
+                    } else {
+                       alreadyDownloaded = true
+                    }
+                }
             }
         }
         .padding()
@@ -84,7 +139,7 @@ struct SaveJourneyView: View {
     /**
      Function is responsible for creating a new journey document in journeys collection in the firestore database.
      */
-    func createJourney() {
+    func createJourney(journey: SingleJourney, name: String) {
         let instanceReference = FirebaseSetup.firebaseInstance
         instanceReference.db.collection("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? "")/journeys").document(name).setData([
             "name" : name,
@@ -93,12 +148,12 @@ struct SaveJourneyView: View {
             "date" : Date()
         ])
         for index in 0...journey.photosLocations.count - 1 {
-            uploadPhoto(index: index, instanceReference: instanceReference)
+            uploadPhoto(journey: journey, name: name, index: index, instanceReference: instanceReference)
         }
     }
     
     /**
-         Function is responsible for filling array with user's journeys.
+     Function is responsible for filling array with user's journeys.
      */
     func populateJourneys() {
         FirebaseSetup.firebaseInstance.db.collection("users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys").getDocuments { snapshot, error in
@@ -115,7 +170,7 @@ struct SaveJourneyView: View {
     /**
      Function is responsible for uploading an image to the firebase storage and adding its details to firestore database.
      */
-    func uploadPhoto(index: Int, instanceReference: FirebaseSetup) {
+    func uploadPhoto(journey: SingleJourney, name: String, index: Int, instanceReference: FirebaseSetup) {
         guard let photo = journey.photos.sorted(by: {$1.number > $0.number}).map({$0.photo})[index].jpegData(compressionQuality: 0.2) else {
             return
         }
@@ -130,7 +185,7 @@ struct SaveJourneyView: View {
                 print(error.localizedDescription)
             }
             
-            //Image's details are added to appropriate collection in firetore's database. 
+            //Image's details are added to appropriate collection in firetore's database.
             instanceReference.db.document("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? "")/journeys/\(name)/photos/\(index)").setData([
                 "latitude": journey.photosLocations[index].latitude,
                 "longitude": journey.photosLocations[index].longitude,
@@ -139,5 +194,31 @@ struct SaveJourneyView: View {
             ])
         }
     }
-    
+    /**
+     Function is responsible for saving the journey in Core Data. (function also exists in SeeJourneyView struct).
+     */
+    func downloadJourney(name: String) {
+        let newJourney = Journey(context: context)
+        
+        newJourney.name = name
+        newJourney.email = FirebaseSetup.firebaseInstance.auth.currentUser?.email
+        newJourney.date = Date()
+        newJourney.networkProblem = true
+        newJourney.photosNumber = (journey.numberOfPhotos) as NSNumber
+        var index = 0
+        
+        while index < journey.photos.count {
+            let newImage = Photo(context: context)
+            newImage.id = Double(index + 1)
+            newImage.journey = newJourney
+            newImage.image = journey.photos[index].photo
+            newImage.latitude = journey.photosLocations[index].latitude
+            newImage.longitude = journey.photosLocations[index].longitude
+            newJourney.addToPhotos(newImage)
+            index+=1
+        }
+        
+        //After all journey properties are set, changes need to be saved with context variable's function: save().
+        try? context.save()
+    }
 }

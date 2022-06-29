@@ -98,7 +98,7 @@ struct DownloadGalleryButton: View {
         } label: {
             ButtonView(buttonTitle: "Save all images to camera roll")
         }
-        .background(journey.photos.map ({return $0.photo}).contains(UIImage()) ? Color.gray : Color.blue)
+        .background(journey.photos.map ({return $0.photo}).contains(UIImage()) ? Color.gray : Color.accentColor)
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .padding(.horizontal, 5)
         .padding(.top, 5)

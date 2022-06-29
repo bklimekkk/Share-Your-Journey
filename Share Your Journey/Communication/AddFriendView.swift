@@ -34,12 +34,12 @@ struct AddFriendView: View {
     @State private var responseType = InvitationError.valid
     var body: some View {
         VStack {
-            Text("Add friend")
+            Text("Add a friend")
                 .font(.system(size:30))
             
             Spacer()
-            TextField("Enter e-mail", text: $email)
-                .font(.system(size: 50))
+            TextField("Enter friend's e-mail", text: $email)
+                .font(.system(size: 30))
             Spacer()
             Button{
                 //Given email address isn't key sensitive.
@@ -132,7 +132,7 @@ struct AddFriendView: View {
             } label: {
                 ButtonView(buttonTitle: "Send request")
             }
-            .background(Color.blue)
+            .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
         .padding()

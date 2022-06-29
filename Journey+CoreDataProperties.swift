@@ -19,6 +19,7 @@ extension Journey {
     @NSManaged public var name: String?
     @NSManaged public var email: String?
     @NSManaged public var date: Date?
+    @NSManaged public var networkProblem: Bool
     @NSManaged public var photosNumber: NSNumber?
     @NSManaged public var photos: NSSet?
 

@@ -14,6 +14,7 @@
 		862AA46C27B14D6D001B9312 /* Share_Your_JourneyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862AA46B27B14D6D001B9312 /* Share_Your_JourneyTests.swift */; };
 		862AA47627B14D6D001B9312 /* Share_Your_JourneyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862AA47527B14D6D001B9312 /* Share_Your_JourneyUITests.swift */; };
 		862AA47827B14D6D001B9312 /* Share_Your_JourneyUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862AA47727B14D6D001B9312 /* Share_Your_JourneyUITestsLaunchTests.swift */; };
+		8633D980286A49EB003D83BB /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8633D97F286A49EB003D83BB /* InstructionsView.swift */; };
 		863CF4FF27BA2A31007B82D4 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863CF4FE27BA2A31007B82D4 /* ChatView.swift */; };
 		863CF50127BA2AD3007B82D4 /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863CF50027BA2AD3007B82D4 /* AddFriendView.swift */; };
 		863CF50827BAF558007B82D4 /* CurrentLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863CF50727BAF558007B82D4 /* CurrentLocationManager.swift */; };
@@ -91,6 +92,7 @@
 		862AA47127B14D6D001B9312 /* Share Your JourneyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Share Your JourneyUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		862AA47527B14D6D001B9312 /* Share_Your_JourneyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Share_Your_JourneyUITests.swift; sourceTree = "<group>"; };
 		862AA47727B14D6D001B9312 /* Share_Your_JourneyUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Share_Your_JourneyUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		8633D97F286A49EB003D83BB /* InstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
 		863CF4FE27BA2A31007B82D4 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		863CF50027BA2AD3007B82D4 /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
 		863CF50727BAF558007B82D4 /* CurrentLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationManager.swift; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 		865452AE280B3570008041A8 /* Account */ = {
 			isa = PBXGroup;
 			children = (
+				8633D97F286A49EB003D83BB /* InstructionsView.swift */,
 				862AA45C27B14D6D001B9312 /* LoginView.swift */,
 				86573E5B27F783D2003E5CF8 /* VerificationView.swift */,
 				86573E5D27F8370B003E5CF8 /* ResetPasswordView.swift */,
@@ -551,6 +554,7 @@
 				86FCCC79281079BD005FD678 /* PickerComponents.swift in Sources */,
 				865452AD2809D452008041A8 /* DownloadChangesView.swift in Sources */,
 				86C649F627D1B43A00891C24 /* Journey+CoreDataClass.swift in Sources */,
+				8633D980286A49EB003D83BB /* InstructionsView.swift in Sources */,
 				8652A17227BFEAE900ADBB25 /* SumUpView.swift in Sources */,
 				86C6495127D045B300891C24 /* UIImageTransformer.swift in Sources */,
 				86FCCC67281027E0005FD678 /* FriendJourneysList.swift in Sources */,
@@ -737,8 +741,7 @@
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Application needs access to your photo library to save image in the camera roll";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -750,7 +753,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -772,8 +775,7 @@
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Application needs access to your photo library to save image in the camera roll";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -785,7 +787,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

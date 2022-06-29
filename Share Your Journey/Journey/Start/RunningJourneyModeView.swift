@@ -24,7 +24,7 @@ struct RunningJourneyModeView: View {
             } label: {
                 Image(systemName: "plus.app.fill")
                     .font(.system(size: 41))
-                    .foregroundColor(Color.blue)
+                    .foregroundColor(Color.accentColor)
             }
             
             Button{
@@ -34,7 +34,7 @@ struct RunningJourneyModeView: View {
                 Image(systemName: "camera.fill")
                     .font(.system(size: 41))
                     .padding([.trailing], 10)
-                    .foregroundColor(Color.blue)
+                    .foregroundColor(Color.accentColor)
             }
             
             Button {
@@ -42,7 +42,7 @@ struct RunningJourneyModeView: View {
             } label: {
                 SymbolButtonView(buttonImage: "pause.fill")
             }
-            .background(Color.blue)
+            .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
     }
