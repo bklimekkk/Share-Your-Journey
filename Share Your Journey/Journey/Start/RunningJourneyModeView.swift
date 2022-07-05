@@ -9,13 +9,17 @@ import SwiftUI
 
 //Struct contains code that generates buttons that are supposed to be used by user while the journey is running.
 struct RunningJourneyModeView: View {
+    @Environment(\.colorScheme) var colorScheme
     
     //Variables are described in StartView struct.
     @Binding var paused: Bool
     @Binding var pickAPhoto: Bool
     @Binding var takeAPhoto: Bool
-    var currentLocationManager: CurrentLocationManager
+    @ObservedObject var currentLocationManager: CurrentLocationManager
     
+    var buttonColor: Color {
+        colorScheme == .dark || currentLocationManager.mapView.mapType == .hybridFlyover ? .white : .accentColor
+    }
     var body: some View {
         HStack {
             Button{
@@ -23,8 +27,8 @@ struct RunningJourneyModeView: View {
                 takeAPhoto = true
             } label: {
                 Image(systemName: "plus.app.fill")
-                    .font(.system(size: 41))
-                    .foregroundColor(Color.accentColor)
+                    .font(.system(size: 38))
+                    .foregroundColor(buttonColor)
             }
             
             Button{
@@ -32,9 +36,9 @@ struct RunningJourneyModeView: View {
                 takeAPhoto = true
             } label: {
                 Image(systemName: "camera.fill")
-                    .font(.system(size: 41))
+                    .font(.system(size: 38))
                     .padding([.trailing], 10)
-                    .foregroundColor(Color.accentColor)
+                    .foregroundColor(buttonColor)
             }
             
             Button {
@@ -52,6 +56,8 @@ struct RunningJourneyModeView: View {
      */
     func pauseJourney() {
         currentLocationManager.recenterLocation()
-        paused = true
+        withAnimation {
+            paused = true
+        }
     }
 }

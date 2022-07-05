@@ -14,16 +14,19 @@ struct ResetPasswordView: View {
     @Binding var resetEmail: String
     
     //Variable responsible for dismissing reset sheet.
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     
     //Variable containing data input by user. 
     @State private var email = ""
+    
+    @State private var showError = false
+    @State private var errorMessage = false
+    
     var body: some View {
         VStack (spacing: 20) {
             Text("Enter your email address to reset password")
-                .font(.system(size: 30))
-            TextField("Your e-mail address", text: $email)
-                .font(.system(size: 30))
+    
+            EmailTextField(label: "Your e-mail address", email: $email)
                 .padding(.horizontal, 10)
             Spacer()
             Button{
@@ -35,7 +38,7 @@ struct ResetPasswordView: View {
                     }
                 }
                 resetEmail = email
-                presentationMode.wrappedValue.dismiss()
+                dismiss()
             } label: {
                 ButtonView(buttonTitle: "Reset password")
             }

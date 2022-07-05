@@ -11,7 +11,7 @@ import Firebase
 
 //Struct contains code responsible for generating screen showing users journey they want to view.
 struct SeeJourneyView: View {
-    
+    @Environment(\.colorScheme) var colorScheme
     @ObservedObject private var network = NetworkManager()
     
     //Similar variable described in SumUpView struct.
@@ -51,6 +51,7 @@ struct SeeJourneyView: View {
     @State private var savedToCameraRoll = false
     @State private var highlightedPhoto: UIImage = UIImage()
     @State private var downloadedPhotos = false
+    @State private var showDownloadAlert = false
     
     //Variable controls if the journey can be found in user's downloaded journeys in the server.
     @State private var alreadyDownloaded = false
@@ -80,6 +81,10 @@ struct SeeJourneyView: View {
     var downloadMode: Bool
     var path: String
     
+    var buttonColor: Color {
+        colorScheme == .dark || currentLocationManager.mapView.mapType == .hybridFlyover ? .white : .accentColor
+    }
+    
     var body: some View {
         
         VStack {
@@ -94,7 +99,7 @@ struct SeeJourneyView: View {
                 if journey.photosLocations.count < journey.numberOfPhotos {
                     VStack {
                         Spacer()
-                        Text("Journey isn't available yet")
+                        Text("Unable to show the journey")
                             .font(.system(size: 20))
                             .foregroundColor(.gray)
                         Spacer()
@@ -119,14 +124,28 @@ struct SeeJourneyView: View {
                 ZStack {
                     VStack {
                         if !downloadedPhotos {
-                            DownloadGalleryButton(journey: journey, showPicture: $showPicture, downloadedPhotos: $downloadedPhotos)
+                            DownloadGalleryButton(journey: journey, showDownloadAlert: $showDownloadAlert, showPicture: $showPicture)
                         }
                         
                         PhotosAlbumView(showPicture: $showPicture, photoIndex: $highlightedPhotoIndex, highlightedPhoto: $highlightedPhoto, layout: layout, singleJourney: journey)
                             .padding(.horizontal, 5)
                         
                     }
-                    
+                    .alert("Download all images", isPresented: $showDownloadAlert) {
+                        Button("Cancel", role: .destructive){}
+                        Button("Download", role: .cancel) {
+                            for photo in journey.photos.map({return $0.photo}) {
+                                
+                                //Each photo is saved to camera roll.
+                                UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
+                            }
+                            withAnimation {
+                                downloadedPhotos = true
+                            }
+                        }
+                    } message: {
+                        Text("Are you sure that you want to download all images to your gallery?")
+                    }
                     HighlightedPhoto(savedToCameraRoll: $savedToCameraRoll, highlightedPhotoIndex: $highlightedPhotoIndex, showPicture: $showPicture, highlightedPhoto: $highlightedPhoto, journey: journey)
                 }
             } else {
@@ -134,7 +153,7 @@ struct SeeJourneyView: View {
                     if journey.photosLocations.count < journey.numberOfPhotos {
                         VStack {
                             Spacer()
-                            Text("Journey isn't available yet")
+                            Text("Unable to show the journey")
                                 .foregroundColor(.gray)
                                 .font(.system(size: 20))
                             Spacer()
@@ -167,7 +186,7 @@ struct SeeJourneyView: View {
                                         } label: {
                                             Image(systemName: "square.and.arrow.down")
                                                 .font(.system(size: 30))
-                                                .foregroundColor(Color.accentColor)
+                                                .foregroundColor(buttonColor)
                                         }
                                         
                                     }
@@ -179,7 +198,7 @@ struct SeeJourneyView: View {
                                             
                                             for i in journeys {
                                                 if i.name == journey.name {
-                                                    i.networkProblem = false
+                                                    context.delete(i)
                                                     try? context.save()
                                                     break
                                                 }
@@ -194,16 +213,28 @@ struct SeeJourneyView: View {
                                     } label: {
                                         Image(systemName: "plus")
                                             .font(.system(size: 30))
-                                            .foregroundColor(Color.accentColor)
+                                            .foregroundColor(colorScheme == .light ? Color.accentColor : .white)
                                     }
                                     
                                 }
                                 
                                 //Icons enabling users to choose between walking and driving directions.
-                                DirectionIcons(walking: $walking)
+                                DirectionIcons(mapType: $currentLocationManager.mapView.mapType, walking: $walking)
                                 
                                 //Buttons enabling users to re-center the map and change map's mode.
-                                MapButtonsView(currentLocationManager: currentLocationManager)
+                                Button {
+                                    currentLocationManager.changeTypeOfMap()
+                                } label: {
+                                    LocationButton()
+                                }
+                                .foregroundColor(buttonColor)
+                                
+                                Button {
+                                    currentLocationManager.recenterLocation()
+                                } label: {
+                                    MapTypeButton()
+                                }
+                                .foregroundColor(buttonColor)
                             }
                             Spacer()
                         }

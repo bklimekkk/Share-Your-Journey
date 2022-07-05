@@ -23,12 +23,12 @@ struct PausedJourneyModeView: View {
     var body: some View {
         HStack {
             Image(systemName: "plus.app.fill")
-                .font(.system(size: 41))
+                .font(.system(size: 38))
                 .foregroundColor(.gray)
                 .disabled(true)
             
             Image(systemName: "camera.fill")
-                .font(.system(size: 41))
+                .font(.system(size: 38))
                 .foregroundColor(.gray)
                 .padding([.trailing], 10)
                 .disabled(true)
@@ -74,7 +74,9 @@ struct PausedJourneyModeView: View {
      */
     func resumeJourney() {
         currentLocationManager.recenterLocation()
-        startedJourney = true
-        paused = false
+        withAnimation {
+            startedJourney = true
+            paused = false
+        }
     }
 }

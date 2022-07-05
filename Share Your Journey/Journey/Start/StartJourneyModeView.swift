@@ -26,6 +26,8 @@ struct StartJourneyModeView: View {
      */
     func startJourney() {
         currentLocationManager.recenterLocation()
-        startedJourney = true
+        withAnimation {
+            startedJourney = true
+        }
     }
 }

@@ -38,42 +38,28 @@ struct SymbolButtonView: View {
 }
 
 //Struct generating standard map type button used to change type of map.
-struct StandardMapTypeButton: View {
-    var locationManager: CurrentLocationManager
+struct MapTypeButton: View {
     var body: some View {
         Image(systemName: "location.fill")
-            .foregroundColor(Color(UIColor(named:"SystemImageColor") ?? .white))
             .font(.system(size: 30))
-    }
-}
-
-//Struct generating hybrid map type button used to change type of map.
-struct HybridMapTypeButton: View {
-    var locationManager: CurrentLocationManager
-    var body: some View {
-        Image(systemName: "location.fill")
-            .foregroundColor(Color.white)
-            .font(.system(size: 30))
+            .padding(.vertical, 10)
     }
 }
 
 //Struct generating standard map type button used to center the the map on user's location.
-struct StandardLocationButton: View {
-    var locationManager: CurrentLocationManager
+struct LocationButton: View {
     var body: some View {
         Image(systemName: "map")
-            .foregroundColor(Color(UIColor(named:"SystemImageColor") ?? .white))
             .font(.system(size: 30))
+            .padding(.vertical, 10)
     }
 }
 
-//Struct generating standard map type button used to center the the map on user's location.
-struct HybridLocationButton: View {
-    var locationManager: CurrentLocationManager
+struct ImageButton: View {
     var body: some View {
-        Image(systemName: "map.fill")
-            .foregroundColor(Color.white)
+        Image(systemName: "photo.fill.on.rectangle.fill")
             .font(.system(size: 30))
+            .padding(.vertical, 10)
     }
 }
 
@@ -82,19 +68,12 @@ struct DownloadGalleryButton: View {
     
     //Variables described in SeeJourneyView struct.
     var journey: SingleJourney
+    @Binding var showDownloadAlert: Bool
     @Binding var showPicture: Bool
-    @Binding var downloadedPhotos: Bool
     
     var body: some View {
         Button{
-            for photo in journey.photos.map({return $0.photo}) {
-                
-                //Each photo is saved to camera roll.
-                UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
-            }
-            withAnimation {
-                downloadedPhotos = true
-            }
+          showDownloadAlert = true
         } label: {
             ButtonView(buttonTitle: "Save all images to camera roll")
         }

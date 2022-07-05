@@ -25,28 +25,30 @@ struct SendJourneyView: View {
     var body: some View {
         VStack {
             
-                List(unsentJourneys.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
-                    HStack {
-                        Text(journey.name)
-                            .padding(.vertical, 30)
-                        Spacer()
-                        Button{
-                            sendJourney(journey: journey)
-                            
-                            //After journey is sent, it needs to be deleted from list that gives user a choice of journeys to send.
+            List(unsentJourneys.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
+                HStack {
+                    Text(journey.name)
+                        .padding(.vertical, 30)
+                    Spacer()
+                    Button{
+                        sendJourney(journey: journey)
+                        
+                        //After journey is sent, it needs to be deleted from list that gives user a choice of journeys to send.
+                        withAnimation {
                             deleteFromSendingList(journeyName: journey.name)
-                            
-                        } label:{
-                            Text("Send")
                         }
-                        .buttonStyle(PlainButtonStyle())
-                        .foregroundColor(Color.accentColor)
+                        
+                    } label:{
+                        Text("Send")
                     }
-                    
+                    .buttonStyle(PlainButtonStyle())
+                    .foregroundColor(Color.accentColor)
                 }
-                .onAppear {
-                    prepareJourneysToSend()
-                }
+                
+            }
+            .onAppear {
+                prepareJourneysToSend()
+            }
             
             Button {
                 presentationMode.wrappedValue.dismiss()

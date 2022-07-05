@@ -35,15 +35,14 @@ struct AddFriendView: View {
     var body: some View {
         VStack {
             Text("Add a friend")
-                .font(.system(size:30))
             
             Spacer()
             TextField("Enter friend's e-mail", text: $email)
-                .font(.system(size: 30))
+                .font(.system(size: 20))
             Spacer()
             Button{
                 //Given email address isn't key sensitive.
-                let lowerCasedEmail = email.lowercased()
+                let lowerCasedEmail = email.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
                 
                 //Each possibility of error connected with inviting friend is checked and prevented with use of if statements below. Statement's aren't contained in separate functions, because each of them contains return key word, which is supposed to stop action performed by button.
                 

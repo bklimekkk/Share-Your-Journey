@@ -55,6 +55,7 @@ struct ListWithJourneys: View {
                 let path = "users/\(email)/friends/\(email)/journeys"
                 
                 //Photos need to be leted from both database and storage, if needed.
+                
                 deleteAllPhotos(path: path)
                 deleteJourneyFromServer(path: path)
                 deleteJourneyFromStorage()
@@ -65,7 +66,7 @@ struct ListWithJourneys: View {
             }
             )
         }
-   }
+    }
     
     /**
      Function is responsible for deleting all images' references from firestore database.

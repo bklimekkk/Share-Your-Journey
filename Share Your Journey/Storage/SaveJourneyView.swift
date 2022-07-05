@@ -42,6 +42,9 @@ struct SaveJourneyView: View {
     //Variable decides if save button should be disabled.
     @State private var disableSaveButton = false
     
+    var trimmedName: String {
+        name.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
     var body: some View {
         VStack {
             Text("Save journey")
@@ -51,26 +54,26 @@ struct SaveJourneyView: View {
             
             //Users are supposed to enter name of journey they are currently saving.
             TextField("Enter name", text: $name)
-                .font(.system(size: 50))
+                .font(.system(size: 30))
             Spacer()
             Button{
-                    
+                
                     //The input field can't be empty and can't contain '-' character.
-                    if name == "" || name.contains("-") {
+                if trimmedName == "" || trimmedName.contains("-") {
                         errorBody = "Name of the journey needs to consist of at least one character and shouldn't contain '-' character"
                         showErrorMessage = true
                         return
-                    } else if journeys.contains(name) {
+                } else if journeys.contains(trimmedName) {
                         errorBody = "A journey with this name already exists in this account."
                         showErrorMessage = true
                         return
-                    } else if !network.connected {
+                } else if !network.connected {
                         errorBody = "Journey can't be saved because of lack of internet connection."
                         showErrorMessage = true
                         return
                     }
                     
-                createJourney(journey: journey, name: name)
+                createJourney(journey: journey, name: trimmedName)
                     done = true
                     presentSheet = false
                 
@@ -115,7 +118,7 @@ struct SaveJourneyView: View {
             DownloadChangesView(presentSheet: $changeName, download: $downloadChangedJourney, newName: $journeyNewName)
         })
         
-        .alert(errorBody, isPresented: $showErrorMessage) {
+        .alert("Saving error", isPresented: $showErrorMessage) {
             Button("Ok", role: .cancel) {
                 showErrorMessage = false
                 errorBody = ""
@@ -132,6 +135,8 @@ struct SaveJourneyView: View {
                     }
                 }
             }
+        } message: {
+            Text(errorBody)
         }
         .padding()
     }

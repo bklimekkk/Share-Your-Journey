@@ -40,7 +40,6 @@ struct LoginView: View {
     @State private var email = ""
     @State private var password = ""
     @State private var repeatedPassword = ""
-    @State private var name = ""
     
     //This variable is set to true if an error message should be shown.
     @State private var showErrorMessage = false
@@ -74,12 +73,6 @@ struct LoginView: View {
                     //PickerView struct enables users to choos between two "sub" screens.
                     PickerView(choice: $register, firstChoice: "Login", secondChoice: "Create account")
                     
-                    //Depending on whether the application presents users with register or login section, they will view different elements (relevant for either registration or loggin in).
-                    if register {
-                        TextField("Your name", text: $name)
-                            .padding(.vertical, 10)
-                            .font(.system(size: 20))
-                    }
                     EmailTextField(label: "E-mail address", email: $email)
                     SecureField("Passowrd", text: $password)
                         .padding(.vertical, 10)
@@ -129,7 +122,6 @@ struct LoginView: View {
                         passwordResetAlert = true
                     }
                 } content: {
-                    
                     //In this screen, users are only asked to enter their e-mail address.
                     ResetPasswordView(resetEmail: $resetEmail)
                 }
@@ -143,34 +135,36 @@ struct LoginView: View {
             .navigationBarTitleDisplayMode(.inline)
             
             //Alert is presented if any error occurs.
-            .alert(errorBody, isPresented: $showErrorMessage) {
+            .alert("Unsuccessfull \(register ? "registration" : "login")", isPresented: $showErrorMessage) {
                 Button("OK", role: .cancel) {
                     showErrorMessage = false
                     clearPasswordField()
                 }
+            } message: {
+                Text(errorBody)
             }
             
             //Alert is shown to inform users that their password reset email was sent.
-            .alert(isPresented: $passwordResetAlert) {
-                Alert(title: Text("Reset password e-mail was sent to \(resetEmail)"),
-                      dismissButton: .default(Text("OK")) {
+            .alert("Password reset e-mail", isPresented: $passwordResetAlert, actions: {
+                Button("Ok", role: .cancel) {
                     resetEmail = ""
                     passwordResetAlert = false
                 }
-                )
-            }
+            }, message: {
+                Text("Reset password e-mail was sent to \(resetEmail)")
+            })
             
-            //Alert is shown if users haven't verified themselves yet.
-            .alert(isPresented: $verificationNeeded) {
-               Alert(title: Text("Account hasn't been verified yet"),
-                      primaryButton: .default(Text("OK")) {
+            .alert("Verification error", isPresented: $verificationNeeded) {
+                Button("Ok"){
                     verificationNeeded = false
-                },
-                      secondaryButton: .cancel(Text("Verify again")) {
-                      sendVerificationEmail()
                 }
-                )
+                Button("Verify again", role: .cancel){
+                    sendVerificationEmail()
+                }
+            } message: {
+                Text("Account hasn't been verified yet")
             }
+
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
@@ -241,13 +235,7 @@ struct LoginView: View {
      Function is responsible for creating new user account, basing on user's details.
      */
     func performRegistration() {
-        
-        //Name is necessary in order to register, if user leaves this input field empty, application informs them about it.
-        if name == "" {
-            showErrorMessage = true
-            errorBody = "You must provide a name"
-            return
-        } else if password != repeatedPassword {
+        if password != repeatedPassword {
             
             //If users won't repeat password properly, registration won't go successfully.
             showErrorMessage = true
@@ -264,7 +252,7 @@ struct LoginView: View {
             }
             
             //User is added to the firestore database.
-            addUser(email: email, name: name)
+            addUser(email: email)
             FirebaseSetup.firebaseInstance.auth.currentUser?.sendEmailVerification { error in
                 if error != nil {
                     print("There was an error while sending verification")
@@ -278,24 +266,21 @@ struct LoginView: View {
 /**
  Function is responsible for adding new user to the Firebase server.
  */
-func addUser(email: String, name: String) {
+func addUser(email: String) {
     //Firebase is used to add user's data to the database.
     
     let instanceReference = FirebaseSetup.firebaseInstance.db
     
     //Each of three collections in Firebase server needs to be populated with new user's date.
     instanceReference.document("users/\(email)").setData([
-        "name": name,
         "email": email
     ])
     
     instanceReference.document("users/\(email)/friends/\(email)").setData([
-        "name": name,
         "email": email
     ])
     
     instanceReference.document("users/\(email)/requests/\(email)").setData([
-        "name": name,
         "email": email
     ])
 }

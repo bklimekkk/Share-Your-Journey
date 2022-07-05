@@ -34,10 +34,6 @@ struct SumUpView: View {
     //variable represents the journey user has taken before sum-up screen appeared.
     var singleJourney: SingleJourney
     
-    //This variable controls if this sum up view is presented or not.
-    var sumUpPresented: () -> ()
-    
-    
     //Variables are set to false and are never changed in this struct. They are used to be passed as parameters for MapView.
     @State var walking = false
     @State var done = false
@@ -68,6 +64,18 @@ struct SumUpView: View {
     
     //Variables checks if all photos were downloaded to phone's camera roll.
     @State private var downloadedPhotos = false
+    
+    @State private var showDownloadAlert = false
+    @State private var showDeleteAlert = false
+    
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.dismiss) var dismiss
+    
+    var buttonColor: Color {
+        colorScheme == .dark || currentLocationManager.mapView.mapType == .hybridFlyover ? .white : .accentColor
+    }
+    
+    @Binding var showSumUp: Bool
     var body: some View {
         
         if viewType == .photoAlbum {
@@ -79,13 +87,28 @@ struct SumUpView: View {
                     if !downloadedPhotos {
                         
                         //Button used to download all journey images.
-                        DownloadGalleryButton(journey: singleJourney, showPicture: $showPicture, downloadedPhotos: $downloadedPhotos)
+                        DownloadGalleryButton(journey: singleJourney, showDownloadAlert: $showDownloadAlert, showPicture: $showPicture)
                             .padding(.horizontal, 10)
                     }
                     
                     //List containing all photos.
                     PhotosAlbumView(showPicture: $showPicture, photoIndex: $photoIndex, highlightedPhoto: $highlightedPhoto, layout: layout, singleJourney: singleJourney)
                         .padding(.horizontal, 15)
+                }
+                .alert("Download all images", isPresented: $showDownloadAlert) {
+                    Button("Cancel", role: .destructive){}
+                    Button("Download", role: .cancel) {
+                        for photo in singleJourney.photos.map({return $0.photo}) {
+                            
+                            //Each photo is saved to camera roll.
+                            UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
+                        }
+                        withAnimation {
+                            downloadedPhotos = true
+                        }
+                    }
+                } message: {
+                    Text("Are you sure that you want to download all images to your gallery?")
                 }
                 
                 //This structs is visible only when user chooses to enlarg any photo.
@@ -126,8 +149,20 @@ struct SumUpView: View {
                         if !showPicture && viewType == .threeDimensional {
                             HStack {
                                 VStack {
-                                    DirectionIcons(walking: $walking)
-                                    MapButtonsView(currentLocationManager: currentLocationManager)
+                                    DirectionIcons(mapType: $currentLocationManager.mapView.mapType, walking: $walking)
+                                    Button {
+                                        currentLocationManager.changeTypeOfMap()
+                                    } label: {
+                                        LocationButton()
+                                    }
+                                    .foregroundColor(buttonColor)
+                                    
+                                    Button {
+                                        currentLocationManager.recenterLocation()
+                                    } label: {
+                                        MapTypeButton()
+                                    }
+                                    .foregroundColor(buttonColor)
                                 }
                                 Spacer()
                             }
@@ -136,17 +171,19 @@ struct SumUpView: View {
                         if !showPicture {
                             if done {
                                 Button {
-                                    sumUpPresented()
+                                    showSumUp = false
+                                    dismiss()
                                 } label: {
                                     
                                     //Button is shown only if the journey is saved.
                                     ButtonView(buttonTitle: "Done")
+                                        .background(Color.green)
                                 }
                                 .background(Color.gray)
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                                 
                             } else {
-                                SumUpFunctionalityButtonsView(saveJourney: $saveJourney, sumUpPresented: sumUpPresented)
+                                SumUpFunctionalityButtonsView(saveJourney: $saveJourney, showDeleteAlert: $showDeleteAlert)
                             }
                         }
                     }
@@ -154,6 +191,14 @@ struct SumUpView: View {
                 .padding()
                 
                 HighlightedPhoto(savedToCameraRoll: $savedToCameraRoll, highlightedPhotoIndex: $photoIndex, showPicture: $showPicture, highlightedPhoto: $highlightedPhoto, journey: singleJourney)
+            }
+            .alert("Quit", isPresented: $showDeleteAlert) {
+                Button("Cancel", role: .cancel){}
+                Button("Quit", role: .destructive){
+                    showSumUp = false
+                }
+            } message: {
+                Text("Are you sure that you want to quit? The journey will be deleted.")
             }
             .sheet(isPresented: $saveJourney, onDismiss: {}, content: {
                 SaveJourneyView(presentSheet: $saveJourney, done: $done, journey: singleJourney)

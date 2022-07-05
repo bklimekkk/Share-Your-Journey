@@ -18,6 +18,9 @@
 		863CF4FF27BA2A31007B82D4 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863CF4FE27BA2A31007B82D4 /* ChatView.swift */; };
 		863CF50127BA2AD3007B82D4 /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863CF50027BA2AD3007B82D4 /* AddFriendView.swift */; };
 		863CF50827BAF558007B82D4 /* CurrentLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863CF50727BAF558007B82D4 /* CurrentLocationManager.swift */; };
+		864B50C7287232660072A5BB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864B50C6287232660072A5BB /* SettingsView.swift */; };
+		864B50C92872D76F0072A5BB /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864B50C82872D76F0072A5BB /* WebView.swift */; };
+		864B50CB2872E26C0072A5BB /* ImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864B50CA2872E26B0072A5BB /* ImagesView.swift */; };
 		8652A16F27BE3EE200ADBB25 /* SendJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652A16E27BE3EE100ADBB25 /* SendJourneyView.swift */; };
 		8652A17227BFEAE900ADBB25 /* SumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652A17127BFEAE900ADBB25 /* SumUpView.swift */; };
 		8652A17527C254C700ADBB25 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652A17427C254C700ADBB25 /* MapView.swift */; };
@@ -96,6 +99,9 @@
 		863CF4FE27BA2A31007B82D4 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		863CF50027BA2AD3007B82D4 /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
 		863CF50727BAF558007B82D4 /* CurrentLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationManager.swift; sourceTree = "<group>"; };
+		864B50C6287232660072A5BB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		864B50C82872D76F0072A5BB /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+		864B50CA2872E26B0072A5BB /* ImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesView.swift; sourceTree = "<group>"; };
 		8652A16E27BE3EE100ADBB25 /* SendJourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendJourneyView.swift; sourceTree = "<group>"; };
 		8652A17027BFC8EF00ADBB25 /* Share-Your-Journey-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Share-Your-Journey-Info.plist"; sourceTree = SOURCE_ROOT; };
 		8652A17127BFEAE900ADBB25 /* SumUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SumUpView.swift; sourceTree = "<group>"; };
@@ -262,6 +268,8 @@
 				862AA45C27B14D6D001B9312 /* LoginView.swift */,
 				86573E5B27F783D2003E5CF8 /* VerificationView.swift */,
 				86573E5D27F8370B003E5CF8 /* ResetPasswordView.swift */,
+				864B50C6287232660072A5BB /* SettingsView.swift */,
+				864B50C82872D76F0072A5BB /* WebView.swift */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -372,6 +380,7 @@
 				86FCCC6928102A4B005FD678 /* RunningJourneyModeView.swift */,
 				86FCCC6B28102A75005FD678 /* PausedJourneyModeView.swift */,
 				86FCCC6D28102A9A005FD678 /* StartJourneyModeView.swift */,
+				864B50CA2872E26B0072A5BB /* ImagesView.swift */,
 			);
 			path = Start;
 			sourceTree = "<group>";
@@ -541,6 +550,7 @@
 				86FCCC652810272B005FD678 /* YourJourneysList.swift in Sources */,
 				86FCCC6C28102A75005FD678 /* PausedJourneyModeView.swift in Sources */,
 				8672551C27B80A9000DC5001 /* TabsView.swift in Sources */,
+				864B50C7287232660072A5BB /* SettingsView.swift in Sources */,
 				86FCCC6A28102A4B005FD678 /* RunningJourneyModeView.swift in Sources */,
 				86FCCC7528102E02005FD678 /* ListWithJourneys.swift in Sources */,
 				86C6494827CFAE4300891C24 /* Journey.xcdatamodeld in Sources */,
@@ -549,6 +559,7 @@
 				86FCCC7D28107B3B005FD678 /* MultipleButtonsComponents.swift in Sources */,
 				863CF50127BA2AD3007B82D4 /* AddFriendView.swift in Sources */,
 				8683852627E94AD40005FEE2 /* NetworkManager.swift in Sources */,
+				864B50C92872D76F0072A5BB /* WebView.swift in Sources */,
 				86FCCC62281025DD005FD678 /* ListWithFriends.swift in Sources */,
 				863CF4FF27BA2A31007B82D4 /* ChatView.swift in Sources */,
 				86FCCC79281079BD005FD678 /* PickerComponents.swift in Sources */,
@@ -556,6 +567,7 @@
 				86C649F627D1B43A00891C24 /* Journey+CoreDataClass.swift in Sources */,
 				8633D980286A49EB003D83BB /* InstructionsView.swift in Sources */,
 				8652A17227BFEAE900ADBB25 /* SumUpView.swift in Sources */,
+				864B50CB2872E26C0072A5BB /* ImagesView.swift in Sources */,
 				86C6495127D045B300891C24 /* UIImageTransformer.swift in Sources */,
 				86FCCC67281027E0005FD678 /* FriendJourneysList.swift in Sources */,
 				863CF50827BAF558007B82D4 /* CurrentLocationManager.swift in Sources */,

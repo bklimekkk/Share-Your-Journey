@@ -19,7 +19,7 @@ struct VerificationInformation: View {
             Form {
                 Image(uiImage: UIImage(systemName: "person.fill.checkmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20)) ?? UIImage())
           
-            Text("A verification e-mail has been sent to \(email), verify yourself to be able to log in.")
+            Text("A verification e-mail has been sent to \(email), verify yourself to be able to log in. If you don't find the e-mail, make sure you check the spam.")
             }
             .navigationTitle("Verification e-mail")
             .navigationBarTitleDisplayMode(.inline)

@@ -26,7 +26,7 @@ struct HighlightedPhoto: View {
                     .resizable()
                     .scaledToFit()
                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                
+                    .shadow(color: .gray, radius: 2)
                 //Gesture added to the image makes it possible to drag left or right to skip to the next or previous image.
                     .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
                         .onEnded({ value in
@@ -105,7 +105,7 @@ struct PhotosAlbumView: View {
     var singleJourney: SingleJourney
     
     var body: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             
             //This container generates a grid with two columns of journey's images. 
             LazyVGrid(columns: layout, spacing: 0) {
@@ -113,6 +113,7 @@ struct PhotosAlbumView: View {
                     Image(uiImage: photo.photo)
                         .resizable()
                         .clipShape(RoundedRectangle(cornerRadius:10))
+                        .shadow(color: .gray, radius: 2)
                         .scaledToFill()
                         .padding(.vertical, 5)
                         .padding(.horizontal, 1)
@@ -148,6 +149,7 @@ struct PhotoAnnotationView: View {
                 .scaledToFit()
                 .frame(width: 60)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
+                .shadow(color: .gray, radius: 2)
                 .onTapGesture(count: 1) {
                     withAnimation(.easeInOut(duration: 0.15)) {
                         photoIndex = location.id

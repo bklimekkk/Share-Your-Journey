@@ -25,10 +25,15 @@ extension UIImage {
 }
 
 struct MapView: UIViewRepresentable {
+    @Environment(\.colorScheme) var colorScheme
+    
     @Binding var walking: Bool
     @Binding var showPhoto: Bool
     @Binding var photoIndex: Int
     
+    var tintColor: UIColor {
+        colorScheme == .light ? UIColor(red: 0.36, green: 0.09, blue: 0.92, alpha: 1.00) : .white
+    }
     //This array is supposed to contain all places that user visited in the StartView screen during the journey.
     var photos: [UIImage]
     var photosLocations: [CLLocationCoordinate2D]
@@ -62,14 +67,18 @@ struct MapView: UIViewRepresentable {
             marker.annotation = annotation
             marker.titleVisibility = .hidden
             if annotation.title != "My Location" {
-                marker.markerTintColor = UIColor(red: 0.36, green: 0.09, blue: 0.92, alpha: 1.00)
+                marker.markerTintColor = parent.tintColor
                 marker.glyphText = annotation.title as? String
                 marker.canShowCallout = true
                 
                 let leftButton = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
                 let rightButton = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
+                
                 leftButton.setImage(UIImage(systemName: "location.north.circle"), for: .normal)
                 rightButton.setImage(UIImage(systemName: "camera"), for: .normal)
+                
+                leftButton.tintColor = parent.tintColor
+                rightButton.tintColor = parent.tintColor
 
                 marker.leftCalloutAccessoryView = leftButton
                 marker.rightCalloutAccessoryView = rightButton
