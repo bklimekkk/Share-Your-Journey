@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct InstructionsView: View {
+struct WelcomeView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var showInstructions: Bool
     var body: some View {

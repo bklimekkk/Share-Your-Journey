@@ -8,9 +8,16 @@
 import SwiftUI
 import MapKit
 import Firebase
+import RevenueCat
+
+class Subscription: ObservableObject {
+    @Published var subscriber: Bool = false
+    @Published var showPanel: Bool = false
+}
 
 //Struct contains code responsible for generating screen showing users journey they want to view.
 struct SeeJourneyView: View {
+    @StateObject private var subscription = Subscription()
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject private var network = NetworkManager()
     
@@ -85,6 +92,10 @@ struct SeeJourneyView: View {
         colorScheme == .dark || currentLocationManager.mapView.mapType == .hybridFlyover ? .white : .accentColor
     }
     
+    var gold: Color {
+        Color(uiColor: UIColor(red: 1.00, green: 0.62, blue: 0.00, alpha: 1.00))
+    }
+    
     var body: some View {
         
         VStack {
@@ -117,14 +128,14 @@ struct SeeJourneyView: View {
                         .opacity(showPicture ? 0 : 1)
                         
                         //Concept of showing enlarged image after user taps it is identical to concept in SumUpView struct, Both structs use the same struct to achieve this effect.
-                        HighlightedPhoto(savedToCameraRoll: $savedToCameraRoll, highlightedPhotoIndex: $highlightedPhotoIndex, showPicture: $showPicture, highlightedPhoto: $highlightedPhoto, journey: journey)
+                        HighlightedPhoto(savedToCameraRoll: $savedToCameraRoll, highlightedPhotoIndex: $highlightedPhotoIndex, showPicture: $showPicture, highlightedPhoto: $highlightedPhoto, subscriber: $subscription.subscriber, showPanel: $subscription.showPanel, journey: journey)
                     }
                 }
             } else if viewMode == .photoAlbum {
                 ZStack {
                     VStack {
                         if !downloadedPhotos {
-                            DownloadGalleryButton(journey: journey, showDownloadAlert: $showDownloadAlert, showPicture: $showPicture)
+                            DownloadGalleryButton(journey: journey, showDownloadAlert: $showDownloadAlert, showPicture: $showPicture, subscriber: $subscription.subscriber, showPanel: $subscription.showPanel)
                         }
                         
                         PhotosAlbumView(showPicture: $showPicture, photoIndex: $highlightedPhotoIndex, highlightedPhoto: $highlightedPhoto, layout: layout, singleJourney: journey)
@@ -146,7 +157,7 @@ struct SeeJourneyView: View {
                     } message: {
                         Text("Are you sure that you want to download all images to your gallery?")
                     }
-                    HighlightedPhoto(savedToCameraRoll: $savedToCameraRoll, highlightedPhotoIndex: $highlightedPhotoIndex, showPicture: $showPicture, highlightedPhoto: $highlightedPhoto, journey: journey)
+                    HighlightedPhoto(savedToCameraRoll: $savedToCameraRoll, highlightedPhotoIndex: $highlightedPhotoIndex, showPicture: $showPicture, highlightedPhoto: $highlightedPhoto, subscriber: $subscription.subscriber, showPanel: $subscription.showPanel, journey: journey)
                 }
             } else {
                 ZStack {
@@ -174,19 +185,22 @@ struct SeeJourneyView: View {
                                         ProgressView()
                                     } else {
                                         Button{
-                                            if journeys.map({$0.name}).contains(journey.name) {
-                                                alreadyDownloaded = true
-                                                return
-                                            }
-                                            
-                                            downloadJourney(name: journey.name)
-                                            withAnimation {
-                                                journeyIsDownloaded = true
+                                            if subscription.subscriber {
+                                                if journeys.map({$0.name}).contains(journey.name) {
+                                                    alreadyDownloaded = true
+                                                    return
+                                                }
+                                                downloadJourney(name: journey.name)
+                                                withAnimation {
+                                                    journeyIsDownloaded = true
+                                                }
+                                            } else {
+                                                subscription.showPanel = true
                                             }
                                         } label: {
                                             Image(systemName: "square.and.arrow.down")
                                                 .font(.system(size: 30))
-                                                .foregroundColor(buttonColor)
+                                                .foregroundColor(subscription.subscriber ? buttonColor : gold)
                                         }
                                         
                                     }
@@ -219,20 +233,20 @@ struct SeeJourneyView: View {
                                 }
                                 
                                 //Icons enabling users to choose between walking and driving directions.
-                                DirectionIcons(mapType: $currentLocationManager.mapView.mapType, walking: $walking)
+                                DirectionIcons(mapType: $currentLocationManager.mapView.mapType, subscriber: $subscription.showPanel, showPanel: $subscription.showPanel, walking: $walking)
                                 
                                 //Buttons enabling users to re-center the map and change map's mode.
                                 Button {
                                     currentLocationManager.changeTypeOfMap()
                                 } label: {
-                                    LocationButton()
+                                    MapTypeButton()
                                 }
                                 .foregroundColor(buttonColor)
                                 
                                 Button {
                                     currentLocationManager.recenterLocation()
                                 } label: {
-                                    MapTypeButton()
+                                    LocationButton()
                                 }
                                 .foregroundColor(buttonColor)
                             }
@@ -241,7 +255,14 @@ struct SeeJourneyView: View {
                         .padding()
                         
                     }
-                    HighlightedPhoto(savedToCameraRoll: $savedToCameraRoll, highlightedPhotoIndex: $highlightedPhotoIndex, showPicture: $showPicture, highlightedPhoto: $highlightedPhoto, journey: journey)
+                    HighlightedPhoto(savedToCameraRoll: $savedToCameraRoll, highlightedPhotoIndex: $highlightedPhotoIndex, showPicture: $showPicture, highlightedPhoto: $highlightedPhoto, subscriber: $subscription.subscriber, showPanel: $subscription.showPanel, journey: journey)
+                }
+            }
+        }
+        .task {
+            Purchases.shared.getCustomerInfo { (customerInfo, error) in
+                if customerInfo!.entitlements["allfeatures"]?.isActive == true {
+                    subscription.subscriber = true
                 }
             }
         }
@@ -267,6 +288,9 @@ struct SeeJourneyView: View {
                 alreadyDownloaded = false
             })
         }
+        .fullScreenCover(isPresented: $subscription.showPanel, content: {
+            SubscriptionView(subscriber: $subscription.subscriber)
+        })
         .sheet(isPresented: $changeName, onDismiss: {
             
             //Sheet is presented to users if they choose to change duplicated journey's name.
@@ -416,7 +440,8 @@ struct SeeJourneyView: View {
             "name" : journey.name,
             "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",
             "photosNumber" : journey.numberOfPhotos,
-            "date" : Date()
+            "date" : Date(),
+            "deletedJourney" : false
         ])
         for index in 0...journey.photosLocations.count - 1 {
             uploadPhoto(index: index, instanceReference: instanceReference)

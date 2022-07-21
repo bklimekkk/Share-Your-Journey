@@ -38,7 +38,7 @@ struct SaveJourneyView: View {
     @State private var downloadChangedJourney = false
     @State private var journeyIsDownloaded = false
     @State private var journeyNewName = ""
-
+    
     //Variable decides if save button should be disabled.
     @State private var disableSaveButton = false
     
@@ -58,24 +58,24 @@ struct SaveJourneyView: View {
             Spacer()
             Button{
                 
-                    //The input field can't be empty and can't contain '-' character.
+                //The input field can't be empty and can't contain '-' character.
                 if trimmedName == "" || trimmedName.contains("-") {
-                        errorBody = "Name of the journey needs to consist of at least one character and shouldn't contain '-' character"
-                        showErrorMessage = true
-                        return
+                    errorBody = "Name of the journey needs to consist of at least one character and shouldn't contain '-' character"
+                    showErrorMessage = true
+                    return
                 } else if journeys.contains(trimmedName) {
-                        errorBody = "A journey with this name already exists in this account."
-                        showErrorMessage = true
-                        return
+                    errorBody = "A journey with this name already exists in this account."
+                    showErrorMessage = true
+                    return
                 } else if !network.connected {
-                        errorBody = "Journey can't be saved because of lack of internet connection."
-                        showErrorMessage = true
-                        return
-                    }
-                    
+                    errorBody = "Journey can't be saved because of lack of internet connection."
+                    showErrorMessage = true
+                    return
+                }
+                
                 createJourney(journey: journey, name: trimmedName)
-                    done = true
-                    presentSheet = false
+                done = true
+                presentSheet = false
                 
             } label: {
                 ButtonView(buttonTitle: "Save")
@@ -131,7 +131,7 @@ struct SaveJourneyView: View {
                         done = true
                         presentSheet = false
                     } else {
-                       alreadyDownloaded = true
+                        alreadyDownloaded = true
                     }
                 }
             }
@@ -150,7 +150,8 @@ struct SaveJourneyView: View {
             "name" : name,
             "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",
             "photosNumber" : journey.numberOfPhotos,
-            "date" : Date()
+            "date" : Date(),
+            "deletedJourney" : false
         ])
         for index in 0...journey.photosLocations.count - 1 {
             uploadPhoto(journey: journey, name: name, index: index, instanceReference: instanceReference)
@@ -166,7 +167,9 @@ struct SaveJourneyView: View {
                 print(error!.localizedDescription)
             } else {
                 for i in snapshot!.documents {
-                    journeys.append(i.documentID)
+                    if !(i.get("deletedJourney") as! Bool) {
+                        journeys.append(i.documentID)
+                    }
                 }
             }
         }

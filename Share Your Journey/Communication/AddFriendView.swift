@@ -168,7 +168,8 @@ struct AddFriendView: View {
     func sendRequest() {
         
         FirebaseSetup.firebaseInstance.db.document("users/\(email.lowercased())/requests/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")").setData([
-            "email": FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? ""
+            "email": FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",
+            "deletedAccount": false
         ])
         showMessage = false
         sheetIsPresented = false

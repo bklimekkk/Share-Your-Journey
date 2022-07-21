@@ -65,6 +65,12 @@ struct LoginView: View {
     //Variable checks if user uses the application for the first time. If yes, it will show the initial instructions.
     @AppStorage("showInstructions") var showInstructions: Bool = true
     
+    @Environment(\.colorScheme) var colorScheme
+    
+    var forgotPasswordButtonColor: Color {
+        colorScheme == .light ? .accentColor : .white
+    }
+    
     var body: some View {
         NavigationView {
             ScrollView {
@@ -103,6 +109,7 @@ struct LoginView: View {
                             resetPassword = true
                         } label: {
                             Text("Forgot my password")
+                                .foregroundColor(forgotPasswordButtonColor)
                         }
                         .padding(.vertical, 5)
                     }
@@ -123,11 +130,11 @@ struct LoginView: View {
                     }
                 } content: {
                     //In this screen, users are only asked to enter their e-mail address.
-                    ResetPasswordView(resetEmail: $resetEmail)
+                    ResetPasswordView(resetEmail: $resetEmail, email: $email)
                 }
             }
             .sheet(isPresented: $showInstructions, content: {
-                InstructionsView(showInstructions: $showInstructions)
+                WelcomeView(showInstructions: $showInstructions)
             })
             .navigationTitle(register ? "Create Account" : "Login")
             
@@ -164,22 +171,21 @@ struct LoginView: View {
             } message: {
                 Text("Account hasn't been verified yet")
             }
-
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
     
     /**
      Function is responsible for sending users a verification e-mail after they complete a registration.
-    */
+     */
     func sendVerificationEmail() {
         //If users haven't receied verification email, they can click button to re-send it.
-         FirebaseSetup.firebaseInstance.auth.currentUser?.sendEmailVerification { error in
-             if error != nil {
-                 print("There was an error while sending verification")
-             }
-         }
-         verificationNeeded = false
+        FirebaseSetup.firebaseInstance.auth.currentUser?.sendEmailVerification { error in
+            if error != nil {
+                print("There was an error while sending verification")
+            }
+        }
+        verificationNeeded = false
     }
     
     /**
@@ -242,24 +248,24 @@ struct LoginView: View {
             errorBody = "Password fields don't match"
             return
         }
-        
-        //Firebase is used for creating a new account.
-        FirebaseSetup.firebaseInstance.auth.createUser(withEmail: email, password: password) { result, error in
-            if error != nil {
-                showErrorMessage = true
-                errorBody = error?.localizedDescription ?? ""
-                return
-            }
             
-            //User is added to the firestore database.
-            addUser(email: email)
-            FirebaseSetup.firebaseInstance.auth.currentUser?.sendEmailVerification { error in
+            //Firebase is used for creating a new account.
+            FirebaseSetup.firebaseInstance.auth.createUser(withEmail: email, password: password) { result, error in
                 if error != nil {
-                    print("There was an error while sending verification")
+                    showErrorMessage = true
+                    errorBody = error?.localizedDescription ?? ""
+                    return
                 }
+                
+                //User is added to the firestore database.
+                addUser(email: email)
+                FirebaseSetup.firebaseInstance.auth.currentUser?.sendEmailVerification { error in
+                    if error != nil {
+                        print("There was an error while sending verification")
+                    }
+                }
+                showVerificationMessage = true
             }
-            showVerificationMessage = true
-        }
     }
 }
 
@@ -273,14 +279,37 @@ func addUser(email: String) {
     
     //Each of three collections in Firebase server needs to be populated with new user's date.
     instanceReference.document("users/\(email)").setData([
-        "email": email
+        "email": email,
+        "deletedAccount": false
     ])
     
     instanceReference.document("users/\(email)/friends/\(email)").setData([
-        "email": email
+        "email": email,
+        "deletedAccount": false
     ])
     
     instanceReference.document("users/\(email)/requests/\(email)").setData([
-        "email": email
+        "email": email,
+        "deletedAccount": false
     ])
+    
+    instanceReference.collection("users/\(email)/friends").getDocuments { querySnapshot, error in
+        if let error = error {
+            print(error.localizedDescription)
+        } else {
+            for i in querySnapshot!.documents {
+                instanceReference.collection("users/\(i.documentID)/friends").getDocuments { querySnapshot, error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                    } else {
+                        for j in querySnapshot!.documents {
+                            if j.documentID == email {
+                                instanceReference.collection("users/\(i.documentID)/friends").document(email).updateData(["deletedAccount" : false])
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

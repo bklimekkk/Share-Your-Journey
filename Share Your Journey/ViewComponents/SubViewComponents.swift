@@ -16,8 +16,12 @@ struct HighlightedPhoto: View {
     @Binding var highlightedPhotoIndex: Int
     @Binding var showPicture: Bool
     @Binding var highlightedPhoto: UIImage
-    
+    @Binding var subscriber: Bool
+    @Binding var showPanel: Bool
     var journey: SingleJourney
+    var gold: Color {
+        Color(uiColor: UIColor(red: 1.00, green: 0.62, blue: 0.00, alpha: 1.00))
+    }
     var body: some View {
         
         if showPicture {
@@ -64,24 +68,31 @@ struct HighlightedPhoto: View {
                     
                     Spacer()
                     
-                    //While the image is highlighted, users can download it only once, after clicking the button, it turns gray and becomes inactive.
+                    //While the image is highlighted, users can download it only once, after clicking the button, it disappears.
                     if savedToCameraRoll {
                         Button {} label:{
-                            Image(systemName: "square.and.arrow.down")
+                            Image(systemName: "checkmark")
                                 .font(.system(size: 30))
-                                .foregroundColor(Color.gray)
+                                .foregroundColor(.green)
                                 .offset(y: -5)
                         }
                         .disabled(true)
-                        
                     } else {
                         Button {
+                            
+                            if subscriber {
                             UIImageWriteToSavedPhotosAlbum(highlightedPhoto, nil, nil, nil)
-                            savedToCameraRoll = true
+                            withAnimation {
+                                savedToCameraRoll = true
+                            }
+                            } else {
+                                showPanel = true
+                            }
+                            
                         } label:{
                             Image(systemName: "square.and.arrow.down")
                                 .font(.system(size: 30))
-                                .foregroundColor(Color(UIColor(named:"SystemImageColor") ?? .gray))
+                                .foregroundColor(subscriber ? Color(UIColor(named:"SystemImageColor") ?? .gray) : gold)
                                 .offset(y: -5)
                         }
                     }
@@ -107,7 +118,7 @@ struct PhotosAlbumView: View {
     var body: some View {
         ScrollView(showsIndicators: false) {
             
-            //This container generates a grid with two columns of journey's images. 
+            //This container generates a grid with two columns of journey's images.
             LazyVGrid(columns: layout, spacing: 0) {
                 ForEach(singleJourney.photos.sorted{$1.number > $0.number}, id: \.self) { photo in
                     Image(uiImage: photo.photo)

@@ -52,30 +52,30 @@ struct ChatView: View {
     var body: some View {
         VStack {
             
-            //Picker View controls which part of the screen is visible (array with your journeys or array with your friend's journeys).
-            PickerView(choice: $yourJourneys, firstChoice: "Sent by \(email)", secondChoice: "Sent by you")
-                .padding()
-            
-            //Field used to search arrays.
-            SearchField(text: "Search journey", search: $searchJourney)
-            
-            if yourJourneys {
-                YourJourneysList(searchJourney: $searchJourney, sendJourneyScreen: $sendJourneyScreen, askAboutDeletion: $askAboutDeletion, sentByYou: $sentByYou, email: email, sentByYouFiltered: sentByYouFiltered)
+                //Picker View controls which part of the screen is visible (array with your journeys or array with your friend's journeys).
+                PickerView(choice: $yourJourneys, firstChoice: "Sent by \(email)", secondChoice: "Sent by you")
+                    .padding()
                 
-                Spacer()
+                //Field used to search arrays.
+                SearchField(text: "Search journey", search: $searchJourney)
                 
-                //Clicking this button opens screen enabling users to send selected journey.
-                Button {
-                    sendJourneyScreen.toggle()
-                } label: {
-                    ButtonView(buttonTitle: "Send journey")
+                if yourJourneys {
+                    YourJourneysList(searchJourney: $searchJourney, sendJourneyScreen: $sendJourneyScreen, askAboutDeletion: $askAboutDeletion, sentByYou: $sentByYou, email: email, sentByYouFiltered: sentByYouFiltered)
+                    
+                    Spacer()
+                    
+                    //Clicking this button opens screen enabling users to send selected journey.
+                    Button {
+                        sendJourneyScreen.toggle()
+                    } label: {
+                        ButtonView(buttonTitle: "Send journey")
+                    }
+                    .background(Color.accentColor)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .padding()
+                } else {
+                    FriendJourneysList(searchJourney: $searchJourney, sentByFriend: $sentByFriend, sentByFriendFiltered: sentByFriendFiltered, email: email)
                 }
-                .background(Color.accentColor)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .padding()
-            } else {
-                FriendJourneysList(searchJourney: $searchJourney, sentByFriend: $sentByFriend, sentByFriendFiltered: sentByFriendFiltered, email: email)
-            }
         }
         .navigationTitle(email)
         .navigationBarTitleDisplayMode(.inline)

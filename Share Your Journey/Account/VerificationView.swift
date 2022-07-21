@@ -11,13 +11,18 @@ struct VerificationInformation: View {
     
     //A verification message is sent to this e-mail.
     var email: String
-    
+    var buttonColor: Color {
+        colorScheme == .dark ? .white : .accentColor
+    }
     //An environment variable responsible for dismissing the sheet after "OK" button is clicked.
     @Environment(\.presentationMode) var presentationMode
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         NavigationView {
             Form {
-                Image(uiImage: UIImage(systemName: "person.fill.checkmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 20)) ?? UIImage())
+                Image(systemName: "person.fill.checkmark")
+                    .foregroundColor(buttonColor)
           
             Text("A verification e-mail has been sent to \(email), verify yourself to be able to log in. If you don't find the e-mail, make sure you check the spam.")
             }

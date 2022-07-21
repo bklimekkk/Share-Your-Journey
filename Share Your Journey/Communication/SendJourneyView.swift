@@ -71,7 +71,8 @@ struct SendJourneyView: View {
             "name": journey.name,
             "email" : journey.email,
             "photosNumber" : journey.numberOfPhotos,
-            "date" : Date()
+            "date" : Date(),
+            "deletedJourney" : false
         ])
         
         let path = "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "" )/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys/\(journey.name)/photos"

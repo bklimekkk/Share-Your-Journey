@@ -12,8 +12,13 @@ import MapKit
 //Struct contains code responsible for generating icons allowing users to change the way how they receive directions to particular point (walking / driving).
 struct DirectionIcons: View {
     @Binding var mapType: MKMapType
+    @Binding var subscriber: Bool
+    @Binding var showPanel: Bool
     var buttonColor: Color {
         colorScheme == .dark || mapType == .hybridFlyover ? .white : .accentColor
+    }
+    var gold: Color {
+        Color(uiColor: UIColor(red: 1.00, green: 0.62, blue: 0.00, alpha: 1.00))
     }
     @Environment(\.colorScheme) var colorScheme
     @Binding var walking: Bool
@@ -21,7 +26,11 @@ struct DirectionIcons: View {
         
         //Chosen icon is set to green colour.
         Button{
-            walking = true
+            if subscriber {
+                walking = true
+            } else {
+                showPanel = true
+            }
         } label : {
             if walking {
                 Image(systemName: "figure.walk")
@@ -30,7 +39,7 @@ struct DirectionIcons: View {
             } else {
                 Image(systemName: "figure.walk")
                     .font(.system(size: 30))
-                    .foregroundColor(buttonColor)
+                    .foregroundColor(subscriber ? buttonColor : gold)
             }
         }
         .padding(.vertical, 10)

@@ -17,7 +17,7 @@ struct ResetPasswordView: View {
     @Environment(\.dismiss) var dismiss
     
     //Variable containing data input by user. 
-    @State private var email = ""
+    @Binding var email: String
     
     @State private var showError = false
     @State private var errorMessage = false

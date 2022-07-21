@@ -110,7 +110,8 @@ struct ListWithRequests: View {
         
         //Email from which the request was sent from, is added to friends collection in Firestore database.
         FirebaseSetup.firebaseInstance.db.document("users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(request)").setData([
-            "email" : request
+            "email" : request,
+            "deletedAccount" : false
         ])
         
         //Collection needs to contain at least one document in order to exist, so It's populated with one. This collection is going to contain qll journeys sent from user.
@@ -120,7 +121,8 @@ struct ListWithRequests: View {
         
         //Program also needs to take care about adding user to their friend's "friends" collection.
         FirebaseSetup.firebaseInstance.db.document("users/\(request)/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")").setData([
-            "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? ""
+            "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",
+            "deletedAccount" : false
         ])
         
         //This collection is going to contain all journeys sent to user.
