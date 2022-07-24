@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		86197618288D3D1C0034FF2C /* NoDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86197617288D3D1B0034FF2C /* NoDataView.swift */; };
 		8624119A2884D108007A86E2 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 862411992884D108007A86E2 /* StoreKit.framework */; };
 		862411A62887F683007A86E2 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 862411A52887F683007A86E2 /* RevenueCat */; };
 		862411A82888AE9F007A86E2 /* SubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862411A72888AE9E007A86E2 /* SubscriptionView.swift */; };
@@ -89,6 +90,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		86197617288D3D1B0034FF2C /* NoDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataView.swift; sourceTree = "<group>"; };
 		862411992884D108007A86E2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		862411A72888AE9E007A86E2 /* SubscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionView.swift; sourceTree = "<group>"; };
 		862AA45727B14D6C001B9312 /* Share Your Journey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Share Your Journey.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -341,6 +343,7 @@
 				86FCCC7A28107A2F005FD678 /* FieldComponents.swift */,
 				86FCCC7E28107C00005FD678 /* SubViewComponents.swift */,
 				86FCCC8028107CBF005FD678 /* JourneyPartsComponents.swift */,
+				86197617288D3D1B0034FF2C /* NoDataView.swift */,
 			);
 			path = ViewComponents;
 			sourceTree = "<group>";
@@ -573,6 +576,7 @@
 				86FCCC652810272B005FD678 /* YourJourneysList.swift in Sources */,
 				86FCCC6C28102A75005FD678 /* PausedJourneyModeView.swift in Sources */,
 				8672551C27B80A9000DC5001 /* TabsView.swift in Sources */,
+				86197618288D3D1C0034FF2C /* NoDataView.swift in Sources */,
 				864B50C7287232660072A5BB /* SettingsView.swift in Sources */,
 				86FCCC6A28102A4B005FD678 /* RunningJourneyModeView.swift in Sources */,
 				86FCCC7528102E02005FD678 /* ListWithJourneys.swift in Sources */,

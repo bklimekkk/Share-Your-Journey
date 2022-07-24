@@ -30,61 +30,67 @@ struct YourJourneysList: View {
     
     var body: some View {
         
-        //List is sorted by date.
-        List(sentByYouFiltered.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
-            NavigationLink(destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(email)/journeys")) {
-                Button{
-                    searchJourneyInDatabase(journey: journey)
-                } label: {
-                    Image(systemName: "xmark")
-                        .foregroundColor(.gray)
+        VStack {
+            if sentByYouFiltered.isEmpty{
+                NoDataView(text: "No journeys to show")
+            } else {
+                //List is sorted by date.
+                List(sentByYouFiltered.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
+                    NavigationLink(destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(email)/journeys")) {
+                        Button{
+                            searchJourneyInDatabase(journey: journey)
+                        } label: {
+                            Image(systemName: "xmark")
+                                .foregroundColor(.gray)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        .padding(.horizontal, 10)
+                        
+                        Text(journey.name)
+                            .padding(.vertical, 30)
+                    }
                 }
-                .buttonStyle(PlainButtonStyle())
-                .padding(.horizontal, 10)
+                .fullScreenCover(isPresented: $sendJourneyScreen, onDismiss: {
+                    populateYourJourneys()
+                }) {
+                    SendJourneyView(targetEmail: email)
+                }
+                .refreshable {
+                    populateYourJourneys()
+                }
                 
-                Text(journey.name)
-                    .padding(.vertical, 30)
+                //Alert is shown if users want to delete any journey they sent.
+                .alert(isPresented: $askAboutDeletion) {
+                    Alert (title: Text("Delete journey"),
+                           message: Text("Are you sure that you want to delete this journey?"),
+                           primaryButton: .cancel(Text("Cancel")) {
+                        askAboutDeletion = false
+                        journeyToDelete = ""
+                    },
+                           secondaryButton: .destructive(Text("Delete")) {
+                        
+                        deleteJourneyFromDatabase()
+                        
+                        //If journey doesn't exist in any other place in the server, it is completely deleted from storage.
+                        for i in 0...sentByYou.count - 1 {
+                            if sentByYou[i].name == journeyToDelete {
+                                if deleteFromStorage {
+                                    deleteJourneyFromStorage(numberOfPhotos: sentByYou[i].numberOfPhotos - 1)
+                                }
+                                sentByYou.remove(at: i)
+                                break
+                            }
+                        }
+                        deleteFromStorage = true
+                        askAboutDeletion = false
+                        journeyToDelete = ""
+                    }
+                    )
+                }
             }
-        }
-        .fullScreenCover(isPresented: $sendJourneyScreen, onDismiss: {
-            populateYourJourneys()
-        }) {
-            SendJourneyView(targetEmail: email)
         }
         .onAppear {
             populateYourJourneys()
-        }
-        .refreshable {
-            populateYourJourneys()
-        }
-        
-        //Alert is shown if users want to delete any journey they sent.
-        .alert(isPresented: $askAboutDeletion) {
-            Alert (title: Text("Delete journey"),
-                   message: Text("Are you sure that you want to delete this journey?"),
-                   primaryButton: .cancel(Text("Cancel")) {
-                askAboutDeletion = false
-                journeyToDelete = ""
-            },
-                   secondaryButton: .destructive(Text("Delete")) {
-                
-                deleteJourneyFromDatabase()
-                
-                //If journey doesn't exist in any other place in the server, it is completely deleted from storage.
-                for i in 0...sentByYou.count - 1 {
-                    if sentByYou[i].name == journeyToDelete {
-                        if deleteFromStorage {
-                            deleteJourneyFromStorage(numberOfPhotos: sentByYou[i].numberOfPhotos - 1)
-                        }
-                        sentByYou.remove(at: i)
-                        break
-                    }
-                }
-                deleteFromStorage = true
-                askAboutDeletion = false
-                journeyToDelete = ""
-            }
-            )
         }
     }
     

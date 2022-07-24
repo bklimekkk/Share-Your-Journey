@@ -14,23 +14,29 @@ struct ListWithFriends: View {
     var filteredFriendsList: [String]
     
     var body: some View {
-        
-        //List is filtered alphabetically.
-        List (filteredFriendsList.sorted(by: {$0 < $1}), id: \.self) { friend in
-            HStack {
-                NavigationLink(destination: ChatView(email: friend)) {
-                    Text(friend)
-                        .padding(.vertical, 30)
+        VStack {
+            
+            if filteredFriendsList.isEmpty {
+                NoDataView(text: "No friends to show")
+            } else {
+                //List is filtered alphabetically.
+                List (filteredFriendsList.sorted(by: {$0 < $1}), id: \.self) { friend in
+                    HStack {
+                        NavigationLink(destination: ChatView(email: friend)) {
+                            Text(friend)
+                                .padding(.vertical, 30)
+                        }
+                    }
+                }
+                .navigationBarHidden(true)
+                
+                .refreshable {
+                    populateFriends()
                 }
             }
         }
-        .navigationBarHidden(true)
-        
         //Array is populated after the screen is shown, but users are also able to refresh the list by dragging it down (thanks to .refreshable).
         .onAppear {
-            populateFriends()
-        }
-        .refreshable {
             populateFriends()
         }
     }

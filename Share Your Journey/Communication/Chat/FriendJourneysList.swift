@@ -21,20 +21,26 @@ struct FriendJourneysList: View {
     var email: String
     
     var body: some View {
-        
-        //List presenting users with journeys sent by their friends.
-        List(sentByFriendFiltered.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
-            
-            //NavigationLink's destination property is set to struct responsible for showing the relevant journey.
-            NavigationLink(destination: SeeJourneyView(journey: journey, email: email, downloadMode: false, path: "users/\(email)/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
-                Text(journey.name)
-                    .padding(.vertical, 30)
+        VStack {
+            if sentByFriendFiltered.isEmpty{
+                NoDataView(text: "No journeys to show")
+            } else {
+                //List presenting users with journeys sent by their friends.
+                List(sentByFriendFiltered.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
+                    
+                    //NavigationLink's destination property is set to struct responsible for showing the relevant journey.
+                    NavigationLink(destination: SeeJourneyView(journey: journey, email: email, downloadMode: false, path: "users/\(email)/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
+                        Text(journey.name)
+                            .padding(.vertical, 30)
+                    }
+                }
+                
+                .refreshable {
+                    populateFriendsJourneys()
+                }
             }
         }
         .onAppear {
-            populateFriendsJourneys()
-        }
-        .refreshable {
             populateFriendsJourneys()
         }
     }

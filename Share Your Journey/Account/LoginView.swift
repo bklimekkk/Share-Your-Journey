@@ -7,6 +7,7 @@
 import SwiftUI
 import Firebase
 import FirebaseStorage
+import RevenueCat
 
 class FirebaseSetup: NSObject {
     
@@ -234,6 +235,12 @@ struct LoginView: View {
             
             //As user logs in, default email address is set to data they provided.
             defaults.set(FirebaseSetup.firebaseInstance.auth.currentUser?.email, forKey: "email")
+            
+            Purchases.shared.logIn(result!.user.uid) { (customerInfo, created, error) in
+                if let error = error {
+                    print(error.localizedDescription)
+                }
+            }
         }
     }
     

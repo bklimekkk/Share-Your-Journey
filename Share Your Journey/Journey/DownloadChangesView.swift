@@ -24,7 +24,7 @@ struct DownloadChangesView: View {
             
             Spacer()
             TextField("Enter new name", text: $newName)
-                .font(.system(size: 50))
+                .font(.system(size: 30))
             Spacer()
             Button{
                 

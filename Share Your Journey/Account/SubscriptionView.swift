@@ -12,7 +12,6 @@ import RevenueCat
 struct SubscriptionView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var subscriber: Bool
-    @State private var purchaseComplete = false
     @State private var availablePackages: [Package] = []
     var body: some View {
         NavigationView {
@@ -52,13 +51,14 @@ struct SubscriptionView: View {
          
                 }
                 ForEach(availablePackages, id: \.self.storeProduct) { package in
-                    Section(header: Text("\(String(String(package.id).suffix(String(package.id).count - 4))) subscription")) {
-                        Button("Buy \(String(String(package.id).suffix(String(package.id).count - 4))) subscription for \(package.localizedPriceString)") {
+                    let timeUnit = String(String(package.id).suffix(String(package.id).count - 4))
+                    Section(header: Text("\(timeUnit) subscription")) {
+                        Button("Buy for \(package.localizedPriceString)") {
                             
                             Purchases.shared.purchase(package: package) { (transaction, customerInfo, error, userCancelled) in
                                 if customerInfo?.entitlements["allfeatures"]?.isActive == true {
                                   subscriber = true
-                                  purchaseComplete = true
+                                  dismiss()
                               }
                             }
                         }
@@ -67,13 +67,6 @@ struct SubscriptionView: View {
                     }
                 }
               }
-            .alert("Purchase Complete", isPresented: $purchaseComplete, actions: {
-                Button("Continue", role: .cancel){
-                    dismiss()
-                }
-            }, message: {
-                Text("Congratulations! you just purchased premium access to Share Your Journey app!")
-            })
             .task {
                 Purchases.shared.getOfferings { (offerings, error) in
                     if let packages = offerings?.offering(identifier: "default")?.availablePackages {
@@ -85,7 +78,7 @@ struct SubscriptionView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Not now"){
+                    Button("Later"){
                         dismiss()
                     }
                 }

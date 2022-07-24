@@ -65,10 +65,11 @@ struct FriendsView: View {
             
             //Depending on what option user has chosen, different lists are persented.
             if requestMode {
-               ListWithRequests(searchPeople: $searchPeople, requestsSet: $requestsSet, filteredRequestsList: filteredRequestsList)
+                ListWithRequests(searchPeople: $searchPeople, requestsSet: $requestsSet, filteredRequestsList: filteredRequestsList)
             } else {
                 ListWithFriends(searchPeople: $searchPeople, friendsSet: $friendsSet, filteredFriendsList: filteredFriendsList)
             }
+            
             Spacer()
             Button {
                 addNewFriend = true

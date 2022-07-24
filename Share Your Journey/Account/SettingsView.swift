@@ -25,7 +25,7 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                         .foregroundColor(.blue)
                     Button("Instructions") {
-                       showInstructions = true
+                        showInstructions = true
                     }
                     .buttonStyle(.plain)
                     .foregroundColor(.blue)
@@ -34,15 +34,32 @@ struct SettingsView: View {
                     }
                     .buttonStyle(.plain)
                     .foregroundColor(.blue)
-                    Button(subscription.subscriber ? "Quit Premium Access" : "Premium Access") {
-                        subscription.showPanel = true
-                    }
-                    .buttonStyle(.plain)
-                    .foregroundColor(subscription.subscriber ? .red : .blue)
                 }
                 
-                Section {
-                    Button("Delete Account"){
+                if !subscription.subscriber {
+                    Section(header: Text("premium access")) {
+                        Button("Premium Access") {
+                            subscription.showPanel = true
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundColor(subscription.subscriber ? .red : .blue)
+                        Button("Restore Your Premium Access") {
+                            Purchases.shared.restorePurchases { customerInfo, error in
+                                if customerInfo?.entitlements["allfeatures"]?.isActive == true {
+                                    withAnimation {
+                                        subscription.subscriber = true
+                                    }
+                                }
+                            }
+                            
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundColor(subscription.subscriber ? .red : .blue)
+                    }
+                }
+                
+                Section(header: Text("account deletion")) {
+                    Button("Delete Your Account"){
                         askAboutAccountDeletion = true
                     }
                     .buttonStyle(.plain)
@@ -114,7 +131,7 @@ struct SettingsView: View {
                                 if i.documentID != email {
                                     let accountReference = FirebaseSetup.firebaseInstance.db.collection("users/\(i.documentID)/friends").document(email)
                                     
-                                        accountReference.updateData(["deletedAccount" : true])
+                                    accountReference.updateData(["deletedAccount" : true])
                                     
                                     FirebaseSetup.firebaseInstance.db.collection("users/\(email)/friends/\(i.documentID)/journeys").getDocuments { querySnapshot, error in
                                         if let error = error {
@@ -124,24 +141,14 @@ struct SettingsView: View {
                                                 if j.documentID != "-" {
                                                     
                                                     FirebaseSetup.firebaseInstance.db.collection("users/\(email)/friends/\(i.documentID)/journeys").document(j.documentID).updateData(["deletedJourney" : true])
-                                                    
-                                                    
-                                                    
-                                                    
-                                                    
-//
-//                                                    deleteAllPhotos(path: "users/\(email)/friends/\(i.documentID)/journeys", journeyToDelete: j.documentID)
-//                                                    deleteJourneyFromServer(path: "users/\(email)/friends/\(i.documentID)/journeys", journeyToDelete: j.documentID)
-                                                    
-                                                    
-                                                    
-                                                    
+                                                    //                                                    deleteAllPhotos(path: "users/\(email)/friends/\(i.documentID)/journeys", journeyToDelete: j.documentID)
+                                                    //                                                    deleteJourneyFromServer(path: "users/\(email)/friends/\(i.documentID)/journeys", journeyToDelete: j.documentID)
                                                 }
                                             }
                                         }
                                     }
-                                        
-                
+                                    
+                                    
                                 }
                                 
                                 FirebaseSetup.firebaseInstance.db.collection("users/\(email)/friends/\(email)/journeys").getDocuments { querySnapshot, error in
@@ -151,14 +158,8 @@ struct SettingsView: View {
                                         for i in querySnapshot!.documents {
                                             if i.documentID != "-" {
                                                 FirebaseSetup.firebaseInstance.db.collection("users/\(email)/friends/\(email)/journeys").document(i.documentID).updateData(["deletedJourney" : true])
-                                                
-                                                
-                                                
-//                                                deleteAllPhotos(path: "users/\(email)/friends/\(email)/journeys", journeyToDelete: i.documentID)
-//                                                deleteJourneyFromServer(path: "users/\(email)/friends/\(email)/journeys", journeyToDelete: i.documentID)
-                                                
-                                                
-                                                
+                                                //                                                deleteAllPhotos(path: "users/\(email)/friends/\(email)/journeys", journeyToDelete: i.documentID)
+                                                //                                                deleteJourneyFromServer(path: "users/\(email)/friends/\(email)/journeys", journeyToDelete: i.documentID)
                                             }
                                         }
                                     }

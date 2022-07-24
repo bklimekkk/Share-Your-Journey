@@ -20,28 +20,28 @@ struct ListWithJourneys: View {
     var journeysFilteredList: [SingleJourney]
     
     var body: some View {
-        List (journeysFilteredList.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
-            NavigationLink (destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
-                HStack {
-                    Button{
-                        checkBeforeDeletion(journey: journey)
-                    } label: {
-                        Image(systemName: "xmark")
-                            .foregroundColor(.gray)
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .padding(.horizontal, 10)
-                    Text(journey.name)
-                        .padding(.vertical, 30)
-                }
-            }
-        }
-        .onAppear {
+    
+        VStack {
             
-            //List is updated every time the screen appears.
-            clearInvalidJourneys()
-            updateJourneys()
-        }
+            if journeysFilteredList.isEmpty{
+                NoDataView(text: "No journeys to show")
+            } else {
+                List (journeysFilteredList.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
+                    NavigationLink (destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
+                        HStack {
+                            Button{
+                                checkBeforeDeletion(journey: journey)
+                            } label: {
+                                Image(systemName: "xmark")
+                                    .foregroundColor(.gray)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .padding(.horizontal, 10)
+                            Text(journey.name)
+                                .padding(.vertical, 30)
+                        }
+                    }
+                }
         .alert(isPresented: $askAboutDeletion) {
             Alert (title: Text("Delete journey"),
                    message: Text("Are you sure that you want to delete this journey?"),
@@ -66,6 +66,18 @@ struct ListWithJourneys: View {
             }
             )
         }
+        
+            }
+            
+        }
+        .onAppear {
+             
+             //List is updated every time the screen appears.
+             clearInvalidJourneys()
+             updateJourneys()
+         }
+        
+        
     }
     
     /**

@@ -22,42 +22,62 @@ struct SendJourneyView: View {
     @State private var sentJourneys: [SingleJourney] = []
     @State private var unsentJourneys: [SingleJourney] = []
     
+    @State private var searchText = ""
+    var filteredUnsentJourneys: [SingleJourney] {
+        if searchText.isEmpty {
+            return unsentJourneys
+        } else {
+            return unsentJourneys.filter{$0.name.contains(searchText)}
+        }
+    }
+    
     var body: some View {
-        VStack {
-            
-            List(unsentJourneys.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
-                HStack {
-                    Text(journey.name)
-                        .padding(.vertical, 30)
-                    Spacer()
-                    Button{
-                        sendJourney(journey: journey)
-                        
-                        //After journey is sent, it needs to be deleted from list that gives user a choice of journeys to send.
-                        withAnimation {
-                            deleteFromSendingList(journeyName: journey.name)
+        NavigationView {
+            VStack {
+                SearchField(text: "Search your journeys", search: $searchText)
+                    .padding(.top)
+                VStack {
+                    if filteredUnsentJourneys.isEmpty{
+                        NoDataView(text: "No journeys to send")
+                    } else {
+                        List(filteredUnsentJourneys.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
+                            HStack {
+                                Text(journey.name)
+                                    .padding(.vertical, 30)
+                                Spacer()
+                                Button{
+                                    sendJourney(journey: journey)
+                                    
+                                    //After journey is sent, it needs to be deleted from list that gives user a choice of journeys to send.
+                                    withAnimation {
+                                        deleteFromSendingList(journeyName: journey.name)
+                                    }
+                                    
+                                } label:{
+                                    Text("Send")
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                .foregroundColor(Color.accentColor)
+                            }
+                            
                         }
-                        
-                    } label:{
-                        Text("Send")
                     }
-                    .buttonStyle(PlainButtonStyle())
-                    .foregroundColor(Color.accentColor)
+                }
+                .onAppear {
+                    prepareJourneysToSend()
                 }
                 
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    ButtonView(buttonTitle: "Done")
+                        .background(Color.accentColor)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .padding()
+                }
             }
-            .onAppear {
-                prepareJourneysToSend()
-            }
-            
-            Button {
-                presentationMode.wrappedValue.dismiss()
-            } label: {
-                ButtonView(buttonTitle: "Done")
-                    .background(Color.accentColor)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .padding()
-            }
+            .navigationTitle("Send journey to \(targetEmail)")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
     

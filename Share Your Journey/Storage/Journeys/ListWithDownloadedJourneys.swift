@@ -24,39 +24,46 @@ struct ListWithDownloadedJourneys: View {
     @Binding var journeyToDelete: String
     
     var body: some View {
-        List (downloadedJourneysFilteredList.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
-            NavigationLink(destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: true, path: "")) {
-                HStack {
-                    Button{
-                        askAboutDeletion = true
-                        journeyToDelete = journey.name
-                    } label: {
-                        Image(systemName: "xmark")
-                            .foregroundColor(.gray)
+        VStack {
+            if downloadedJourneysFilteredList.isEmpty{
+                NoDataView(text: "No journeys to show")
+            } else {
+                List (downloadedJourneysFilteredList.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
+                    NavigationLink(destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: true, path: "")) {
+                        HStack {
+                            Button{
+                                askAboutDeletion = true
+                                journeyToDelete = journey.name
+                            } label: {
+                                Image(systemName: "xmark")
+                                    .foregroundColor(.gray)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .padding(.horizontal, 10)
+                            Text(journey.name)
+                                .padding(.vertical, 30)
+                        }
                     }
-                    .buttonStyle(PlainButtonStyle())
-                    .padding(.horizontal, 10)
-                    Text(journey.name)
-                        .padding(.vertical, 30)
+                    .buttonStyle(.plain)
+                }
+                
+                .alert(isPresented: $askAboutDeletion) {
+                    //After tapping "x" button, users are always asked if they are sure to delete this particular journey.
+                    Alert (title: Text("Delete journey"),
+                           message: Text("Are you sure that you want to delete this journey?"),
+                           primaryButton: .cancel(Text("Cancel")) {
+                        askAboutDeletion = false
+                        journeyToDelete = ""
+                    },
+                           secondaryButton: .destructive(Text("Delete")) {
+                        deleteDownloadedJourney()
+                    }
+                    )
                 }
             }
-            .buttonStyle(.plain)
         }
         .onAppear {
             populateWithDownloadedJourneys()
-        }
-        .alert(isPresented: $askAboutDeletion) {
-            //After tapping "x" button, users are always asked if they are sure to delete this particular journey.
-            Alert (title: Text("Delete journey"),
-                   message: Text("Are you sure that you want to delete this journey?"),
-                   primaryButton: .cancel(Text("Cancel")) {
-                askAboutDeletion = false
-                journeyToDelete = ""
-            },
-                   secondaryButton: .destructive(Text("Delete")) {
-                deleteDownloadedJourney()
-            }
-            )
         }
     }
     
@@ -89,9 +96,7 @@ struct ListWithDownloadedJourneys: View {
         }
         do {
             try context.save()
-        } catch {
-            
-        }
+        } catch {}
         
         //Journey has to be deleted from the array right away.
         for i in 0...downloadedJourneysList.count - 1 {

@@ -221,6 +221,11 @@ struct StartView: View {
             print("Error while logging out: \(signOutError)")
         }
         
+        Purchases.shared.logOut { customerInfo, error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+        }
         loggedOut = true
     }
     

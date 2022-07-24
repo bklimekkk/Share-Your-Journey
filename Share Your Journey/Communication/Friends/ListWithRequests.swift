@@ -16,41 +16,49 @@ struct ListWithRequests: View {
     
     var body: some View {
         
-        //List contains all requests searched by user.
-        List (filteredRequestsList.sorted(by: {$0 < $1}), id: \.self) { request in
-            HStack {
-                Button{
-                    removeRequest(request: request)
-                } label: {
-                    Image(systemName: "xmark")
-                        .padding(5)
-                        .foregroundColor(.gray)
+        VStack {
+            if filteredRequestsList.isEmpty {
+                NoDataView(text: "No requests to show")
+            } else {
+                //List contains all requests searched by user.
+                List (filteredRequestsList.sorted(by: {$0 < $1}), id: \.self) { request in
+                    HStack {
+                        Button{
+                            removeRequest(request: request)
+                        } label: {
+                            Image(systemName: "xmark")
+                                .padding(5)
+                                .foregroundColor(.gray)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        
+                        Text(request)
+                            .padding(.vertical, 30)
+                        
+                        Spacer()
+                        
+                        Button{
+                            acceptRequest(request: request)
+                        } label: {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(Color.green)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
                 }
-                .buttonStyle(PlainButtonStyle())
+                .navigationBarHidden(true)
                 
-                Text(request)
-                    .padding(.vertical, 30)
-                
-                Spacer()
-                
-                Button{
-                    acceptRequest(request: request)
-                } label: {
-                    Image(systemName: "checkmark")
-                        .foregroundColor(Color.green)
+                .refreshable {
+                    
+                    //Users are able to refresh list if any changes were made in the meantime.
+                    populateRequests()
                 }
-                .buttonStyle(PlainButtonStyle())
             }
         }
-        .navigationBarHidden(true)
         .onAppear {
             populateRequests()
         }
-        .refreshable {
-            
-            //Users are able to refresh list if any changes were made in the meantime.
-            populateRequests()
-        }
+        
     }
     
     /**

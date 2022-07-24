@@ -71,19 +71,20 @@ struct MapView: UIViewRepresentable {
                 marker.glyphText = annotation.title as? String
                 marker.canShowCallout = true
                 
-                let leftButton = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
-                let rightButton = UIButton(frame: CGRect(x: 0, y: 0, width: 32, height: 32))
+                let leftButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+                let rightButton = UIButton(frame: CGRect(x: 0, y: 0, width: 45, height: 40))
                 
-                leftButton.setImage(UIImage(systemName: "location.north.circle"), for: .normal)
-                rightButton.setImage(UIImage(systemName: "camera"), for: .normal)
+                let iconSizeConfiguration = UIImage.SymbolConfiguration(pointSize: 25)
+                
+                leftButton.setImage(UIImage(systemName: "location.north.circle", withConfiguration: iconSizeConfiguration), for: .normal)
+                rightButton.setImage(UIImage(systemName: "camera", withConfiguration: iconSizeConfiguration), for: .normal)
                 
                 leftButton.tintColor = parent.tintColor
                 rightButton.tintColor = parent.tintColor
-
+                
                 marker.leftCalloutAccessoryView = leftButton
                 marker.rightCalloutAccessoryView = rightButton
-                
-            } else {
+               } else {
                 marker.markerTintColor = .systemBlue
                 marker.glyphImage = UIImage(systemName: "person.fill")
                 marker.selectedGlyphImage = UIImage(systemName: "person")

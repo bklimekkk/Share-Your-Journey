@@ -233,7 +233,7 @@ struct SeeJourneyView: View {
                                 }
                                 
                                 //Icons enabling users to choose between walking and driving directions.
-                                DirectionIcons(mapType: $currentLocationManager.mapView.mapType, subscriber: $subscription.showPanel, showPanel: $subscription.showPanel, walking: $walking)
+                                DirectionIcons(mapType: $currentLocationManager.mapView.mapType, subscriber: $subscription.subscriber, showPanel: $subscription.showPanel, walking: $walking)
                                 
                                 //Buttons enabling users to re-center the map and change map's mode.
                                 Button {
