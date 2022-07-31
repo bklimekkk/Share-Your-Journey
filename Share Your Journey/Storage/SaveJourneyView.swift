@@ -20,7 +20,7 @@ struct SaveJourneyView: View {
     //Variables were described in SumUpView struct.
     @Binding var presentSheet: Bool
     @Binding var done: Bool
-    var journey: SingleJourney
+    @Binding var journey: SingleJourney
     
     //Variable is supposed to hold data entered by user while naming the journey that they want to save.
     @State private var name = ""
@@ -74,6 +74,7 @@ struct SaveJourneyView: View {
                 }
                 
                 createJourney(journey: journey, name: trimmedName)
+                journey.name = trimmedName
                 done = true
                 presentSheet = false
                 

@@ -24,7 +24,11 @@ struct ListWithJourneys: View {
         VStack {
             
             if journeysFilteredList.isEmpty{
-                NoDataView(text: "No journeys to show")
+                NoDataView(text: "No journeys to show. Tap to refresh.")
+                    .onTapGesture {
+                        clearInvalidJourneys()
+                        updateJourneys()
+                    }
             } else {
                 List (journeysFilteredList.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
                     NavigationLink (destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
@@ -71,11 +75,14 @@ struct ListWithJourneys: View {
             
         }
         .onAppear {
-             
              //List is updated every time the screen appears.
              clearInvalidJourneys()
              updateJourneys()
          }
+        .refreshable {
+            clearInvalidJourneys()
+            updateJourneys()
+        }
         
         
     }

@@ -19,6 +19,8 @@
 		862AA47627B14D6D001B9312 /* Share_Your_JourneyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862AA47527B14D6D001B9312 /* Share_Your_JourneyUITests.swift */; };
 		862AA47827B14D6D001B9312 /* Share_Your_JourneyUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862AA47727B14D6D001B9312 /* Share_Your_JourneyUITestsLaunchTests.swift */; };
 		8633D980286A49EB003D83BB /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8633D97F286A49EB003D83BB /* WelcomeView.swift */; };
+		8639E00D28968E0800D7A3F5 /* SendJourneyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8639E00C28968E0800D7A3F5 /* SendJourneyManager.swift */; };
+		8639E00F289694D100D7A3F5 /* SendViewedJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8639E00E289694D100D7A3F5 /* SendViewedJourneyView.swift */; };
 		863CF4FF27BA2A31007B82D4 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863CF4FE27BA2A31007B82D4 /* ChatView.swift */; };
 		863CF50127BA2AD3007B82D4 /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863CF50027BA2AD3007B82D4 /* AddFriendView.swift */; };
 		863CF50827BAF558007B82D4 /* CurrentLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863CF50727BAF558007B82D4 /* CurrentLocationManager.swift */; };
@@ -104,6 +106,8 @@
 		862AA47527B14D6D001B9312 /* Share_Your_JourneyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Share_Your_JourneyUITests.swift; sourceTree = "<group>"; };
 		862AA47727B14D6D001B9312 /* Share_Your_JourneyUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Share_Your_JourneyUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		8633D97F286A49EB003D83BB /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		8639E00C28968E0800D7A3F5 /* SendJourneyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendJourneyManager.swift; sourceTree = "<group>"; };
+		8639E00E289694D100D7A3F5 /* SendViewedJourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendViewedJourneyView.swift; sourceTree = "<group>"; };
 		863CF4FE27BA2A31007B82D4 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		863CF50027BA2AD3007B82D4 /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
 		863CF50727BAF558007B82D4 /* CurrentLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationManager.swift; sourceTree = "<group>"; };
@@ -308,6 +312,7 @@
 			children = (
 				86FCCC6828102A26005FD678 /* Start */,
 				8652A17127BFEAE900ADBB25 /* SumUpView.swift */,
+				8639E00E289694D100D7A3F5 /* SendViewedJourneyView.swift */,
 				86C649FC27D1DF0700891C24 /* SeeJourneyView.swift */,
 				865452AC2809D452008041A8 /* DownloadChangesView.swift */,
 			);
@@ -330,6 +335,7 @@
 				86FCCC632810263C005FD678 /* Chat */,
 				863CF50027BA2AD3007B82D4 /* AddFriendView.swift */,
 				8652A16E27BE3EE100ADBB25 /* SendJourneyView.swift */,
+				8639E00C28968E0800D7A3F5 /* SendJourneyManager.swift */,
 			);
 			path = Communication;
 			sourceTree = "<group>";
@@ -568,6 +574,7 @@
 				86C6494E27D036B300891C24 /* SaveJourneyView.swift in Sources */,
 				8672551E27B80C8A00DC5001 /* FriendsView.swift in Sources */,
 				86FCCC6028102449005FD678 /* ListWithRequests.swift in Sources */,
+				8639E00F289694D100D7A3F5 /* SendViewedJourneyView.swift in Sources */,
 				86FCCC7B28107A2F005FD678 /* FieldComponents.swift in Sources */,
 				867254DD27B47B7B00DC5001 /* StartView.swift in Sources */,
 				86C6494C27CFAFD500891C24 /* JourneyDataManager.swift in Sources */,
@@ -608,6 +615,7 @@
 				86FCCC772810796B005FD678 /* ButtonComponents.swift in Sources */,
 				862411A82888AE9F007A86E2 /* SubscriptionView.swift in Sources */,
 				86C649FB27D1B43A00891C24 /* Photo+CoreDataProperties.swift in Sources */,
+				8639E00D28968E0800D7A3F5 /* SendJourneyManager.swift in Sources */,
 				86573E5C27F783D3003E5CF8 /* VerificationView.swift in Sources */,
 				8652A16F27BE3EE200ADBB25 /* SendJourneyView.swift in Sources */,
 				86573E5E27F8370B003E5CF8 /* ResetPasswordView.swift in Sources */,

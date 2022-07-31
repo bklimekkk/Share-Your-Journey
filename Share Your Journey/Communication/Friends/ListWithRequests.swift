@@ -18,7 +18,10 @@ struct ListWithRequests: View {
         
         VStack {
             if filteredRequestsList.isEmpty {
-                NoDataView(text: "No requests to show")
+                NoDataView(text: "No requests to show. Tap to refresh.")
+                    .onTapGesture {
+                        populateRequests()
+                    }
             } else {
                 //List contains all requests searched by user.
                 List (filteredRequestsList.sorted(by: {$0 < $1}), id: \.self) { request in

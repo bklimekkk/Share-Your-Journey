@@ -32,6 +32,7 @@ struct AddFriendView: View {
     
     //Variable is set to one of enum values from InvitationError.
     @State private var responseType = InvitationError.valid
+    
     var body: some View {
         VStack {
             Text("Add a friend")
@@ -140,22 +141,22 @@ struct AddFriendView: View {
             //Depending on which error occurs, users are presented to relevant message.
             Alert (title: Text(responseType == .valid ? "Invite friend" : "Invitation error"),
                    message: Text(responseType == .emptyField ? "You must provide email address" : responseType == .yourEmail ? "This is your email address" : responseType == .requestFromFriend ? "This friend already sent you a friend request" : responseType == .alreadyInvited ? "You already invited this person" : responseType ==  .friendsAlready ? "You are already friends!" : responseType == .noAccount ? "Account doesn't exist" : email),
-                   primaryButton: .cancel(Text(responseType == .valid ? "Invite" : "Try again")) {
-                if responseType == .valid {
-                    sendRequest()
-                } else {
-                    showMessage = false
-                    responseType = .valid
-                    email = ""
-                }
-            },
-                   secondaryButton: .destructive(Text(responseType == .valid ? "Cancel" : "Quit")) {
+                   primaryButton: .destructive(Text(responseType == .valid ? "Cancel" : "Quit")) {
                 if responseType == .valid {
                     showMessage = false
                 } else {
                     showMessage = false
                     sheetIsPresented = false
                     responseType = .valid
+                }
+            },
+                   secondaryButton: .cancel(Text(responseType == .valid ? "Invite" : "Try again")) {
+                if responseType == .valid {
+                    sendRequest()
+                } else {
+                    showMessage = false
+                    responseType = .valid
+                    email = ""
                 }
             }
             )

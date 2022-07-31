@@ -23,6 +23,7 @@ struct SendJourneyView: View {
     @State private var unsentJourneys: [SingleJourney] = []
     
     @State private var searchText = ""
+    
     var filteredUnsentJourneys: [SingleJourney] {
         if searchText.isEmpty {
             return unsentJourneys
@@ -38,7 +39,7 @@ struct SendJourneyView: View {
                     .padding(.top)
                 VStack {
                     if filteredUnsentJourneys.isEmpty{
-                        NoDataView(text: "No journeys to send")
+                        NoDataView(text: "No journeys to send. Tap to refresh.")
                     } else {
                         List(filteredUnsentJourneys.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
                             HStack {
@@ -46,7 +47,7 @@ struct SendJourneyView: View {
                                     .padding(.vertical, 30)
                                 Spacer()
                                 Button{
-                                    sendJourney(journey: journey)
+                                    SendJourneyManager().sendJourney(journey: journey, targetEmail: targetEmail)
                                     
                                     //After journey is sent, it needs to be deleted from list that gives user a choice of journeys to send.
                                     withAnimation {
@@ -81,39 +82,6 @@ struct SendJourneyView: View {
         }
     }
     
-    /**
-     Function is responsible for sending entire journey to particular user.
-     */
-    func sendJourney(journey: SingleJourney) {
-        
-        //Journey is added to relevant collection in the firestore database (without photos references).
-        FirebaseSetup.firebaseInstance.db.document("users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(targetEmail)/journeys/\(journey.name)").setData([
-            "name": journey.name,
-            "email" : journey.email,
-            "photosNumber" : journey.numberOfPhotos,
-            "date" : Date(),
-            "deletedJourney" : false
-        ])
-        
-        let path = "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "" )/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys/\(journey.name)/photos"
-        
-        FirebaseSetup.firebaseInstance.db.collection(path).getDocuments { (querySnapshot, error) in
-            if error != nil {
-                print(error!.localizedDescription)
-            } else {
-                //All photos details are stored inside document representing particular journey.
-                for i in querySnapshot!.documents.sorted(by: { $0["photoNumber"] as! Int > $1["photoNumber"] as! Int }) {
-                    FirebaseSetup.firebaseInstance.db.document("users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(targetEmail)/journeys/\(journey.name)/photos/\(i.documentID)").setData([
-                        "latitude": i.get("latitude") as! CLLocationDegrees,
-                        "longitude": i.get("longitude") as! CLLocationDegrees,
-                        "photoUrl": i.get("photoUrl") as! String,
-                        "photoNumber": i.get("photoNumber") as! Int
-                    ])
-                }
-            }
-        }
-    }
-    
     //Function is responsible for deleting particular journey from the list of unsent journeys.
     func deleteFromSendingList(journeyName: String) {
         for i in 0...unsentJourneys.count - 1 {
@@ -128,7 +96,7 @@ struct SendJourneyView: View {
      Function is responsible for preapring the list from which users can choose a journey to send.
      */
     func prepareJourneysToSend() {
-        //First of all, all program fetches all user's journeys that were sent to particular friend from firebase database and stores them in first array.
+        //First of all, the program fetches all user's journeys that were sent to particular friend from firebase database and stores them in first array.
         let ownEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.email
         FirebaseSetup.firebaseInstance.db.collection("users/\(ownEmail ?? "")/friends/\(targetEmail)/journeys").getDocuments { (snapshot, error) in
             if error != nil {

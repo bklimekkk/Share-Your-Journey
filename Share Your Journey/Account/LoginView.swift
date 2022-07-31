@@ -27,44 +27,47 @@ class FirebaseSetup: NSObject {
     }
 }
 
+class AccountAccessManager: ObservableObject {
+    //Variable responsible for checking if first screen is in registration or in login mode.
+    @Published var register = false
+    
+    //Variable checks if users verified themselves already.
+    @Published var verificationNeeded = false
+    //Variable triggers sheet with verification that is shown after users registers successfully.
+    @Published var showVerificationMessage = false
+    
+    //Variable checks if users want to reset their password.
+    @Published var resetPassword = false
+    //Variable justifies if screen should present users with reset password message.
+    @Published var passwordResetAlert = false
+    //Email that users are supposed to enter in order for the application to send reset email.
+    @Published var resetEmail = ""
+}
+
+class ErrorManager: ObservableObject {
+    //This variable is set to true if an error message should be shown.
+    @Published var showErrorMessage = false
+    
+    //This variable is set to relevant error message when needed.
+    @Published var errorBody = ""
+}
+
 //Struct responsible for presenting login and register screens of the application.
 struct LoginView: View {
     let defaults = UserDefaults.standard
-    
-    //Variable responsible for checking if first screen is in registration or in login mode.
-    @State private var register = false
-    
-    //Variable triggers sheet with verification that is shown after users registers successfully.
-    @State private var showVerificationMessage = false
+    //Variable checks if user uses the application for the first time. If yes, it will show the initial instructions.
+    @AppStorage("showInstructions") var showInstructions: Bool = true
     
     //Variables represent user's email, password and name, which are used for registration and logging in processes.
     @State private var email = ""
     @State private var password = ""
     @State private var repeatedPassword = ""
     
-    //This variable is set to true if an error message should be shown.
-    @State private var showErrorMessage = false
-    
-    //This variable is set to relevant error message when needed.
-    @State private var errorBody = ""
-    
-    //Variable checks if users verified themselves already.
-    @State private var verificationNeeded = false
-    
-    //Variable checks if users want to reset their password.
-    @State private var resetPassword = false
-    
-    //Variable justifies if screen should present users with reset password message.
-    @State private var passwordResetAlert = false
-    
-    //Email that users are supposed to enter in order for the application to send reset email.
-    @State private var resetEmail = ""
-    
     //Variable controls if user is logged in or logged out.
     @Binding var loggedOut: Bool
     
-    //Variable checks if user uses the application for the first time. If yes, it will show the initial instructions.
-    @AppStorage("showInstructions") var showInstructions: Bool = true
+    @StateObject private var accountAccessManager = AccountAccessManager()
+    @StateObject private var errorManager = ErrorManager()
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -78,7 +81,7 @@ struct LoginView: View {
                 VStack {
                     
                     //PickerView struct enables users to choos between two "sub" screens.
-                    PickerView(choice: $register, firstChoice: "Login", secondChoice: "Create account")
+                    PickerView(choice: $accountAccessManager.register, firstChoice: "Login", secondChoice: "Create account")
                     
                     EmailTextField(label: "E-mail address", email: $email)
                     SecureField("Passowrd", text: $password)
@@ -86,7 +89,7 @@ struct LoginView: View {
                         .font(.system(size: 20))
                     
                     //If users register themselves, they are supposed to repeat entered password.
-                    if register {
+                    if accountAccessManager.register {
                         SecureField("Repeat password", text: $repeatedPassword)
                             .padding(.vertical, 10)
                             .font(.system(size: 20))
@@ -99,15 +102,15 @@ struct LoginView: View {
                     } label: {
                         
                         //Depending on screen current mode, button will show different message.
-                        ButtonView(buttonTitle: register ? "Create Account" : "Login")
+                        ButtonView(buttonTitle: accountAccessManager.register ? "Create Account" : "Login")
                     }
                     .background(Color.accentColor)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     
                     //Reset password option shows up only when screen presents logging in functionality.
-                    if !register {
+                    if !accountAccessManager.register {
                         Button{
-                            resetPassword = true
+                            accountAccessManager.resetPassword = true
                         } label: {
                             Text("Forgot my password")
                                 .foregroundColor(forgotPasswordButtonColor)
@@ -118,53 +121,54 @@ struct LoginView: View {
                 }
                 .onAppear {
                     email = defaults.string(forKey: "email") ?? ""
+                    password = defaults.string(forKey: "password") ?? ""
                 }
                 .padding()
-                .fullScreenCover(isPresented: $showVerificationMessage) {
-                    register = false
+                .fullScreenCover(isPresented: $accountAccessManager.showVerificationMessage) {
+                    accountAccessManager.register = false
                 } content: {
                     VerificationInformation(email: email)
                 }
-                .sheet(isPresented: $resetPassword) {
-                    if resetEmail != "" {
-                        passwordResetAlert = true
+                .sheet(isPresented: $accountAccessManager.resetPassword) {
+                    if accountAccessManager.resetEmail != "" {
+                        accountAccessManager.passwordResetAlert = true
                     }
                 } content: {
                     //In this screen, users are only asked to enter their e-mail address.
-                    ResetPasswordView(resetEmail: $resetEmail, email: $email)
+                    ResetPasswordView(resetEmail: $accountAccessManager.resetEmail, email: email)
                 }
             }
             .sheet(isPresented: $showInstructions, content: {
                 WelcomeView(showInstructions: $showInstructions)
             })
-            .navigationTitle(register ? "Create Account" : "Login")
+            .navigationTitle(accountAccessManager.register ? "Create Account" : "Login")
             
             //Title's property is set in a way that it takes possibly smallest space.
             .navigationBarTitleDisplayMode(.inline)
             
             //Alert is presented if any error occurs.
-            .alert("Unsuccessfull \(register ? "registration" : "login")", isPresented: $showErrorMessage) {
+            .alert("Unsuccessfull \(accountAccessManager.register ? "registration" : "login")", isPresented: $errorManager.showErrorMessage) {
                 Button("OK", role: .cancel) {
-                    showErrorMessage = false
+                    errorManager.showErrorMessage = false
                     clearPasswordField()
                 }
             } message: {
-                Text(errorBody)
+                Text(errorManager.errorBody)
             }
             
             //Alert is shown to inform users that their password reset email was sent.
-            .alert("Password reset e-mail", isPresented: $passwordResetAlert, actions: {
+            .alert("Password reset e-mail", isPresented: $accountAccessManager.passwordResetAlert, actions: {
                 Button("Ok", role: .cancel) {
-                    resetEmail = ""
-                    passwordResetAlert = false
+                    accountAccessManager.resetEmail = ""
+                    accountAccessManager.passwordResetAlert = false
                 }
             }, message: {
-                Text("Reset password e-mail was sent to \(resetEmail)")
+                Text("Reset password e-mail was sent to \(accountAccessManager.resetEmail)")
             })
             
-            .alert("Verification error", isPresented: $verificationNeeded) {
+            .alert("Verification error", isPresented: $accountAccessManager.verificationNeeded) {
                 Button("Ok"){
-                    verificationNeeded = false
+                    accountAccessManager.verificationNeeded = false
                 }
                 Button("Verify again", role: .cancel){
                     sendVerificationEmail()
@@ -186,16 +190,16 @@ struct LoginView: View {
                 print("There was an error while sending verification")
             }
         }
-        verificationNeeded = false
+        accountAccessManager.verificationNeeded = false
     }
     
     /**
      After users are presented with error during registraiton, all input fields are cleared.
      */
     func clearPasswordField() {
-        if !register {
+        if !accountAccessManager.register {
             password = ""
-            errorBody = ""
+            errorManager.errorBody = ""
         }
     }
     
@@ -203,7 +207,7 @@ struct LoginView: View {
      Function performs either login or registration, depending on what mode user is currently at.
      */
     func performButtonAction() {
-        if register {
+        if accountAccessManager.register {
             performRegistration()
         } else {
             performLogin()
@@ -218,24 +222,24 @@ struct LoginView: View {
         //Using firebase as a way to authenticate users by email and passord.
         FirebaseSetup.firebaseInstance.auth.signIn(withEmail: email, password: password) { result, error in
             if(error != nil) {
-                showErrorMessage = true
-                errorBody = error?.localizedDescription ?? ""
+                errorManager.showErrorMessage = true
+                errorManager.errorBody = error?.localizedDescription ?? ""
                 return
             }
             
             //Program checks if users verified themselves already.
             let verifiedEmail = result?.user.isEmailVerified ?? false
             if !verifiedEmail {
-                verificationNeeded = true
+                accountAccessManager.verificationNeeded = true
                 return
             }
             
             //As this variable is set to false, logging in screen disappears and users can access the application.
             loggedOut = false
             
-            //As user logs in, default email address is set to data they provided.
+            //As user logs in, default email address and password are set to data they provided.
             defaults.set(FirebaseSetup.firebaseInstance.auth.currentUser?.email, forKey: "email")
-            
+            defaults.set(password, forKey: "password")
             Purchases.shared.logIn(result!.user.uid) { (customerInfo, created, error) in
                 if let error = error {
                     print(error.localizedDescription)
@@ -251,27 +255,27 @@ struct LoginView: View {
         if password != repeatedPassword {
             
             //If users won't repeat password properly, registration won't go successfully.
-            showErrorMessage = true
-            errorBody = "Password fields don't match"
+            errorManager.showErrorMessage = true
+            errorManager.errorBody = "Password fields don't match"
             return
         }
             
             //Firebase is used for creating a new account.
-            FirebaseSetup.firebaseInstance.auth.createUser(withEmail: email, password: password) { result, error in
+        FirebaseSetup.firebaseInstance.auth.createUser(withEmail: email, password: password) { result, error in
                 if error != nil {
-                    showErrorMessage = true
-                    errorBody = error?.localizedDescription ?? ""
+                    errorManager.showErrorMessage = true
+                    errorManager.errorBody = error?.localizedDescription ?? ""
                     return
                 }
                 
                 //User is added to the firestore database.
-                addUser(email: email)
+            addUser(email: email)
                 FirebaseSetup.firebaseInstance.auth.currentUser?.sendEmailVerification { error in
                     if error != nil {
                         print("There was an error while sending verification")
                     }
                 }
-                showVerificationMessage = true
+            accountAccessManager.showVerificationMessage = true
             }
     }
 }

@@ -13,12 +13,12 @@ struct NoDataView: View {
     var body: some View {
         ZStack {
             Color(colorScheme == .dark ? .black : UIColor(red: 0.95, green: 0.95, blue: 0.97, alpha: 1.00))
-        VStack {
-            Spacer()
-            Text(text)
-                .foregroundColor(.gray)
-            Spacer()
-        }
+            VStack {
+                Spacer()
+                Text(text)
+                    .foregroundColor(.gray)
+                Spacer()
+            }
         }
     }
 }

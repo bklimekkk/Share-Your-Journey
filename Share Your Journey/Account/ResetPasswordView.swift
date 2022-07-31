@@ -17,10 +17,9 @@ struct ResetPasswordView: View {
     @Environment(\.dismiss) var dismiss
     
     //Variable containing data input by user. 
-    @Binding var email: String
+    @State var email: String
     
-    @State private var showError = false
-    @State private var errorMessage = false
+    @StateObject private var errorManager = ErrorManager()
     
     var body: some View {
         VStack (spacing: 20) {
@@ -30,6 +29,12 @@ struct ResetPasswordView: View {
                 .padding(.horizontal, 10)
             Spacer()
             Button{
+                
+                if email.isEmpty {
+                    errorManager.errorBody = "Enter email to reset the password"
+                    errorManager.showErrorMessage = true
+                    return
+                }
                 
                 //Sending a password-reset message to a given email address. 
                 FirebaseSetup.firebaseInstance.auth.sendPasswordReset(withEmail: email) { error in
@@ -42,6 +47,9 @@ struct ResetPasswordView: View {
             } label: {
                 ButtonView(buttonTitle: "Reset password")
             }
+            .alert("Email field is empty", isPresented: $errorManager.showErrorMessage, actions: {}, message: {
+                Text(errorManager.errorBody)
+            })
             .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .padding(.horizontal, 10)

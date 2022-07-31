@@ -23,7 +23,10 @@ struct FriendJourneysList: View {
     var body: some View {
         VStack {
             if sentByFriendFiltered.isEmpty{
-                NoDataView(text: "No journeys to show")
+                NoDataView(text: "No journeys to show. Tap to refresh.")
+                    .onTapGesture {
+                        populateFriendsJourneys()
+                    }
             } else {
                 //List presenting users with journeys sent by their friends.
                 List(sentByFriendFiltered.sorted(by: {$0.date > $1.date}), id: \.self) { journey in

@@ -75,6 +75,8 @@ struct SeeJourneyView: View {
     //Variable checks if presented journey was already downloaded (not to be mistaken with "areadyDownloaded which search for duplication in the Core Data).
     @State private var journeyIsDownloaded = false
     
+    @State private var showSendingView = false
+    
     //Variable is responsible for saving data to Core Data.
     @Environment(\.managedObjectContext) var context
     
@@ -259,6 +261,15 @@ struct SeeJourneyView: View {
                 }
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button{
+                    showSendingView = true
+                }label:{
+                   Image(systemName: "square.and.arrow.up")
+                }
+            }
+        }
         .task {
             Purchases.shared.getCustomerInfo { (customerInfo, error) in
                 if customerInfo!.entitlements["allfeatures"]?.isActive == true {
@@ -290,6 +301,9 @@ struct SeeJourneyView: View {
         }
         .fullScreenCover(isPresented: $subscription.showPanel, content: {
             SubscriptionView(subscriber: $subscription.subscriber)
+        })
+        .sheet(isPresented: $showSendingView, content: {
+            SendViewedJourneyView(journey: journey)
         })
         .sheet(isPresented: $changeName, onDismiss: {
             

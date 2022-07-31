@@ -19,15 +19,15 @@ struct ChatView: View {
     //Variable controls if program should ask user about deleting particular item in the array.
     @State private var askAboutDeletion = false
     
-    //Variable contains text entered by user in order to search items in the array.
-    @State private var searchJourney = ""
-    
     //Array is supposed to contain all journeys send by user.
     @State private var sentByYou: [SingleJourney] = []
     
     //Array containing journeys sent by friend.
     @State private var sentByFriend: [SingleJourney] = []
     
+    //Variable contains text entered by user in order to search items in the array.
+    @State private var searchJourney = ""
+   
     //Variable contains all journeys send by users that they searched.
     private var sentByYouFiltered: [SingleJourney] {
         if searchJourney == "" {

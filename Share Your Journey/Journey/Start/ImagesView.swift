@@ -14,28 +14,37 @@ struct ImagesView: View {
     @Environment(\.dismiss) var dismiss
     var body: some View {
         NavigationView {
-            ScrollView(showsIndicators: false) {
-                VStack {
-                    ForEach(images, id: \.number) { image in
-                            Image(uiImage: image.photo)
-                                .resizable()
-                                .clipShape(RoundedRectangle(cornerRadius:10))
-                                .shadow(color: .gray, radius: 2)
-                                .scaledToFill()
-                                .padding(.vertical, 5)
-                                .padding(.horizontal, 1)
-                        }
-                }
-                .padding()
-                .navigationTitle("Journey Photos")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .bottomBar) {
-                        Button("Back to journey") {
-                            dismiss()
+            VStack {
+                if images.isEmpty {
+                    Spacer()
+                    Text("No images to show")
+                        .foregroundColor(.gray)
+                    Spacer()
+                } else {
+                    ScrollView(showsIndicators: false) {
+                        VStack {
+                            ForEach(images, id: \.number) { image in
+                                Image(uiImage: image.photo)
+                                    .resizable()
+                                    .clipShape(RoundedRectangle(cornerRadius:10))
+                                    .shadow(color: .gray, radius: 2)
+                                    .scaledToFill()
+                                    .padding(.vertical, 5)
+                                    .padding(.horizontal, 1)
+                            }
                         }
                     }
+                }
             }
+            .padding()
+            .navigationTitle("Journey Photos")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                    Button("Back to the journey") {
+                        dismiss()
+                    }
+                }
             }
         }
     }

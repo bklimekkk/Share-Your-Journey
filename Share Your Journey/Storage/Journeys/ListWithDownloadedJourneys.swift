@@ -26,7 +26,10 @@ struct ListWithDownloadedJourneys: View {
     var body: some View {
         VStack {
             if downloadedJourneysFilteredList.isEmpty{
-                NoDataView(text: "No journeys to show")
+                NoDataView(text: "No journeys to show. Tap to refresh.")
+                    .onTapGesture {
+                        populateWithDownloadedJourneys()
+                    }
             } else {
                 List (downloadedJourneysFilteredList.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
                     NavigationLink(destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: true, path: "")) {
@@ -63,6 +66,9 @@ struct ListWithDownloadedJourneys: View {
             }
         }
         .onAppear {
+            populateWithDownloadedJourneys()
+        }
+        .refreshable {
             populateWithDownloadedJourneys()
         }
     }

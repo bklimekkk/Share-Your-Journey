@@ -17,7 +17,10 @@ struct ListWithFriends: View {
         VStack {
             
             if filteredFriendsList.isEmpty {
-                NoDataView(text: "No friends to show")
+                NoDataView(text: "No friends to show. Tap to refresh.")
+                    .onTapGesture {
+                        populateFriends()
+                    }
             } else {
                 //List is filtered alphabetically.
                 List (filteredFriendsList.sorted(by: {$0 < $1}), id: \.self) { friend in

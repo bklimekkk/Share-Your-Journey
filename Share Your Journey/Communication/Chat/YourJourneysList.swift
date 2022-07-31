@@ -32,7 +32,10 @@ struct YourJourneysList: View {
         
         VStack {
             if sentByYouFiltered.isEmpty{
-                NoDataView(text: "No journeys to show")
+                NoDataView(text: "No journeys to show. Tap to refresh.")
+                    .onTapGesture {
+                        populateYourJourneys()
+                    }
             } else {
                 //List is sorted by date.
                 List(sentByYouFiltered.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
@@ -49,11 +52,6 @@ struct YourJourneysList: View {
                         Text(journey.name)
                             .padding(.vertical, 30)
                     }
-                }
-                .fullScreenCover(isPresented: $sendJourneyScreen, onDismiss: {
-                    populateYourJourneys()
-                }) {
-                    SendJourneyView(targetEmail: email)
                 }
                 .refreshable {
                     populateYourJourneys()
@@ -88,6 +86,11 @@ struct YourJourneysList: View {
                     )
                 }
             }
+        }
+        .fullScreenCover(isPresented: $sendJourneyScreen, onDismiss: {
+            populateYourJourneys()
+        }) {
+            SendJourneyView(targetEmail: email)
         }
         .onAppear {
             populateYourJourneys()

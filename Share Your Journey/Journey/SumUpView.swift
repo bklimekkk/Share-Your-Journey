@@ -34,7 +34,7 @@ struct SumUpView: View {
     @State private var viewType = SeeJourneyView.ViewType.twoDimensional
     
     //variable represents the journey user has taken before sum-up screen appeared.
-    var singleJourney: SingleJourney
+    @State var singleJourney: SingleJourney
     
     //Variables are set to false and are never changed in this struct. They are used to be passed as parameters for MapView.
     @State var walking = false
@@ -69,6 +69,8 @@ struct SumUpView: View {
     
     @State private var showDownloadAlert = false
     @State private var showDeleteAlert = false
+    
+    @State private var sendJourney = false
     
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
@@ -134,7 +136,7 @@ struct SumUpView: View {
                     } else if viewType == .twoDimensional {
                         Map(coordinateRegion: $initialFocus, annotationItems: singleJourney.photosLocations.enumerated().map({return PhotoLocation(id: $0.offset, location: CLLocationCoordinate2D(latitude: $0.element.latitude, longitude: $0.element.longitude))})) { location in
                             MapAnnotation(coordinate: location.location) {
-                                PhotoAnnotationView(photoIndex: $photoIndex, highlightedPhoto: $highlightedPhoto , showPicture: $showPicture, singleJourney: singleJourney, location: location)
+                                PhotoAnnotationView(photoIndex: $photoIndex, highlightedPhoto: $highlightedPhoto, showPicture: $showPicture, singleJourney: singleJourney, location: location)
                             }
                         }
                         .onAppear {
@@ -172,6 +174,16 @@ struct SumUpView: View {
                             
                             if !showPicture {
                                 if done {
+                                    
+                                    HStack(spacing: 10) {
+                                        Button {
+                                            sendJourney = true
+                                        } label: {
+                                            //Button is shown only if the journey is saved.
+                                            ButtonView(buttonTitle: "Send To Friend")
+                                                .background(Color.blue)
+                                        }
+                                        .clipShape(RoundedRectangle(cornerRadius: 10))
                                     Button {
                                         showSumUp = false
                                         dismiss()
@@ -181,9 +193,8 @@ struct SumUpView: View {
                                         ButtonView(buttonTitle: "Done")
                                             .background(Color.green)
                                     }
-                                    .background(Color.gray)
                                     .clipShape(RoundedRectangle(cornerRadius: 10))
-                                    
+                                    }
                                 } else {
                                     SumUpFunctionalityButtonsView(saveJourney: $saveJourney, showDeleteAlert: $showDeleteAlert)
                                 }
@@ -203,13 +214,16 @@ struct SumUpView: View {
                     Text("Are you sure that you want to quit? The journey will be deleted.")
                 }
                 .sheet(isPresented: $saveJourney, onDismiss: {}, content: {
-                    SaveJourneyView(presentSheet: $saveJourney, done: $done, journey: singleJourney)
+                    SaveJourneyView(presentSheet: $saveJourney, done: $done, journey: $singleJourney)
                 })
             }
         }
         .fullScreenCover(isPresented: $subscription.showPanel) {
             SubscriptionView(subscriber: $subscription.subscriber)
         }
+        .sheet(isPresented: $sendJourney, content: {
+            SendViewedJourneyView(journey: singleJourney)
+        })
         .task {
             Purchases.shared.getCustomerInfo { (customerInfo, error) in
                 if customerInfo!.entitlements["allfeatures"]?.isActive == true {
