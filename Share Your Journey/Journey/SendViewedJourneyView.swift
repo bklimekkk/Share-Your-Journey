@@ -20,18 +20,17 @@ struct SendViewedJourneyView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(listOfFriends, id: \.self) { friend in
+                ForEach(listOfFriends.sorted(by: {$0 < $1}), id: \.self) { friend in
                     Text(friend)
+                        .padding(.vertical, 15)
                         .onTapGesture {
-                            
-                            
-                            
                             FirebaseSetup.firebaseInstance.db.collection("users/\(email)/friends/\(friend)/journeys").getDocuments { querySnapshot, error in
                                 if let error = error {
                                     print(error.localizedDescription)
                                 } else {
                                     if querySnapshot!.documents.map({$0.documentID}).contains(journey.name) {
                                         showDuplicationAlert = true
+                                       
                                     } else {
                                         SendJourneyManager().sendJourney(journey: journey, targetEmail: friend)
                                         withAnimation {
@@ -43,15 +42,20 @@ struct SendViewedJourneyView: View {
                                             }
                                         }
                                     }
-                                    
-                                }
-                                
-                            }
-                            
-                            
-                        }
-                    
-                    
+                               }
+                           }
+
+//                    FirebaseSetup.firebaseInstance.db.collection("users/\(friend)/friends/\(email)/journeys").getDocuments { querySnapshot, error in
+//                        if let error = error {
+//                            print(error.localizedDescription)
+//                        } else {
+//                            if querySnapshot!.documents.map({$0.documentID}).contains(journey.name) {
+//                                showDuplicationAlert = true
+//                                return
+//                            }
+//                        }
+//                    }
+                  }
                 }
                 
             }
@@ -67,7 +71,7 @@ struct SendViewedJourneyView: View {
             .alert("Duplicate journey", isPresented: $showDuplicationAlert, actions: {
                 Button("Ok", role: .cancel){ }
             },message: {
-                Text("You have already sent this journey to this person.")
+                Text("This journey already exists in your conversation with this person.")
             })
             .task {
                 FirebaseSetup.firebaseInstance.db.collection("users/\(email)/friends").getDocuments { querySnapshot, error in

@@ -55,34 +55,36 @@ struct FriendsView: View {
     }
     
     var body: some View {
-        VStack {
-            
-            //Screen allows users to view their friends list and list with requests sent to them.
-            PickerView(choice: $requestMode, firstChoice: "Friends", secondChoice: "Requests")
-                .padding()
-            
-            SearchField(text: "Search e-mail address", search: $searchPeople)
-            
-            //Depending on what option user has chosen, different lists are persented.
-            if requestMode {
-                ListWithRequests(searchPeople: $searchPeople, requestsSet: $requestsSet, filteredRequestsList: filteredRequestsList)
-            } else {
-                ListWithFriends(searchPeople: $searchPeople, friendsSet: $friendsSet, filteredFriendsList: filteredFriendsList)
+
+            VStack {
+                
+                //Screen allows users to view their friends list and list with requests sent to them.
+                PickerView(choice: $requestMode, firstChoice: "Friends", secondChoice: "Requests")
+                    .padding()
+                
+                SearchField(text: "Search e-mail address", search: $searchPeople)
+                
+                //Depending on what option user has chosen, different lists are persented.
+                if requestMode {
+                    ListWithRequests(searchPeople: $searchPeople, requestsSet: $requestsSet, filteredRequestsList: filteredRequestsList)
+                } else {
+                    ListWithFriends(searchPeople: $searchPeople, friendsSet: $friendsSet, filteredFriendsList: filteredFriendsList)
+                }
+                
+                Spacer()
+                Button {
+                    addNewFriend = true
+                } label: {
+                    ButtonView(buttonTitle: "Add a new friend")
+                }
+                .background(Color.accentColor)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .padding(.horizontal)
             }
-            
-            Spacer()
-            Button {
-                addNewFriend = true
-            } label: {
-                ButtonView(buttonTitle: "Add a new friend")
+            .padding(.bottom)
+            .sheet(isPresented: $addNewFriend, onDismiss: nil) {
+                AddFriendView(sheetIsPresented: $addNewFriend)
             }
-            .background(Color.accentColor)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .padding(.horizontal)
-        }
-        .padding(.bottom)
-        .sheet(isPresented: $addNewFriend, onDismiss: nil) {
-            AddFriendView(sheetIsPresented: $addNewFriend)
-        }
+    
     }
 }

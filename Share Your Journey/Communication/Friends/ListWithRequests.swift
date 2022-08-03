@@ -36,7 +36,7 @@ struct ListWithRequests: View {
                         .buttonStyle(PlainButtonStyle())
                         
                         Text(request)
-                            .padding(.vertical, 30)
+                            .padding(.vertical, 15)
                         
                         Spacer()
                         

@@ -18,11 +18,18 @@ extension UIImage {
         self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
         
         let normalizedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-
+        
         UIGraphicsEndImageContext()
         return normalizedImage;
     }
 }
+
+
+
+
+
+
+
 
 struct MapView: UIViewRepresentable {
     @Environment(\.colorScheme) var colorScheme
@@ -30,6 +37,10 @@ struct MapView: UIViewRepresentable {
     @Binding var walking: Bool
     @Binding var showPhoto: Bool
     @Binding var photoIndex: Int
+    @Binding var showWeather: Bool
+    @Binding var expandWeather: Bool
+    @Binding var weatherLatitude: Double
+    @Binding var weatherLongitude: Double
     
     var tintColor: UIColor {
         colorScheme == .light ? UIColor(red: 0.36, green: 0.09, blue: 0.92, alpha: 1.00) : .white
@@ -51,19 +62,35 @@ struct MapView: UIViewRepresentable {
         
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
             if let title = view.annotation?.title, title != "My Location" {
-             
+                
                 if let validTitle = Int(title!) {
                     parent.photoIndex = validTitle - 1
                 }
                 parent.clManager.mapView.setCenter(view.annotation!.coordinate, animated: true)
-           }
+            }
+            
+            parent.weatherLatitude = view.annotation?.coordinate.latitude ?? 0.0
+            parent.weatherLongitude = view.annotation?.coordinate.longitude ?? 0.0
+            
+            withAnimation(.easeInOut(duration: 0.15)) {
+                parent.showWeather = true
+            }
+        }
+        
+        func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+            withAnimation(.easeInOut(duration: 0.15)) {
+                parent.expandWeather = false
+            }
+            withAnimation(.easeInOut(duration: 0.15)) {
+                parent.showWeather = false
+            }
         }
         
         /**
          Function is responsible for specifying the way how annotations should look like on 3D map and what functionality they should present.
          */
-         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-          let marker = MKMarkerAnnotationView()
+        func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+            let marker = MKMarkerAnnotationView()
             marker.annotation = annotation
             marker.titleVisibility = .hidden
             if annotation.title != "My Location" {
@@ -84,12 +111,12 @@ struct MapView: UIViewRepresentable {
                 
                 marker.leftCalloutAccessoryView = leftButton
                 marker.rightCalloutAccessoryView = rightButton
-               } else {
+            } else {
                 marker.markerTintColor = .systemBlue
                 marker.glyphImage = UIImage(systemName: "person.fill")
                 marker.selectedGlyphImage = UIImage(systemName: "person")
             }
-    
+            
             return marker
         }
         
@@ -99,7 +126,7 @@ struct MapView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
             if view.rightCalloutAccessoryView == control {
                 withAnimation(.easeInOut(duration: 0.15)) {
-                parent.showPhoto = true
+                    parent.showPhoto = true
                 }
             } else {
                 
@@ -179,23 +206,23 @@ struct MapView: UIViewRepresentable {
         addPhotos(mapView: mapView)
         
         if photosLocations.count > 0 {
-        clManager.mapView.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: photosLocations[0].latitude, longitude: photosLocations[0].longitude), latitudinalMeters: 1000, longitudinalMeters: 1000), animated: false)
+            clManager.mapView.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: photosLocations[0].latitude, longitude: photosLocations[0].longitude), latitudinalMeters: 1000, longitudinalMeters: 1000), animated: false)
         }
         return mapView
     }
-
+    
     /**
      Function is responsible for adding photo's annotation to the map.
      */
     func addPhotos(mapView: MKMapView) {
-            var index = 0
-            while index < photosLocations.count {
-                let photoPin = MKPointAnnotation()
-                photoPin.title = String(index + 1)
-                photoPin.coordinate = photosLocations[index]
-                mapView.addAnnotation(photoPin)
-                index+=1
-            }
+        var index = 0
+        while index < photosLocations.count {
+            let photoPin = MKPointAnnotation()
+            photoPin.title = String(index + 1)
+            photoPin.coordinate = photosLocations[index]
+            mapView.addAnnotation(photoPin)
+            index+=1
+        }
     }
     
     /**

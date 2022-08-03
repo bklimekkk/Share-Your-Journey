@@ -57,6 +57,9 @@
 		86C649FA27D1B43A00891C24 /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C649F427D1B43A00891C24 /* Photo+CoreDataClass.swift */; };
 		86C649FB27D1B43A00891C24 /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C649F527D1B43A00891C24 /* Photo+CoreDataProperties.swift */; };
 		86C649FD27D1DF0800891C24 /* SeeJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C649FC27D1DF0700891C24 /* SeeJourneyView.swift */; };
+		86D9F7192899207C0092832E /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D9F7182899207B0092832E /* WeatherModel.swift */; };
+		86D9F71B2899234E0092832E /* WeatherRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D9F71A2899234D0092832E /* WeatherRequest.swift */; };
+		86D9F71D28992D0E0092832E /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D9F71C28992D0E0092832E /* WeatherView.swift */; };
 		86FCCC6028102449005FD678 /* ListWithRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC5F28102449005FD678 /* ListWithRequests.swift */; };
 		86FCCC62281025DD005FD678 /* ListWithFriends.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC61281025DD005FD678 /* ListWithFriends.swift */; };
 		86FCCC652810272B005FD678 /* YourJourneysList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC642810272B005FD678 /* YourJourneysList.swift */; };
@@ -139,6 +142,9 @@
 		86C649F427D1B43A00891C24 /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		86C649F527D1B43A00891C24 /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		86C649FC27D1DF0700891C24 /* SeeJourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeeJourneyView.swift; sourceTree = "<group>"; };
+		86D9F7182899207B0092832E /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
+		86D9F71A2899234D0092832E /* WeatherRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRequest.swift; sourceTree = "<group>"; };
+		86D9F71C28992D0E0092832E /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
 		86FCCC5F28102449005FD678 /* ListWithRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListWithRequests.swift; sourceTree = "<group>"; };
 		86FCCC61281025DD005FD678 /* ListWithFriends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListWithFriends.swift; sourceTree = "<group>"; };
 		86FCCC642810272B005FD678 /* YourJourneysList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourJourneysList.swift; sourceTree = "<group>"; };
@@ -220,6 +226,7 @@
 		862AA45927B14D6C001B9312 /* Share Your Journey */ = {
 			isa = PBXGroup;
 			children = (
+				86D9F71728991DFE0092832E /* Weather */,
 				862AA45A27B14D6C001B9312 /* Share_Your_JourneyApp.swift */,
 				8652A17027BFC8EF00ADBB25 /* Share-Your-Journey-Info.plist */,
 				8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */,
@@ -379,6 +386,16 @@
 				86C649F527D1B43A00891C24 /* Photo+CoreDataProperties.swift */,
 			);
 			path = NSManagedObjectSubclasses;
+			sourceTree = "<group>";
+		};
+		86D9F71728991DFE0092832E /* Weather */ = {
+			isa = PBXGroup;
+			children = (
+				86D9F7182899207B0092832E /* WeatherModel.swift */,
+				86D9F71A2899234D0092832E /* WeatherRequest.swift */,
+				86D9F71C28992D0E0092832E /* WeatherView.swift */,
+			);
+			path = Weather;
 			sourceTree = "<group>";
 		};
 		86FCCC5E28102424005FD678 /* Friends */ = {
@@ -593,13 +610,16 @@
 				86FCCC7D28107B3B005FD678 /* MultipleButtonsComponents.swift in Sources */,
 				863CF50127BA2AD3007B82D4 /* AddFriendView.swift in Sources */,
 				8683852627E94AD40005FEE2 /* NetworkManager.swift in Sources */,
+				86D9F71B2899234E0092832E /* WeatherRequest.swift in Sources */,
 				864B50C92872D76F0072A5BB /* WebView.swift in Sources */,
 				86FCCC62281025DD005FD678 /* ListWithFriends.swift in Sources */,
 				863CF4FF27BA2A31007B82D4 /* ChatView.swift in Sources */,
 				86FCCC79281079BD005FD678 /* PickerComponents.swift in Sources */,
 				865452AD2809D452008041A8 /* DownloadChangesView.swift in Sources */,
 				86C649F627D1B43A00891C24 /* Journey+CoreDataClass.swift in Sources */,
+				86D9F71D28992D0E0092832E /* WeatherView.swift in Sources */,
 				8633D980286A49EB003D83BB /* WelcomeView.swift in Sources */,
+				86D9F7192899207C0092832E /* WeatherModel.swift in Sources */,
 				8652A17227BFEAE900ADBB25 /* SumUpView.swift in Sources */,
 				864B50CB2872E26C0072A5BB /* ImagesView.swift in Sources */,
 				86C6495127D045B300891C24 /* UIImageTransformer.swift in Sources */,

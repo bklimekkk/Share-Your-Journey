@@ -18,7 +18,7 @@ struct RunningJourneyModeView: View {
     @ObservedObject var currentLocationManager: CurrentLocationManager
     
     var buttonColor: Color {
-        colorScheme == .dark || currentLocationManager.mapView.mapType == .hybridFlyover ? .white : .accentColor
+        colorScheme == .dark ? .white : .accentColor
     }
     var body: some View {
         HStack {

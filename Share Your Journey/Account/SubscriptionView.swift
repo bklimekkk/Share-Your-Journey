@@ -48,7 +48,7 @@ struct SubscriptionView: View {
                             .frame(width: 20)
                         Text("The first week is free. You can cancel subscription at any time.")
                     }
-         
+                    
                 }
                 ForEach(availablePackages, id: \.self.storeProduct) { package in
                     let timeUnit = String(String(package.id).suffix(String(package.id).count - 4))
@@ -57,16 +57,16 @@ struct SubscriptionView: View {
                             
                             Purchases.shared.purchase(package: package) { (transaction, customerInfo, error, userCancelled) in
                                 if customerInfo?.entitlements["allfeatures"]?.isActive == true {
-                                  subscriber = true
-                                  dismiss()
-                              }
+                                    dismiss()
+                                    subscriber = true
+                                }
                             }
                         }
                         .buttonStyle(.plain)
                         .foregroundColor(.blue)
                     }
                 }
-              }
+            }
             .task {
                 Purchases.shared.getOfferings { (offerings, error) in
                     if let packages = offerings?.offering(identifier: "default")?.availablePackages {

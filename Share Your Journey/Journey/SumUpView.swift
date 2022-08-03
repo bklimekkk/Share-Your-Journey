@@ -75,8 +75,13 @@ struct SumUpView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
     
+    @State private var showWeather = false
+    @State private var expandWeather = false
+    @State private var weatherLatitude = 0.0
+    @State private var weatherLongitude = 0.0
+    
     var buttonColor: Color {
-        colorScheme == .dark || currentLocationManager.mapView.mapType == .hybridFlyover ? .white : .accentColor
+        colorScheme == .dark ? .white : .accentColor
     }
     
     @Binding var showSumUp: Bool
@@ -100,8 +105,8 @@ struct SumUpView: View {
                             .padding(.horizontal, 15)
                     }
                     .alert("Download all images", isPresented: $showDownloadAlert) {
-                        Button("Cancel", role: .destructive){}
-                        Button("Download", role: .cancel) {
+                        Button("Cancel", role: .cancel){}
+                        Button("Download") {
                             for photo in singleJourney.photos.map({return $0.photo}) {
                                 
                                 //Each photo is saved to camera roll.
@@ -129,7 +134,7 @@ struct SumUpView: View {
                     
                     //Depending on option chosen by users, program will present them with different type of map (or photo album).
                     if viewType == .threeDimensional {
-                        MapView(walking: $walking, showPhoto: $showPicture, photoIndex: $photoIndex, photos: singleJourney.photos.sorted{$1.number > $0.number}.map{$0.photo}, photosLocations: singleJourney.photosLocations)
+                        MapView(walking: $walking, showPhoto: $showPicture, photoIndex: $photoIndex, showWeather: $showWeather, expandWeather: $expandWeather, weatherLatitude: $weatherLatitude, weatherLongitude: $weatherLongitude, photos: singleJourney.photos.sorted{$1.number > $0.number}.map{$0.photo}, photosLocations: singleJourney.photosLocations)
                             .edgesIgnoringSafeArea(.all)
                             .environmentObject(currentLocationManager)
                             .opacity(showPicture ? 0 : 1)

@@ -77,6 +77,11 @@ struct SeeJourneyView: View {
     
     @State private var showSendingView = false
     
+    @State private var showWeather = false
+    @State private var expandWeather = false
+    @State private var weatherLatitude = 0.0
+    @State private var weatherLongitude = 0.0
+    
     //Variable is responsible for saving data to Core Data.
     @Environment(\.managedObjectContext) var context
     
@@ -91,11 +96,11 @@ struct SeeJourneyView: View {
     var path: String
     
     var buttonColor: Color {
-        colorScheme == .dark || currentLocationManager.mapView.mapType == .hybridFlyover ? .white : .accentColor
+        colorScheme == .dark ? .white : .accentColor
     }
     
     var gold: Color {
-        Color(uiColor: UIColor(red: 1.00, green: 0.62, blue: 0.00, alpha: 1.00))
+        Color(uiColor: UIColor(red: 0.90, green: 0.42, blue: 0.00, alpha: 1.00))
     }
     
     var body: some View {
@@ -145,8 +150,8 @@ struct SeeJourneyView: View {
                         
                     }
                     .alert("Download all images", isPresented: $showDownloadAlert) {
-                        Button("Cancel", role: .destructive){}
-                        Button("Download", role: .cancel) {
+                        Button("Cancel", role: .cancel){}
+                        Button("Download") {
                             for photo in journey.photos.map({return $0.photo}) {
                                 
                                 //Each photo is saved to camera roll.
@@ -172,11 +177,41 @@ struct SeeJourneyView: View {
                             Spacer()
                         }
                     } else {
-                        MapView(walking: $walking, showPhoto: $showPicture, photoIndex: $highlightedPhotoIndex, photos: journey.photos.sorted{$1.number > $0.number}.map{$0.photo}, photosLocations: journey.photosLocations)
-                            .edgesIgnoringSafeArea(.all)
-                            .environmentObject(currentLocationManager)
-                            .opacity(showPicture ? 0 : 1)
-                    }
+                        
+                        ZStack {
+                            MapView(walking: $walking, showPhoto: $showPicture, photoIndex: $highlightedPhotoIndex, showWeather: $showWeather, expandWeather: $expandWeather, weatherLatitude: $weatherLatitude, weatherLongitude: $weatherLongitude, photos: journey.photos.sorted{$1.number > $0.number}.map{$0.photo}, photosLocations: journey.photosLocations)
+                                .edgesIgnoringSafeArea(.all)
+                                .environmentObject(currentLocationManager)
+                                .opacity(showPicture ? 0 : 1)
+                            
+                            if showWeather {
+                                VStack {
+                                    HStack {
+                                        
+                                        
+                                        
+                                        if expandWeather {
+                                            WeatherView(latitude: weatherLatitude, longitude: weatherLongitude)
+                                                .padding()
+                                        } else {
+                                            Button{
+                                                withAnimation(.easeInOut(duration: 0.15)) {
+                                                    expandWeather = true
+                                                }
+                                            }label: {
+                                                MapButton(imageName: "cloud.sun.fill")
+                                                    .foregroundColor(colorScheme == .light ? .accentColor : .white)
+                                                    .padding()
+                                            }
+                                        }
+                                        Spacer()
+                                    }
+                                    Spacer()
+                                }
+                                .opacity(showPicture ? 0 : 1)
+                            }
+                        }
+                     }
                     if !showPicture {
                         HStack {
                             VStack {
@@ -185,6 +220,7 @@ struct SeeJourneyView: View {
                                 if !downloadMode && !journeyIsDownloaded {
                                     if journey.photos.map ({return $0.photo}).contains(UIImage()) {
                                         ProgressView()
+                                            .padding(.vertical)
                                     } else {
                                         Button{
                                             if subscription.subscriber {
@@ -200,8 +236,7 @@ struct SeeJourneyView: View {
                                                 subscription.showPanel = true
                                             }
                                         } label: {
-                                            Image(systemName: "square.and.arrow.down")
-                                                .font(.system(size: 30))
+                                            MapButton(imageName: "square.and.arrow.down")
                                                 .foregroundColor(subscription.subscriber ? buttonColor : gold)
                                         }
                                         
@@ -227,8 +262,7 @@ struct SeeJourneyView: View {
                                         }
                                         
                                     } label: {
-                                        Image(systemName: "plus")
-                                            .font(.system(size: 30))
+                                        MapButton(imageName: "plus")
                                             .foregroundColor(colorScheme == .light ? Color.accentColor : .white)
                                     }
                                     
@@ -244,6 +278,7 @@ struct SeeJourneyView: View {
                                     MapTypeButton()
                                 }
                                 .foregroundColor(buttonColor)
+                                
                                 
                                 Button {
                                     currentLocationManager.recenterLocation()
@@ -266,7 +301,7 @@ struct SeeJourneyView: View {
                 Button{
                     showSendingView = true
                 }label:{
-                   Image(systemName: "square.and.arrow.up")
+                    Image(systemName: "square.and.arrow.up")
                 }
             }
         }
@@ -278,12 +313,13 @@ struct SeeJourneyView: View {
             }
         }
         .onAppear {
-            
-            //Depending on journey mode, program will fetch data from different source.
-            if !downloadMode {
-                getJourneyDetails()
-            } else {
-                getDownloadedJourneyDetails()
+            if journey.photosLocations.count == 0 {
+                //Depending on journey mode, program will fetch data from different source.
+                if !downloadMode {
+                    getJourneyDetails()
+                } else {
+                    getDownloadedJourneyDetails()
+                }
             }
         }
         .alert(isPresented: $alreadyDownloaded) {

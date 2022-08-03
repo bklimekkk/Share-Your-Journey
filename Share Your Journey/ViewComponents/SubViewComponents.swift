@@ -20,7 +20,7 @@ struct HighlightedPhoto: View {
     @Binding var showPanel: Bool
     var journey: SingleJourney
     var gold: Color {
-        Color(uiColor: UIColor(red: 1.00, green: 0.62, blue: 0.00, alpha: 1.00))
+        Color(uiColor: UIColor(red: 0.90, green: 0.42, blue: 0.00, alpha: 1.00))
     }
     var body: some View {
         
@@ -45,7 +45,8 @@ struct HighlightedPhoto: View {
                                 savedToCameraRoll = false
                             }
                         }))
-                
+            
+                Spacer()
                 //This HStack contains code responsible for generating functionality provided along with highlighted image: Ability to go back to the map, number of image and ability to download the image.
                 HStack {
                     

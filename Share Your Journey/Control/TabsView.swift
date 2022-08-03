@@ -16,35 +16,37 @@ struct TabsView: View {
         UITabBar.appearance().backgroundColor = UIColor(named: "TabViewColor")
     }
     var body: some View {
-      
-        NavigationView {
+
             //This view ensures that the application presents user with bottom navigation containing three elements.
             TabView () {
                 StartView()
                     .tabItem {
                         Label("Map", systemImage: "map.fill")
                     }
-                    .navigationBarTitle("")
-                    .navigationBarHidden(true)
                     .tag(1)
+                    .navigationTitle("")
+                    .navigationBarHidden(true)
                 
-                
+                NavigationView {
                 JourneysView()
+                        .navigationTitle("")
+                        .navigationBarHidden(true)
+                }
                     .tabItem {
                         Label("Journeys", systemImage: "mappin")
                     }
-                    .navigationBarTitle("")
-                    .navigationBarHidden(true)
                     .tag(2)
-                
+            
+                NavigationView {
                 FriendsView()
+                        .navigationTitle("")
+                        .navigationBarHidden(true)
+                }
                     .tabItem {
                         Label("Friends", systemImage: "person.fill")
                     }
-                    .navigationBarTitle("")
-                    .navigationBarHidden(true)
                     .tag(3)
+                   
             }
-        }
     }
 }

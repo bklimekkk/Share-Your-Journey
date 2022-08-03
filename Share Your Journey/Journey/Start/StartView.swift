@@ -66,15 +66,20 @@ struct StartView: View {
     @State private var showSettings = false
     @State private var showImages = false
     
+    @State private var showWeather = false
+    @State private var expandWeather = false
+    @State private var weatherLatitude = 0.0
+    @State private var weatherLongitude = 0.0
+    
     var buttonColor: Color {
-        colorScheme == .dark || currentLocationManager.mapView.mapType == .hybridFlyover ? .white : .accentColor
+        colorScheme == .dark ? .white : .accentColor
     }
     
     var body: some View {
         ZStack {
             
             //This struct contains MapView struct, which means that during they journey, users are able to use 3D map.
-            MapView(walking: $walking, showPhoto: $showPhoto, photoIndex: $photoIndex, photos: [], photosLocations: [])
+            MapView(walking: $walking, showPhoto: $showPhoto, photoIndex: $photoIndex, showWeather: $showWeather, expandWeather: $expandWeather, weatherLatitude: $weatherLatitude, weatherLongitude: $weatherLongitude, photos: [], photosLocations: [])
                 .environmentObject(currentLocationManager)
                 .edgesIgnoringSafeArea(.all)
             
@@ -84,7 +89,7 @@ struct StartView: View {
                         logOut()
                     } label:{
                         Image(systemName: "arrow.backward.circle.fill")
-                            .foregroundColor(buttonColor)
+                            .foregroundColor(colorScheme == .dark || currentLocationManager.mapView.mapType == .hybridFlyover ? .white : .accentColor)
                             .font(.system(size: 38))
                     }
                     Spacer()
@@ -256,8 +261,6 @@ struct StartView: View {
 
 struct SettingsButton: View {
     var body: some View {
-        Image(systemName: "gearshape.fill")
-            .font(.system(size: 30))
-            .padding(.vertical, 10)
+        MapButton(imageName: "gearshape.fill")
     }
 }

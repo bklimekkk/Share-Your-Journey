@@ -44,7 +44,7 @@ struct SendJourneyView: View {
                         List(filteredUnsentJourneys.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
                             HStack {
                                 Text(journey.name)
-                                    .padding(.vertical, 30)
+                                    .padding(.vertical, 15)
                                 Spacer()
                                 Button{
                                     SendJourneyManager().sendJourney(journey: journey, targetEmail: targetEmail)

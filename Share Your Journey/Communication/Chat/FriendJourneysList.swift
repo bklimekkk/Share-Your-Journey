@@ -34,7 +34,7 @@ struct FriendJourneysList: View {
                     //NavigationLink's destination property is set to struct responsible for showing the relevant journey.
                     NavigationLink(destination: SeeJourneyView(journey: journey, email: email, downloadMode: false, path: "users/\(email)/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
                         Text(journey.name)
-                            .padding(.vertical, 30)
+                            .padding(.vertical, 15)
                     }
                 }
                 

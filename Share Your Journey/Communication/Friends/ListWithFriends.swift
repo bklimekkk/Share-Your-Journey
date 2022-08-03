@@ -27,7 +27,7 @@ struct ListWithFriends: View {
                     HStack {
                         NavigationLink(destination: ChatView(email: friend)) {
                             Text(friend)
-                                .padding(.vertical, 30)
+                                .padding(.vertical, 15)
                         }
                     }
                 }

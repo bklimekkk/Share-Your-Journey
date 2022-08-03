@@ -50,7 +50,7 @@ struct YourJourneysList: View {
                         .padding(.horizontal, 10)
                         
                         Text(journey.name)
-                            .padding(.vertical, 30)
+                            .padding(.vertical, 15)
                     }
                 }
                 .refreshable {

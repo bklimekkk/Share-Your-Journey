@@ -15,10 +15,10 @@ struct DirectionIcons: View {
     @Binding var subscriber: Bool
     @Binding var showPanel: Bool
     var buttonColor: Color {
-        colorScheme == .dark || mapType == .hybridFlyover ? .white : .accentColor
+        colorScheme == .dark ? .white : .accentColor
     }
     var gold: Color {
-        Color(uiColor: UIColor(red: 1.00, green: 0.62, blue: 0.00, alpha: 1.00))
+        Color(uiColor: UIColor(red: 0.90, green: 0.42, blue: 0.00, alpha: 1.00))
     }
     @Environment(\.colorScheme) var colorScheme
     @Binding var walking: Bool
@@ -33,31 +33,25 @@ struct DirectionIcons: View {
             }
         } label : {
             if walking {
-                Image(systemName: "figure.walk")
-                    .font(.system(size: 30))
+                MapButton(imageName: "figure.walk")
                     .foregroundColor(Color.green)
             } else {
-                Image(systemName: "figure.walk")
-                    .font(.system(size: 30))
+                 MapButton(imageName: "figure.walk")
                     .foregroundColor(subscriber ? buttonColor : gold)
             }
         }
-        .padding(.vertical, 10)
         
         Button {
             walking = false
         } label : {
             if walking {
-                Image(systemName: "car")
-                    .font(.system(size: 30))
+                MapButton(imageName: "car")
                     .foregroundColor(buttonColor)
             } else {
-                Image(systemName: "car")
-                    .font(.system(size: 30))
+                MapButton(imageName: "car")
                     .foregroundColor(Color.green)
             }
         }
-        .padding(.vertical, 10)
     }
 }
 
@@ -70,20 +64,22 @@ struct SumUpFunctionalityButtonsView: View {
     var body: some View {
         HStack {
             Button {
-                saveJourney = true
-            } label: {
-                ButtonView(buttonTitle: "Save journey")
-            }
-            .background(Color.accentColor)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            Spacer()
-            Button {
                 showDeleteAlert = true
             } label: {
                 ButtonView(buttonTitle: "Quit")
                     .background(.red)
             }
             .background(Color.gray)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            
+            Spacer()
+            
+            Button {
+                saveJourney = true
+            } label: {
+                ButtonView(buttonTitle: "Save journey")
+            }
+            .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
     }

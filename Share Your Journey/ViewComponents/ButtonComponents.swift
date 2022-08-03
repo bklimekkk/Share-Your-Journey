@@ -40,26 +40,20 @@ struct SymbolButtonView: View {
 //Struct generating standard map type button used to change type of map.
 struct LocationButton: View {
     var body: some View {
-        Image(systemName: "location.fill")
-            .font(.system(size: 30))
-            .padding(.vertical, 10)
+        MapButton(imageName: "location.fill")
     }
 }
 
 //Struct generating standard map type button used to center the the map on user's location.
 struct MapTypeButton: View {
     var body: some View {
-        Image(systemName: "map")
-            .font(.system(size: 30))
-            .padding(.vertical, 10)
+        MapButton(imageName: "map")
     }
 }
 
 struct ImageButton: View {
     var body: some View {
-        Image(systemName: "photo.fill.on.rectangle.fill")
-            .font(.system(size: 30))
-            .padding(.vertical, 10)
+        MapButton(imageName: "photo.fill.on.rectangle.fill")
     }
 }
 
@@ -74,7 +68,7 @@ struct DownloadGalleryButton: View {
     @Binding var showPanel: Bool
     
     var gold: Color {
-        Color(uiColor: UIColor(red: 1.00, green: 0.62, blue: 0.00, alpha: 1.00))
+        Color(uiColor: UIColor(red: 0.90, green: 0.42, blue: 0.00, alpha: 1.00))
     }
     
     var body: some View {
@@ -93,6 +87,24 @@ struct DownloadGalleryButton: View {
         .padding(.top, 5)
         .disabled(journey.photos.map ({return $0.photo}).contains(UIImage()) ? true : false)
         .opacity(showPicture ? 0 : 1)
+    }
+}
+
+struct MapButton: View {
+    let imageName: String
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(.ultraThickMaterial)
+                .frame(width: 40, height: 40)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(.gray, lineWidth: 1)
+                )
+            Image(systemName: imageName)
+                .font(.system(size: 20))
+        }
+        .padding(.vertical, 5)
     }
 }
 

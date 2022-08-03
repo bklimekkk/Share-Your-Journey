@@ -50,6 +50,8 @@ struct JourneysView: View {
     }
     
     var body: some View {
+        
+
         VStack {
             PickerView(choice: $downloaded, firstChoice: "Saved", secondChoice: "Downloaded")
                 .padding()
@@ -62,5 +64,6 @@ struct JourneysView: View {
                 ListWithJourneys(journeysList: $journeysList, journeyToDelete: $journeyToDelete, deleteFromStorage: $deleteFromStorage, askAboutDeletion: $askAboutDeletion, journeysFilteredList: journeysFilteredList)
             }
         }
+        
     }
 }
