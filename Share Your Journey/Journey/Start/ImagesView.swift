@@ -12,6 +12,10 @@ struct ImagesView: View {
     @Binding var images: [SinglePhoto]
     @Binding var imagesLocations: [CLLocationCoordinate2D]
     @Environment(\.dismiss) var dismiss
+    @Environment(\.managedObjectContext) var moc
+    
+    @FetchRequest(sortDescriptors: []) var currentImages: FetchedResults<CurrentImage>
+    @FetchRequest(sortDescriptors: []) var currentLocations: FetchedResults<CurrentLocation>
     var body: some View {
         NavigationView {
             VStack {
@@ -24,19 +28,36 @@ struct ImagesView: View {
                     ScrollView(showsIndicators: false) {
                         VStack {
                             ForEach(images, id: \.number) { image in
-                                Image(uiImage: image.photo)
-                                    .resizable()
-                                    .clipShape(RoundedRectangle(cornerRadius:10))
-                                    .shadow(color: .gray, radius: 2)
-                                    .scaledToFill()
-                                    .padding(.vertical, 5)
-                                    .padding(.horizontal, 1)
+                                
+                                ZStack {
+                                    Image(uiImage: image.photo)
+                                        .resizable()
+                                        .shadow(color: .gray, radius: 2)
+                                        .scaledToFill()
+                                        .padding(.vertical, 5)
+                                        .padding(.horizontal, 1)
+                                    VStack {
+                                        HStack{
+                                            Spacer()
+                                            Button{
+                                                deleteImage(number: image.number)
+                                                
+                                            }label: {
+                                                Image(systemName: "xmark")
+                                                    .foregroundColor(.white)
+                                                    .font(.system(size: 20))
+                                                    .padding()
+                                            }
+                                        }
+                                        Spacer()
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
-            .padding()
+            .padding(.horizontal)
             .navigationTitle("Journey Photos")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -45,6 +66,51 @@ struct ImagesView: View {
                         dismiss()
                     }
                 }
+            }
+        }
+    }
+    
+    func deleteImage(number: Int) {
+        let shiftIndex = number
+        
+        withAnimation {
+            imagesLocations.remove(at: shiftIndex)
+            images.remove(at: shiftIndex)
+            
+            var imagesCounter = 0
+            
+            for i in currentImages {
+                if shiftIndex == imagesCounter {
+                    moc.delete(i)
+                    break
+                }
+                imagesCounter += 1
+            }
+            
+            
+            var locationsCounter = 0
+            for i in currentLocations {
+                if shiftIndex == locationsCounter {
+                    moc.delete(i)
+                    break
+                }
+                locationsCounter += 1
+            }
+            
+            if !images.isEmpty && shiftIndex != images.count {
+                for i in shiftIndex...images.count - 1 {
+                    images[i].number = images[i].number - 1
+                }
+                
+                for i in currentImages {
+                    if i.id > shiftIndex {
+                        i.id = i.id - 1
+                    }
+                }
+            }
+            
+            if moc.hasChanges {
+                try? moc.save()
             }
         }
     }

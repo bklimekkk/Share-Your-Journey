@@ -10,14 +10,14 @@ import RevenueCat
 
 @main
 struct Share_Your_JourneyApp: App {
-    
+    @StateObject private var journeyDataManager = JourneyDataManager()
     init() {
         setupRevenueCat()
     }
     var body: some Scene {
         WindowGroup {
-            let context = JourneyDataManager.shared.journeyContainer.viewContext
-            TabsView().environment(\.managedObjectContext, context)
+            TabsView()
+                .environment(\.managedObjectContext, journeyDataManager.journeyContainer.viewContext)
         }
     }
     

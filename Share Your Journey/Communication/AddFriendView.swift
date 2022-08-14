@@ -37,7 +37,6 @@ struct AddFriendView: View {
         VStack {
             Text("Add a friend")
             
-            Spacer()
             TextField("Enter friend's e-mail", text: $email)
                 .font(.system(size: 20))
             Spacer()

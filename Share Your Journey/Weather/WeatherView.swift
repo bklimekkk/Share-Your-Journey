@@ -35,6 +35,7 @@ struct WeatherView: View {
                 }
                 .pickerStyle(.segmented)
             }
+            .padding(.horizontal, 7)
             
             
             if currentWeatherInformation == "current" {
@@ -43,14 +44,14 @@ struct WeatherView: View {
                 ForecastView(forecastResponse: forecastResponse, latitude: latitude, longitude: longitude)
             }
         }
-        .padding()
+        .padding(.vertical, 7)
         .background(
             colorScheme == .light ? Color(red: 0.81, green: 0.93, blue: 0.99) : Color(red: 0.00, green: 0.20, blue: 0.30),
             in: RoundedRectangle(cornerRadius: 10, style: .continuous)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(.gray, lineWidth: 1)
+                .stroke(.gray, lineWidth: 0.5)
         )
         
         
@@ -98,7 +99,7 @@ struct CurrentWeatherView: View {
                     .padding(.top)
             }
             .padding(.top)
-            .offset(x: -10, y: 7)
+            .offset(x: -15, y: 7)
             
             Spacer()
             
@@ -111,9 +112,10 @@ struct CurrentWeatherView: View {
                     .padding(.top)
             }
             .padding(.top)
-            .offset(x: -7, y: 7)
+            .offset(x: -10, y: 6)
        
         }
+        .padding(.horizontal, 7)
     }
 }
 

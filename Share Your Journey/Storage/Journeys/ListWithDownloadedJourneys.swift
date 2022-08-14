@@ -16,7 +16,7 @@ struct ListWithDownloadedJourneys: View {
     @FetchRequest(entity: Journey.entity(), sortDescriptors: [], predicate: nil, animation: nil) var journeys: FetchedResults<Journey>
     
     //Variable is used to save changes made to journeys collection in Core Data.
-    @Environment(\.managedObjectContext) var context
+    @Environment(\.managedObjectContext) var moc
     
     //Variables are described in JourneysView struct.
     @Binding var downloadedJourneysList: [SingleJourney]
@@ -96,12 +96,12 @@ struct ListWithDownloadedJourneys: View {
     func deleteDownloadedJourney() {
         for i in 0...journeys.count - 1 {
             if journeys[i].name == journeyToDelete {
-                context.delete(journeys[i])
+                moc.delete(journeys[i])
                 break
             }
         }
         do {
-            try context.save()
+            try moc.save()
         } catch {}
         
         //Journey has to be deleted from the array right away.

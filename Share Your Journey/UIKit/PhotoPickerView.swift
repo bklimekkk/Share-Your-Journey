@@ -9,6 +9,7 @@ import SwiftUI
 import PhotosUI
 
 struct PhotoPickerView: UIViewControllerRepresentable {
+    @Environment(\.managedObjectContext) var moc
     @Binding var pickPhoto: Bool
     @Binding var photosArray: [SinglePhoto]
 

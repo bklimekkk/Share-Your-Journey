@@ -12,7 +12,7 @@ import CoreData
 struct SaveJourneyView: View {
     
     @FetchRequest(sortDescriptors: []) var downloadedJourneys: FetchedResults<Journey>
-    @Environment(\.managedObjectContext) var context
+    @Environment(\.managedObjectContext) var moc
     
     //Variable is used to check if user's phone is connected to the internet.
     @ObservedObject var network = NetworkManager()
@@ -48,13 +48,10 @@ struct SaveJourneyView: View {
     var body: some View {
         VStack {
             Text("Save journey")
-                .font(.system(size:30))
-            
-            Spacer()
             
             //Users are supposed to enter name of journey they are currently saving.
             TextField("Enter name", text: $name)
-                .font(.system(size: 30))
+
             Spacer()
             Button{
                 
@@ -207,7 +204,7 @@ struct SaveJourneyView: View {
      Function is responsible for saving the journey in Core Data. (function also exists in SeeJourneyView struct).
      */
     func downloadJourney(name: String) {
-        let newJourney = Journey(context: context)
+        let newJourney = Journey(context: moc)
         
         newJourney.name = name
         newJourney.email = FirebaseSetup.firebaseInstance.auth.currentUser?.email
@@ -217,7 +214,7 @@ struct SaveJourneyView: View {
         var index = 0
         
         while index < journey.photos.count {
-            let newImage = Photo(context: context)
+            let newImage = Photo(context: moc)
             newImage.id = Double(index + 1)
             newImage.journey = newJourney
             newImage.image = journey.photos[index].photo
@@ -228,6 +225,6 @@ struct SaveJourneyView: View {
         }
         
         //After all journey properties are set, changes need to be saved with context variable's function: save().
-        try? context.save()
+        try? moc.save()
     }
 }

@@ -11,7 +11,9 @@ import RevenueCat
 
 //Struct responsible for presenting users with screen enabling users to start a journey.
 struct StartView: View {
-    
+    @FetchRequest(sortDescriptors: []) var currentImages: FetchedResults<CurrentImage>
+    @FetchRequest(sortDescriptors: []) var currentLocations: FetchedResults<CurrentLocation>
+    @Environment(\.managedObjectContext) var moc
     //Emum justifies if users want to finish the journey and see where they went or completely quit it without intention of viewing or saving it.
     enum AlertType {
         case finish
@@ -22,10 +24,17 @@ struct StartView: View {
     @State private var alert = AlertType.finish
     
     //Varieble's value justifies if users are currently logged in or not.
-    @State private var loggedOut = true
+    @AppStorage("loggedOut") private var loggedOut = true
     
     //Variable defines if journey was started.
-    @State  var startedJourney = false
+    @AppStorage("startedJourney") private var startedJourney = false
+    
+    
+    //Array is prepared to contain all objects representing photos taken by user during the journey.
+    @State private var arrayOfPhotos: [SinglePhoto] = []
+
+    //Array is prepared to contain all objects representing lcations where photos were taken during the journey.
+    @State private var arrayOfPhotosLocations: [CLLocationCoordinate2D] = []
     
     //Variable defines if journey was paused.
     @State  var paused = false
@@ -49,12 +58,6 @@ struct StartView: View {
     
     //Variable's value justifies if user wants to pick image from the gallery instead of making a photo.
     @State private var pickAPhoto = false
-    
-    //Array is prepared to contain all objects representing photos taken by user during the journey.
-    @State private var arrayOfPhotos: [SinglePhoto] = []
-    
-    //Array is prepared to contain all objects representing lcations where photos were taken during the journey.
-    @State private var arrayOfPhotosLocations: [CLLocationCoordinate2D] = []
     
     //Variables are set to false (and 0) and are never changed in this struct. They are used to be passed as parameters for MapView.
     @State var showPhoto = false
@@ -143,6 +146,19 @@ struct StartView: View {
             }
             .padding()
         }
+        .task {
+            if !currentImages.isEmpty {
+                for i in currentImages {
+                    arrayOfPhotos.append(SinglePhoto(number: i.getId, photo: i.getImage))
+                }
+            }
+            
+            if !currentLocations.isEmpty {
+                for i in currentLocations {
+                    arrayOfPhotosLocations.append(CLLocationCoordinate2D(latitude: i.latitude, longitude: i.longitude))
+                }
+            }
+        }
         .fullScreenCover(isPresented: $showSettings, content: {
             SettingsView(loggedOut: $loggedOut)
         })
@@ -158,6 +174,9 @@ struct StartView: View {
             
             //Photo's location is added to the aproppriate array after view with camera is dismissed.
             addPhotoLocation()
+            if moc.hasChanges {
+                try? moc.save()
+            }
         }, content: {
             //Struct represents view that user is supposed to see while taking a picture.
             PhotoPickerView(pickPhoto: $pickAPhoto, photosArray: $arrayOfPhotos)
@@ -195,6 +214,18 @@ struct StartView: View {
                     alert = .finish
                     quitJourney()
                 }
+                
+                for i in currentImages {
+                    moc.delete(i)
+                }
+                
+                for i in currentLocations {
+                    moc.delete(i)
+                }
+                
+                if moc.hasChanges {
+                    try? moc.save()
+                }
                 alertMessage = false
             })
         }
@@ -213,6 +244,13 @@ struct StartView: View {
         if arrayOfPhotosLocations.count < arrayOfPhotos.count {
             currentLocation = currentLocationManager.currentRegion
             arrayOfPhotosLocations.append(currentLocation.center)
+            let location = CurrentLocation(context: moc)
+            location.latitude = currentLocation.center.latitude
+            location.longitude = currentLocation.center.longitude
+            
+            let image = CurrentImage(context: moc)
+            image.id = Int16(arrayOfPhotos[arrayOfPhotos.count - 1].number)
+            image.image = arrayOfPhotos[arrayOfPhotos.count - 1].photo
         }
     }
     

@@ -14,8 +14,9 @@ struct ForecastView: View {
     var body: some View {
         
         ScrollView(.horizontal, showsIndicators: false) {
+      
             HStack(spacing: 20) {
-                ForEach(forecastResponse.list, id: \.wind.speed) { forecastEntity in
+                ForEach(forecastResponse.list, id: \.dtTxt) { forecastEntity in
                     VStack(spacing: 0) {
                     Text(getDayOfWeekAndTime(dateAndTimeString: forecastEntity.dtTxt))
                     WeatherIconView(weatherArray: forecastEntity.weather, url: "")
@@ -25,11 +26,12 @@ struct ForecastView: View {
                     .offset(y: 10)
                 }
             }
+            .padding(.horizontal, 7)
         }
     }
     
     func getDayOfWeekAndTime(dateAndTimeString: String) -> String {
-        let daysOfTheWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        let daysOfTheWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -37,7 +39,7 @@ struct ForecastView: View {
         guard let date = dateFormatter.date(from: dateAndTimeString) else {return ""}
         
             let calendar = Calendar(identifier: .gregorian)
-            let dayOfWeek = calendar.component(.weekday, from: date)
+        let dayOfWeek = calendar.component(.weekday, from: date)
             let hour = calendar.component(.hour, from: date)
         
             return "\(daysOfTheWeek[dayOfWeek - 1]), \(hour):00"

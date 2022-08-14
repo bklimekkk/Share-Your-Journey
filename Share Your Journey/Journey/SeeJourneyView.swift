@@ -83,7 +83,7 @@ struct SeeJourneyView: View {
     @State private var weatherLongitude = 0.0
     
     //Variable is responsible for saving data to Core Data.
-    @Environment(\.managedObjectContext) var context
+    @Environment(\.managedObjectContext) var moc
     
     //Variable is meant to contain downloaded journeys.
     @FetchRequest(entity: Journey.entity(), sortDescriptors: [], predicate: nil, animation: nil) var journeys: FetchedResults<Journey>
@@ -249,8 +249,8 @@ struct SeeJourneyView: View {
                                             
                                             for i in journeys {
                                                 if i.name == journey.name {
-                                                    context.delete(i)
-                                                    try? context.save()
+                                                    moc.delete(i)
+                                                    try? moc.save()
                                                     break
                                                 }
                                             }
@@ -457,7 +457,7 @@ struct SeeJourneyView: View {
      Function is responsible for saving the journey in Core Data.
      */
     func downloadJourney(name: String) {
-        let newJourney = Journey(context: context)
+        let newJourney = Journey(context: moc)
         
         newJourney.name = name
         newJourney.email = FirebaseSetup.firebaseInstance.auth.currentUser?.email
@@ -467,7 +467,7 @@ struct SeeJourneyView: View {
         var index = 0
         
         while index < journey.photos.count {
-            let newImage = Photo(context: context)
+            let newImage = Photo(context: moc)
             newImage.id = Double(index + 1)
             newImage.journey = newJourney
             newImage.image = journey.photos[index].photo
@@ -478,7 +478,7 @@ struct SeeJourneyView: View {
         }
         
         //After all journey properties are set, changes need to be saved with context variable's function: save().
-        try? context.save()
+        try? moc.save()
     }
     
     /**
