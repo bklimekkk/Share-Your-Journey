@@ -35,6 +35,7 @@
 		864FEF4228A7E4010060E94D /* CurrentImage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864FEF4028A7E4000060E94D /* CurrentImage+CoreDataProperties.swift */; };
 		864FEF4528A7E86C0060E94D /* CurrentLocation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864FEF4328A7E86B0060E94D /* CurrentLocation+CoreDataClass.swift */; };
 		864FEF4628A7E86C0060E94D /* CurrentLocation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864FEF4428A7E86C0060E94D /* CurrentLocation+CoreDataProperties.swift */; };
+		864FEF4828A952830060E94D /* DateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864FEF4728A952820060E94D /* DateManager.swift */; };
 		8652A16F27BE3EE200ADBB25 /* SendJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652A16E27BE3EE100ADBB25 /* SendJourneyView.swift */; };
 		8652A17227BFEAE900ADBB25 /* SumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652A17127BFEAE900ADBB25 /* SumUpView.swift */; };
 		8652A17527C254C700ADBB25 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652A17427C254C700ADBB25 /* MapView.swift */; };
@@ -132,6 +133,7 @@
 		864FEF4028A7E4000060E94D /* CurrentImage+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CurrentImage+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		864FEF4328A7E86B0060E94D /* CurrentLocation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CurrentLocation+CoreDataClass.swift"; sourceTree = "<group>"; };
 		864FEF4428A7E86C0060E94D /* CurrentLocation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CurrentLocation+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		864FEF4728A952820060E94D /* DateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateManager.swift; sourceTree = "<group>"; };
 		8652A16E27BE3EE100ADBB25 /* SendJourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendJourneyView.swift; sourceTree = "<group>"; };
 		8652A17027BFC8EF00ADBB25 /* Share-Your-Journey-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Share-Your-Journey-Info.plist"; sourceTree = SOURCE_ROOT; };
 		8652A17127BFEAE900ADBB25 /* SumUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SumUpView.swift; sourceTree = "<group>"; };
@@ -344,6 +346,7 @@
 			children = (
 				86FCCC7128102D8E005FD678 /* Journeys */,
 				86C6494D27D036B300891C24 /* SaveJourneyView.swift */,
+				864FEF4728A952820060E94D /* DateManager.swift */,
 			);
 			path = Storage;
 			sourceTree = "<group>";
@@ -622,6 +625,7 @@
 				864B50C7287232660072A5BB /* SettingsView.swift in Sources */,
 				86FCCC6A28102A4B005FD678 /* RunningJourneyModeView.swift in Sources */,
 				86FCCC7528102E02005FD678 /* ListWithJourneys.swift in Sources */,
+				864FEF4828A952830060E94D /* DateManager.swift in Sources */,
 				86C6494827CFAE4300891C24 /* Journey.xcdatamodeld in Sources */,
 				86FCCC7F28107C00005FD678 /* SubViewComponents.swift in Sources */,
 				8652A17527C254C700ADBB25 /* MapView.swift in Sources */,

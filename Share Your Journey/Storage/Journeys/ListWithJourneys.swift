@@ -20,7 +20,7 @@ struct ListWithJourneys: View {
     var journeysFilteredList: [SingleJourney]
     
     var body: some View {
-    
+        
         VStack {
             
             if journeysFilteredList.isEmpty{
@@ -43,42 +43,46 @@ struct ListWithJourneys: View {
                             .padding(.horizontal, 10)
                             Text(journey.name)
                                 .padding(.vertical, 15)
+                            Spacer()
+                            Text(DateManager().getDate(date: journey.date))
+                                .foregroundColor(.gray)
                         }
                     }
                 }
-        .alert(isPresented: $askAboutDeletion) {
-            Alert (title: Text("Delete journey"),
-                   message: Text("Are you sure that you want to delete this journey?"),
-                   primaryButton: .cancel(Text("Cancel")) {
-                askAboutDeletion = false
-                journeyToDelete = ""
-            },
-                   secondaryButton: .destructive(Text("Delete")) {
+                .listStyle(.inset)
+                .alert(isPresented: $askAboutDeletion) {
+                    Alert (title: Text("Delete journey"),
+                           message: Text("Are you sure that you want to delete this journey?"),
+                           primaryButton: .cancel(Text("Cancel")) {
+                        askAboutDeletion = false
+                        journeyToDelete = ""
+                    },
+                           secondaryButton: .destructive(Text("Delete")) {
+                        
+                        let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? ""
+                        let path = "users/\(email)/friends/\(email)/journeys"
+                        
+                        //Photos need to be leted from both database and storage, if needed.
+                        
+                        deleteAllPhotos(path: path)
+                        deleteJourneyFromServer(path: path)
+                        deleteJourneyFromStorage()
+                        
+                        deleteFromStorage = true
+                        askAboutDeletion = false
+                        journeyToDelete = ""
+                    }
+                    )
+                }
                 
-                let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? ""
-                let path = "users/\(email)/friends/\(email)/journeys"
-                
-                //Photos need to be leted from both database and storage, if needed.
-                
-                deleteAllPhotos(path: path)
-                deleteJourneyFromServer(path: path)
-                deleteJourneyFromStorage()
-                
-                deleteFromStorage = true
-                askAboutDeletion = false
-                journeyToDelete = ""
-            }
-            )
-        }
-        
             }
             
         }
         .onAppear {
-             //List is updated every time the screen appears.
-             clearInvalidJourneys()
-             updateJourneys()
-         }
+            //List is updated every time the screen appears.
+            clearInvalidJourneys()
+            updateJourneys()
+        }
         .refreshable {
             clearInvalidJourneys()
             updateJourneys()

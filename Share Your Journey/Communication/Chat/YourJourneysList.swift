@@ -51,8 +51,14 @@ struct YourJourneysList: View {
                         
                         Text(journey.name)
                             .padding(.vertical, 15)
+                        
+                        Spacer()
+                        
+                        Text(DateManager().getDate(date: journey.date))
+                            .foregroundColor(.gray)
                     }
                 }
+                .listStyle(.inset)
                 .refreshable {
                     populateYourJourneys()
                 }

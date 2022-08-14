@@ -49,6 +49,7 @@ struct ListWithRequests: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
+                .listStyle(.inset)
                 .navigationBarHidden(true)
                 
                 .refreshable {

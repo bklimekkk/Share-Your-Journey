@@ -49,6 +49,7 @@ struct ListWithDownloadedJourneys: View {
                     }
                     .buttonStyle(.plain)
                 }
+                .listStyle(.inset)
                 
                 .alert(isPresented: $askAboutDeletion) {
                     //After tapping "x" button, users are always asked if they are sure to delete this particular journey.
