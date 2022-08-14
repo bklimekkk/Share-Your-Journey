@@ -32,7 +32,7 @@ struct StartView: View {
     
     //Array is prepared to contain all objects representing photos taken by user during the journey.
     @State private var arrayOfPhotos: [SinglePhoto] = []
-
+    
     //Array is prepared to contain all objects representing lcations where photos were taken during the journey.
     @State private var arrayOfPhotosLocations: [CLLocationCoordinate2D] = []
     
@@ -77,6 +77,9 @@ struct StartView: View {
     var buttonColor: Color {
         colorScheme == .dark ? .white : .accentColor
     }
+    
+    //Variable justifies if the user decided to go back from the sum-up screen to make changes to the current journey.
+    @State private var goBack = false
     
     var body: some View {
         ZStack {
@@ -185,11 +188,34 @@ struct StartView: View {
         
         //After the journey is finished, StartView is coverd by SumUpView.
         .fullScreenCover(isPresented: $showSumUp, onDismiss: {
-            arrayOfPhotos = []
-            arrayOfPhotosLocations = []
+            if !goBack {
+                withAnimation {
+                    startedJourney = false
+                }
+                
+                paused = false
+                
+                arrayOfPhotos = []
+                arrayOfPhotosLocations = []
+                
+                for i in currentImages {
+                    moc.delete(i)
+                }
+                
+                for i in currentLocations {
+                    moc.delete(i)
+                }
+                
+                if moc.hasChanges {
+                    try? moc.save()
+                }
+            } else {
+                paused = false
+                goBack = false
+            }
         }) {
             SumUpView(singleJourney: SingleJourney(email: "", name: "", date: Date(), numberOfPhotos: arrayOfPhotos.count, photos: arrayOfPhotos, photosLocations: arrayOfPhotosLocations),
-                      showSumUp: $showSumUp)
+                      showSumUp: $showSumUp, goBack: $goBack)
         }
         //Alert is presented only if error occurs
         .alert("No photos", isPresented: $alertError) {
@@ -212,24 +238,26 @@ struct StartView: View {
                     finishJourney()
                 } else {
                     alert = .finish
+                    
+                    for i in currentImages {
+                        moc.delete(i)
+                    }
+                    
+                    for i in currentLocations {
+                        moc.delete(i)
+                    }
+                    
                     quitJourney()
-                }
-                
-                for i in currentImages {
-                    moc.delete(i)
-                }
-                
-                for i in currentLocations {
-                    moc.delete(i)
                 }
                 
                 if moc.hasChanges {
                     try? moc.save()
                 }
+                
                 alertMessage = false
             })
         }
-
+        
         
         //When users see main screen for the first time, application updates user's current location.
         .onAppear(perform: {
@@ -276,10 +304,6 @@ struct StartView: View {
      Function responsible for resuming the journey activity.
      */
     func finishJourney() {
-        withAnimation {
-            startedJourney = false
-        }
-        paused = false
         showSumUp = true
     }
     

@@ -85,6 +85,8 @@ struct SumUpView: View {
     }
     
     @Binding var showSumUp: Bool
+    @Binding var goBack: Bool
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -227,7 +229,8 @@ struct SumUpView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Continue journey") {
-                        
+                        goBack = true
+                        dismiss()
                     }
                 }
             }

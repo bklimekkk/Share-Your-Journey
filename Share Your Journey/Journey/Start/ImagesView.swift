@@ -43,9 +43,9 @@ struct ImagesView: View {
                                                 deleteImage(number: image.number)
                                                 
                                             }label: {
-                                                Image(systemName: "xmark")
-                                                    .foregroundColor(.white)
-                                                    .font(.system(size: 20))
+                                                Image(systemName: "xmark.circle.fill")
+                                                    .foregroundColor(.black)
+                                                    .font(.system(size: 30))
                                                     .padding()
                                             }
                                         }
