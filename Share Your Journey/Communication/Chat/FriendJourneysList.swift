@@ -22,7 +22,7 @@ struct FriendJourneysList: View {
     
     var body: some View {
         VStack {
-            if sentByFriendFiltered.isEmpty{
+            if sentByFriendFiltered.isEmpty {
                 NoDataView(text: "No journeys to show. Tap to refresh.")
                     .onTapGesture {
                         populateFriendsJourneys()
@@ -35,9 +35,12 @@ struct FriendJourneysList: View {
                     NavigationLink(destination: SeeJourneyView(journey: journey, email: email, downloadMode: false, path: "users/\(email)/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
                         Text(journey.name)
                             .padding(.vertical, 15)
+                        Spacer()
+                        Text(DateManager().getDate(date: journey.date))
+                            .foregroundColor(.gray)
                     }
                 }
-                
+                .listStyle(.inset)
                 .refreshable {
                     populateFriendsJourneys()
                 }

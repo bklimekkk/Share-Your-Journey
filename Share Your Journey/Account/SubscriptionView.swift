@@ -78,7 +78,7 @@ struct SubscriptionView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Later"){
+                    Button("Done"){
                         dismiss()
                     }
                 }

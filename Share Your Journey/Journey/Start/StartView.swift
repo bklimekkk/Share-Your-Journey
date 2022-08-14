@@ -10,82 +10,82 @@ import MapKit
 import RevenueCat
 
 //Struct responsible for presenting users with screen enabling users to start a journey.
+
+class WeatherController: ObservableObject {
+    @Published var showWeather = false
+    @Published var expandWeather = false
+    @Published var weatherLatitude = 0.0
+    @Published var weatherLongitude = 0.0
+}
+
+class JourneyStateController: ObservableObject {
+    //Variable defines if journey was paused.
+    @Published  var paused = false
+    //Variable responsible for defining if journey has finished. If yes, application is responsible for showing sum up screen.
+    @Published var showSumUp = false
+    //object responsible for holding data about user's current location.
+    @Published var currentLocation: MKCoordinateRegion!
+    //Variable's value justifies if user wants to take a photo at a particular moment.
+    @Published var takeAPhoto = false
+    //Variable justifies if the user decided to go back from the sum-up screen to make changes to the current journey.
+    @Published var goBack = false
+    @Published var showSettings = false
+    @Published var showImages = false
+    //Variable's value justifies if user wants to pick image from the gallery instead of taking a photo.
+    @Published var pickAPhoto = false
+    @Published var walking = false
+    
+    //Variables responsible for showing potential journey error messages.
+    @Published var alertError = false
+    @Published var alertMessage = false
+    @Published var alertBody = ""
+}
+
 struct StartView: View {
     @FetchRequest(sortDescriptors: []) var currentImages: FetchedResults<CurrentImage>
     @FetchRequest(sortDescriptors: []) var currentLocations: FetchedResults<CurrentLocation>
+    
     @Environment(\.managedObjectContext) var moc
+    @Environment(\.colorScheme) var colorScheme
+    
     //Emum justifies if users want to finish the journey and see where they went or completely quit it without intention of viewing or saving it.
     enum AlertType {
         case finish
         case quit
     }
-    
     //Value of the variable is set to AlertType enum value.
     @State private var alert = AlertType.finish
     
     //Varieble's value justifies if users are currently logged in or not.
     @AppStorage("loggedOut") private var loggedOut = true
-    
     //Variable defines if journey was started.
     @AppStorage("startedJourney") private var startedJourney = false
     
-    
     //Array is prepared to contain all objects representing photos taken by user during the journey.
     @State private var arrayOfPhotos: [SinglePhoto] = []
-    
     //Array is prepared to contain all objects representing lcations where photos were taken during the journey.
     @State private var arrayOfPhotosLocations: [CLLocationCoordinate2D] = []
     
-    //Variable defines if journey was paused.
-    @State  var paused = false
-    
-    //Variables responsible for showing potential error messages.
-    @State private var alertError = false
-    @State private var alertMessage = false
-    @State private var alertBody = ""
-    
     //Variable responsible for defining if journey has finished. If yes, application is responsible for showing sum up screen.
-    @State private var showSumUp = false
-    
+
     //Object necessary for tracking user's location.
     @StateObject private var currentLocationManager = CurrentLocationManager()
-    
-    //object responsible for holding data about user's current location.
-    @State private var currentLocation: MKCoordinateRegion!
-    
-    //Variable's value justifies if user wants to take a photo at a particular moment.
-    @State private var takeAPhoto = false
-    
-    //Variable's value justifies if user wants to pick image from the gallery instead of making a photo.
-    @State private var pickAPhoto = false
+    @StateObject private var weatherController = WeatherController()
+    @StateObject private var journeyStateController = JourneyStateController()
     
     //Variables are set to false (and 0) and are never changed in this struct. They are used to be passed as parameters for MapView.
     @State var showPhoto = false
-    @State var walking = false
     @State var photoIndex = 0
-    
-    @Environment(\.colorScheme) var colorScheme
-    
-    @State private var showSettings = false
-    @State private var showImages = false
-    
-    @State private var showWeather = false
-    @State private var expandWeather = false
-    @State private var weatherLatitude = 0.0
-    @State private var weatherLongitude = 0.0
-    
+
     var buttonColor: Color {
         colorScheme == .dark ? .white : .accentColor
     }
-    
-    //Variable justifies if the user decided to go back from the sum-up screen to make changes to the current journey.
-    @State private var goBack = false
     
     var body: some View {
         ZStack {
             
             //This struct contains MapView struct, which means that during they journey, users are able to use 3D map.
-            MapView(walking: $walking, showPhoto: $showPhoto, photoIndex: $photoIndex, showWeather: $showWeather, expandWeather: $expandWeather, weatherLatitude: $weatherLatitude, weatherLongitude: $weatherLongitude, photos: [], photosLocations: [])
+            MapView(walking: $journeyStateController.walking, showPhoto: $showPhoto, photoIndex: $photoIndex, showWeather: $weatherController.showWeather, expandWeather: $weatherController.expandWeather, weatherLatitude: $weatherController.weatherLatitude, weatherLongitude: $weatherController.weatherLongitude, photos: [], photosLocations: [])
                 .environmentObject(currentLocationManager)
                 .edgesIgnoringSafeArea(.all)
             
@@ -105,7 +105,7 @@ struct StartView: View {
                 HStack {
                     VStack {
                         Button{
-                            showSettings = true
+                            journeyStateController.showSettings = true
                         } label: {
                             SettingsButton()
                         }
@@ -113,7 +113,7 @@ struct StartView: View {
                         
                         if startedJourney {
                             Button {
-                                showImages = true
+                                journeyStateController.showImages = true
                             }label: {
                                 ImageButton()
                             }
@@ -138,11 +138,11 @@ struct StartView: View {
                     Spacer()
                 }
                 //This else if statements block ensures that starting, pausing, resuming, quitting and completing the journey works in the most intuitive way.
-                if startedJourney && !paused {
-                    RunningJourneyModeView(paused: $paused, pickAPhoto: $pickAPhoto, takeAPhoto: $takeAPhoto, currentLocationManager: currentLocationManager)
+                if startedJourney && !journeyStateController.paused {
+                    RunningJourneyModeView(paused: $journeyStateController.paused, pickAPhoto: $journeyStateController.pickAPhoto, takeAPhoto: $journeyStateController.takeAPhoto, currentLocationManager: currentLocationManager)
                     
-                } else if startedJourney && paused {
-                    PausedJourneyModeView(arrayOfPhotos: $arrayOfPhotos, alertMessage: $alertMessage, alertError: $alertError, paused: $paused, startedJourney: $startedJourney, alert: $alert, alertBody: $alertBody, currentLocationManager: currentLocationManager)
+                } else if startedJourney && journeyStateController.paused {
+                    PausedJourneyModeView(arrayOfPhotos: $arrayOfPhotos, alertMessage: $journeyStateController.alertMessage, alertError: $journeyStateController.alertError, paused: $journeyStateController.paused, startedJourney: $startedJourney, alert: $alert, alertBody: $journeyStateController.alertBody, currentLocationManager: currentLocationManager)
                 } else {
                     StartJourneyModeView(startedJourney: $startedJourney, currentLocationManager: currentLocationManager)
                 }
@@ -162,10 +162,10 @@ struct StartView: View {
                 }
             }
         }
-        .fullScreenCover(isPresented: $showSettings, content: {
+        .fullScreenCover(isPresented: $journeyStateController.showSettings, content: {
             SettingsView(loggedOut: $loggedOut)
         })
-        .fullScreenCover(isPresented: $showImages, content: {
+        .fullScreenCover(isPresented: $journeyStateController.showImages, content: {
             ImagesView(images: $arrayOfPhotos, imagesLocations: $arrayOfPhotosLocations)
         })
         .fullScreenCover(isPresented: $loggedOut) {
@@ -173,7 +173,7 @@ struct StartView: View {
             //If user isn't logged in, screen presented by StartView struct is fully covered by View generated by this struct.
             LoginView(loggedOut: $loggedOut)
         }
-        .fullScreenCover(isPresented: $takeAPhoto, onDismiss: {
+        .fullScreenCover(isPresented: $journeyStateController.takeAPhoto, onDismiss: {
             
             //Photo's location is added to the aproppriate array after view with camera is dismissed.
             addPhotoLocation()
@@ -182,18 +182,18 @@ struct StartView: View {
             }
         }, content: {
             //Struct represents view that user is supposed to see while taking a picture.
-            PhotoPickerView(pickPhoto: $pickAPhoto, photosArray: $arrayOfPhotos)
+            PhotoPickerView(pickPhoto: $journeyStateController.pickAPhoto, photosArray: $arrayOfPhotos)
                 .ignoresSafeArea()
         })
         
         //After the journey is finished, StartView is coverd by SumUpView.
-        .fullScreenCover(isPresented: $showSumUp, onDismiss: {
-            if !goBack {
+        .fullScreenCover(isPresented: $journeyStateController.showSumUp, onDismiss: {
+            if !journeyStateController.goBack {
                 withAnimation {
                     startedJourney = false
                 }
                 
-                paused = false
+                journeyStateController.paused = false
                 
                 arrayOfPhotos = []
                 arrayOfPhotosLocations = []
@@ -210,28 +210,28 @@ struct StartView: View {
                     try? moc.save()
                 }
             } else {
-                paused = false
-                goBack = false
+                journeyStateController.paused = false
+                journeyStateController.goBack = false
             }
         }) {
             SumUpView(singleJourney: SingleJourney(email: "", name: "", date: Date(), numberOfPhotos: arrayOfPhotos.count, photos: arrayOfPhotos, photosLocations: arrayOfPhotosLocations),
-                      showSumUp: $showSumUp, goBack: $goBack)
+                      showSumUp: $journeyStateController.showSumUp, goBack: $journeyStateController.goBack)
         }
         //Alert is presented only if error occurs
-        .alert("No photos", isPresented: $alertError) {
+        .alert("No photos", isPresented: $journeyStateController.alertError) {
             Button("Ok", role: .cancel) {
-                alertMessage = false
+                journeyStateController.alertMessage = false
             }
         } message: {
-            Text(alertBody)
+            Text(journeyStateController.alertBody)
         }
         
         //Alert is presented after user chooses to finish the journey. They have two ways of doing it and depending on which one they choose, alert will be looking differently.
-        .alert(isPresented: $alertMessage) {
+        .alert(isPresented: $journeyStateController.alertMessage) {
             Alert(title: Text(alert == .finish ? "Finish Journey" : "Delete Journey"),
                   message: Text(alert == .finish ? "Are you sure that you want to finish the journey?" : "Are you sure of deleting this yourney?"),
                   primaryButton: .destructive(Text("Cancel")) {
-                alertMessage = false
+                journeyStateController.alertMessage = false
             },
                   secondaryButton: .default(Text("Yes")) {
                 if alert == .finish {
@@ -254,14 +254,14 @@ struct StartView: View {
                     try? moc.save()
                 }
                 
-                alertMessage = false
+                journeyStateController.alertMessage = false
             })
         }
         
         
         //When users see main screen for the first time, application updates user's current location.
         .onAppear(perform: {
-            currentLocation = currentLocationManager.currentRegion
+            journeyStateController.currentLocation = currentLocationManager.currentRegion
         })
     }
     
@@ -270,11 +270,11 @@ struct StartView: View {
      */
     func addPhotoLocation() {
         if arrayOfPhotosLocations.count < arrayOfPhotos.count {
-            currentLocation = currentLocationManager.currentRegion
-            arrayOfPhotosLocations.append(currentLocation.center)
+            journeyStateController.currentLocation = currentLocationManager.currentRegion
+            arrayOfPhotosLocations.append(journeyStateController.currentLocation.center)
             let location = CurrentLocation(context: moc)
-            location.latitude = currentLocation.center.latitude
-            location.longitude = currentLocation.center.longitude
+            location.latitude = journeyStateController.currentLocation.center.latitude
+            location.longitude = journeyStateController.currentLocation.center.longitude
             
             let image = CurrentImage(context: moc)
             image.id = Int16(arrayOfPhotos[arrayOfPhotos.count - 1].number)
@@ -304,7 +304,7 @@ struct StartView: View {
      Function responsible for resuming the journey activity.
      */
     func finishJourney() {
-        showSumUp = true
+        journeyStateController.showSumUp = true
     }
     
     /**
@@ -317,7 +317,7 @@ struct StartView: View {
         withAnimation {
             startedJourney = false
         }
-        paused = false
+        journeyStateController.paused = false
     }
 }
 

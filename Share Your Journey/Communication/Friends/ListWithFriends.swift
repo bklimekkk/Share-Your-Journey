@@ -31,6 +31,7 @@ struct ListWithFriends: View {
                         }
                     }
                 }
+                .listStyle(.inset)
                 .navigationBarHidden(true)
                 
                 .refreshable {

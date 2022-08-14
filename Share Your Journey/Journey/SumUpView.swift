@@ -146,7 +146,6 @@ struct SumUpView: View {
                                 }
                             }
                             .onAppear {
-                                
                                 //Variable's center property is set to location of first journey's photo.
                                 initialFocus = MKCoordinateRegion(center: singleJourney.photosLocations[0], latitudinalMeters: 1000, longitudinalMeters: 1000)
                             }
