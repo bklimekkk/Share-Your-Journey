@@ -16,11 +16,15 @@ extension Photo {
         return NSFetchRequest<Photo>(entityName: "Photo")
     }
 
-    @NSManaged public var image: UIImage
+    @NSManaged public var image: Data?
     @NSManaged public var latitude: Double
     @NSManaged public var longitude: Double
     @NSManaged public var journey: Journey?
     @NSManaged public var id: Double
+    
+    public var getImage: UIImage {
+        return UIImage(data: image ?? Data()) ?? UIImage()
+    }
 }
 
 extension Photo : Identifiable {

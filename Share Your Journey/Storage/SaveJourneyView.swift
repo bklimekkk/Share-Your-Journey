@@ -217,7 +217,7 @@ struct SaveJourneyView: View {
             let newImage = Photo(context: moc)
             newImage.id = Double(index + 1)
             newImage.journey = newJourney
-            newImage.image = journey.photos[index].photo
+            newImage.image = journey.photos[index].photo.jpegData(compressionQuality: 0.5)
             newImage.latitude = journey.photosLocations[index].latitude
             newImage.longitude = journey.photosLocations[index].longitude
             newJourney.addToPhotos(newImage)

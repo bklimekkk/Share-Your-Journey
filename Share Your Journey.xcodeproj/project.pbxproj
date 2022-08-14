@@ -59,7 +59,6 @@
 		86C6494827CFAE4300891C24 /* Journey.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86C6494627CFAE4200891C24 /* Journey.xcdatamodeld */; };
 		86C6494C27CFAFD500891C24 /* JourneyDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6494B27CFAFD400891C24 /* JourneyDataManager.swift */; };
 		86C6494E27D036B300891C24 /* SaveJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6494D27D036B300891C24 /* SaveJourneyView.swift */; };
-		86C6495127D045B300891C24 /* UIImageTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6495027D045B200891C24 /* UIImageTransformer.swift */; };
 		86C649F627D1B43A00891C24 /* Journey+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C649F027D1B43800891C24 /* Journey+CoreDataClass.swift */; };
 		86C649F727D1B43A00891C24 /* Journey+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C649F127D1B43A00891C24 /* Journey+CoreDataProperties.swift */; };
 		86C649FA27D1B43A00891C24 /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C649F427D1B43A00891C24 /* Photo+CoreDataClass.swift */; };
@@ -152,7 +151,6 @@
 		86C6494727CFAE4300891C24 /* Journey.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Journey.xcdatamodel; sourceTree = "<group>"; };
 		86C6494B27CFAFD400891C24 /* JourneyDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyDataManager.swift; sourceTree = "<group>"; };
 		86C6494D27D036B300891C24 /* SaveJourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveJourneyView.swift; sourceTree = "<group>"; };
-		86C6495027D045B200891C24 /* UIImageTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageTransformer.swift; sourceTree = "<group>"; };
 		86C649F027D1B43800891C24 /* Journey+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Journey+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		86C649F127D1B43A00891C24 /* Journey+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Journey+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		86C649F427D1B43A00891C24 /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
@@ -247,7 +245,6 @@
 				8652A17027BFC8EF00ADBB25 /* Share-Your-Journey-Info.plist */,
 				8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */,
 				86C649D727D197B000891C24 /* NSManagedObjectSubclasses */,
-				86C6494F27D0457700891C24 /* Transformers */,
 				86C6493A27CEF10400891C24 /* DataModels */,
 				8652A17327C254A800ADBB25 /* UIKit */,
 				863CF50627BAF509007B82D4 /* Managers */,
@@ -383,14 +380,6 @@
 				86C6494627CFAE4200891C24 /* Journey.xcdatamodeld */,
 			);
 			path = DataModels;
-			sourceTree = "<group>";
-		};
-		86C6494F27D0457700891C24 /* Transformers */ = {
-			isa = PBXGroup;
-			children = (
-				86C6495027D045B200891C24 /* UIImageTransformer.swift */,
-			);
-			path = Transformers;
 			sourceTree = "<group>";
 		};
 		86C649D727D197B000891C24 /* NSManagedObjectSubclasses */ = {
@@ -652,7 +641,6 @@
 				86D9F7192899207C0092832E /* WeatherModel.swift in Sources */,
 				8652A17227BFEAE900ADBB25 /* SumUpView.swift in Sources */,
 				864B50CB2872E26C0072A5BB /* ImagesView.swift in Sources */,
-				86C6495127D045B300891C24 /* UIImageTransformer.swift in Sources */,
 				86FCCC67281027E0005FD678 /* FriendJourneysList.swift in Sources */,
 				863CF50827BAF558007B82D4 /* CurrentLocationManager.swift in Sources */,
 				862AA45B27B14D6C001B9312 /* Share_Your_JourneyApp.swift in Sources */,

@@ -386,7 +386,7 @@ struct SeeJourneyView: View {
                 journey.numberOfPhotos = i.photosArray.count
                 
                 for index in 0...i.photosArray.count - 1 {
-                    let singlePhoto = SinglePhoto(number: index, photo: i.photosArray[index].image)
+                    let singlePhoto = SinglePhoto(number: index, photo: i.photosArray[index].getImage)
                     journey.photos.append(singlePhoto)
                     journey.photosLocations.append(CLLocationCoordinate2D(latitude: i.photosArray[index].latitude, longitude: i.photosArray[index].longitude))
                 }
@@ -470,7 +470,7 @@ struct SeeJourneyView: View {
             let newImage = Photo(context: moc)
             newImage.id = Double(index + 1)
             newImage.journey = newJourney
-            newImage.image = journey.photos[index].photo
+            newImage.image = journey.photos[index].photo.jpegData(compressionQuality: 0.5)
             newImage.latitude = journey.photosLocations[index].latitude
             newImage.longitude = journey.photosLocations[index].longitude
             newJourney.addToPhotos(newImage)

@@ -250,7 +250,7 @@ struct StartView: View {
             
             let image = CurrentImage(context: moc)
             image.id = Int16(arrayOfPhotos[arrayOfPhotos.count - 1].number)
-            image.image = arrayOfPhotos[arrayOfPhotos.count - 1].photo
+            image.image = arrayOfPhotos[arrayOfPhotos.count - 1].photo.jpegData(compressionQuality: 0.5)
         }
     }
     

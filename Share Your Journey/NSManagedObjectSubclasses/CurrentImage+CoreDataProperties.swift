@@ -16,11 +16,11 @@ extension CurrentImage {
         return NSFetchRequest<CurrentImage>(entityName: "CurrentImage")
     }
 
-    @NSManaged public var image: UIImage?
+    @NSManaged public var image: Data?
     @NSManaged public var id: Int16
     
     public var getImage: UIImage {
-        return image ?? UIImage()
+        return UIImage(data: image ?? Data()) ?? UIImage()
     }
     
     public var getId: Int {
