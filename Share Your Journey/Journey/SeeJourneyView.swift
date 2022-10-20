@@ -187,9 +187,6 @@ struct SeeJourneyView: View {
                             if showWeather {
                                 VStack {
                                     HStack {
-                                        
-                                        
-                                        
                                         if expandWeather {
                                             WeatherView(latitude: weatherLatitude, longitude: weatherLongitude)
                                                 .padding()
@@ -265,7 +262,6 @@ struct SeeJourneyView: View {
                                         MapButton(imageName: "plus")
                                             .foregroundColor(colorScheme == .light ? Color.accentColor : .white)
                                     }
-                                    
                                 }
                                 
                                 //Icons enabling users to choose between walking and driving directions.

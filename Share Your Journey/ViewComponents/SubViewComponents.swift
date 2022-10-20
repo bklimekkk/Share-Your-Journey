@@ -22,11 +22,11 @@ struct HighlightedPhoto: View {
     var gold: Color {
         Color(uiColor: UIColor(red: 0.90, green: 0.42, blue: 0.00, alpha: 1.00))
     }
+    
     var body: some View {
-        
         if showPicture {
             VStack {
-                Image(uiImage:  journey.photos.sorted{$1.number > $0.number}.map{$0.photo}[highlightedPhotoIndex])
+                Image(uiImage: journey.photos.sorted{$1.number > $0.number}.map{$0.photo}[highlightedPhotoIndex])
                     .resizable()
                     .scaledToFit()
                     .shadow(color: .gray, radius: 2)
