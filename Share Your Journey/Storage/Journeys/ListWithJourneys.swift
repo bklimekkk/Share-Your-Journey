@@ -23,33 +23,45 @@ struct ListWithJourneys: View {
         
         VStack {
             
-            if journeysFilteredList.isEmpty{
+            if journeysFilteredList.isEmpty {
                 NoDataView(text: "No journeys to show. Tap to refresh.")
                     .onTapGesture {
                         clearInvalidJourneys()
                         updateJourneys()
                     }
             } else {
-                List (journeysFilteredList.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
-                    NavigationLink (destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
-                        HStack {
-                            Button{
-                                checkBeforeDeletion(journey: journey)
-                            } label: {
-                                Image(systemName: "xmark")
-                                    .foregroundColor(.gray)
+                ScrollView(showsIndicators: false) {
+                        ForEach (journeysFilteredList.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
+                            NavigationLink (destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
+
+
+
+                                HStack {
+                                    Button{
+                                        checkBeforeDeletion(journey: journey)
+                                    } label: {
+                                        Image(systemName: "xmark")
+                                            .foregroundColor(.gray)
+                                    }
+                                    .padding(.horizontal, 10)
+
+                                    Text(journey.name)
+                                        .foregroundColor(.black)
+                                        .padding(.vertical, 15)
+                                    Spacer()
+                                    Text(DateManager().getDate(date: journey.date))
+                                        .foregroundColor(.gray)
+                                        .padding(.trailing, 10)
+                                }
+                                .background(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(.thickMaterial)
+                                )
                             }
-                            .buttonStyle(PlainButtonStyle())
-                            .padding(.horizontal, 10)
-                            Text(journey.name)
-                                .padding(.vertical, 15)
-                            Spacer()
-                            Text(DateManager().getDate(date: journey.date))
-                                .foregroundColor(.gray)
                         }
-                    }
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 1)
                 }
-                .listStyle(.inset)
                 .alert(isPresented: $askAboutDeletion) {
                     Alert (title: Text("Delete journey"),
                            message: Text("Are you sure that you want to delete this journey?"),
@@ -165,7 +177,8 @@ struct ListWithJourneys: View {
             } else {
                 for i in querySnapshot!.documents {
                     if !journeysList.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {
-                        journeysList.append(SingleJourney(email: i.get("email") as! String, name: i.documentID, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
+                        journeysList.append(SingleJourney(email: i.get("email") as! String, name: i.documentID, date: (i.get("date") as? Timestamp)?
+                            .dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
                     }
                 }
             }
@@ -184,7 +197,8 @@ struct ListWithJourneys: View {
             } else {
                 for i in snapshot!.documents {
                     if i.documentID != FirebaseSetup.firebaseInstance.auth.currentUser?.email {
-                        FirebaseSetup.firebaseInstance.db.collection("\(friendsPath)/\(i.documentID)/journeys").getDocuments { journeySnapshot, error in
+                        FirebaseSetup.firebaseInstance.db.collection("\(friendsPath)/\(i.documentID)/journeys").getDocuments {
+                            journeySnapshot, error in
                             if error != nil {
                                 print(error!.localizedDescription)
                             } else {

@@ -31,26 +31,25 @@ struct ListWithDownloadedJourneys: View {
                         populateWithDownloadedJourneys()
                     }
             } else {
-                List (downloadedJourneysFilteredList.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
-                    NavigationLink(destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: true, path: "")) {
-                        HStack {
-                            Button{
-                                askAboutDeletion = true
-                                journeyToDelete = journey.name
-                            } label: {
-                                Image(systemName: "xmark")
-                                    .foregroundColor(.gray)
+                ScrollView(showsIndicators: false) {
+                    ForEach (downloadedJourneysFilteredList.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
+                        NavigationLink(destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: true, path: "")) {
+                            HStack {
+                                Button{
+                                    askAboutDeletion = true
+                                    journeyToDelete = journey.name
+                                } label: {
+                                    Image(systemName: "xmark")
+                                        .foregroundColor(.gray)
+                                }
+                                .padding(.horizontal, 10)
+                                Text(journey.name)
+                                    .foregroundColor(.black)
+                                    .padding(.vertical, 15)
                             }
-                            .buttonStyle(PlainButtonStyle())
-                            .padding(.horizontal, 10)
-                            Text(journey.name)
-                                .padding(.vertical, 15)
                         }
                     }
-                    .buttonStyle(.plain)
                 }
-                .listStyle(.inset)
-                
                 .alert(isPresented: $askAboutDeletion) {
                     //After tapping "x" button, users are always asked if they are sure to delete this particular journey.
                     Alert (title: Text("Delete journey"),
