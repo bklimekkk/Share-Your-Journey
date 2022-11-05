@@ -31,7 +31,7 @@ struct SumUpView: View {
     ]
     
     //this variable controls which of three modes program should currently display.
-    @State private var viewType = SeeJourneyView.ViewType.twoDimensional
+    @State private var viewType = SeeJourneyView.ViewType.threeDimensional
     
     //variable represents the journey user has taken before sum-up screen appeared.
     @State var singleJourney: SingleJourney
@@ -91,7 +91,7 @@ struct SumUpView: View {
         NavigationView {
             VStack {
                 if viewType == .photoAlbum {
-                    TriplePickerView(choice: $viewType, firstChoice: "2D", secondChoice: "3D", thirdChoice: "Album")
+                    JourneyPickerView(choice: $viewType, firstChoice: "Map", secondChoice: "Album")
                         .padding(.horizontal)
                     ZStack {
                         VStack {
@@ -128,34 +128,22 @@ struct SumUpView: View {
                 } else {
                     
                     //As users have 3 options of viewing photos, they are presented with picker that contains three values to choose.
-                    TriplePickerView(choice: $viewType, firstChoice: "2D", secondChoice: "3D", thirdChoice: "Album")
+                    JourneyPickerView(choice: $viewType, firstChoice: "Map", secondChoice: "Album")
                         .padding(.horizontal)
                     
                     ZStack {
                         
                         //Depending on option chosen by users, program will present them with different type of map (or photo album).
-                        if viewType == .threeDimensional {
-                            MapView(walking: $walking, showPhoto: $showPicture, photoIndex: $photoIndex, showWeather: $showWeather, expandWeather: $expandWeather, weatherLatitude: $weatherLatitude, weatherLongitude: $weatherLongitude, photos: singleJourney.photos.sorted{$1.number > $0.number}.map{$0.photo}, photosLocations: singleJourney.photosLocations)
-                                .edgesIgnoringSafeArea(.all)
-                                .environmentObject(currentLocationManager)
-                                .opacity(showPicture ? 0 : 1)
-                        } else if viewType == .twoDimensional {
-                            Map(coordinateRegion: $initialFocus, annotationItems: singleJourney.photosLocations.enumerated().map({return PhotoLocation(id: $0.offset, location: CLLocationCoordinate2D(latitude: $0.element.latitude, longitude: $0.element.longitude))})) { location in
-                                MapAnnotation(coordinate: location.location) {
-                                    PhotoAnnotationView(photoIndex: $photoIndex, highlightedPhoto: $highlightedPhoto, showPicture: $showPicture, singleJourney: singleJourney, location: location)
-                                }
-                            }
-                            .onAppear {
-                                //Variable's center property is set to location of first journey's photo.
-                                initialFocus = MKCoordinateRegion(center: singleJourney.photosLocations[0], latitudinalMeters: 1000, longitudinalMeters: 1000)
-                            }
+
+                        MapView(walking: $walking, showPhoto: $showPicture, photoIndex: $photoIndex, showWeather: $showWeather, expandWeather: $expandWeather, weatherLatitude: $weatherLatitude, weatherLongitude: $weatherLongitude, photos: singleJourney.photos.sorted{$1.number > $0.number}.map{$0.photo}, photosLocations: singleJourney.photosLocations)
+                            .edgesIgnoringSafeArea(.all)
+                            .environmentObject(currentLocationManager)
                             .opacity(showPicture ? 0 : 1)
-                            .ignoresSafeArea()
-                        }
+
                         VStack {
                             Spacer()
                             VStack {
-                                if !showPicture && viewType == .threeDimensional {
+                                if !showPicture {
                                     HStack {
                                         VStack {
                                             DirectionIcons(mapType: $currentLocationManager.mapView.mapType, subscriber: $subscription.subscriber, showPanel: $subscription.showPanel, walking: $walking)
@@ -228,7 +216,6 @@ struct SumUpView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Continue journey") {
-                        goBack = true
                         dismiss()
                     }
                 }

@@ -22,17 +22,11 @@ struct PausedJourneyModeView: View {
     
     var body: some View {
         HStack {
-            Image(systemName: "plus.app.fill")
-                .font(.system(size: 38))
-                .foregroundColor(.gray)
+            MapButton(imageName: "plus.app.fill")
                 .disabled(true)
-            
-            Image(systemName: "camera.fill")
-                .font(.system(size: 38))
-                .foregroundColor(.gray)
-                .padding([.trailing], 10)
+            MapButton(imageName: "camera.fill")
                 .disabled(true)
-            
+                .padding(.trailing, 10)
             Button {
                 resumeJourney()
             } label: {

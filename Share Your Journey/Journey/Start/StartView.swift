@@ -94,9 +94,7 @@ struct StartView: View {
                     Button {
                         logOut()
                     } label:{
-                        Image(systemName: "arrow.backward.circle.fill")
-                            .foregroundColor(colorScheme == .dark || currentLocationManager.mapView.mapType == .hybridFlyover ? .white : .accentColor)
-                            .font(.system(size: 38))
+                        MapButton(imageName: "arrow.backward")
                     }
                     Spacer()
                 }
@@ -137,6 +135,7 @@ struct StartView: View {
                     
                     Spacer()
                 }
+
                 //This else if statements block ensures that starting, pausing, resuming, quitting and completing the journey works in the most intuitive way.
                 if startedJourney && !journeyStateController.paused {
                     RunningJourneyModeView(paused: $journeyStateController.paused, pickAPhoto: $journeyStateController.pickAPhoto, takeAPhoto: $journeyStateController.takeAPhoto, currentLocationManager: currentLocationManager)
@@ -235,7 +234,9 @@ struct StartView: View {
             },
                   secondaryButton: .default(Text("Yes")) {
                 if alert == .finish {
-                    finishJourney()
+                    withAnimation {
+                        finishJourney()
+                    }
                 } else {
                     alert = .finish
                     

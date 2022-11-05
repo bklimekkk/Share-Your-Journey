@@ -13,7 +13,9 @@ struct StartJourneyModeView: View {
     var currentLocationManager: CurrentLocationManager
     var body: some View {
         Button {
-            startJourney()
+            withAnimation {
+                startJourney()
+            }
         } label: {
             ButtonView(buttonTitle: "Start journey")
         }

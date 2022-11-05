@@ -26,19 +26,15 @@ struct RunningJourneyModeView: View {
                 pickAPhoto = true
                 takeAPhoto = true
             } label: {
-                Image(systemName: "plus.app.fill")
-                    .font(.system(size: 38))
-                    .foregroundColor(buttonColor)
+                MapButton(imageName: "plus")
             }
             
             Button{
                 pickAPhoto = false
                 takeAPhoto = true
             } label: {
-                Image(systemName: "camera.fill")
-                    .font(.system(size: 38))
-                    .padding([.trailing], 10)
-                    .foregroundColor(buttonColor)
+                MapButton(imageName: "camera.fill")
+                    .padding(.trailing, 10)
             }
             
             Button {

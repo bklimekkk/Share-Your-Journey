@@ -25,22 +25,19 @@ struct PickerView: View {
 }
 
 //Struct is responsible for generating picker view allowing users to pick between three options.
-struct TriplePickerView: View {
+struct JourneyPickerView: View {
     
     //This variable's value is set to one of three cases of ViewType enum.
     var choice: Binding<SeeJourneyView.ViewType>
     
     var firstChoice: String
     var secondChoice: String
-    var thirdChoice: String
     
     var body: some View {
         Picker(selection: choice, label: Text("")) {
             Text(firstChoice)
-                .tag(SeeJourneyView.ViewType.twoDimensional)
-            Text(secondChoice)
                 .tag(SeeJourneyView.ViewType.threeDimensional)
-            Text(thirdChoice)
+            Text(secondChoice)
                 .tag(SeeJourneyView.ViewType.photoAlbum)
         }
         .pickerStyle(SegmentedPickerStyle())
