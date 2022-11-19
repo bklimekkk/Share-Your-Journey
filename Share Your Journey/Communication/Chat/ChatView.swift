@@ -53,8 +53,9 @@ struct ChatView: View {
         VStack {
             
                 //Picker View controls which part of the screen is visible (array with your journeys or array with your friend's journeys).
-                PickerView(choice: $yourJourneys, firstChoice: "Sent by \(email)", secondChoice: "Sent by you")
-                    .padding()
+                PickerView(choice: $yourJourneys, firstChoice: "Sent by friend", secondChoice: "Sent by you")
+                .padding(.vertical)
+                .padding(.horizontal, 5)
                 
                 //Field used to search arrays.
                 SearchField(text: "Search journey", search: $searchJourney)

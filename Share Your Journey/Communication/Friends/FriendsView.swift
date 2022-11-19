@@ -60,7 +60,8 @@ struct FriendsView: View {
                 
                 //Screen allows users to view their friends list and list with requests sent to them.
                 PickerView(choice: $requestMode, firstChoice: "Friends", secondChoice: "Requests")
-                    .padding()
+                    .padding(.vertical)
+                    .padding(.horizontal, 5)
                 
                 SearchField(text: "Search e-mail address", search: $searchPeople)
                 

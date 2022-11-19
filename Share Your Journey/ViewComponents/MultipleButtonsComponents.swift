@@ -82,5 +82,7 @@ struct SumUpFunctionalityButtonsView: View {
             .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
+        .padding(.horizontal, 5)
+        .padding(.bottom, 5)
     }
 }

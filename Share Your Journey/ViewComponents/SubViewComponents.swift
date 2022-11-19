@@ -104,7 +104,7 @@ struct HighlightedPhoto: View {
     }
 }
 
-//struct contains code that generates list of photos presented if the third option in triple picker is chosen.
+//struct contains code that generates list of photos presented if the first option in triple picker is chosen.
 struct PhotosAlbumView: View {
     
     //Variables are described in SumUpView struct.

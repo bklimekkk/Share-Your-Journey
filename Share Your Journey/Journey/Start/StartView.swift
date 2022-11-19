@@ -34,11 +34,21 @@ class JourneyStateController: ObservableObject {
     //Variable's value justifies if user wants to pick image from the gallery instead of taking a photo.
     @Published var pickAPhoto = false
     @Published var walking = false
-    
     //Variables responsible for showing potential journey error messages.
     @Published var alertError = false
     @Published var alertMessage = false
     @Published var alertBody = ""
+}
+
+class CurrentImagesCollection: ObservableObject {
+    @Published var photoIndex = 0
+    @Published var highlightedPhoto: UIImage = UIImage()
+    @Published var showPicture: Bool = false
+    @Published var savedToCameraRoll: Bool = false
+    @Published var layout = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
 }
 
 struct StartView: View {
@@ -47,6 +57,7 @@ struct StartView: View {
     
     @Environment(\.managedObjectContext) var moc
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.dismiss) var dismiss
     
     //Emum justifies if users want to finish the journey and see where they went or completely quit it without intention of viewing or saving it.
     enum AlertType {
@@ -72,7 +83,8 @@ struct StartView: View {
     @StateObject private var currentLocationManager = CurrentLocationManager()
     @StateObject private var weatherController = WeatherController()
     @StateObject private var journeyStateController = JourneyStateController()
-    
+    @StateObject private var currentImagesCollection = CurrentImagesCollection()
+    @StateObject private var subscription = Subscription()
     //Variables are set to false (and 0) and are never changed in this struct. They are used to be passed as parameters for MapView.
     @State var showPhoto = false
     @State var photoIndex = 0
@@ -165,7 +177,37 @@ struct StartView: View {
             SettingsView(loggedOut: $loggedOut)
         })
         .fullScreenCover(isPresented: $journeyStateController.showImages, content: {
-            ImagesView(images: $arrayOfPhotos, imagesLocations: $arrayOfPhotosLocations)
+
+            ZStack {
+                VStack {
+                    PhotosAlbumView(showPicture: $currentImagesCollection.showPicture, photoIndex: $currentImagesCollection.photoIndex,
+                                    highlightedPhoto: $currentImagesCollection.highlightedPhoto,
+                                    layout: currentImagesCollection.layout, singleJourney: SingleJourney(email: "", name: "", date: Date.now,
+                                                                                                         numberOfPhotos: arrayOfPhotosLocations.count,
+                                                                                                         photos: arrayOfPhotos,
+                                                                                                         photosLocations: arrayOfPhotosLocations,
+                                                                                                         networkProblem: false))
+                    Spacer()
+                    Button {
+                        dismiss()
+                    }label:{
+                        Text("Back to journey")
+                            .foregroundColor(.accentColor)
+                    }
+                }
+                .padding()
+
+                HighlightedPhoto(savedToCameraRoll: $currentImagesCollection.savedToCameraRoll,
+                                 highlightedPhotoIndex: $currentImagesCollection.photoIndex, showPicture: $currentImagesCollection.showPicture,
+                                 highlightedPhoto: $currentImagesCollection.highlightedPhoto, subscriber: $subscription.subscriber,
+                                 showPanel: $subscription.showPanel, journey: SingleJourney(email: "", name: "", date: Date.now,
+                                                                                            numberOfPhotos: arrayOfPhotosLocations.count,
+                                                                                            photos: arrayOfPhotos,
+                                                                                            photosLocations: arrayOfPhotosLocations,
+                                                                                            networkProblem: false))
+            }
+
+
         })
         .fullScreenCover(isPresented: $loggedOut) {
             
