@@ -18,9 +18,11 @@ struct ListWithJourneys: View {
     @Binding var askAboutDeletion: Bool
     
     var journeysFilteredList: [SingleJourney]
-    
+
+    var sortedJourneysFilteredList: [SingleJourney] {
+        return journeysFilteredList.sorted(by: {$0.date > $1.date})
+    }
     var body: some View {
-        
         VStack {
             
             if journeysFilteredList.isEmpty {
@@ -30,38 +32,30 @@ struct ListWithJourneys: View {
                         updateJourneys()
                     }
             } else {
-                ScrollView(showsIndicators: false) {
-                        ForEach (journeysFilteredList.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
-                            NavigationLink (destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
+                List  {
+                    ForEach (sortedJourneysFilteredList, id: \.self) { journey in
+                        ZStack {
+                            HStack {
+                                Text(journey.name)
+                                    .foregroundColor(.black)
 
 
-
-                                HStack {
-                                    Button{
-                                        checkBeforeDeletion(journey: journey)
-                                    } label: {
-                                        Image(systemName: "xmark")
-                                            .foregroundColor(.gray)
-                                    }
-                                    .padding(.horizontal, 10)
-
-                                    Text(journey.name)
-                                        .foregroundColor(.black)
-                                        .padding(.vertical, 15)
-                                    Spacer()
-                                    Text(DateManager().getDate(date: journey.date))
-                                        .foregroundColor(.gray)
-                                        .padding(.trailing, 10)
-                                }
-                                .background(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(.thickMaterial)
-                                )
+                                    .padding(.vertical, 15)
+                                Spacer()
+                                Text(DateManager().getDate(date: journey.date))
+                                    .foregroundColor(.gray)
                             }
+
+
+                            NavigationLink (destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
+                                EmptyView()
+                            }
+                            .opacity(0)
                         }
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 1)
+                    }
+                    .onDelete(perform: delete)
                 }
+                .listStyle(.plain)
                 .alert(isPresented: $askAboutDeletion) {
                     Alert (title: Text("Delete journey"),
                            message: Text("Are you sure that you want to delete this journey?"),
@@ -216,5 +210,9 @@ struct ListWithJourneys: View {
         }
         askAboutDeletion = true
         journeyToDelete = journey.name
+    }
+
+    func delete(at offsets: IndexSet) {
+        checkBeforeDeletion(journey: sortedJourneysFilteredList[offsets[offsets.startIndex]])
     }
 }

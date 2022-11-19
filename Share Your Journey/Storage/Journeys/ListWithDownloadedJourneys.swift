@@ -11,7 +11,11 @@ import FirebaseStorage
 //Struct contains code responsible for generating list with journeys downloaded by user.
 struct ListWithDownloadedJourneys: View {
     var downloadedJourneysFilteredList: [SingleJourney]
-    
+
+    var sortedDownloadedJourneysFilteredList: [SingleJourney] {
+       return downloadedJourneysFilteredList.sorted(by: {$0.date > $1.date})
+    }
+
     //Similar variable was described in SeeJourneyView struct.
     @FetchRequest(entity: Journey.entity(), sortDescriptors: [], predicate: nil, animation: nil) var journeys: FetchedResults<Journey>
     
@@ -31,25 +35,28 @@ struct ListWithDownloadedJourneys: View {
                         populateWithDownloadedJourneys()
                     }
             } else {
-                ScrollView(showsIndicators: false) {
-                    ForEach (downloadedJourneysFilteredList.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
-                        NavigationLink(destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: true, path: "")) {
+                List  {
+                    ForEach (sortedDownloadedJourneysFilteredList, id: \.self) { journey in
+                        ZStack {
                             HStack {
-                                Button{
-                                    askAboutDeletion = true
-                                    journeyToDelete = journey.name
-                                } label: {
-                                    Image(systemName: "xmark")
-                                        .foregroundColor(.gray)
-                                }
-                                .padding(.horizontal, 10)
                                 Text(journey.name)
                                     .foregroundColor(.black)
+
+
                                     .padding(.vertical, 15)
+                                Spacer()
+                                Text(DateManager().getDate(date: journey.date))
+                                    .foregroundColor(.gray)
                             }
+                            NavigationLink (destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: true, path: "")) {
+                                EmptyView()
+                            }
+                            .opacity(0)
                         }
                     }
+                    .onDelete(perform: delete)
                 }
+                .listStyle(.plain)
                 .alert(isPresented: $askAboutDeletion) {
                     //After tapping "x" button, users are always asked if they are sure to delete this particular journey.
                     Alert (title: Text("Delete journey"),
@@ -114,5 +121,10 @@ struct ListWithDownloadedJourneys: View {
         
         askAboutDeletion = false
         journeyToDelete = ""
+    }
+
+    func delete(at offsets: IndexSet) {
+        askAboutDeletion = true
+        journeyToDelete = sortedDownloadedJourneysFilteredList[offsets[offsets.startIndex]].name
     }
 }
