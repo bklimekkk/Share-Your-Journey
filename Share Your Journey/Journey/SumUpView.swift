@@ -61,9 +61,6 @@ struct SumUpView: View {
     //Variable contains data of image that should be enlarged at particular moment.
     @State private var highlightedPhoto: UIImage = UIImage()
     
-    //Variable controls where map centers when the sum up views appeares.
-    @State private var initialFocus = MKCoordinateRegion(center: CLLocationCoordinate2D(), latitudinalMeters: 1000, longitudinalMeters: 1000)
-    
     //Variables checks if all photos were downloaded to phone's camera roll.
     @State private var downloadedPhotos = false
     

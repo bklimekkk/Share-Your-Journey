@@ -10,14 +10,14 @@ import Firebase
 
 //Struct contains code responsible for displaying list of user's journeys.
 struct ListWithJourneys: View {
-    
+
+    var journeysFilteredList: [SingleJourney]
+
     //Variables are described in JourneysView struct.
     @Binding var journeysList: [SingleJourney]
     @Binding var journeyToDelete: String
     @Binding var deleteFromStorage: Bool
     @Binding var askAboutDeletion: Bool
-    
-    var journeysFilteredList: [SingleJourney]
 
     var sortedJourneysFilteredList: [SingleJourney] {
         return journeysFilteredList.sorted(by: {$0.date > $1.date})
@@ -32,14 +32,12 @@ struct ListWithJourneys: View {
                         updateJourneys()
                     }
             } else {
-                List  {
+                List {
                     ForEach (sortedJourneysFilteredList, id: \.self) { journey in
                         ZStack {
                             HStack {
                                 Text(journey.name)
-                                    .foregroundColor(.black)
-
-
+                                    .foregroundColor(.primary)
                                     .padding(.vertical, 15)
                                 Spacer()
                                 Text(DateManager().getDate(date: journey.date))

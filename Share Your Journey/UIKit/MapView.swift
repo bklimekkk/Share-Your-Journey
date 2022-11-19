@@ -24,13 +24,6 @@ extension UIImage {
     }
 }
 
-
-
-
-
-
-
-
 struct MapView: UIViewRepresentable {
     @Environment(\.colorScheme) var colorScheme
     

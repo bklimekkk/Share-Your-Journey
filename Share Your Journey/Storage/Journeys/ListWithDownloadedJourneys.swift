@@ -12,10 +12,6 @@ import FirebaseStorage
 struct ListWithDownloadedJourneys: View {
     var downloadedJourneysFilteredList: [SingleJourney]
 
-    var sortedDownloadedJourneysFilteredList: [SingleJourney] {
-       return downloadedJourneysFilteredList.sorted(by: {$0.date > $1.date})
-    }
-
     //Similar variable was described in SeeJourneyView struct.
     @FetchRequest(entity: Journey.entity(), sortDescriptors: [], predicate: nil, animation: nil) var journeys: FetchedResults<Journey>
     
@@ -24,12 +20,17 @@ struct ListWithDownloadedJourneys: View {
     
     //Variables are described in JourneysView struct.
     @Binding var downloadedJourneysList: [SingleJourney]
-    @Binding var askAboutDeletion: Bool
+
+    var sortedDownloadedJourneysFilteredList: [SingleJourney] {
+       return downloadedJourneysFilteredList.sorted(by: {$0.date > $1.date})
+    }
+    
     @Binding var journeyToDelete: String
+    @Binding var askAboutDeletion: Bool
     
     var body: some View {
         VStack {
-            if downloadedJourneysFilteredList.isEmpty{
+            if downloadedJourneysFilteredList.isEmpty {
                 NoDataView(text: "No journeys to show. Tap to refresh.")
                     .onTapGesture {
                         populateWithDownloadedJourneys()
@@ -40,7 +41,7 @@ struct ListWithDownloadedJourneys: View {
                         ZStack {
                             HStack {
                                 Text(journey.name)
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.primary)
 
 
                                     .padding(.vertical, 15)

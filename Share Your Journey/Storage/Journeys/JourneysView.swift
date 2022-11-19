@@ -59,9 +59,9 @@ struct JourneysView: View {
             SearchField(text: "Search journey", search: $searchedJourney)
             
             if downloaded {
-                ListWithDownloadedJourneys(downloadedJourneysFilteredList: downloadedJourneysFilteredList, downloadedJourneysList: $downloadedJourneysList, askAboutDeletion: $askAboutDeletion, journeyToDelete: $journeyToDelete)
+                ListWithDownloadedJourneys(downloadedJourneysFilteredList: downloadedJourneysFilteredList, downloadedJourneysList: $downloadedJourneysList, journeyToDelete: $journeyToDelete, askAboutDeletion: $askAboutDeletion)
             } else {
-                ListWithJourneys(journeysList: $journeysList, journeyToDelete: $journeyToDelete, deleteFromStorage: $deleteFromStorage, askAboutDeletion: $askAboutDeletion, journeysFilteredList: journeysFilteredList)
+                ListWithJourneys(journeysFilteredList: journeysFilteredList, journeysList: $journeysList, journeyToDelete: $journeyToDelete, deleteFromStorage: $deleteFromStorage, askAboutDeletion: $askAboutDeletion)
             }
         }
         

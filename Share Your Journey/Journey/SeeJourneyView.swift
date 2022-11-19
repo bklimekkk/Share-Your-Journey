@@ -29,7 +29,6 @@ struct SeeJourneyView: View {
     
     //Enum's cases control how users view journey's photos at the particular moment.
     enum ViewType {
-        case twoDimensional
         case threeDimensional
         case photoAlbum
     }
@@ -41,16 +40,13 @@ struct SeeJourneyView: View {
     @StateObject private var currentLocationManager = CurrentLocationManager()
     
     //Variable is set to one of ViewType enum's cases.
-    @State private var viewMode = ViewType.twoDimensional
+    @State private var viewMode = ViewType.threeDimensional
     
     //journey that is currently viewed by the user.
     @State var journey: SingleJourney
     
     //all locations that are assigned to photos taken by user.
     @State private var locations: [PhotoLocation] = []
-    
-    //Similar variable was described in SumUpView struct.
-    @State private var initialFocus = MKCoordinateRegion(center: CLLocationCoordinate2D(), latitudinalMeters: 1000, longitudinalMeters: 1000)
     
     //Similar variables were described in SumUpView struct.
     @State private var highlightedPhotoIndex = 0
