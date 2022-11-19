@@ -58,7 +58,6 @@ struct ChatView: View {
                 
                 //Field used to search arrays.
                 SearchField(text: "Search journey", search: $searchJourney)
-                
                 if yourJourneys {
                     YourJourneysList(searchJourney: $searchJourney, sendJourneyScreen: $sendJourneyScreen, askAboutDeletion: $askAboutDeletion, sentByYou: $sentByYou, email: email, sentByYouFiltered: sentByYouFiltered)
                     

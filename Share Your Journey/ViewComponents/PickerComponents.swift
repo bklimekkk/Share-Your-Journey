@@ -36,9 +36,9 @@ struct JourneyPickerView: View {
     var body: some View {
         Picker(selection: choice, label: Text("")) {
             Text(firstChoice)
-                .tag(SeeJourneyView.ViewType.threeDimensional)
-            Text(secondChoice)
                 .tag(SeeJourneyView.ViewType.photoAlbum)
+            Text(secondChoice)
+                .tag(SeeJourneyView.ViewType.threeDimensional)
         }
         .pickerStyle(SegmentedPickerStyle())
     }

@@ -46,8 +46,10 @@ struct WeatherView: View {
         }
         .padding(.vertical, 7)
         .background(
-            colorScheme == .light ? Color(red: 0.81, green: 0.93, blue: 0.99) : Color(red: 0.00, green: 0.20, blue: 0.30),
-            in: RoundedRectangle(cornerRadius: 10, style: .continuous)
+//            colorScheme == .light ? Color(red: 0.81, green: 0.93, blue: 0.99) : Color(red: 0.00, green: 0.20, blue: 0.30),
+//            in: RoundedRectangle(cornerRadius: 10, style: .continuous)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(.ultraThinMaterial)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 10)

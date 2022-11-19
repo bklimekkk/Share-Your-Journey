@@ -17,6 +17,10 @@ struct FriendJourneysList: View {
     
     var sentByFriendFiltered: [SingleJourney]
     
+    var sentByFriendFilteredSorted: [SingleJourney] {
+        return sentByFriendFiltered.sorted(by: {$0.date > $1.date})
+    }
+    
     //Friend's e-mail address.
     var email: String
     
@@ -29,15 +33,23 @@ struct FriendJourneysList: View {
                     }
             } else {
                 //List presenting users with journeys sent by their friends.
-                List(sentByFriendFiltered.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
-                    
-                    //NavigationLink's destination property is set to struct responsible for showing the relevant journey.
-                    NavigationLink(destination: SeeJourneyView(journey: journey, email: email, downloadMode: false, path: "users/\(email)/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
-                        Text(journey.name)
-                            .padding(.vertical, 15)
-                        Spacer()
-                        Text(DateManager().getDate(date: journey.date))
-                            .foregroundColor(.gray)
+                List {
+                    ForEach (sentByFriendFilteredSorted, id: \.self) { journey in
+                        
+                        ZStack {
+                            HStack {
+                                Text(journey.name)
+                                    .padding(.vertical, 15)
+                                Spacer()
+                                Text(DateManager().getDate(date: journey.date))
+                                    .foregroundColor(.gray)
+                            }
+                            //NavigationLink's destination property is set to struct responsible for showing the relevant journey.
+                            NavigationLink(destination: SeeJourneyView(journey: journey, email: email, downloadMode: false, path: "users/\(email)/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")){
+                                EmptyView()
+                            }
+                            .opacity(0)
+                        }
                     }
                 }
                 .listStyle(.inset)

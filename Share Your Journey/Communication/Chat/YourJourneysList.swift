@@ -27,7 +27,11 @@ struct YourJourneysList: View {
     var email: String
     
     var sentByYouFiltered: [SingleJourney]
-    
+
+    var sentByYouFilteredSorted: [SingleJourney] {
+        return sentByYouFiltered.sorted(by: {$0.date > $1.date})
+    }
+
     var body: some View {
         
         VStack {
@@ -38,25 +42,25 @@ struct YourJourneysList: View {
                     }
             } else {
                 //List is sorted by date.
-                List(sentByYouFiltered.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
-                    NavigationLink(destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(email)/journeys")) {
-                        Button{
-                            searchJourneyInDatabase(journey: journey)
-                        } label: {
-                            Image(systemName: "xmark")
-                                .foregroundColor(.gray)
+                List {
+                    ForEach (sentByYouFilteredSorted, id: \.self) { journey in
+                        ZStack {
+                            HStack {
+                                Text(journey.name)
+                                    .padding(.vertical, 15)
+
+                                Spacer()
+
+                                Text(DateManager().getDate(date: journey.date))
+                                    .foregroundColor(.gray)
+                            }
+                            NavigationLink(destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(email)/journeys")) {
+                                EmptyView()
+                            }
+                            .opacity(0)
                         }
-                        .buttonStyle(PlainButtonStyle())
-                        .padding(.horizontal, 10)
-                        
-                        Text(journey.name)
-                            .padding(.vertical, 15)
-                        
-                        Spacer()
-                        
-                        Text(DateManager().getDate(date: journey.date))
-                            .foregroundColor(.gray)
                     }
+                    .onDelete(perform: delete)
                 }
                 .listStyle(.inset)
                 .refreshable {
@@ -200,5 +204,9 @@ struct YourJourneysList: View {
                 }
             }
         }
+    }
+
+    func delete(at offsets: IndexSet) {
+        searchJourneyInDatabase(journey: sentByYouFilteredSorted[offsets[offsets.startIndex]])
     }
 }

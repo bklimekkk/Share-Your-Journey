@@ -22,18 +22,24 @@ struct ListWithFriends: View {
                         populateFriends()
                     }
             } else {
-                //List is filtered alphabetically.
-                List (filteredFriendsList.sorted(by: {$0 < $1}), id: \.self) { friend in
-                    HStack {
-                        NavigationLink(destination: ChatView(email: friend)) {
-                            Text(friend)
-                                .padding(.vertical, 15)
+                //List is sorted alphabetically.
+                List {
+                    ForEach (filteredFriendsList.sorted(by: {$0 < $1}), id: \.self) { friend in
+                        ZStack {
+                            HStack {
+                                Text(friend)
+                                    .padding(.vertical, 15)
+                                Spacer()
+                            }
+
+                            NavigationLink(destination: ChatView(email: friend)) {
+                                EmptyView()
+                            }
+                            .opacity(0)
                         }
                     }
                 }
-                .listStyle(.inset)
-                .navigationBarHidden(true)
-                
+                .listStyle(.plain)
                 .refreshable {
                     populateFriends()
                 }

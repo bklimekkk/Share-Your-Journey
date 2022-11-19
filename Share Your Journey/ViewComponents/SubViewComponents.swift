@@ -29,7 +29,6 @@ struct HighlightedPhoto: View {
                 Image(uiImage: journey.photos.sorted{$1.number > $0.number}.map{$0.photo}[highlightedPhotoIndex])
                     .resizable()
                     .scaledToFit()
-                    .shadow(color: .gray, radius: 2)
                 //Gesture added to the image makes it possible to drag left or right to skip to the next or previous image.
                     .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
                         .onEnded({ value in
@@ -123,8 +122,8 @@ struct PhotosAlbumView: View {
                 ForEach(singleJourney.photos.sorted{$1.number > $0.number}, id: \.self) { photo in
                     Image(uiImage: photo.photo)
                         .resizable()
-                        .shadow(color: .gray, radius: 2)
                         .scaledToFit()
+                        .cornerRadius(10)
                         .padding(.vertical, 5)
                         .onTapGesture {
                             withAnimation(.easeInOut(duration: 0.15)) {

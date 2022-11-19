@@ -21,7 +21,7 @@ struct TabsView: View {
             TabView () {
                 StartView()
                     .tabItem {
-                        Label("Map", systemImage: "map.fill")
+                        Label("Your Journey", systemImage: "map.fill")
                     }
                     .tag(1)
                     .navigationTitle("")
