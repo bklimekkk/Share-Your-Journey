@@ -39,6 +39,7 @@ struct SinglePhoto: Hashable {
 struct SingleJourney: Hashable {
     var email: String
     var name: String
+    var place: String
     var date: Date
     var numberOfPhotos: Int
     var photos: [SinglePhoto]

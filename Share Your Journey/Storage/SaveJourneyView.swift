@@ -8,6 +8,7 @@
 import SwiftUI
 import FirebaseStorage
 import CoreData
+import MapKit
 
 struct SaveJourneyView: View {
     
@@ -54,7 +55,6 @@ struct SaveJourneyView: View {
 
             Spacer()
             Button{
-                
                 //The input field can't be empty and can't contain '-' character.
                 if trimmedName == "" || trimmedName.contains("-") {
                     errorBody = "Name of the journey needs to consist of at least one character and shouldn't contain '-' character"
@@ -69,8 +69,14 @@ struct SaveJourneyView: View {
                     showErrorMessage = true
                     return
                 }
-                
-                createJourney(journey: journey, name: trimmedName)
+                let journeyLastLocation = journey.photosLocations.last ?? CLLocationCoordinate2D()
+                calculatePlace(locationCoordinate: journeyLastLocation) { placemark in
+                    if let locality = placemark?.locality, let subLocality = placemark?.subLocality {
+                        journey.place = subLocality.isEmpty ? locality : "\(locality), \(subLocality)"
+                    }
+
+                    createJourney(journey: journey, name: UUID().uuidString)
+                }
                 journey.name = trimmedName
                 done = true
                 presentSheet = false
@@ -138,7 +144,22 @@ struct SaveJourneyView: View {
         }
         .padding()
     }
-    
+    /**
+     Function is responsible for getting a placemark from the location.
+     */
+    func calculatePlace(locationCoordinate: CLLocationCoordinate2D, completionHandler: @escaping (CLPlacemark?) -> Void) {
+        let geocoder = CLGeocoder()
+        let location = CLLocation(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
+        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+            if error == nil {
+                let locationName = placemarks?[0]
+                completionHandler(locationName)
+            } else {
+                completionHandler(nil)
+            }
+        }
+    }
+
     /**
      Function is responsible for creating a new journey document in journeys collection in the firestore database.
      */
@@ -146,6 +167,7 @@ struct SaveJourneyView: View {
         let instanceReference = FirebaseSetup.firebaseInstance
         instanceReference.db.collection("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? "")/journeys").document(name).setData([
             "name" : name,
+            "place" : journey.place,
             "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",
             "photosNumber" : journey.numberOfPhotos,
             "date" : Date(),

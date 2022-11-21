@@ -182,7 +182,7 @@ struct StartView: View {
                 VStack {
                     PhotosAlbumView(showPicture: $currentImagesCollection.showPicture, photoIndex: $currentImagesCollection.photoIndex,
                                     highlightedPhoto: $currentImagesCollection.highlightedPhoto,
-                                    layout: currentImagesCollection.layout, singleJourney: SingleJourney(email: "", name: "", date: Date.now,
+                                    layout: currentImagesCollection.layout, singleJourney: SingleJourney(email: "", name: "", place: "", date: Date.now,
                                                                                                          numberOfPhotos: arrayOfPhotosLocations.count,
                                                                                                          photos: arrayOfPhotos,
                                                                                                          photosLocations: arrayOfPhotosLocations,
@@ -200,7 +200,7 @@ struct StartView: View {
                 HighlightedPhoto(savedToCameraRoll: $currentImagesCollection.savedToCameraRoll,
                                  highlightedPhotoIndex: $currentImagesCollection.photoIndex, showPicture: $currentImagesCollection.showPicture,
                                  highlightedPhoto: $currentImagesCollection.highlightedPhoto, subscriber: $subscription.subscriber,
-                                 showPanel: $subscription.showPanel, journey: SingleJourney(email: "", name: "", date: Date.now,
+                                 showPanel: $subscription.showPanel, journey: SingleJourney(email: "", name: "", place: "", date: Date.now,
                                                                                             numberOfPhotos: arrayOfPhotosLocations.count,
                                                                                             photos: arrayOfPhotos,
                                                                                             photosLocations: arrayOfPhotosLocations,
@@ -255,7 +255,7 @@ struct StartView: View {
                 journeyStateController.goBack = false
             }
         }) {
-            SumUpView(singleJourney: SingleJourney(email: "", name: "", date: Date(), numberOfPhotos: arrayOfPhotos.count, photos: arrayOfPhotos, photosLocations: arrayOfPhotosLocations),
+            SumUpView(singleJourney: SingleJourney(email: "", name: "", place: "", date: Date(), numberOfPhotos: arrayOfPhotos.count, photos: arrayOfPhotos, photosLocations: arrayOfPhotosLocations),
                       showSumUp: $journeyStateController.showSumUp, goBack: $journeyStateController.goBack)
         }
         //Alert is presented only if error occurs

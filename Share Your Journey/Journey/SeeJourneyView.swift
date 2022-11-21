@@ -316,7 +316,7 @@ struct SeeJourneyView: View {
         }, content: {
             DownloadChangesView(presentSheet: $changeName, download: $downloadChangedJourney, newName: $journeyNewName)
         })
-        .navigationBarTitle(journey.name, displayMode: .inline)
+        .navigationBarTitle(journey.place, displayMode: .inline)
     }
     
     /**
@@ -449,6 +449,7 @@ struct SeeJourneyView: View {
         let instanceReference = FirebaseSetup.firebaseInstance
         instanceReference.db.collection("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? "")/journeys").document(journey.name).setData([
             "name" : journey.name,
+            "place" : journey.place,
             "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",
             "photosNumber" : journey.numberOfPhotos,
             "date" : Date(),

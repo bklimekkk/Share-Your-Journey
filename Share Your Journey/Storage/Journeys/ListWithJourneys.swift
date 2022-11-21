@@ -36,7 +36,7 @@ struct ListWithJourneys: View {
                     ForEach (sortedJourneysFilteredList, id: \.self) { journey in
                         ZStack {
                             HStack {
-                                Text(journey.name)
+                                Text(journey.place)
                                     .foregroundColor(.primary)
                                     .padding(.vertical, 15)
                                 Spacer()
@@ -169,7 +169,7 @@ struct ListWithJourneys: View {
             } else {
                 for i in querySnapshot!.documents {
                     if !journeysList.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {
-                        journeysList.append(SingleJourney(email: i.get("email") as! String, name: i.documentID, date: (i.get("date") as? Timestamp)?
+                        journeysList.append(SingleJourney(email: i.get("email") as! String, name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?
                             .dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
                     }
                 }
@@ -195,7 +195,7 @@ struct ListWithJourneys: View {
                                 print(error!.localizedDescription)
                             } else {
                                 for j in journeySnapshot!.documents {
-                                    if j.documentID == journeyToDelete {
+                                    if j.documentID == journey.name {
                                         deleteFromStorage = false
                                         break
                                     }

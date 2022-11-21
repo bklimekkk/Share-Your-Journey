@@ -16,7 +16,8 @@ struct SendJourneyManager {
         
         //Journey is added to relevant collection in the firestore database (without photos references).
         FirebaseSetup.firebaseInstance.db.document("users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(targetEmail)/journeys/\(journey.name)").setData([
-            "name": journey.name,
+            "name" : journey.name,
+            "place": journey.place,
             "email" : journey.email,
             "photosNumber" : journey.numberOfPhotos,
             "date" : Date(),

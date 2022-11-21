@@ -38,7 +38,7 @@ struct FriendJourneysList: View {
                         
                         ZStack {
                             HStack {
-                                Text(journey.name)
+                                Text(journey.place)
                                     .padding(.vertical, 15)
                                 Spacer()
                                 Text(DateManager().getDate(date: journey.date))
@@ -76,7 +76,7 @@ struct FriendJourneysList: View {
                 let receivedJourneys = querySnapshot!.documents
                 for i in receivedJourneys {
                     if !sentByFriend.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {
-                        sentByFriend.append(SingleJourney(email: email, name: i.documentID, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
+                        sentByFriend.append(SingleJourney(email: email, name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
                     }
                 }
                 

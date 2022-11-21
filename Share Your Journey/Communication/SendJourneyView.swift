@@ -43,7 +43,7 @@ struct SendJourneyView: View {
                     } else {
                         List(filteredUnsentJourneys.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
                             HStack {
-                                Text(journey.name)
+                                Text("\(journey.place), \(journey.date)")
                                     .padding(.vertical, 15)
                                 Spacer()
                                 Button{
@@ -104,7 +104,7 @@ struct SendJourneyView: View {
             } else {
                 for i in snapshot!.documents {
                     if(i.documentID != "-") {
-                        sentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
+                        sentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
                     }
                 }
             }
@@ -116,7 +116,7 @@ struct SendJourneyView: View {
                 } else {
                     for i in snapshot!.documents {
                         if !sentJourneys.map({$0.name}).contains(i.documentID) {
-                            unsentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
+                            unsentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
                         }
                     }
                 }

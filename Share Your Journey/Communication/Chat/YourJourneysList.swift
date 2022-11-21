@@ -46,7 +46,7 @@ struct YourJourneysList: View {
                     ForEach (sentByYouFilteredSorted, id: \.self) { journey in
                         ZStack {
                             HStack {
-                                Text(journey.name)
+                                Text(journey.place)
                                     .padding(.vertical, 15)
 
                                 Spacer()
@@ -120,7 +120,7 @@ struct YourJourneysList: View {
                     
                     //If conditions are met, journey's data is appended to the array.
                     if !sentByYou.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {
-                        sentByYou.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
+                        sentByYou.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
                     }
                 }
             }
@@ -146,7 +146,7 @@ struct YourJourneysList: View {
                                 print(error!.localizedDescription)
                             } else {
                                 for j in journeySnapshot!.documents {
-                                    if j.documentID == journeyToDelete {
+                                    if j.documentID == journey.name {
                                         deleteFromStorage = false
                                         break
                                     }

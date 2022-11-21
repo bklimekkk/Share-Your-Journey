@@ -93,7 +93,7 @@ struct ListWithDownloadedJourneys: View {
         
         for i in journeys.filter({return $0.email == FirebaseSetup.firebaseInstance.auth.currentUser?.email}) {
             if !downloadedJourneysList.map({return $0.name}).contains(i.name) {
-                downloadedJourneysList.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.name ?? "", date: i.date ?? Date(), numberOfPhotos: i.photosNumber as! Int, photos: [], photosLocations: [], networkProblem: i.networkProblem))
+                downloadedJourneysList.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.name ?? "", place: "", date: i.date ?? Date(), numberOfPhotos: i.photosNumber as! Int, photos: [], photosLocations: [], networkProblem: i.networkProblem))
             }
         }
     }
