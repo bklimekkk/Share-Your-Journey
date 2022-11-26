@@ -72,7 +72,8 @@ struct SeeJourneyView: View {
     @State private var journeyIsDownloaded = false
     
     @State private var showSendingView = false
-    
+    @State private var showPhotoDetails = false
+
     @State private var showWeather = false
     @State private var expandWeather = false
     @State private var weatherLatitude = 0.0
@@ -259,11 +260,19 @@ struct SeeJourneyView: View {
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button{
+                if showPicture {
+                    Button{
+                        self.showPhotoDetails = true
+                    }label:{
+                        Image(systemName: "info.circle")
+                    }
+                } else {
+                Button {
                     showSendingView = true
                 }label:{
                     Image(systemName: "square.and.arrow.up")
                 }
+            }
             }
         }
         .task {
@@ -298,6 +307,9 @@ struct SeeJourneyView: View {
         }
         .fullScreenCover(isPresented: $subscription.showPanel, content: {
             SubscriptionView(subscriber: $subscription.subscriber)
+        })
+        .sheet(isPresented: $showPhotoDetails, content: {
+            PhotoDetailsView(photo: self.journey.photos[self.highlightedPhotoIndex])
         })
         .sheet(isPresented: $showSendingView, content: {
             SendViewedJourneyView(journey: journey)
@@ -387,7 +399,8 @@ struct SeeJourneyView: View {
      Function is responsible for downloading for all photo's details from the database and storage.
      */
     func downloadPhotoDetails(queryDocumentSnapshot: QueryDocumentSnapshot) {
-        journey.photosLocations.append(CLLocationCoordinate2D(latitude: queryDocumentSnapshot.get("latitude") as! CLLocationDegrees, longitude: queryDocumentSnapshot.get("longitude") as! CLLocationDegrees))
+        journey.photosLocations.append(CLLocationCoordinate2D(latitude: queryDocumentSnapshot.get("latitude") as! CLLocationDegrees,
+                                                              longitude: queryDocumentSnapshot.get("longitude") as! CLLocationDegrees))
         
         //Image's reverence / url is used for downloading image from storage later on.
         let photoReference = FirebaseSetup.firebaseInstance.storage.reference().child(queryDocumentSnapshot.get("photoUrl") as! String)
@@ -406,7 +419,10 @@ struct SeeJourneyView: View {
                     
                     //Image is appended to photos array on main thread so running application isn't interrupted.
                     DispatchQueue.main.async {
-                        journey.photos[queryDocumentSnapshot.get("photoNumber") as! Int] = (SinglePhoto(number: queryDocumentSnapshot.get("photoNumber") as! Int,photo: image))
+                        journey.photos[queryDocumentSnapshot.get("photoNumber") as! Int] =
+                        (SinglePhoto(number: queryDocumentSnapshot.get("photoNumber") as! Int,photo: image,
+                                     location: queryDocumentSnapshot.get("location") as! String, subLocation:
+                                        queryDocumentSnapshot.get("subLocation") as! String))
                     }
                 }
                 .resume()
@@ -434,6 +450,8 @@ struct SeeJourneyView: View {
             newImage.image = journey.photos[index].photo.jpegData(compressionQuality: 0.5)
             newImage.latitude = journey.photosLocations[index].latitude
             newImage.longitude = journey.photosLocations[index].longitude
+            newImage.location = journey.photos[index].location
+            newImage.subLocation = journey.photos[index].subLocation
             newJourney.addToPhotos(newImage)
             index+=1
         }
@@ -482,6 +500,8 @@ struct SeeJourneyView: View {
             instanceReference.db.document("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? "")/journeys/\(journey.name)/photos/\(index)").setData([
                 "latitude": journey.photosLocations[index].latitude,
                 "longitude": journey.photosLocations[index].longitude,
+                "location": journey.photos[index].location,
+                "subLocation": journey.photos[index].subLocation,
                 "photoUrl": photoReference,
                 "photoNumber": index
             ])

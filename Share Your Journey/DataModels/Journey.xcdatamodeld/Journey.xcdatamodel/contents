@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21512" systemVersion="21G115" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CurrentImage" representedClassName="CurrentImage" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" valueTransformerName="UIImageTransformer" customClassName="UIImage"/>
+        <attribute name="location" optional="YES" attributeType="String"/>
+        <attribute name="subLocation" optional="YES" attributeType="String"/>
     </entity>
     <entity name="CurrentLocation" representedClassName="CurrentLocation" syncable="YES">
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -17,16 +19,18 @@
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Photo" inverseName="journey" inverseEntity="Photo"/>
     </entity>
     <entity name="Photo" representedClassName="Photo" syncable="YES">
+        <attribute name="administrativeArea" optional="YES" attributeType="String"/>
+        <attribute name="country" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" valueTransformerName="UIImageTransformer" customClassName="UIImage"/>
+        <attribute name="isoCountryCode" optional="YES" attributeType="String"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="location" optional="YES" attributeType="String"/>
         <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="ocean" optional="YES" attributeType="String"/>
+        <attribute name="postalCode" optional="YES" attributeType="String"/>
+        <attribute name="subLocation" optional="YES" attributeType="String"/>
         <relationship name="journey" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Journey" inverseName="photos" inverseEntity="Journey"/>
     </entity>
-    <elements>
-        <element name="Journey" positionX="-315.88671875" positionY="12.44140625" width="128" height="119"/>
-        <element name="Photo" positionX="-59.6796875" positionY="-89.7421875" width="128" height="104"/>
-        <element name="CurrentImage" positionX="-189" positionY="18" width="128" height="59"/>
-        <element name="CurrentLocation" positionX="-180" positionY="27" width="128" height="59"/>
-    </elements>
 </model>

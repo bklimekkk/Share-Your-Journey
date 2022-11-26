@@ -122,12 +122,10 @@ struct MapView: UIViewRepresentable {
                     parent.showPhoto = true
                 }
             } else {
-                
                 let overlays = mapView.overlays
                 mapView.removeOverlays(overlays)
                 let firstPoint = MKPlacemark(coordinate: parent.clManager.currentRegion.center)
                 let secondPoint = MKPlacemark(coordinate: view.annotation!.coordinate)
-                
                 let routeRequest = MKDirections.Request()
                 routeRequest.source = MKMapItem(placemark: firstPoint)
                 routeRequest.destination = MKMapItem(placemark: secondPoint)

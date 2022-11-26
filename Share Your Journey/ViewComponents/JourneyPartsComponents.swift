@@ -18,21 +18,73 @@ struct PhotoLocation: Identifiable {
 //Struct represents a single photo.
 struct SinglePhoto: Hashable {
     var number: Int
-    let photo: UIImage
-    
-//    enum CodingKeys: CodingKey {
-//        case number, photo
-//    }
-//
-//    func encode(to encoder: Encoder) throws {
-//        var container = encoder.container(keyedBy: CodingKeys.self)
-//        try container.encode(number, forKey : .number)
-//        try container.encode(photo, forKey: .photo)
-//    }
-//
-//    required init(from decoder: Decoder) throws {
-//
-//    }
+    var photo: UIImage
+    var location: String
+    var subLocation: String
+    var administrativeArea: String
+    var country: String
+    var isoCountryCode: String
+    var name: String
+    var postalCode: String
+    var ocean: String
+    var inlandWater: String
+    var areasOfInterest: [String]
+
+    init() {
+        self.number = 0
+        self.photo = UIImage()
+        self.location = ""
+        self.subLocation = ""
+        self.administrativeArea = ""
+        self.country = ""
+        self.isoCountryCode = ""
+        self.name = ""
+        self.postalCode = ""
+        self.ocean = ""
+        self.inlandWater = ""
+        self.areasOfInterest = []
+    }
+
+    init(number: Int, photo: UIImage) {
+        self.number = number
+        self.photo = photo
+        location = ""
+        subLocation = ""
+        self.administrativeArea = ""
+        self.country = ""
+        self.isoCountryCode = ""
+        self.name = ""
+        self.postalCode = ""
+        self.ocean = ""
+        self.inlandWater = ""
+        self.areasOfInterest = []
+    }
+
+    init(number: Int,
+         photo: UIImage,
+         location: String,
+         subLocation: String,
+         administrativeArea: String,
+         country: String,
+         isoCountryCode: String,
+         name: String,
+         postalCode: String,
+         ocean: String,
+         inlandWater: String,
+         areasOfInterest: [String]) {
+        self.number = number
+        self.photo = photo
+        self.location = location
+        self.subLocation = subLocation
+        self.administrativeArea = administrativeArea
+        self.country = country
+        self.isoCountryCode = isoCountryCode
+        self.name = name
+        self.postalCode = postalCode
+        self.ocean = ocean
+        self.inlandWater = inlandWater
+        self.areasOfInterest = areasOfInterest
+    }
 }
 
 //Struct represents a single journey.

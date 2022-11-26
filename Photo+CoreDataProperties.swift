@@ -21,9 +21,19 @@ extension Photo {
     @NSManaged public var longitude: Double
     @NSManaged public var journey: Journey?
     @NSManaged public var id: Double
+    @NSManaged public var location: String?
+    @NSManaged public var subLocation: String?
     
     public var getImage: UIImage {
         return UIImage(data: image ?? Data()) ?? UIImage()
+    }
+
+    public var getLocation: String {
+        return self.location ?? ""
+    }
+
+    public var getSubLocation: String {
+        return self.subLocation ?? ""
     }
 }
 

@@ -18,13 +18,23 @@ extension CurrentImage {
 
     @NSManaged public var image: Data?
     @NSManaged public var id: Int16
+    @NSManaged public var location: String?
+    @NSManaged public var subLocation: String?
     
     public var getImage: UIImage {
-        return UIImage(data: image ?? Data()) ?? UIImage()
+        return UIImage(data: self.image ?? Data()) ?? UIImage()
     }
     
     public var getId: Int {
-        return Int(id)
+        return Int(self.id)
+    }
+
+    public var getLocation: String {
+        return self.location ?? ""
+    }
+
+    public var getSubLocation: String {
+        return self.subLocation ?? ""
     }
 }
 

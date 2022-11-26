@@ -51,6 +51,8 @@
 		86640DB627D588DC00F5BE1A /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 86640DB527D588DC00F5BE1A /* FirebaseDatabase */; };
 		86640DB827D588DC00F5BE1A /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 86640DB727D588DC00F5BE1A /* FirebaseFirestore */; };
 		86640DBA27D588DC00F5BE1A /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 86640DB927D588DC00F5BE1A /* FirebaseStorage */; };
+		866A7E1A293221C100CD3340 /* SpotDetailsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A7E19293221C100CD3340 /* SpotDetailsManager.swift */; };
+		866A7E1C29326BF500CD3340 /* PhotoDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */; };
 		8671E6FE2876D24300E4A5AC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8671E6FD2876D24300E4A5AC /* InstructionsView.swift */; };
 		867254DD27B47B7B00DC5001 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867254DC27B47B7B00DC5001 /* StartView.swift */; };
 		8672551C27B80A9000DC5001 /* TabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8672551B27B80A8F00DC5001 /* TabsView.swift */; };
@@ -59,7 +61,6 @@
 		86C6493427CC4DCB00891C24 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6493327CC4DCB00891C24 /* PhotoPickerView.swift */; };
 		86C6494827CFAE4300891C24 /* Journey.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86C6494627CFAE4200891C24 /* Journey.xcdatamodeld */; };
 		86C6494C27CFAFD500891C24 /* JourneyDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6494B27CFAFD400891C24 /* JourneyDataManager.swift */; };
-		86C6494E27D036B300891C24 /* SaveJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6494D27D036B300891C24 /* SaveJourneyView.swift */; };
 		86C649F627D1B43A00891C24 /* Journey+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C649F027D1B43800891C24 /* Journey+CoreDataClass.swift */; };
 		86C649F727D1B43A00891C24 /* Journey+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C649F127D1B43A00891C24 /* Journey+CoreDataProperties.swift */; };
 		86C649FA27D1B43A00891C24 /* Photo+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C649F427D1B43A00891C24 /* Photo+CoreDataClass.swift */; };
@@ -144,6 +145,8 @@
 		86573E5B27F783D2003E5CF8 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
 		86573E5D27F8370B003E5CF8 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		866A7E19293221C100CD3340 /* SpotDetailsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotDetailsManager.swift; sourceTree = "<group>"; };
+		866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailsView.swift; sourceTree = "<group>"; };
 		8671E6FD2876D24300E4A5AC /* InstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
 		867254DC27B47B7B00DC5001 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		8672551B27B80A8F00DC5001 /* TabsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsView.swift; sourceTree = "<group>"; };
@@ -152,7 +155,6 @@
 		86C6493327CC4DCB00891C24 /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
 		86C6494727CFAE4300891C24 /* Journey.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Journey.xcdatamodel; sourceTree = "<group>"; };
 		86C6494B27CFAFD400891C24 /* JourneyDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyDataManager.swift; sourceTree = "<group>"; };
-		86C6494D27D036B300891C24 /* SaveJourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveJourneyView.swift; sourceTree = "<group>"; };
 		86C649F027D1B43800891C24 /* Journey+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Journey+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		86C649F127D1B43A00891C24 /* Journey+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Journey+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		86C649F427D1B43A00891C24 /* Photo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Photo+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
@@ -294,6 +296,7 @@
 				863CF50727BAF558007B82D4 /* CurrentLocationManager.swift */,
 				86C6494B27CFAFD400891C24 /* JourneyDataManager.swift */,
 				8683852527E94AD30005FEE2 /* NetworkManager.swift */,
+				866A7E19293221C100CD3340 /* SpotDetailsManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 			children = (
 				86FCCC6828102A26005FD678 /* Start */,
 				8652A17127BFEAE900ADBB25 /* SumUpView.swift */,
+				866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */,
 				8639E00E289694D100D7A3F5 /* SendViewedJourneyView.swift */,
 				86C649FC27D1DF0700891C24 /* SeeJourneyView.swift */,
 				865452AC2809D452008041A8 /* DownloadChangesView.swift */,
@@ -345,7 +349,6 @@
 			isa = PBXGroup;
 			children = (
 				86FCCC7128102D8E005FD678 /* Journeys */,
-				86C6494D27D036B300891C24 /* SaveJourneyView.swift */,
 				864FEF4728A952820060E94D /* DateManager.swift */,
 			);
 			path = Storage;
@@ -606,7 +609,6 @@
 				864FEF4128A7E4010060E94D /* CurrentImage+CoreDataClass.swift in Sources */,
 				8653A2D4280418EB00852374 /* JourneysView.swift in Sources */,
 				86C649F727D1B43A00891C24 /* Journey+CoreDataProperties.swift in Sources */,
-				86C6494E27D036B300891C24 /* SaveJourneyView.swift in Sources */,
 				8672551E27B80C8A00DC5001 /* FriendsView.swift in Sources */,
 				864FEF4228A7E4010060E94D /* CurrentImage+CoreDataProperties.swift in Sources */,
 				864FEEF5289B092D0060E94D /* ForecastModel.swift in Sources */,
@@ -625,6 +627,7 @@
 				864B50C7287232660072A5BB /* SettingsView.swift in Sources */,
 				86FCCC6A28102A4B005FD678 /* RunningJourneyModeView.swift in Sources */,
 				86FCCC7528102E02005FD678 /* ListWithJourneys.swift in Sources */,
+				866A7E1C29326BF500CD3340 /* PhotoDetailsView.swift in Sources */,
 				864FEF4828A952830060E94D /* DateManager.swift in Sources */,
 				86C6494827CFAE4300891C24 /* Journey.xcdatamodeld in Sources */,
 				86FCCC7F28107C00005FD678 /* SubViewComponents.swift in Sources */,
@@ -642,6 +645,7 @@
 				864FEEF9289B24380060E94D /* ForecastRequest.swift in Sources */,
 				86D9F71D28992D0E0092832E /* WeatherView.swift in Sources */,
 				8633D980286A49EB003D83BB /* WelcomeView.swift in Sources */,
+				866A7E1A293221C100CD3340 /* SpotDetailsManager.swift in Sources */,
 				86D9F7192899207C0092832E /* WeatherModel.swift in Sources */,
 				8652A17227BFEAE900ADBB25 /* SumUpView.swift in Sources */,
 				864B50CB2872E26C0072A5BB /* ImagesView.swift in Sources */,
@@ -836,6 +840,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -870,6 +875,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

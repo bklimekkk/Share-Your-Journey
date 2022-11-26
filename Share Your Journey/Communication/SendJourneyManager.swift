@@ -35,6 +35,8 @@ struct SendJourneyManager {
                     FirebaseSetup.firebaseInstance.db.document("users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(targetEmail)/journeys/\(journey.name)/photos/\(i.documentID)").setData([
                         "latitude": i.get("latitude") as! CLLocationDegrees,
                         "longitude": i.get("longitude") as! CLLocationDegrees,
+                        "location": i.get("location") as! String,
+                        "subLocation": i.get("subLocation") as! String,
                         "photoUrl": i.get("photoUrl") as! String,
                         "photoNumber": i.get("photoNumber") as! Int
                     ])

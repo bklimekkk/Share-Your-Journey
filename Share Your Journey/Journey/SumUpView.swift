@@ -49,9 +49,6 @@ struct SumUpView: View {
     //Variable representing user's current location. Right now it's set to one default value, but it is changed right after the view appears.
     @State private var currentLocation = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), latitudinalMeters: 1000, longitudinalMeters: 1000)
     
-    //Variable controls if journey should be saved or not.
-    @State var saveJourney = false
-    
     //Variable controls if viewed image should be saved to camera roll.
     @State private var savedToCameraRoll = false
     
@@ -87,6 +84,7 @@ struct SumUpView: View {
     var body: some View {
         NavigationView {
             ZStack {
+                if !self.showPicture {
                 VStack {
                     if viewType == .photoAlbum {
                         JourneyPickerView(choice: $viewType, firstChoice: "Album", secondChoice: "Map")
@@ -131,66 +129,61 @@ struct SumUpView: View {
                                 .edgesIgnoringSafeArea(.all)
                                 .environmentObject(currentLocationManager)
                                 .opacity(showPicture ? 0 : 1)
-
                             VStack {
                                 Spacer()
                                 VStack {
-                                    if !showPicture {
-                                        HStack {
-                                            VStack {
-                                                DirectionIcons(mapType: $currentLocationManager.mapView.mapType, subscriber: $subscription.subscriber, showPanel: $subscription.showPanel, walking: $walking)
-                                                Button {
-                                                    currentLocationManager.changeTypeOfMap()
-                                                } label: {
-                                                    MapTypeButton()
-                                                }
-                                                .foregroundColor(buttonColor)
 
-                                                Button {
-                                                    currentLocationManager.recenterLocation()
-                                                } label: {
-                                                    LocationButton()
-                                                }
-                                                .foregroundColor(buttonColor)
+                                    HStack {
+                                        VStack {
+                                            DirectionIcons(mapType: $currentLocationManager.mapView.mapType, subscriber: $subscription.subscriber, showPanel: $subscription.showPanel, walking: $walking)
+                                            Button {
+                                                currentLocationManager.changeTypeOfMap()
+                                            } label: {
+                                                MapTypeButton()
                                             }
-                                            Spacer()
+                                            .foregroundColor(buttonColor)
+
+                                            Button {
+                                                currentLocationManager.recenterLocation()
+                                            } label: {
+                                                LocationButton()
+                                            }
+                                            .foregroundColor(buttonColor)
                                         }
+                                        Spacer()
                                     }
+
                                 }
                             }
                             .padding()
                         }
-
-
                     }
-                    if !showPicture {
-                        if done {
 
-                            HStack(spacing: 10) {
-                                Button {
-                                    sendJourney = true
-                                } label: {
-                                    //Button is shown only if the journey is saved.
-                                    ButtonView(buttonTitle: "Send To Friend")
-                                        .background(Color.blue)
-                                }
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                                Button {
-                                    showSumUp = false
-                                    dismiss()
-                                } label: {
-
-                                    //Button is shown only if the journey is saved.
-                                    ButtonView(buttonTitle: "Done")
-                                        .background(Color.green)
-                                }
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                    if done {
+                        HStack(spacing: 10) {
+                            Button {
+                                sendJourney = true
+                            } label: {
+                                //Button is shown only if the journey is saved.
+                                ButtonView(buttonTitle: "Send To Friend")
+                                    .background(Color.blue)
                             }
-                            .padding(.horizontal, 5)
-                            .padding(.bottom, 5)
-                        } else {
-                            SumUpFunctionalityButtonsView(saveJourney: $saveJourney, showDeleteAlert: $showDeleteAlert)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            Button {
+                                showSumUp = false
+                                dismiss()
+                            } label: {
+
+                                //Button is shown only if the journey is saved.
+                                ButtonView(buttonTitle: "Done")
+                                    .background(Color.green)
+                            }
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
+                        .padding(.horizontal, 5)
+                        .padding(.bottom, 5)
+                    } else {
+                        SumUpFunctionalityButtonsView(journey: self.$singleJourney, showDeleteAlert: self.$showDeleteAlert, done: self.$done)
                     }
                 }
                 .alert("Quit", isPresented: $showDeleteAlert) {
@@ -201,10 +194,7 @@ struct SumUpView: View {
                 } message: {
                     Text("Are you sure that you want to quit? The journey will be deleted.")
                 }
-                .sheet(isPresented: $saveJourney, onDismiss: {}, content: {
-                    SaveJourneyView(presentSheet: $saveJourney, done: $done, journey: $singleJourney)
-                })
-
+            }
                 HighlightedPhoto(savedToCameraRoll: $savedToCameraRoll, highlightedPhotoIndex: $photoIndex, showPicture: $showPicture, highlightedPhoto: $highlightedPhoto, subscriber: $subscription.subscriber, showPanel: $subscription.showPanel, journey: singleJourney)
             }
             .navigationTitle("Sum up")

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseStorage
 import SwiftUI
 import MapKit
 
@@ -59,8 +60,9 @@ struct DirectionIcons: View {
 struct SumUpFunctionalityButtonsView: View {
     
     //Variables are described in SumUpView struct.
-    @Binding var saveJourney: Bool
+    @Binding var journey: SingleJourney
     @Binding var showDeleteAlert: Bool
+    @Binding var done: Bool
     var body: some View {
         HStack {
             Button {
@@ -75,7 +77,13 @@ struct SumUpFunctionalityButtonsView: View {
             Spacer()
             
             Button {
-                saveJourney = true
+                let hapticFeedback = UIImpactFeedbackGenerator(style: .heavy)
+                hapticFeedback.impactOccurred()
+                if let location = self.journey.photos.last?.location, let subLocation = self.journey.photos.last?.subLocation {
+                    self.journey.place = subLocation.isEmpty ? location : "\(location), \(subLocation)"
+                }
+                self.createJourney(journey: journey, name: UUID().uuidString)
+                self.done = true
             } label: {
                 ButtonView(buttonTitle: "Save journey")
             }
@@ -84,5 +92,53 @@ struct SumUpFunctionalityButtonsView: View {
         }
         .padding(.horizontal, 5)
         .padding(.bottom, 5)
+    }
+
+    /**
+     Function is responsible for creating a new journey document in journeys collection in the firestore database.
+     */
+    func createJourney(journey: SingleJourney, name: String) {
+        let instanceReference = FirebaseSetup.firebaseInstance
+        instanceReference.db.collection("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? "")/journeys").document(name).setData([
+            "name" : name,
+            "place" : journey.place,
+            "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",
+            "photosNumber" : journey.numberOfPhotos,
+            "date" : Date(),
+            "deletedJourney" : false
+        ])
+        for index in 0...journey.photosLocations.count - 1 {
+            uploadPhoto(journey: journey, name: name, index: index, instanceReference: instanceReference)
+        }
+    }
+
+    /**
+     Function is responsible for uploading an image to the firebase storage and adding its details to firestore database.
+     */
+    func uploadPhoto(journey: SingleJourney, name: String, index: Int, instanceReference: FirebaseSetup) {
+        guard let photo = journey.photos.sorted(by: {$1.number > $0.number}).map({$0.photo})[index].jpegData(compressionQuality: 0.2) else {
+            return
+        }
+        let metaData = StorageMetadata()
+        metaData.contentType = "image/jpeg"
+        let photoReference = "\(instanceReference.auth.currentUser?.email ?? "")/\(name)/\(index)"
+        let storageReference = instanceReference.storage.reference(withPath: photoReference)
+
+        //Storage is populated with the image.
+        storageReference.putData(photo, metadata: metaData) { metaData, error in
+            if let error = error {
+                print(error.localizedDescription)
+            }
+
+            //Image's details are added to appropriate collection in firetore's database.
+            instanceReference.db.document("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? "")/journeys/\(name)/photos/\(index)").setData([
+                "latitude": journey.photosLocations[index].latitude,
+                "longitude": journey.photosLocations[index].longitude,
+                "location": journey.photos[index].location,
+                "subLocation": journey.photos[index].subLocation,
+                "photoUrl": photoReference,
+                "photoNumber": index
+            ])
+        }
     }
 }

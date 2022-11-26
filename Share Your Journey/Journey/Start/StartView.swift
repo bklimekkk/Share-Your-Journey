@@ -163,7 +163,10 @@ struct StartView: View {
         .task {
             if !currentImages.isEmpty {
                 for i in currentImages {
-                    arrayOfPhotos.append(SinglePhoto(number: i.getId, photo: i.getImage))
+                    arrayOfPhotos.append(SinglePhoto(number: i.getId,
+                                                     photo: i.getImage,
+                                                     location: i.getLocation,
+                                                     subLocation: i.getSubLocation))
                 }
             }
             
@@ -318,10 +321,44 @@ struct StartView: View {
             let location = CurrentLocation(context: moc)
             location.latitude = journeyStateController.currentLocation.center.latitude
             location.longitude = journeyStateController.currentLocation.center.longitude
-            
+
+            guard var lastPhoto = self.arrayOfPhotos.last else {
+                return
+            }
+
             let image = CurrentImage(context: moc)
-            image.id = Int16(arrayOfPhotos[arrayOfPhotos.count - 1].number)
-            image.image = arrayOfPhotos[arrayOfPhotos.count - 1].photo.jpegData(compressionQuality: 0.5)
+            image.id = Int16(lastPhoto.number)
+            image.image = lastPhoto.photo.jpegData(compressionQuality: 0.5)
+
+            let locationCoordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
+            SpotDetailsManager().calculatePlace(locationCoordinate: locationCoordinate) { placemark in
+                let locality = placemark?.locality ?? ""
+                let subLocality = placemark?.subLocality ?? ""
+                let administrativeArea = placemark?.administrativeArea ?? ""
+                let country = placemark?.country ?? ""
+                let isoCountryCode = placemark?.isoCountryCode ?? ""
+                let name = placemark?.name ?? ""
+                let postalCode = placemark?.postalCode ?? ""
+                let ocean = placemark?.ocean ?? ""
+                let inlandWater = placemark?.inlandWater ?? ""
+                let areasOfInterest = placemark?.areasOfInterest ?? []
+
+                print("locality: \(locality)")
+                print("subLocality: \(subLocality)")
+                print("administrative area: \(administrativeArea)")
+                print("areas of interest: \(areasOfInterest)")
+                print("country: \(country)")
+                print("inland water: \(inlandWater)")
+                print("iso country code: \(isoCountryCode)")
+                print("name: \(name)")
+                print("ocean: \(ocean)")
+                print("postal code: \(postalCode)")
+
+                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].location = locality
+                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].subLocation = subLocality
+                image.location = locality
+                image.subLocation = subLocality
+            }
         }
     }
     
@@ -340,7 +377,7 @@ struct StartView: View {
                 print(error.localizedDescription)
             }
         }
-        loggedOut = true
+        self.loggedOut = true
     }
     
     /**
@@ -354,13 +391,13 @@ struct StartView: View {
      Function responsible for quiting the journey activity.
      */
     func quitJourney() {
-        currentLocationManager.recenterLocation()
-        arrayOfPhotos = []
-        arrayOfPhotosLocations = []
+        self.currentLocationManager.recenterLocation()
+        self.arrayOfPhotos = []
+        self.arrayOfPhotosLocations = []
         withAnimation {
             startedJourney = false
         }
-        journeyStateController.paused = false
+        self.journeyStateController.paused = false
     }
 }
 
