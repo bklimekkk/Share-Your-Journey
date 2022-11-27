@@ -97,7 +97,15 @@ struct StartView: View {
         ZStack {
             
             //This struct contains MapView struct, which means that during they journey, users are able to use 3D map.
-            MapView(walking: $journeyStateController.walking, showPhoto: $showPhoto, photoIndex: $photoIndex, showWeather: $weatherController.showWeather, expandWeather: $weatherController.expandWeather, weatherLatitude: $weatherController.weatherLatitude, weatherLongitude: $weatherController.weatherLongitude, photos: [], photosLocations: [])
+            MapView(walking: $journeyStateController.walking,
+                    showPhoto: $showPhoto,
+                    photoIndex: $photoIndex,
+                    showWeather: $weatherController.showWeather,
+                    expandWeather: $weatherController.expandWeather,
+                    weatherLatitude: $weatherController.weatherLatitude,
+                    weatherLongitude: $weatherController.weatherLongitude,
+                    photos: [],
+                    photosLocations: [])
                 .environmentObject(currentLocationManager)
                 .edgesIgnoringSafeArea(.all)
             
@@ -148,12 +156,22 @@ struct StartView: View {
                     Spacer()
                 }
 
-                //This else if statements block ensures that starting, pausing, resuming, quitting and completing the journey works in the most intuitive way.
+                //This else if statements block ensures that starting, pausing, resuming,
+                //quitting and completing the journey works in the most intuitive way.
                 if startedJourney && !journeyStateController.paused {
-                    RunningJourneyModeView(paused: $journeyStateController.paused, pickAPhoto: $journeyStateController.pickAPhoto, takeAPhoto: $journeyStateController.takeAPhoto, currentLocationManager: currentLocationManager)
+                    RunningJourneyModeView(paused: $journeyStateController.paused,
+                                           pickAPhoto: $journeyStateController.pickAPhoto,
+                                           takeAPhoto: $journeyStateController.takeAPhoto,
+                                           currentLocationManager: currentLocationManager)
                     
                 } else if startedJourney && journeyStateController.paused {
-                    PausedJourneyModeView(arrayOfPhotos: $arrayOfPhotos, alertMessage: $journeyStateController.alertMessage, alertError: $journeyStateController.alertError, paused: $journeyStateController.paused, startedJourney: $startedJourney, alert: $alert, alertBody: $journeyStateController.alertBody, currentLocationManager: currentLocationManager)
+                    PausedJourneyModeView(arrayOfPhotos: $arrayOfPhotos,
+                                          alertMessage: $journeyStateController.alertMessage,
+                                          alertError: $journeyStateController.alertError,
+                                          paused: $journeyStateController.paused,
+                                          startedJourney: $startedJourney, alert: $alert,
+                                          alertBody: $journeyStateController.alertBody,
+                                          currentLocationManager: currentLocationManager)
                 } else {
                     StartJourneyModeView(startedJourney: $startedJourney, currentLocationManager: currentLocationManager)
                 }
@@ -166,7 +184,15 @@ struct StartView: View {
                     arrayOfPhotos.append(SinglePhoto(number: i.getId,
                                                      photo: i.getImage,
                                                      location: i.getLocation,
-                                                     subLocation: i.getSubLocation))
+                                                     subLocation: i.getSubLocation,
+                                                     administrativeArea: i.getAdministrativeArea,
+                                                     country: i.getCountry,
+                                                     isoCountryCode: i.getIsoCountryCode,
+                                                     name: i.getName,
+                                                     postalCode: i.getPostalCode,
+                                                     ocean: i.getOcean,
+                                                     inlandWater: i.getInlandWater,
+                                                     areasOfInterest: i.getAreasOfInterst.components(separatedBy: ",")))
                 }
             }
             
@@ -183,13 +209,18 @@ struct StartView: View {
 
             ZStack {
                 VStack {
-                    PhotosAlbumView(showPicture: $currentImagesCollection.showPicture, photoIndex: $currentImagesCollection.photoIndex,
+                    PhotosAlbumView(showPicture: $currentImagesCollection.showPicture,
+                                    photoIndex: $currentImagesCollection.photoIndex,
                                     highlightedPhoto: $currentImagesCollection.highlightedPhoto,
-                                    layout: currentImagesCollection.layout, singleJourney: SingleJourney(email: "", name: "", place: "", date: Date.now,
-                                                                                                         numberOfPhotos: arrayOfPhotosLocations.count,
-                                                                                                         photos: arrayOfPhotos,
-                                                                                                         photosLocations: arrayOfPhotosLocations,
-                                                                                                         networkProblem: false))
+                                    layout: currentImagesCollection.layout,
+                                    singleJourney: SingleJourney(email: "",
+                                                                 name: "",
+                                                                 place: "",
+                                                                 date: Date.now,
+                                                                 numberOfPhotos: arrayOfPhotosLocations.count,
+                                                                 photos: arrayOfPhotos,
+                                                                 photosLocations: arrayOfPhotosLocations,
+                                                                 networkProblem: false))
                     Spacer()
                     Button {
                         dismiss()
@@ -209,16 +240,12 @@ struct StartView: View {
                                                                                             photosLocations: arrayOfPhotosLocations,
                                                                                             networkProblem: false))
             }
-
-
         })
         .fullScreenCover(isPresented: $loggedOut) {
-            
             //If user isn't logged in, screen presented by StartView struct is fully covered by View generated by this struct.
             LoginView(loggedOut: $loggedOut)
         }
         .fullScreenCover(isPresented: $journeyStateController.takeAPhoto, onDismiss: {
-            
             //Photo's location is added to the aproppriate array after view with camera is dismissed.
             addPhotoLocation()
             if moc.hasChanges {
@@ -236,20 +263,15 @@ struct StartView: View {
                 withAnimation {
                     startedJourney = false
                 }
-                
                 journeyStateController.paused = false
-                
                 arrayOfPhotos = []
                 arrayOfPhotosLocations = []
-                
                 for i in currentImages {
                     moc.delete(i)
                 }
-                
                 for i in currentLocations {
                     moc.delete(i)
                 }
-                
                 if moc.hasChanges {
                     try? moc.save()
                 }
@@ -258,8 +280,15 @@ struct StartView: View {
                 journeyStateController.goBack = false
             }
         }) {
-            SumUpView(singleJourney: SingleJourney(email: "", name: "", place: "", date: Date(), numberOfPhotos: arrayOfPhotos.count, photos: arrayOfPhotos, photosLocations: arrayOfPhotosLocations),
-                      showSumUp: $journeyStateController.showSumUp, goBack: $journeyStateController.goBack)
+            SumUpView(singleJourney: SingleJourney(email: "",
+                                                   name: "",
+                                                   place: "",
+                                                   date: Date(),
+                                                   numberOfPhotos: arrayOfPhotos.count,
+                                                   photos: arrayOfPhotos,
+                                                   photosLocations: arrayOfPhotosLocations),
+                      showSumUp: $journeyStateController.showSumUp,
+                      goBack: $journeyStateController.goBack)
         }
         //Alert is presented only if error occurs
         .alert("No photos", isPresented: $journeyStateController.alertError) {
@@ -269,7 +298,6 @@ struct StartView: View {
         } message: {
             Text(journeyStateController.alertBody)
         }
-        
         //Alert is presented after user chooses to finish the journey. They have two ways of doing it and depending on which one they choose, alert will be looking differently.
         .alert(isPresented: $journeyStateController.alertMessage) {
             Alert(title: Text(alert == .finish ? "Finish Journey" : "Delete Journey"),
@@ -303,8 +331,6 @@ struct StartView: View {
                 journeyStateController.alertMessage = false
             })
         }
-        
-        
         //When users see main screen for the first time, application updates user's current location.
         .onAppear(perform: {
             journeyStateController.currentLocation = currentLocationManager.currentRegion
@@ -341,8 +367,7 @@ struct StartView: View {
                 let postalCode = placemark?.postalCode ?? ""
                 let ocean = placemark?.ocean ?? ""
                 let inlandWater = placemark?.inlandWater ?? ""
-                let areasOfInterest = placemark?.areasOfInterest ?? []
-
+                let areasOfInterest = placemark?.areasOfInterest?.joined(separator: ",") ?? ""
                 print("locality: \(locality)")
                 print("subLocality: \(subLocality)")
                 print("administrative area: \(administrativeArea)")
@@ -353,11 +378,26 @@ struct StartView: View {
                 print("name: \(name)")
                 print("ocean: \(ocean)")
                 print("postal code: \(postalCode)")
-
                 self.arrayOfPhotos[self.arrayOfPhotos.count - 1].location = locality
                 self.arrayOfPhotos[self.arrayOfPhotos.count - 1].subLocation = subLocality
+                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].administrativeArea = administrativeArea
+                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].country = country
+                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].isoCountryCode = isoCountryCode
+                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].name = name
+                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].postalCode = postalCode
+                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].ocean = ocean
+                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].inlandWater = inlandWater
+                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].areasOfInterest = areasOfInterest.components(separatedBy: ",")
                 image.location = locality
                 image.subLocation = subLocality
+                image.administrativeArea = administrativeArea
+                image.country = country
+                image.isoCountryCode = isoCountryCode
+                image.name = name
+                image.postalCode = postalCode
+                image.ocean = ocean
+                image.inlandWater = inlandWater
+                image.areasOfInterest = areasOfInterest
             }
         }
     }

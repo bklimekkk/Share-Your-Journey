@@ -421,8 +421,16 @@ struct SeeJourneyView: View {
                     DispatchQueue.main.async {
                         journey.photos[queryDocumentSnapshot.get("photoNumber") as! Int] =
                         (SinglePhoto(number: queryDocumentSnapshot.get("photoNumber") as! Int,photo: image,
-                                     location: queryDocumentSnapshot.get("location") as! String, subLocation:
-                                        queryDocumentSnapshot.get("subLocation") as! String))
+                                     location: queryDocumentSnapshot.get("location") as! String,
+                                     subLocation: queryDocumentSnapshot.get("subLocation") as! String,
+                                     administrativeArea: queryDocumentSnapshot.get("administrativeArea") as! String,
+                                     country: queryDocumentSnapshot.get("country") as! String,
+                                     isoCountryCode: queryDocumentSnapshot.get("isoCountryCode") as! String,
+                                     name: queryDocumentSnapshot.get("name") as! String,
+                                     postalCode: queryDocumentSnapshot.get("postalCode") as! String,
+                                     ocean: queryDocumentSnapshot.get("ocean") as! String,
+                                     inlandWater: queryDocumentSnapshot.get("inlandWater") as! String,
+                                     areasOfInterest: (queryDocumentSnapshot.get("areasOfInterest") as! String).components(separatedBy: ",")))
                     }
                 }
                 .resume()
@@ -452,6 +460,14 @@ struct SeeJourneyView: View {
             newImage.longitude = journey.photosLocations[index].longitude
             newImage.location = journey.photos[index].location
             newImage.subLocation = journey.photos[index].subLocation
+            newImage.administrativeArea = journey.photos[index].administrativeArea
+            newImage.country = journey.photos[index].country
+            newImage.isoCountryCode = journey.photos[index].isoCountryCode
+            newImage.name = journey.photos[index].name
+            newImage.postalCode = journey.photos[index].postalCode
+            newImage.ocean = journey.photos[index].ocean
+            newImage.inlandWater = journey.photos[index].inlandWater
+            newImage.areasOfInterest = journey.photos[index].areasOfInterest.joined(separator: ",")
             newJourney.addToPhotos(newImage)
             index+=1
         }

@@ -97,7 +97,10 @@ struct SumUpView: View {
                             }
 
                             //List containing all photos.
-                            PhotosAlbumView(showPicture: $showPicture, photoIndex: $photoIndex, highlightedPhoto: $highlightedPhoto, layout: layout, singleJourney: singleJourney)
+                            PhotosAlbumView(showPicture: $showPicture,
+                                            photoIndex: $photoIndex,
+                                            highlightedPhoto: $highlightedPhoto,
+                                            layout: layout, singleJourney: singleJourney)
                                 .padding(.horizontal, 5)
                         }
                         .alert("Download all images", isPresented: $showDownloadAlert) {
@@ -125,7 +128,15 @@ struct SumUpView: View {
                         ZStack {
                             //Depending on option chosen by users, program will present them with different type of map (or photo album).
 
-                            MapView(walking: $walking, showPhoto: $showPicture, photoIndex: $photoIndex, showWeather: $showWeather, expandWeather: $expandWeather, weatherLatitude: $weatherLatitude, weatherLongitude: $weatherLongitude, photos: singleJourney.photos.sorted{$1.number > $0.number}.map{$0.photo}, photosLocations: singleJourney.photosLocations)
+                            MapView(walking: $walking,
+                                    showPhoto: $showPicture,
+                                    photoIndex: $photoIndex,
+                                    showWeather: $showWeather,
+                                    expandWeather: $expandWeather,
+                                    weatherLatitude: $weatherLatitude,
+                                    weatherLongitude: $weatherLongitude,
+                                    photos: singleJourney.photos.sorted{$1.number > $0.number}.map{$0.photo},
+                                    photosLocations: singleJourney.photosLocations)
                                 .edgesIgnoringSafeArea(.all)
                                 .environmentObject(currentLocationManager)
                                 .opacity(showPicture ? 0 : 1)
@@ -135,7 +146,10 @@ struct SumUpView: View {
 
                                     HStack {
                                         VStack {
-                                            DirectionIcons(mapType: $currentLocationManager.mapView.mapType, subscriber: $subscription.subscriber, showPanel: $subscription.showPanel, walking: $walking)
+                                            DirectionIcons(mapType: $currentLocationManager.mapView.mapType,
+                                                           subscriber: $subscription.subscriber,
+                                                           showPanel: $subscription.showPanel,
+                                                           walking: $walking)
                                             Button {
                                                 currentLocationManager.changeTypeOfMap()
                                             } label: {
@@ -152,7 +166,6 @@ struct SumUpView: View {
                                         }
                                         Spacer()
                                     }
-
                                 }
                             }
                             .padding()
@@ -170,8 +183,8 @@ struct SumUpView: View {
                             }
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                             Button {
-                                showSumUp = false
-                                dismiss()
+                                self.showSumUp = false
+                                self.dismiss()
                             } label: {
 
                                 //Button is shown only if the journey is saved.
@@ -195,7 +208,13 @@ struct SumUpView: View {
                     Text("Are you sure that you want to quit? The journey will be deleted.")
                 }
             }
-                HighlightedPhoto(savedToCameraRoll: $savedToCameraRoll, highlightedPhotoIndex: $photoIndex, showPicture: $showPicture, highlightedPhoto: $highlightedPhoto, subscriber: $subscription.subscriber, showPanel: $subscription.showPanel, journey: singleJourney)
+                HighlightedPhoto(savedToCameraRoll: $savedToCameraRoll,
+                                 highlightedPhotoIndex: $photoIndex,
+                                 showPicture: $showPicture,
+                                 highlightedPhoto: $highlightedPhoto,
+                                 subscriber: $subscription.subscriber,
+                                 showPanel: $subscription.showPanel,
+                                 journey: singleJourney)
             }
             .navigationTitle("Sum up")
             .navigationBarTitleDisplayMode(.inline)

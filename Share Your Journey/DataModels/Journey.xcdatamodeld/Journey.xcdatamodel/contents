@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21512" systemVersion="21G115" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="CurrentImage" representedClassName="CurrentImage" syncable="YES">
+        <attribute name="administrativeArea" optional="YES" attributeType="String"/>
+        <attribute name="areasOfInterest" optional="YES" attributeType="String"/>
+        <attribute name="country" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" valueTransformerName="UIImageTransformer" customClassName="UIImage"/>
+        <attribute name="inlandWater" optional="YES" attributeType="String"/>
+        <attribute name="isoCountryCode" optional="YES" attributeType="String"/>
         <attribute name="location" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="ocean" optional="YES" attributeType="String"/>
+        <attribute name="postalCode" optional="YES" attributeType="String"/>
         <attribute name="subLocation" optional="YES" attributeType="String"/>
     </entity>
     <entity name="CurrentLocation" representedClassName="CurrentLocation" syncable="YES">
@@ -20,9 +28,11 @@
     </entity>
     <entity name="Photo" representedClassName="Photo" syncable="YES">
         <attribute name="administrativeArea" optional="YES" attributeType="String"/>
+        <attribute name="areasOfInterest" optional="YES" attributeType="String" customClassName="[String]"/>
         <attribute name="country" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" valueTransformerName="UIImageTransformer" customClassName="UIImage"/>
+        <attribute name="inlandWater" optional="YES" attributeType="String"/>
         <attribute name="isoCountryCode" optional="YES" attributeType="String"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="location" optional="YES" attributeType="String"/>

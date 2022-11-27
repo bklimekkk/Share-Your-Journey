@@ -23,6 +23,14 @@ extension Photo {
     @NSManaged public var id: Double
     @NSManaged public var location: String?
     @NSManaged public var subLocation: String?
+    @NSManaged public var administrativeArea: String?
+    @NSManaged public var country: String?
+    @NSManaged public var isoCountryCode: String?
+    @NSManaged public var name: String?
+    @NSManaged public var postalCode: String?
+    @NSManaged public var ocean: String?
+    @NSManaged public var inlandWater: String?
+    @NSManaged public var areasOfInterest: String?
     
     public var getImage: UIImage {
         return UIImage(data: image ?? Data()) ?? UIImage()
@@ -34,6 +42,38 @@ extension Photo {
 
     public var getSubLocation: String {
         return self.subLocation ?? ""
+    }
+
+    public var getAdministrativeArea: String {
+        return self.administrativeArea ?? ""
+    }
+
+    public var getCountry: String {
+        return self.country ?? ""
+    }
+
+    public var getIsoCountryCode: String {
+        return self.isoCountryCode ?? ""
+    }
+
+    public var getName: String {
+        return self.name ?? ""
+    }
+
+    public var getPostalCode: String {
+        return self.postalCode ?? ""
+    }
+
+    public var getOcean: String {
+        return self.ocean ?? ""
+    }
+
+    public var getInlandWater: String {
+        return self.inlandWater ?? ""
+    }
+
+    public var getAreasOfInterst: String {
+        return self.areasOfInterest ?? ""
     }
 }
 
