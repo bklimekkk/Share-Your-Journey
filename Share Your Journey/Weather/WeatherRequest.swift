@@ -18,14 +18,13 @@ struct WeatherRequest {
             print("Invalid url")
             return
         }
-        
+
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-              let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-            
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
             if let decodedData = try? decoder.decode(WeatherResponse.self, from: data) {
-                weatherResponse = decodedData
+                self.weatherResponse = decodedData
             }
         } catch {
             print("Invalid data")

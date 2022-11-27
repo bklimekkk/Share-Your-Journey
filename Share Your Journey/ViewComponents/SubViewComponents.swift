@@ -113,13 +113,14 @@ struct PhotosAlbumView: View {
     @Binding var highlightedPhoto: UIImage
     var layout: [GridItem]
     var singleJourney: SingleJourney
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ScrollView(showsIndicators: false) {
             
             //This container generates a grid with two columns of journey's images.
             LazyVGrid(columns: layout, spacing: 0) {
-                ForEach(singleJourney.photos.sorted{$1.number > $0.number}, id: \.self) { photo in
+                ForEach(singleJourney.photos.sorted{$1.number > $0.number}, id: \.self.number) { photo in
                     Image(uiImage: photo.photo)
                         .resizable()
                         .scaledToFit()

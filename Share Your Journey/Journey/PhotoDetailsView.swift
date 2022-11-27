@@ -45,10 +45,12 @@ struct PhotoDetailView: View {
     var title: String
     var information: String
     var body: some View {
-        HStack {
-            Text(self.title)
-            Spacer()
-            Text(self.information)
+        if !information.isEmpty {
+            HStack {
+                Text(self.title)
+                Spacer()
+                Text(self.information)
+            }
         }
     }
 }

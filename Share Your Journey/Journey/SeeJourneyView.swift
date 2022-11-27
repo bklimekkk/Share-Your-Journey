@@ -516,10 +516,18 @@ struct SeeJourneyView: View {
             instanceReference.db.document("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? "")/journeys/\(journey.name)/photos/\(index)").setData([
                 "latitude": journey.photosLocations[index].latitude,
                 "longitude": journey.photosLocations[index].longitude,
+                "photoUrl": photoReference,
+                "photoNumber": index,
                 "location": journey.photos[index].location,
                 "subLocation": journey.photos[index].subLocation,
-                "photoUrl": photoReference,
-                "photoNumber": index
+                "administrativeArea": journey.photos[index].administrativeArea,
+                "country": journey.photos[index].country,
+                "isoCountryCode": journey.photos[index].isoCountryCode,
+                "name": journey.photos[index].name,
+                "postalCode": journey.photos[index].postalCode,
+                "ocean": journey.photos[index].ocean,
+                "inlandWater": journey.photos[index].inlandWater,
+                "areasOfInterest": journey.photos[index].areasOfInterest.joined(separator: ",")
             ])
         }
     }

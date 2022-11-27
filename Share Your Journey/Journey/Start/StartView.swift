@@ -206,31 +206,19 @@ struct StartView: View {
             SettingsView(loggedOut: $loggedOut)
         })
         .fullScreenCover(isPresented: $journeyStateController.showImages, content: {
-
             ZStack {
-                VStack {
-                    PhotosAlbumView(showPicture: $currentImagesCollection.showPicture,
-                                    photoIndex: $currentImagesCollection.photoIndex,
-                                    highlightedPhoto: $currentImagesCollection.highlightedPhoto,
-                                    layout: currentImagesCollection.layout,
-                                    singleJourney: SingleJourney(email: "",
-                                                                 name: "",
-                                                                 place: "",
-                                                                 date: Date.now,
-                                                                 numberOfPhotos: arrayOfPhotosLocations.count,
-                                                                 photos: arrayOfPhotos,
-                                                                 photosLocations: arrayOfPhotosLocations,
-                                                                 networkProblem: false))
-                    Spacer()
-                    Button {
-                        dismiss()
-                    }label:{
-                        Text("Back to journey")
-                            .foregroundColor(.accentColor)
-                    }
-                }
-                .padding()
-
+                ImagesView(showPicture: $currentImagesCollection.showPicture,
+                               photoIndex: $currentImagesCollection.photoIndex,
+                               highlightedPhoto: $currentImagesCollection.highlightedPhoto,
+                               layout: currentImagesCollection.layout,
+                               singleJourney: SingleJourney(email: "",
+                                                            name: "",
+                                                            place: "",
+                                                            date: Date.now,
+                                                            numberOfPhotos: arrayOfPhotosLocations.count,
+                                                            photos: arrayOfPhotos,
+                                                            photosLocations: arrayOfPhotosLocations,
+                                                            networkProblem: false))
                 HighlightedPhoto(savedToCameraRoll: $currentImagesCollection.savedToCameraRoll,
                                  highlightedPhotoIndex: $currentImagesCollection.photoIndex, showPicture: $currentImagesCollection.showPicture,
                                  highlightedPhoto: $currentImagesCollection.highlightedPhoto, subscriber: $subscription.subscriber,
@@ -348,7 +336,7 @@ struct StartView: View {
             location.latitude = journeyStateController.currentLocation.center.latitude
             location.longitude = journeyStateController.currentLocation.center.longitude
 
-            guard var lastPhoto = self.arrayOfPhotos.last else {
+            guard let lastPhoto = self.arrayOfPhotos.last else {
                 return
             }
 

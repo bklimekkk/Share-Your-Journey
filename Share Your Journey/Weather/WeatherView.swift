@@ -9,39 +9,36 @@ import SwiftUI
 
 struct WeatherView: View {
 
-    @Environment(\.colorScheme) var colorScheme
-    
-    @State private var weatherResponse = WeatherResponse(weather: [], main: Main(temp: 0.0, pressure: 0.0, humidity: 0.0), wind: Wind(speed: 0.0), name: "", sys: Sys(country: ""))
+    @Environment(\.self.colorScheme) var colorScheme
+    @State private var weatherResponse = WeatherResponse(weather: [], main: Main(temp: 0.0,
+                                                                                 pressure: 0.0,
+                                                                                 humidity: 0.0),
+                                                         wind: Wind(speed: 0.0),
+                                                         name: "",
+                                                         sys: Sys(country: ""))
     @State private var forecastResponse = ForecastResponse(list: [])
-    
     var latitude: Double
     var longitude: Double
     @State private var currentWeatherInformation = "current"
     var currentOrForecast = ["current", "forecast"]
-    
     var body: some View {
-        
         VStack {
             HStack {
-                Text("\(weatherResponse.name)\(weatherResponse.name.isEmpty ? "" : ",") \(weatherResponse.sys.country)")
+                Text("\(self.weatherResponse.name)\(self.weatherResponse.name.isEmpty ? "" : ",") \(self.weatherResponse.sys.country)")
                     .font(.headline).bold()
                 Spacer()
-                
-            
-                Picker("current", selection: $currentWeatherInformation) {
-                    ForEach(currentOrForecast, id: \.self) { service in
+                Picker("current", selection: self.$currentWeatherInformation) {
+                    ForEach(self.currentOrForecast, id: \.self) { service in
                         Text(service)
                     }
                 }
                 .pickerStyle(.segmented)
             }
             .padding(.horizontal, 7)
-            
-            
-            if currentWeatherInformation == "current" {
-                CurrentWeatherView(weatherResponse: weatherResponse)
+            if self.currentWeatherInformation == "current" {
+                CurrentWeatherView(weatherResponse: self.weatherResponse)
             } else {
-                ForecastView(forecastResponse: forecastResponse, latitude: latitude, longitude: longitude)
+                ForecastView(forecastResponse: self.forecastResponse, latitude: self.latitude, longitude: self.longitude)
             }
         }
         .padding(.vertical, 7)
@@ -55,12 +52,9 @@ struct WeatherView: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(.gray, lineWidth: 0.5)
         )
-        
-        
         .task {
-            await WeatherRequest(weatherResponse: $weatherResponse, latitude: latitude, longitude: longitude).fetchWeatherData()
-            
-            await ForecastRequest(forecastResponse: $forecastResponse, latitude: latitude, longitude: longitude).fetchForecastData()
+            await WeatherRequest(weatherResponse: self.$weatherResponse, latitude: self.latitude, longitude: self.longitude).fetchWeatherData()
+            await ForecastRequest(forecastResponse: self.$forecastResponse, latitude: self.latitude, longitude: self.longitude).fetchForecastData()
         }
     }
 }
@@ -70,14 +64,12 @@ struct CurrentWeatherView: View {
     var body: some View {
         HStack (alignment: .top) {
             VStack(spacing: 0) {
-                AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(weatherResponse.weather.isEmpty ? "" : weatherResponse.weather[0].icon)@4x.png")) { image in
+                AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(self.weatherResponse.weather.isEmpty ? "" : self.weatherResponse.weather[0].icon)@4x.png")) { image in
                     image
                         .resizable()
                         .scaledToFit()
                         .frame(width: 75)
-                    
-                    
-                }placeholder: {
+                } placeholder: {
                     ZStack {
                         VStack{}
                             .frame(width: 75, height: 55)
@@ -85,38 +77,33 @@ struct CurrentWeatherView: View {
                     }
                     .padding(.bottom, 20)
                 }
-                
-                Text("\(Int(weatherResponse.main.temp))°C")
+                Text("\(Int(self.weatherResponse.main.temp))°C")
                     .font(.headline).bold()
             }
             .padding(.top, 6)
             Spacer()
-            
             VStack(spacing: 0) {
                 Image(systemName: "wind")
                     .foregroundColor(.gray)
                     .font(.system(size: 41))
-                Text("\(Int(weatherResponse.wind.speed))km/h")
+                Text("\(Int(self.weatherResponse.wind.speed))km/h")
                     .font(.headline).bold()
                     .padding(.top)
             }
             .padding(.top)
             .offset(x: -15, y: 7)
-            
             Spacer()
-            
             VStack(spacing: 0) {
                 Image(systemName: "drop.fill")
                     .foregroundColor(.blue)
                     .font(.system(size: 38))
-                Text("\(Int(weatherResponse.main.humidity))%")
+                Text("\(Int(self.weatherResponse.main.humidity))%")
                     .font(.headline).bold()
                     .padding(.top)
             }
             .padding(.top)
             .offset(x: -10, y: 6)
-       
-        }
+       }
         .padding(.horizontal, 7)
     }
 }

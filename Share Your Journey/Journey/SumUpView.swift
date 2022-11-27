@@ -32,38 +32,27 @@ struct SumUpView: View {
     
     //this variable controls which of three modes program should currently display.
     @State private var viewType = SeeJourneyView.ViewType.photoAlbum
-    
     //variable represents the journey user has taken before sum-up screen appeared.
     @State var singleJourney: SingleJourney
-    
     //Variables are set to false and are never changed in this struct. They are used to be passed as parameters for MapView.
     @State var walking = false
     @State var done = false
-    
     //Index of image that is currently enlarged in the application.
     @State var photoIndex = 0
-    
     //Location manager used for the current view (each view with map is supposed to have it's own lcation manager).
     @StateObject private var currentLocationManager = CurrentLocationManager()
-    
     //Variable representing user's current location. Right now it's set to one default value, but it is changed right after the view appears.
     @State private var currentLocation = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), latitudinalMeters: 1000, longitudinalMeters: 1000)
-    
     //Variable controls if viewed image should be saved to camera roll.
     @State private var savedToCameraRoll = false
-    
     //Variable controls if users tapped any picture. If yes, it's set to true and the image is enlarged.
     @State private var showPicture = false
-    
     //Variable contains data of image that should be enlarged at particular moment.
     @State private var highlightedPhoto: UIImage = UIImage()
-    
     //Variables checks if all photos were downloaded to phone's camera roll.
     @State private var downloadedPhotos = false
-    
     @State private var showDownloadAlert = false
     @State private var showDeleteAlert = false
-    
     @State private var sendJourney = false
     
     @Environment(\.colorScheme) var colorScheme

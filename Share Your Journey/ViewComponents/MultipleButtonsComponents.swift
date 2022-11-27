@@ -82,7 +82,8 @@ struct SumUpFunctionalityButtonsView: View {
                 if let location = self.journey.photos.last?.location, let subLocation = self.journey.photos.last?.subLocation {
                     self.journey.place = subLocation.isEmpty ? location : "\(location), \(subLocation)"
                 }
-                self.createJourney(journey: journey, name: UUID().uuidString)
+                self.journey.name = UUID().uuidString
+                self.createJourney(journey: self.journey)
                 self.done = true
             } label: {
                 ButtonView(buttonTitle: "Save journey")
@@ -97,10 +98,10 @@ struct SumUpFunctionalityButtonsView: View {
     /**
      Function is responsible for creating a new journey document in journeys collection in the firestore database.
      */
-    func createJourney(journey: SingleJourney, name: String) {
+    func createJourney(journey: SingleJourney) {
         let instanceReference = FirebaseSetup.firebaseInstance
-        instanceReference.db.collection("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? "")/journeys").document(name).setData([
-            "name" : name,
+        instanceReference.db.collection("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? "")/journeys").document(journey.name).setData([
+            "name" : journey.name,
             "place" : journey.place,
             "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",
             "photosNumber" : journey.numberOfPhotos,
@@ -108,7 +109,7 @@ struct SumUpFunctionalityButtonsView: View {
             "deletedJourney" : false
         ])
         for index in 0...journey.photosLocations.count - 1 {
-            uploadPhoto(journey: journey, name: name, index: index, instanceReference: instanceReference)
+            uploadPhoto(journey: journey, name: journey.name, index: index, instanceReference: instanceReference)
         }
     }
 
@@ -145,7 +146,7 @@ struct SumUpFunctionalityButtonsView: View {
                 "postalCode": journey.photos[index].postalCode,
                 "ocean": journey.photos[index].ocean,
                 "inlandWater": journey.photos[index].inlandWater,
-                "areasOfInterest": journey.photos[index].areasOfInterest,
+                "areasOfInterest": journey.photos[index].areasOfInterest.joined(separator: ",")
             ])
         }
     }

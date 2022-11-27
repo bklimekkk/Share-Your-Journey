@@ -30,7 +30,7 @@ struct SendViewedJourneyView: View {
                                 } else {
                                     if querySnapshot!.documents.map({$0.documentID}).contains(journey.name) {
                                         showDuplicationAlert = true
-                                       
+
                                     } else {
                                         SendJourneyManager().sendJourney(journey: journey, targetEmail: friend)
                                         withAnimation {
@@ -42,23 +42,13 @@ struct SendViewedJourneyView: View {
                                             }
                                         }
                                     }
-                               }
-                           }
-
-//                    FirebaseSetup.firebaseInstance.db.collection("users/\(friend)/friends/\(email)/journeys").getDocuments { querySnapshot, error in
-//                        if let error = error {
-//                            print(error.localizedDescription)
-//                        } else {
-//                            if querySnapshot!.documents.map({$0.documentID}).contains(journey.name) {
-//                                showDuplicationAlert = true
-//                                return
-//                            }
-//                        }
-//                    }
-                  }
+                                }
+                            }
+                        }
                 }
                 
             }
+            .listStyle(.plain)
             .navigationTitle("Choose recipients")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

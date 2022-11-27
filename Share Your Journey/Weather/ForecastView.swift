@@ -12,13 +12,11 @@ struct ForecastView: View {
     var latitude: Double
     var longitude: Double
     var body: some View {
-        
         ScrollView(.horizontal, showsIndicators: false) {
-      
             HStack(spacing: 20) {
-                ForEach(forecastResponse.list, id: \.dtTxt) { forecastEntity in
+                ForEach(self.forecastResponse.list, id: \.self.dtTxt) { forecastEntity in
                     VStack(spacing: 0) {
-                    Text(getDayOfWeekAndTime(dateAndTimeString: forecastEntity.dtTxt))
+                        Text(self.getDayOfWeekAndTime(dateAndTimeString: forecastEntity.dtTxt))
                     WeatherIconView(weatherArray: forecastEntity.weather, url: "")
                     Text("\(Int(forecastEntity.main.temp))°C")
                             .offset(y: -10)

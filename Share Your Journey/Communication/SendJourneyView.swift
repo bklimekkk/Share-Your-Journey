@@ -60,8 +60,8 @@ struct SendJourneyView: View {
                                 .buttonStyle(PlainButtonStyle())
                                 .foregroundColor(Color.accentColor)
                             }
-                            
                         }
+                        .listStyle(.plain)
                     }
                 }
                 .onAppear {
