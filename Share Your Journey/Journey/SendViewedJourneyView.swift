@@ -20,7 +20,7 @@ struct SendViewedJourneyView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(listOfFriends.sorted(by: {$0 < $1}), id: \.self) { friend in
+                ForEach(self.listOfFriends.sorted(by: {$0 < $1}), id: \.self) { friend in
                     Text(friend)
                         .padding(.vertical, 15)
                         .onTapGesture {
@@ -28,15 +28,15 @@ struct SendViewedJourneyView: View {
                                 if let error = error {
                                     print(error.localizedDescription)
                                 } else {
-                                    if querySnapshot!.documents.map({$0.documentID}).contains(journey.name) {
-                                        showDuplicationAlert = true
+                                    if querySnapshot!.documents.map({$0.documentID}).contains(self.journey.name) {
+                                        self.showDuplicationAlert = true
 
                                     } else {
-                                        SendJourneyManager().sendJourney(journey: journey, targetEmail: friend)
+                                        SendJourneyManager().sendJourney(journey: self.journey, targetEmail: friend)
                                         withAnimation {
-                                            for i in 0...listOfFriends.count - 1 {
-                                                if listOfFriends[i] == friend {
-                                                    listOfFriends.remove(at: i)
+                                            for i in 0...self.listOfFriends.count - 1 {
+                                                if self.listOfFriends[i] == friend {
+                                                    self.listOfFriends.remove(at: i)
                                                     break
                                                 }
                                             }
@@ -54,28 +54,28 @@ struct SendViewedJourneyView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
-                        dismiss()
+                        self.dismiss()
                     }
                 }
             }
-            .alert("Duplicate journey", isPresented: $showDuplicationAlert, actions: {
+            .alert("Duplicate journey", isPresented: self.$showDuplicationAlert, actions: {
                 Button("Ok", role: .cancel){ }
             },message: {
                 Text("This journey already exists in your conversation with this person.")
             })
             .task {
-                FirebaseSetup.firebaseInstance.db.collection("users/\(email)/friends").getDocuments { querySnapshot, error in
+                FirebaseSetup.firebaseInstance.db.collection("users/\(self.email)/friends").getDocuments { querySnapshot, error in
                     if let error = error {
                         print(error.localizedDescription)
                     } else {
                         for i in querySnapshot!.documents {
-                            if i.documentID != email {
-                                FirebaseSetup.firebaseInstance.db.collection("users/\(email)/friends/\(i)/journeys").getDocuments() { querySnapshot, error in
+                            if i.documentID != self.email {
+                                FirebaseSetup.firebaseInstance.db.collection("users/\(self.email)/friends/\(i)/journeys").getDocuments() { querySnapshot, error in
                                     if let error = error {
                                         print(error.localizedDescription)
                                     } else {
-                                        if !querySnapshot!.documents.map({$0.documentID}).contains(journey.name) {
-                                            listOfFriends.append(i.documentID)
+                                        if !querySnapshot!.documents.map({$0.documentID}).contains(self.journey.name) {
+                                            self.listOfFriends.append(i.documentID)
                                         }
                                     }
                                     

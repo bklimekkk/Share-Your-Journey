@@ -33,19 +33,19 @@ struct JourneysView: View {
     
     //Variable is calculated by filtering list with user's journeys.
     private var journeysFilteredList: [SingleJourney]  {
-        if searchedJourney == "" {
-            return journeysList
+        if self.searchedJourney == "" {
+            return self.journeysList
         } else {
-            return journeysList.filter({return $0.name.lowercased().contains(searchedJourney.lowercased())})
+            return self.journeysList.filter({return $0.name.lowercased().contains(self.searchedJourney.lowercased())})
         }
     }
     
     //Variable is calculated by filtering list with user's downloaded journeys.
     private var downloadedJourneysFilteredList: [SingleJourney]  {
-        if searchedJourney == "" {
-            return downloadedJourneysList
+        if self.searchedJourney == "" {
+            return self.downloadedJourneysList
         } else {
-            return downloadedJourneysList.filter({return $0.name.lowercased().contains(searchedJourney.lowercased())})
+            return self.downloadedJourneysList.filter({return $0.name.lowercased().contains(self.searchedJourney.lowercased())})
         }
     }
     
@@ -53,15 +53,15 @@ struct JourneysView: View {
         
 
         VStack {
-            PickerView(choice: $downloaded, firstChoice: "Saved", secondChoice: "Downloaded")
+            PickerView(choice: self.$downloaded, firstChoice: "Saved", secondChoice: "Downloaded")
                 .padding()
             
-            SearchField(text: "Search journey", search: $searchedJourney)
+            SearchField(text: "Search journey", search: self.$searchedJourney)
             
-            if downloaded {
-                ListWithDownloadedJourneys(downloadedJourneysFilteredList: downloadedJourneysFilteredList, downloadedJourneysList: $downloadedJourneysList, journeyToDelete: $journeyToDelete, askAboutDeletion: $askAboutDeletion)
+            if self.downloaded {
+                ListWithDownloadedJourneys(downloadedJourneysFilteredList: self.downloadedJourneysFilteredList, downloadedJourneysList: self.$downloadedJourneysList, journeyToDelete: self.$journeyToDelete, askAboutDeletion: self.$askAboutDeletion)
             } else {
-                ListWithJourneys(journeysFilteredList: journeysFilteredList, journeysList: $journeysList, journeyToDelete: $journeyToDelete, deleteFromStorage: $deleteFromStorage, askAboutDeletion: $askAboutDeletion)
+                ListWithJourneys(journeysFilteredList: self.journeysFilteredList, journeysList: self.$journeysList, journeyToDelete: self.$journeyToDelete, deleteFromStorage: self.$deleteFromStorage, askAboutDeletion: self.$askAboutDeletion)
             }
         }
         

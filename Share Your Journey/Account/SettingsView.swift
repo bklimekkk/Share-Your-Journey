@@ -25,42 +25,42 @@ struct SettingsView: View {
                         .buttonStyle(.plain)
                         .foregroundColor(.blue)
                     Button("Instructions") {
-                        showInstructions = true
+                        self.showInstructions = true
                     }
                     .buttonStyle(.plain)
                     .foregroundColor(.blue)
                     Button("Privacy Policy") {
-                        showPrivacyPolicy = true
+                        self.showPrivacyPolicy = true
                     }
                     .buttonStyle(.plain)
                     .foregroundColor(.blue)
                 }
                 
-                if !subscription.subscriber {
+                if !self.subscription.subscriber {
                     Section(header: Text("premium access")) {
                         Button("Premium Access") {
-                            subscription.showPanel = true
+                            self.subscription.showPanel = true
                         }
                         .buttonStyle(.plain)
-                        .foregroundColor(subscription.subscriber ? .red : .blue)
+                        .foregroundColor(self.subscription.subscriber ? .red : .blue)
                         Button("Restore Your Premium Access") {
                             Purchases.shared.restorePurchases { customerInfo, error in
                                 if customerInfo?.entitlements["allfeatures"]?.isActive == true {
                                     withAnimation {
-                                        subscription.subscriber = true
+                                        self.subscription.subscriber = true
                                     }
                                 }
                             }
                             
                         }
                         .buttonStyle(.plain)
-                        .foregroundColor(subscription.subscriber ? .red : .blue)
+                        .foregroundColor(self.subscription.subscriber ? .red : .blue)
                     }
                 }
                 
                 Section(header: Text("account deletion")) {
                     Button("Delete Your Account"){
-                        askAboutAccountDeletion = true
+                        self.askAboutAccountDeletion = true
                     }
                     .buttonStyle(.plain)
                     .foregroundColor(.red)
@@ -69,30 +69,30 @@ struct SettingsView: View {
             .task {
                 Purchases.shared.getCustomerInfo { (customerInfo, error) in
                     if customerInfo!.entitlements["allfeatures"]?.isActive == true {
-                        subscription.subscriber = true
+                        self.subscription.subscriber = true
                     }
                 }
             }
             .fullScreenCover(isPresented: $showInstructions, content: {
                 InstructionsView()
             })
-            .fullScreenCover(isPresented: $subscription.showPanel, content: {
-                SubscriptionView(subscriber: $subscription.subscriber)
+            .fullScreenCover(isPresented: self.$subscription.showPanel, content: {
+                SubscriptionView(subscriber: self.$subscription.subscriber)
             })
-            .sheet(isPresented: $showPrivacyPolicy, content: {
+            .sheet(isPresented: self.$showPrivacyPolicy, content: {
                 WebView(url: URL(string: "https://bklimekkk.github.io/share-your-journey-privacy-policy/")!)
             })
-            .navigationTitle(subscription.subscriber ? "Premium Account" : "Regular Account")
+            .navigationTitle(self.subscription.subscriber ? "Premium Account" : "Regular Account")
             .navigationBarTitleDisplayMode(.inline)
-            .alert("Account deleted", isPresented: $deletedAccount, actions: {
+            .alert("Account deleted", isPresented: self.$deletedAccount, actions: {
                 Button("Ok", role: .cancel){
-                    loggedOut = true
-                    dismiss()
+                    self.loggedOut = true
+                    self.dismiss()
                 }
             }, message: {
                 Text("Your account has been deleted")
             })
-            .alert("Account deletion", isPresented: $askAboutAccountDeletion) {
+            .alert("Account deletion", isPresented: self.$askAboutAccountDeletion) {
                 Button("Delete account", role: .destructive) {
                     let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? ""
                     
@@ -167,7 +167,7 @@ struct SettingsView: View {
                             }
                         }
                     }
-                    deletedAccount = true
+                    self.deletedAccount = true
                 }
             } message: {
                 Text("Are you sure that you want to delete your account? You won't be able to create account using the same e-mail address.")
@@ -175,7 +175,7 @@ struct SettingsView: View {
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
                     Button("Back to app") {
-                        dismiss()
+                        self.dismiss()
                     }
                 }
             }

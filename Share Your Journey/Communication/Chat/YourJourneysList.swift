@@ -29,21 +29,21 @@ struct YourJourneysList: View {
     var sentByYouFiltered: [SingleJourney]
 
     var sentByYouFilteredSorted: [SingleJourney] {
-        return sentByYouFiltered.sorted(by: {$0.date > $1.date})
+        return self.sentByYouFiltered.sorted(by: {$0.date > $1.date})
     }
 
     var body: some View {
         
         VStack {
-            if sentByYouFiltered.isEmpty{
+            if self.sentByYouFiltered.isEmpty{
                 NoDataView(text: "No journeys to show. Tap to refresh.")
                     .onTapGesture {
-                        populateYourJourneys()
+                        self.populateYourJourneys()
                     }
             } else {
                 //List is sorted by date.
                 List {
-                    ForEach (sentByYouFilteredSorted, id: \.self) { journey in
+                    ForEach (self.sentByYouFilteredSorted, id: \.self) { journey in
                         ZStack {
                             HStack {
                                 Text(journey.place)
@@ -54,56 +54,56 @@ struct YourJourneysList: View {
                                 Text(DateManager().getDate(date: journey.date))
                                     .foregroundColor(.gray)
                             }
-                            NavigationLink(destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(email)/journeys")) {
+                            NavigationLink(destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(self.email)/journeys")) {
                                 EmptyView()
                             }
                             .opacity(0)
                         }
                     }
-                    .onDelete(perform: delete)
+                    .onDelete(perform: self.delete)
                 }
                 .listStyle(.inset)
                 .refreshable {
-                    populateYourJourneys()
+                    self.populateYourJourneys()
                 }
                 
                 //Alert is shown if users want to delete any journey they sent.
-                .alert(isPresented: $askAboutDeletion) {
+                .alert(isPresented: self.$askAboutDeletion) {
                     Alert (title: Text("Delete journey"),
                            message: Text("Are you sure that you want to delete this journey?"),
                            primaryButton: .cancel(Text("Cancel")) {
-                        askAboutDeletion = false
-                        journeyToDelete = ""
+                        self.askAboutDeletion = false
+                        self.journeyToDelete = ""
                     },
                            secondaryButton: .destructive(Text("Delete")) {
                         
-                        deleteJourneyFromDatabase()
+                        self.deleteJourneyFromDatabase()
                         
                         //If journey doesn't exist in any other place in the server, it is completely deleted from storage.
                         for i in 0...sentByYou.count - 1 {
-                            if sentByYou[i].name == journeyToDelete {
-                                if deleteFromStorage {
-                                    deleteJourneyFromStorage(numberOfPhotos: sentByYou[i].numberOfPhotos - 1)
+                            if self.sentByYou[i].name == self.journeyToDelete {
+                                if self.deleteFromStorage {
+                                    self.deleteJourneyFromStorage(numberOfPhotos: sentByYou[i].numberOfPhotos - 1)
                                 }
-                                sentByYou.remove(at: i)
+                                self.sentByYou.remove(at: i)
                                 break
                             }
                         }
-                        deleteFromStorage = true
-                        askAboutDeletion = false
-                        journeyToDelete = ""
+                        self.deleteFromStorage = true
+                        self.askAboutDeletion = false
+                        self.journeyToDelete = ""
                     }
                     )
                 }
             }
         }
-        .fullScreenCover(isPresented: $sendJourneyScreen, onDismiss: {
-            populateYourJourneys()
+        .fullScreenCover(isPresented: self.$sendJourneyScreen, onDismiss: {
+            self.populateYourJourneys()
         }) {
-            SendJourneyView(targetEmail: email)
+            SendJourneyView(targetEmail: self.email)
         }
         .onAppear {
-            populateYourJourneys()
+            self.populateYourJourneys()
         }
     }
     
@@ -119,8 +119,8 @@ struct YourJourneysList: View {
                 for i in querySnapshot!.documents {
                     
                     //If conditions are met, journey's data is appended to the array.
-                    if !sentByYou.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {
-                        sentByYou.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
+                    if !self.sentByYou.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {
+                        self.sentByYou.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
                     }
                 }
             }
@@ -140,14 +140,14 @@ struct YourJourneysList: View {
                 
                 //Firstly, algorithm searches for all user's friends, then it checks all journeys sent to them by this user.
                 for i in snapshot!.documents {
-                    if i.documentID != email {
+                    if i.documentID != self.email {
                         FirebaseSetup.firebaseInstance.db.collection("\(friendsPath)/\(i.documentID)/journeys").getDocuments { journeySnapshot, error in
                             if error != nil {
                                 print(error!.localizedDescription)
                             } else {
                                 for j in journeySnapshot!.documents {
                                     if j.documentID == journey.name {
-                                        deleteFromStorage = false
+                                        self.deleteFromStorage = false
                                         break
                                     }
                                 }
@@ -158,8 +158,8 @@ struct YourJourneysList: View {
             }
         }
         
-        askAboutDeletion = true
-        journeyToDelete = journey.name
+        self.askAboutDeletion = true
+        self.journeyToDelete = journey.name
     }
     
     
@@ -207,6 +207,6 @@ struct YourJourneysList: View {
     }
 
     func delete(at offsets: IndexSet) {
-        searchJourneyInDatabase(journey: sentByYouFilteredSorted[offsets[offsets.startIndex]])
+        self.searchJourneyInDatabase(journey: self.sentByYouFilteredSorted[offsets[offsets.startIndex]])
     }
 }

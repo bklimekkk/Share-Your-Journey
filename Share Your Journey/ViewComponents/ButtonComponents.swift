@@ -14,7 +14,7 @@ struct ButtonView: View {
     var body: some View {
         HStack{
             Spacer()
-            Text(buttonTitle)
+            Text(self.buttonTitle)
                 .padding(.vertical, 10)
             Spacer()
         }
@@ -28,7 +28,7 @@ struct SymbolButtonView: View {
     var body: some View {
         HStack{
             Spacer()
-            Image(systemName: buttonImage)
+            Image(systemName: self.buttonImage)
                 .foregroundColor(.white)
                 .padding(.vertical, 11)
             Spacer()
@@ -73,20 +73,20 @@ struct DownloadGalleryButton: View {
     
     var body: some View {
         Button{
-            if subscriber {
-                showDownloadAlert = true
+            if self.subscriber {
+                self.showDownloadAlert = true
             } else {
-                showPanel = true
+                self.showPanel = true
             }
         } label: {
             ButtonView(buttonTitle: "Save all images to camera roll")
         }
-        .background(subscriber ? (journey.photos.map ({return $0.photo}).contains(UIImage()) ? Color.gray : Color.accentColor) : gold)
+        .background(subscriber ? (self.journey.photos.map ({return $0.photo}).contains(UIImage()) ? Color.gray : Color.accentColor) : self.gold)
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .padding(.horizontal, 5)
         .padding(.top, 5)
-        .disabled(journey.photos.map ({return $0.photo}).contains(UIImage()) ? true : false)
-        .opacity(showPicture ? 0 : 1)
+        .disabled(self.journey.photos.map ({return $0.photo}).contains(UIImage()) ? true : false)
+        .opacity(self.showPicture ? 0 : 1)
     }
 }
 
@@ -101,7 +101,7 @@ struct MapButton: View {
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(.gray, lineWidth: 1)
                 )
-            Image(systemName: imageName)
+            Image(systemName: self.imageName)
                 .font(.system(size: 20))
         }
         .padding(.vertical, 5)

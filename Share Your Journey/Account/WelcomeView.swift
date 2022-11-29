@@ -25,8 +25,8 @@ struct WelcomeView: View {
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
                     Button("Start using the app") {
-                        showInstructions = false
-                        dismiss()
+                        self.showInstructions = false
+                        self.dismiss()
                     }
                 }
             }

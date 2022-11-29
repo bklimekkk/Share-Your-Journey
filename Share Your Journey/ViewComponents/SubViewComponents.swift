@@ -24,23 +24,23 @@ struct HighlightedPhoto: View {
     }
     
     var body: some View {
-        if showPicture {
+        if self.showPicture {
             VStack {
-                Image(uiImage: journey.photos.sorted{$1.number > $0.number}.map{$0.photo}[highlightedPhotoIndex])
+                Image(uiImage: self.journey.photos.sorted{$1.number > $0.number}.map{$0.photo}[self.highlightedPhotoIndex])
                     .resizable()
                     .scaledToFit()
                 //Gesture added to the image makes it possible to drag left or right to skip to the next or previous image.
                     .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
                         .onEnded({ value in
-                            if value.translation.width > 0 && highlightedPhotoIndex > 0 {
-                                highlightedPhotoIndex -= 1
-                                highlightedPhoto = journey.photos[highlightedPhotoIndex].photo
-                                savedToCameraRoll = false
+                            if value.translation.width > 0 && self.highlightedPhotoIndex > 0 {
+                                self.highlightedPhotoIndex -= 1
+                                self.highlightedPhoto = self.journey.photos[highlightedPhotoIndex].photo
+                                self.savedToCameraRoll = false
                             }
-                            if value.translation.width < 0 && highlightedPhotoIndex < journey.photos.count - 1 {
-                                highlightedPhotoIndex += 1
-                                highlightedPhoto = journey.photos[highlightedPhotoIndex].photo
-                                savedToCameraRoll = false
+                            if value.translation.width < 0 && self.highlightedPhotoIndex < self.journey.photos.count - 1 {
+                                self.highlightedPhotoIndex += 1
+                                self.highlightedPhoto = self.journey.photos[highlightedPhotoIndex].photo
+                                self.savedToCameraRoll = false
                             }
                         }))
             
@@ -50,8 +50,8 @@ struct HighlightedPhoto: View {
                     
                     Button {
                         withAnimation(.easeInOut(duration: 0.15)) {
-                            showPicture = false
-                            savedToCameraRoll = false
+                            self.showPicture = false
+                            self.savedToCameraRoll = false
                         }
                     } label:{
                         Image(systemName: "xmark")
@@ -61,14 +61,14 @@ struct HighlightedPhoto: View {
                     
                     Spacer()
                     
-                    Text(String(highlightedPhotoIndex + 1))
+                    Text(String(self.highlightedPhotoIndex + 1))
                         .foregroundColor(Color(UIColor(named:"SystemImageColor") ?? .white))
                         .font(.system(size: 40))
                     
                     Spacer()
                     
                     //While the image is highlighted, users can download it only once, after clicking the button, it disappears.
-                    if savedToCameraRoll {
+                    if self.savedToCameraRoll {
                         Button {} label:{
                             Image(systemName: "checkmark")
                                 .font(.system(size: 30))
@@ -79,19 +79,19 @@ struct HighlightedPhoto: View {
                     } else {
                         Button {
                             
-                            if subscriber {
-                            UIImageWriteToSavedPhotosAlbum(highlightedPhoto, nil, nil, nil)
+                            if self.subscriber {
+                                UIImageWriteToSavedPhotosAlbum(self.highlightedPhoto, nil, nil, nil)
                             withAnimation {
-                                savedToCameraRoll = true
+                                self.savedToCameraRoll = true
                             }
                             } else {
-                                showPanel = true
+                                self.showPanel = true
                             }
                             
                         } label:{
                             Image(systemName: "square.and.arrow.down")
                                 .font(.system(size: 30))
-                                .foregroundColor(subscriber ? Color(UIColor(named:"SystemImageColor") ?? .gray) : gold)
+                                .foregroundColor(self.subscriber ? Color(UIColor(named:"SystemImageColor") ?? .gray) : self.gold)
                                 .offset(y: -5)
                         }
                     }
@@ -119,8 +119,8 @@ struct PhotosAlbumView: View {
         ScrollView(showsIndicators: false) {
             
             //This container generates a grid with two columns of journey's images.
-            LazyVGrid(columns: layout, spacing: 0) {
-                ForEach(singleJourney.photos.sorted{$1.number > $0.number}, id: \.self.number) { photo in
+            LazyVGrid(columns: self.layout, spacing: 0) {
+                ForEach(self.singleJourney.photos.sorted{$1.number > $0.number}, id: \.self.number) { photo in
                     Image(uiImage: photo.photo)
                         .resizable()
                         .scaledToFit()
@@ -128,15 +128,15 @@ struct PhotosAlbumView: View {
                         .padding(.vertical, 5)
                         .onTapGesture {
                             withAnimation(.easeInOut(duration: 0.15)) {
-                                photoIndex = photo.number
-                                highlightedPhoto = singleJourney.photos[photoIndex].photo
-                                showPicture = true
+                                self.photoIndex = photo.number
+                                self.highlightedPhoto = self.singleJourney.photos[photoIndex].photo
+                                self.showPicture = true
                             }
                         }
                 }
             }
         }
-        .opacity(showPicture ? 0 : 1)
+        .opacity(self.showPicture ? 0 : 1)
     }
 }
 
@@ -153,19 +153,19 @@ struct PhotoAnnotationView: View {
     var body: some View {
         ZStack {
             ProgressView()
-            Image(uiImage: singleJourney.photos[location.id].photo)
+            Image(uiImage: self.singleJourney.photos[location.id].photo)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 60)
                 .shadow(color: .gray, radius: 2)
                 .onTapGesture(count: 1) {
                     withAnimation(.easeInOut(duration: 0.15)) {
-                        photoIndex = location.id
-                        highlightedPhoto = singleJourney.photos[location.id].photo
-                        showPicture = true
+                        self.photoIndex = self.location.id
+                        self.highlightedPhoto = self.singleJourney.photos[location.id].photo
+                        self.showPicture = true
                     }
                 }
-            Text(String(location.id + 1))
+            Text(String(self.location.id + 1))
                 .font(.system(size: 50))
                 .foregroundColor(.white)
         }

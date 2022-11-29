@@ -64,7 +64,7 @@ struct SumUpView: View {
     @State private var weatherLongitude = 0.0
     
     var buttonColor: Color {
-        colorScheme == .dark ? .white : .accentColor
+        self.colorScheme == .dark ? .white : .accentColor
     }
     
     @Binding var showSumUp: Bool
@@ -75,33 +75,33 @@ struct SumUpView: View {
             ZStack {
                 if !self.showPicture {
                 VStack {
-                    if viewType == .photoAlbum {
-                        JourneyPickerView(choice: $viewType, firstChoice: "Album", secondChoice: "Map")
+                    if self.viewType == .photoAlbum {
+                        JourneyPickerView(choice: self.$viewType, firstChoice: "Album", secondChoice: "Map")
                             .padding(.horizontal, 5)
                         VStack {
-                            if !downloadedPhotos {
+                            if !self.downloadedPhotos {
 
                                 //Button used to download all journey images.
-                                DownloadGalleryButton(journey: singleJourney, showDownloadAlert: $showDownloadAlert, showPicture: $showPicture, subscriber: $subscription.subscriber, showPanel: $subscription.showPanel)
+                                DownloadGalleryButton(journey: self.singleJourney, showDownloadAlert: self.$showDownloadAlert, showPicture: self.$showPicture, subscriber: self.$subscription.subscriber, showPanel: self.$subscription.showPanel)
                             }
 
                             //List containing all photos.
-                            PhotosAlbumView(showPicture: $showPicture,
-                                            photoIndex: $photoIndex,
-                                            highlightedPhoto: $highlightedPhoto,
-                                            layout: layout, singleJourney: singleJourney)
+                            PhotosAlbumView(showPicture: self.$showPicture,
+                                            photoIndex: self.$photoIndex,
+                                            highlightedPhoto: self.$highlightedPhoto,
+                                            layout: layout, singleJourney: self.singleJourney)
                                 .padding(.horizontal, 5)
                         }
-                        .alert("Download all images", isPresented: $showDownloadAlert) {
+                        .alert("Download all images", isPresented: self.$showDownloadAlert) {
                             Button("Cancel", role: .cancel){}
                             Button("Download") {
-                                for photo in singleJourney.photos.map({return $0.photo}) {
+                                for photo in self.singleJourney.photos.map({return $0.photo}) {
 
                                     //Each photo is saved to camera roll.
                                     UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
                                 }
                                 withAnimation {
-                                    downloadedPhotos = true
+                                    self.downloadedPhotos = true
                                 }
                             }
                         } message: {
@@ -117,41 +117,40 @@ struct SumUpView: View {
                         ZStack {
                             //Depending on option chosen by users, program will present them with different type of map (or photo album).
 
-                            MapView(walking: $walking,
-                                    showPhoto: $showPicture,
-                                    photoIndex: $photoIndex,
-                                    showWeather: $showWeather,
-                                    expandWeather: $expandWeather,
-                                    weatherLatitude: $weatherLatitude,
-                                    weatherLongitude: $weatherLongitude,
-                                    photos: singleJourney.photos.sorted{$1.number > $0.number}.map{$0.photo},
-                                    photosLocations: singleJourney.photosLocations)
+                            MapView(walking: self.$walking,
+                                    showPhoto: self.$showPicture,
+                                    photoIndex: self.$photoIndex,
+                                    showWeather: self.$showWeather,
+                                    expandWeather: self.$expandWeather,
+                                    weatherLatitude: self.$weatherLatitude,
+                                    weatherLongitude: self.$weatherLongitude,
+                                    photos: self.singleJourney.photos.sorted{$1.number > $0.number}.map{$0.photo},
+                                    photosLocations: self.singleJourney.photosLocations)
                                 .edgesIgnoringSafeArea(.all)
-                                .environmentObject(currentLocationManager)
-                                .opacity(showPicture ? 0 : 1)
+                                .environmentObject(self.currentLocationManager)
+                                .opacity(self.showPicture ? 0 : 1)
                             VStack {
                                 Spacer()
                                 VStack {
-
                                     HStack {
                                         VStack {
-                                            DirectionIcons(mapType: $currentLocationManager.mapView.mapType,
-                                                           subscriber: $subscription.subscriber,
-                                                           showPanel: $subscription.showPanel,
-                                                           walking: $walking)
+                                            DirectionIcons(mapType: self.$currentLocationManager.mapView.mapType,
+                                                           subscriber: self.$subscription.subscriber,
+                                                           showPanel: self.$subscription.showPanel,
+                                                           walking: self.$walking)
                                             Button {
-                                                currentLocationManager.changeTypeOfMap()
+                                                self.currentLocationManager.changeTypeOfMap()
                                             } label: {
                                                 MapTypeButton()
                                             }
-                                            .foregroundColor(buttonColor)
+                                            .foregroundColor(self.buttonColor)
 
                                             Button {
-                                                currentLocationManager.recenterLocation()
+                                                self.currentLocationManager.recenterLocation()
                                             } label: {
                                                 LocationButton()
                                             }
-                                            .foregroundColor(buttonColor)
+                                            .foregroundColor(self.buttonColor)
                                         }
                                         Spacer()
                                     }
@@ -161,10 +160,10 @@ struct SumUpView: View {
                         }
                     }
 
-                    if done {
+                    if self.done {
                         HStack(spacing: 10) {
                             Button {
-                                sendJourney = true
+                                self.sendJourney = true
                             } label: {
                                 //Button is shown only if the journey is saved.
                                 ButtonView(buttonTitle: "Send To Friend")
@@ -191,39 +190,39 @@ struct SumUpView: View {
                 .alert("Quit", isPresented: $showDeleteAlert) {
                     Button("Cancel", role: .cancel){}
                     Button("Quit", role: .destructive){
-                        showSumUp = false
+                        self.showSumUp = false
                     }
                 } message: {
                     Text("Are you sure that you want to quit? The journey will be deleted.")
                 }
             }
-                HighlightedPhoto(savedToCameraRoll: $savedToCameraRoll,
-                                 highlightedPhotoIndex: $photoIndex,
-                                 showPicture: $showPicture,
-                                 highlightedPhoto: $highlightedPhoto,
-                                 subscriber: $subscription.subscriber,
-                                 showPanel: $subscription.showPanel,
-                                 journey: singleJourney)
+                HighlightedPhoto(savedToCameraRoll: self.$savedToCameraRoll,
+                                 highlightedPhotoIndex: self.$photoIndex,
+                                 showPicture: self.$showPicture,
+                                 highlightedPhoto: self.$highlightedPhoto,
+                                 subscriber: self.$subscription.subscriber,
+                                 showPanel: self.$subscription.showPanel,
+                                 journey: self.singleJourney)
             }
             .navigationTitle("Sum up")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Continue journey") {
-                        dismiss()
+                        self.dismiss()
                     }
                 }
             }
-            .fullScreenCover(isPresented: $subscription.showPanel) {
-                SubscriptionView(subscriber: $subscription.subscriber)
+            .fullScreenCover(isPresented: self.$subscription.showPanel) {
+                SubscriptionView(subscriber: self.$subscription.subscriber)
             }
-            .sheet(isPresented: $sendJourney, content: {
-                SendViewedJourneyView(journey: singleJourney)
+            .sheet(isPresented: self.$sendJourney, content: {
+                SendViewedJourneyView(journey: self.singleJourney)
             })
             .task {
                 Purchases.shared.getCustomerInfo { (customerInfo, error) in
                     if customerInfo!.entitlements["allfeatures"]?.isActive == true {
-                        subscription.subscriber = true
+                        self.subscription.subscriber = true
                     }
                 }
             }

@@ -22,8 +22,8 @@ struct PhotoPickerView: UIViewControllerRepresentable {
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             
             if let photo = info[.originalImage] as? UIImage {
-                let photoArraySize = photoPickerView.photosArray.count
-                photoPickerView.photosArray.append(SinglePhoto(number: photoArraySize,photo: photo))
+                let photoArraySize = self.photoPickerView.photosArray.count
+                self.photoPickerView.photosArray.append(SinglePhoto(number: photoArraySize,photo: photo))
             }
             picker.dismiss(animated:true)
         }
@@ -37,7 +37,7 @@ struct PhotoPickerView: UIViewControllerRepresentable {
         let photoPicker = UIImagePickerController()
         photoPicker.delegate = context.coordinator
         
-            photoPicker.sourceType = pickPhoto ? .photoLibrary : .camera
+        photoPicker.sourceType = self.pickPhoto ? .photoLibrary : .camera
         
         return photoPicker
     }

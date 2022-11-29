@@ -97,22 +97,22 @@ struct StartView: View {
         ZStack {
             
             //This struct contains MapView struct, which means that during they journey, users are able to use 3D map.
-            MapView(walking: $journeyStateController.walking,
-                    showPhoto: $showPhoto,
-                    photoIndex: $photoIndex,
-                    showWeather: $weatherController.showWeather,
-                    expandWeather: $weatherController.expandWeather,
-                    weatherLatitude: $weatherController.weatherLatitude,
-                    weatherLongitude: $weatherController.weatherLongitude,
+            MapView(walking: self.$journeyStateController.walking,
+                    showPhoto: self.$showPhoto,
+                    photoIndex: self.$photoIndex,
+                    showWeather: self.$weatherController.showWeather,
+                    expandWeather: self.$weatherController.expandWeather,
+                    weatherLatitude: self.$weatherController.weatherLatitude,
+                    weatherLongitude: self.$weatherController.weatherLongitude,
                     photos: [],
                     photosLocations: [])
-                .environmentObject(currentLocationManager)
+            .environmentObject(self.currentLocationManager)
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
                 HStack {
                     Button {
-                        logOut()
+                        self.logOut()
                     } label:{
                         MapButton(imageName: "arrow.backward")
                     }
@@ -123,34 +123,34 @@ struct StartView: View {
                 HStack {
                     VStack {
                         Button{
-                            journeyStateController.showSettings = true
+                            self.journeyStateController.showSettings = true
                         } label: {
                             SettingsButton()
                         }
                         .foregroundColor(buttonColor)
                         
-                        if startedJourney {
+                        if self.startedJourney {
                             Button {
-                                journeyStateController.showImages = true
+                                self.journeyStateController.showImages = true
                             }label: {
                                 ImageButton()
                             }
-                            .foregroundColor(buttonColor)
+                            .foregroundColor(self.buttonColor)
                         }
                         
                         Button {
-                            currentLocationManager.changeTypeOfMap()
+                            self.currentLocationManager.changeTypeOfMap()
                         } label: {
                             MapTypeButton()
                         }
-                        .foregroundColor(buttonColor)
+                        .foregroundColor(self.buttonColor)
                         
                         Button {
-                            currentLocationManager.recenterLocation()
+                            self.currentLocationManager.recenterLocation()
                         } label: {
                             LocationButton()
                         }
-                        .foregroundColor(buttonColor)
+                        .foregroundColor(self.buttonColor)
                     }
                     
                     Spacer()
@@ -173,14 +173,14 @@ struct StartView: View {
                                           alertBody: $journeyStateController.alertBody,
                                           currentLocationManager: currentLocationManager)
                 } else {
-                    StartJourneyModeView(startedJourney: $startedJourney, currentLocationManager: currentLocationManager)
+                    StartJourneyModeView(startedJourney: self.$startedJourney, currentLocationManager: self.currentLocationManager)
                 }
             }
             .padding()
         }
         .task {
-            if !currentImages.isEmpty {
-                for i in currentImages {
+            if !self.currentImages.isEmpty {
+                for i in self.currentImages {
                     arrayOfPhotos.append(SinglePhoto(number: i.getId,
                                                      photo: i.getImage,
                                                      location: i.getLocation,
@@ -196,48 +196,48 @@ struct StartView: View {
                 }
             }
             
-            if !currentLocations.isEmpty {
-                for i in currentLocations {
-                    arrayOfPhotosLocations.append(CLLocationCoordinate2D(latitude: i.latitude, longitude: i.longitude))
+            if !self.currentLocations.isEmpty {
+                for i in self.currentLocations {
+                    self.arrayOfPhotosLocations.append(CLLocationCoordinate2D(latitude: i.latitude, longitude: i.longitude))
                 }
             }
         }
-        .fullScreenCover(isPresented: $journeyStateController.showSettings, content: {
+        .fullScreenCover(isPresented: self.$journeyStateController.showSettings, content: {
             SettingsView(loggedOut: $loggedOut)
         })
-        .fullScreenCover(isPresented: $journeyStateController.showImages, content: {
+        .fullScreenCover(isPresented: self.$journeyStateController.showImages, content: {
             ZStack {
-                ImagesView(showPicture: $currentImagesCollection.showPicture,
-                               photoIndex: $currentImagesCollection.photoIndex,
-                               highlightedPhoto: $currentImagesCollection.highlightedPhoto,
-                               layout: currentImagesCollection.layout,
+                ImagesView(showPicture: self.$currentImagesCollection.showPicture,
+                           photoIndex: self.$currentImagesCollection.photoIndex,
+                           highlightedPhoto: self.$currentImagesCollection.highlightedPhoto,
+                           layout: self.currentImagesCollection.layout,
                                singleJourney: SingleJourney(email: "",
                                                             name: "",
                                                             place: "",
                                                             date: Date.now,
-                                                            numberOfPhotos: arrayOfPhotosLocations.count,
-                                                            photos: arrayOfPhotos,
-                                                            photosLocations: arrayOfPhotosLocations,
+                                                            numberOfPhotos: self.arrayOfPhotosLocations.count,
+                                                            photos: self.arrayOfPhotos,
+                                                            photosLocations: self.arrayOfPhotosLocations,
                                                             networkProblem: false))
-                HighlightedPhoto(savedToCameraRoll: $currentImagesCollection.savedToCameraRoll,
-                                 highlightedPhotoIndex: $currentImagesCollection.photoIndex, showPicture: $currentImagesCollection.showPicture,
-                                 highlightedPhoto: $currentImagesCollection.highlightedPhoto, subscriber: $subscription.subscriber,
-                                 showPanel: $subscription.showPanel, journey: SingleJourney(email: "", name: "", place: "", date: Date.now,
-                                                                                            numberOfPhotos: arrayOfPhotosLocations.count,
-                                                                                            photos: arrayOfPhotos,
-                                                                                            photosLocations: arrayOfPhotosLocations,
+                HighlightedPhoto(savedToCameraRoll: self.$currentImagesCollection.savedToCameraRoll,
+                                 highlightedPhotoIndex: self.$currentImagesCollection.photoIndex, showPicture: self.$currentImagesCollection.showPicture,
+                                 highlightedPhoto: self.$currentImagesCollection.highlightedPhoto, subscriber: self.$subscription.subscriber,
+                                 showPanel: self.$subscription.showPanel, journey: SingleJourney(email: "", name: "", place: "", date: Date.now,
+                                                                                                 numberOfPhotos: self.arrayOfPhotosLocations.count,
+                                                                                                 photos: self.arrayOfPhotos,
+                                                                                                 photosLocations: self.arrayOfPhotosLocations,
                                                                                             networkProblem: false))
             }
         })
-        .fullScreenCover(isPresented: $loggedOut) {
+        .fullScreenCover(isPresented: self.$loggedOut) {
             //If user isn't logged in, screen presented by StartView struct is fully covered by View generated by this struct.
-            LoginView(loggedOut: $loggedOut)
+            LoginView(loggedOut: self.$loggedOut)
         }
-        .fullScreenCover(isPresented: $journeyStateController.takeAPhoto, onDismiss: {
+        .fullScreenCover(isPresented: self.$journeyStateController.takeAPhoto, onDismiss: {
             //Photo's location is added to the aproppriate array after view with camera is dismissed.
-            addPhotoLocation()
-            if moc.hasChanges {
-                try? moc.save()
+            self.addPhotoLocation()
+            if self.moc.hasChanges {
+                try? self.moc.save()
             }
         }, content: {
             //Struct represents view that user is supposed to see while taking a picture.
@@ -246,82 +246,81 @@ struct StartView: View {
         })
         
         //After the journey is finished, StartView is coverd by SumUpView.
-        .fullScreenCover(isPresented: $journeyStateController.showSumUp, onDismiss: {
-            if !journeyStateController.goBack {
+        .fullScreenCover(isPresented: self.$journeyStateController.showSumUp, onDismiss: {
+            if !self.journeyStateController.goBack {
                 withAnimation {
-                    startedJourney = false
+                    self.startedJourney = false
                 }
-                journeyStateController.paused = false
-                arrayOfPhotos = []
-                arrayOfPhotosLocations = []
-                for i in currentImages {
-                    moc.delete(i)
+                self.journeyStateController.paused = false
+                self.arrayOfPhotos = []
+                self.arrayOfPhotosLocations = []
+                for i in self.currentImages {
+                    self.moc.delete(i)
                 }
-                for i in currentLocations {
-                    moc.delete(i)
+                for i in self.currentLocations {
+                    self.moc.delete(i)
                 }
-                if moc.hasChanges {
-                    try? moc.save()
+                if self.moc.hasChanges {
+                    try? self.moc.save()
                 }
             } else {
-                journeyStateController.paused = false
-                journeyStateController.goBack = false
+                self.journeyStateController.paused = false
+                self.journeyStateController.goBack = false
             }
         }) {
             SumUpView(singleJourney: SingleJourney(email: "",
                                                    name: "",
                                                    place: "",
                                                    date: Date(),
-                                                   numberOfPhotos: arrayOfPhotos.count,
-                                                   photos: arrayOfPhotos,
-                                                   photosLocations: arrayOfPhotosLocations),
-                      showSumUp: $journeyStateController.showSumUp,
-                      goBack: $journeyStateController.goBack)
+                                                   numberOfPhotos: self.arrayOfPhotos.count,
+                                                   photos: self.arrayOfPhotos,
+                                                   photosLocations: self.arrayOfPhotosLocations),
+                      showSumUp: self.$journeyStateController.showSumUp,
+                      goBack: self.$journeyStateController.goBack)
         }
         //Alert is presented only if error occurs
-        .alert("No photos", isPresented: $journeyStateController.alertError) {
+        .alert("No photos", isPresented: self.$journeyStateController.alertError) {
             Button("Ok", role: .cancel) {
-                journeyStateController.alertMessage = false
+                self.journeyStateController.alertMessage = false
             }
         } message: {
-            Text(journeyStateController.alertBody)
+            Text(self.journeyStateController.alertBody)
         }
         //Alert is presented after user chooses to finish the journey. They have two ways of doing it and depending on which one they choose, alert will be looking differently.
-        .alert(isPresented: $journeyStateController.alertMessage) {
-            Alert(title: Text(alert == .finish ? "Finish Journey" : "Delete Journey"),
-                  message: Text(alert == .finish ? "Are you sure that you want to finish the journey?" : "Are you sure of deleting this yourney?"),
+        .alert(isPresented: self.$journeyStateController.alertMessage) {
+            Alert(title: Text(self.alert == .finish ? "Finish Journey" : "Delete Journey"),
+                  message: Text(self.alert == .finish ? "Are you sure that you want to finish the journey?" : "Are you sure of deleting this yourney?"),
                   primaryButton: .destructive(Text("Cancel")) {
-                journeyStateController.alertMessage = false
+                self.journeyStateController.alertMessage = false
             },
                   secondaryButton: .default(Text("Yes")) {
-                if alert == .finish {
+                if self.alert == .finish {
                     withAnimation {
-                        finishJourney()
+                        self.finishJourney()
                     }
                 } else {
-                    alert = .finish
+                    self.alert = .finish
                     
-                    for i in currentImages {
-                        moc.delete(i)
+                    for i in self.currentImages {
+                        self.moc.delete(i)
                     }
                     
-                    for i in currentLocations {
-                        moc.delete(i)
+                    for i in self.currentLocations {
+                        self.moc.delete(i)
                     }
-                    
-                    quitJourney()
+                    self.quitJourney()
                 }
                 
-                if moc.hasChanges {
-                    try? moc.save()
+                if self.moc.hasChanges {
+                    try? self.moc.save()
                 }
                 
-                journeyStateController.alertMessage = false
+                self.journeyStateController.alertMessage = false
             })
         }
         //When users see main screen for the first time, application updates user's current location.
         .onAppear(perform: {
-            journeyStateController.currentLocation = currentLocationManager.currentRegion
+            self.journeyStateController.currentLocation = self.currentLocationManager.currentRegion
         })
     }
     
@@ -329,18 +328,18 @@ struct StartView: View {
      Function is responsible for populating array with location objects with object containing the right photo location.
      */
     func addPhotoLocation() {
-        if arrayOfPhotosLocations.count < arrayOfPhotos.count {
-            journeyStateController.currentLocation = currentLocationManager.currentRegion
-            arrayOfPhotosLocations.append(journeyStateController.currentLocation.center)
-            let location = CurrentLocation(context: moc)
-            location.latitude = journeyStateController.currentLocation.center.latitude
-            location.longitude = journeyStateController.currentLocation.center.longitude
+        if self.arrayOfPhotosLocations.count < self.arrayOfPhotos.count {
+            self.journeyStateController.currentLocation = self.currentLocationManager.currentRegion
+            self.arrayOfPhotosLocations.append(self.journeyStateController.currentLocation.center)
+            let location = CurrentLocation(context: self.moc)
+            location.latitude = self.journeyStateController.currentLocation.center.latitude
+            location.longitude = self.journeyStateController.currentLocation.center.longitude
 
             guard let lastPhoto = self.arrayOfPhotos.last else {
                 return
             }
 
-            let image = CurrentImage(context: moc)
+            let image = CurrentImage(context: self.moc)
             image.id = Int16(lastPhoto.number)
             image.image = lastPhoto.photo.jpegData(compressionQuality: 0.5)
 
@@ -412,7 +411,7 @@ struct StartView: View {
      Function responsible for resuming the journey activity.
      */
     func finishJourney() {
-        journeyStateController.showSumUp = true
+        self.journeyStateController.showSumUp = true
     }
     
     /**
@@ -423,7 +422,7 @@ struct StartView: View {
         self.arrayOfPhotos = []
         self.arrayOfPhotosLocations = []
         withAnimation {
-            startedJourney = false
+            self.startedJourney = false
         }
         self.journeyStateController.paused = false
     }

@@ -18,27 +18,27 @@ struct RunningJourneyModeView: View {
     @ObservedObject var currentLocationManager: CurrentLocationManager
     
     var buttonColor: Color {
-        colorScheme == .dark ? .white : .accentColor
+        self.colorScheme == .dark ? .white : .accentColor
     }
     var body: some View {
         HStack {
             Button{
-                pickAPhoto = true
-                takeAPhoto = true
+                self.pickAPhoto = true
+                self.takeAPhoto = true
             } label: {
                 MapButton(imageName: "plus")
             }
             
             Button{
-                pickAPhoto = false
-                takeAPhoto = true
+                self.pickAPhoto = false
+                self.takeAPhoto = true
             } label: {
                 MapButton(imageName: "camera.fill")
                     .padding(.trailing, 10)
             }
             
             Button {
-                pauseJourney()
+                self.pauseJourney()
             } label: {
                 SymbolButtonView(buttonImage: "pause.fill")
             }
@@ -51,9 +51,9 @@ struct RunningJourneyModeView: View {
      Function responsible for pausing the journey activity.
      */
     func pauseJourney() {
-        currentLocationManager.recenterLocation()
+        self.currentLocationManager.recenterLocation()
         withAnimation {
-            paused = true
+            self.paused = true
         }
     }
 }

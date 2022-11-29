@@ -28,7 +28,7 @@ struct PausedJourneyModeView: View {
                 .disabled(true)
                 .padding(.trailing, 10)
             Button {
-                resumeJourney()
+                self.resumeJourney()
             } label: {
                 SymbolButtonView(buttonImage: "play.fill")
             }
@@ -36,13 +36,13 @@ struct PausedJourneyModeView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
             Spacer()
             Button {
-                alert = .finish
+                self.alert = .finish
                 
-                if arrayOfPhotos.count > 0 {
-                    alertMessage = true
+                if self.arrayOfPhotos.count > 0 {
+                    self.alertMessage = true
                 } else {
-                    alertBody = "Journey should contain at least one photo"
-                    alertError = true
+                    self.alertBody = "Journey should contain at least one photo"
+                    self.alertError = true
                 }
             } label: {
                 SymbolButtonView(buttonImage: "checkmark")
@@ -53,8 +53,8 @@ struct PausedJourneyModeView: View {
             Spacer()
             
             Button {
-                alert = .quit
-                alertMessage = true
+                self.alert = .quit
+                self.alertMessage = true
             } label: {
                 SymbolButtonView(buttonImage: "xmark")
             }
@@ -67,10 +67,10 @@ struct PausedJourneyModeView: View {
      Function responsible for resuming the journey activity.
      */
     func resumeJourney() {
-        currentLocationManager.recenterLocation()
+        self.currentLocationManager.recenterLocation()
         withAnimation {
-            startedJourney = true
-            paused = false
+            self.startedJourney = true
+            self.paused = false
         }
     }
 }

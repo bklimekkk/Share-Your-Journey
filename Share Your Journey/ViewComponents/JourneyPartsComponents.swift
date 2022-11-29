@@ -48,8 +48,8 @@ struct SinglePhoto: Hashable {
     init(number: Int, photo: UIImage) {
         self.number = number
         self.photo = photo
-        location = ""
-        subLocation = ""
+        self.location = ""
+        self.subLocation = ""
         self.administrativeArea = ""
         self.country = ""
         self.isoCountryCode = ""

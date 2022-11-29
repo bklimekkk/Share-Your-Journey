@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WeatherView: View {
 
-    @Environment(\.self.colorScheme) var colorScheme
+    @Environment(\.colorScheme) var colorScheme
     @State private var weatherResponse = WeatherResponse(weather: [], main: Main(temp: 0.0,
                                                                                  pressure: 0.0,
                                                                                  humidity: 0.0),

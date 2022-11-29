@@ -16,7 +16,7 @@ struct DirectionIcons: View {
     @Binding var subscriber: Bool
     @Binding var showPanel: Bool
     var buttonColor: Color {
-        colorScheme == .dark ? .white : .accentColor
+        self.colorScheme == .dark ? .white : .accentColor
     }
     var gold: Color {
         Color(uiColor: UIColor(red: 0.90, green: 0.42, blue: 0.00, alpha: 1.00))
@@ -27,27 +27,27 @@ struct DirectionIcons: View {
         
         //Chosen icon is set to green colour.
         Button{
-            if subscriber {
-                walking = true
+            if self.subscriber {
+                self.walking = true
             } else {
-                showPanel = true
+                self.showPanel = true
             }
         } label : {
-            if walking {
+            if self.walking {
                 MapButton(imageName: "figure.walk")
                     .foregroundColor(Color.green)
             } else {
                  MapButton(imageName: "figure.walk")
-                    .foregroundColor(subscriber ? buttonColor : gold)
+                    .foregroundColor(self.subscriber ? self.buttonColor : self.gold)
             }
         }
         
         Button {
-            walking = false
+            self.walking = false
         } label : {
-            if walking {
+            if self.walking {
                 MapButton(imageName: "car")
-                    .foregroundColor(buttonColor)
+                    .foregroundColor(self.buttonColor)
             } else {
                 MapButton(imageName: "car")
                     .foregroundColor(Color.green)
@@ -66,7 +66,7 @@ struct SumUpFunctionalityButtonsView: View {
     var body: some View {
         HStack {
             Button {
-                showDeleteAlert = true
+                self.showDeleteAlert = true
             } label: {
                 ButtonView(buttonTitle: "Quit")
                     .background(.red)
@@ -109,7 +109,7 @@ struct SumUpFunctionalityButtonsView: View {
             "deletedJourney" : false
         ])
         for index in 0...journey.photosLocations.count - 1 {
-            uploadPhoto(journey: journey, name: journey.name, index: index, instanceReference: instanceReference)
+            self.uploadPhoto(journey: journey, name: journey.name, index: index, instanceReference: instanceReference)
         }
     }
 

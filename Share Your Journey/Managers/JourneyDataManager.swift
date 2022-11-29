@@ -10,7 +10,7 @@ import CoreData
 class JourneyDataManager: ObservableObject {
     let journeyContainer = NSPersistentContainer(name: "Journey")
     init() {
-        journeyContainer.loadPersistentStores { description, error in
+        self.journeyContainer.loadPersistentStores { description, error in
             if let error = error {
                 fatalError("Journey data isn't accessible: \(error)")
             }

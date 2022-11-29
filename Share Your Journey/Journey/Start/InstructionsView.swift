@@ -12,7 +12,7 @@ struct InstructionsView: View {
     @Environment(\.colorScheme) var colorScheme
     
     var buttonColor: Color {
-        colorScheme == .dark ? .white : .accentColor
+        self.colorScheme == .dark ? .white : .accentColor
     }
     
     var body: some View {
@@ -21,7 +21,7 @@ struct InstructionsView: View {
                 Group {
                     HStack {
                         SettingsButton()
-                            .foregroundColor(buttonColor)
+                            .foregroundColor(self.buttonColor)
                             .padding(.horizontal, 7)
                         Text("Viewing settings options.")
                     }
@@ -60,7 +60,7 @@ struct InstructionsView: View {
                     }
                     HStack {
                         MapTypeButton()
-                            .foregroundColor(buttonColor)
+                            .foregroundColor(self.buttonColor)
                             .padding(.horizontal, 5)
                         
                         Text("Switching map types.")
@@ -68,7 +68,7 @@ struct InstructionsView: View {
                     
                     HStack {
                         LocationButton()
-                            .foregroundColor(buttonColor)
+                            .foregroundColor(self.buttonColor)
                             .padding(.horizontal, 5)
                         
                         
@@ -77,21 +77,21 @@ struct InstructionsView: View {
                     
                     HStack {
                         ImageButton()
-                            .foregroundColor(buttonColor)
+                            .foregroundColor(self.buttonColor)
                         Text("Viewing photos that have already been taken.")
                     }
                     
                     HStack {
                         Image(systemName: "figure.walk")
                             .font(.system(size: 30))
-                            .foregroundColor(buttonColor)
+                            .foregroundColor(self.buttonColor)
                             .padding(.horizontal, 7)
                         Text("Switching directions options to walking directions.")
                     }
                     HStack {
                         Image(systemName: "car")
                             .font(.system(size: 30))
-                            .foregroundColor(buttonColor)
+                            .foregroundColor(self.buttonColor)
                         
                         Text("Switching directions options to driving directions.")
                     }
@@ -107,7 +107,7 @@ struct InstructionsView: View {
                     HStack{
                         Image(systemName: "plus.app.fill")
                             .font(.system(size: 35))
-                            .foregroundColor(buttonColor)
+                            .foregroundColor(self.buttonColor)
                         Text("Uploading image from user's camera roll.")
                     }
                     
@@ -115,7 +115,7 @@ struct InstructionsView: View {
                     HStack {
                         Image(systemName: "camera.fill")
                             .font(.system(size: 27))
-                            .foregroundColor(buttonColor)
+                            .foregroundColor(self.buttonColor)
                         Text("Taking a picture during the journey.")
                     }
                     
@@ -130,7 +130,7 @@ struct InstructionsView: View {
                     HStack {
                         Image(systemName: "square.and.arrow.down")
                             .font(.system(size: 30))
-                            .foregroundColor(buttonColor)
+                            .foregroundColor(self.buttonColor)
                             .padding(.horizontal, 3)
                         Text("Downloading the journey to device.")
                     }
@@ -138,7 +138,7 @@ struct InstructionsView: View {
                     HStack {
                         Image(systemName: "plus")
                             .font(.system(size: 30))
-                            .foregroundColor(buttonColor)
+                            .foregroundColor(self.buttonColor)
                             .padding(.horizontal, 4)
                         Text("Allows users to move downloaded journey to the list of saved journeys.")
                     }
@@ -149,7 +149,7 @@ struct InstructionsView: View {
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
                     Button("Back to app") {
-                        dismiss()
+                        self.dismiss()
                     }
                 }
             }

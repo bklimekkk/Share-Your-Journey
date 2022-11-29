@@ -14,7 +14,7 @@ struct StartJourneyModeView: View {
     var body: some View {
         Button {
             withAnimation {
-                startJourney()
+                self.startJourney()
             }
         } label: {
             ButtonView(buttonTitle: "Start journey")
@@ -27,9 +27,9 @@ struct StartJourneyModeView: View {
      Function responsible for starting the journey activity.
      */
     func startJourney() {
-        currentLocationManager.recenterLocation()
+        self.currentLocationManager.recenterLocation()
         withAnimation {
-            startedJourney = true
+            self.startedJourney = true
         }
     }
 }

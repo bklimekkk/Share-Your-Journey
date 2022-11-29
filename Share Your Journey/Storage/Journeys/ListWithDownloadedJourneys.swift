@@ -22,7 +22,7 @@ struct ListWithDownloadedJourneys: View {
     @Binding var downloadedJourneysList: [SingleJourney]
 
     var sortedDownloadedJourneysFilteredList: [SingleJourney] {
-       return downloadedJourneysFilteredList.sorted(by: {$0.date > $1.date})
+        return self.downloadedJourneysFilteredList.sorted(by: {$0.date > $1.date})
     }
     
     @Binding var journeyToDelete: String
@@ -30,14 +30,14 @@ struct ListWithDownloadedJourneys: View {
     
     var body: some View {
         VStack {
-            if downloadedJourneysFilteredList.isEmpty {
+            if self.downloadedJourneysFilteredList.isEmpty {
                 NoDataView(text: "No journeys to show. Tap to refresh.")
                     .onTapGesture {
-                        populateWithDownloadedJourneys()
+                        self.populateWithDownloadedJourneys()
                     }
             } else {
                 List  {
-                    ForEach (sortedDownloadedJourneysFilteredList, id: \.self) { journey in
+                    ForEach (self.sortedDownloadedJourneysFilteredList, id: \.self) { journey in
                         ZStack {
                             HStack {
                                 Text(journey.name)
@@ -55,29 +55,29 @@ struct ListWithDownloadedJourneys: View {
                             .opacity(0)
                         }
                     }
-                    .onDelete(perform: delete)
+                    .onDelete(perform: self.delete)
                 }
                 .listStyle(.plain)
-                .alert(isPresented: $askAboutDeletion) {
+                .alert(isPresented: self.$askAboutDeletion) {
                     //After tapping "x" button, users are always asked if they are sure to delete this particular journey.
                     Alert (title: Text("Delete journey"),
                            message: Text("Are you sure that you want to delete this journey?"),
                            primaryButton: .cancel(Text("Cancel")) {
-                        askAboutDeletion = false
-                        journeyToDelete = ""
+                        self.askAboutDeletion = false
+                        self.journeyToDelete = ""
                     },
                            secondaryButton: .destructive(Text("Delete")) {
-                        deleteDownloadedJourney()
+                        self.deleteDownloadedJourney()
                     }
                     )
                 }
             }
         }
         .onAppear {
-            populateWithDownloadedJourneys()
+            self.populateWithDownloadedJourneys()
         }
         .refreshable {
-            populateWithDownloadedJourneys()
+            self.populateWithDownloadedJourneys()
         }
     }
     
@@ -87,13 +87,13 @@ struct ListWithDownloadedJourneys: View {
     func populateWithDownloadedJourneys() {
         
         //Function checks which user is currently logged in. If new user has logged into the application, program clears the array.
-        if downloadedJourneysList.count > 0 && downloadedJourneysList[0].email != FirebaseSetup.firebaseInstance.auth.currentUser?.email {
-            downloadedJourneysList = []
+        if self.downloadedJourneysList.count > 0 && self.downloadedJourneysList[0].email != FirebaseSetup.firebaseInstance.auth.currentUser?.email {
+            self.downloadedJourneysList = []
         }
         
-        for i in journeys.filter({return $0.email == FirebaseSetup.firebaseInstance.auth.currentUser?.email}) {
-            if !downloadedJourneysList.map({return $0.name}).contains(i.name) {
-                downloadedJourneysList.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.name ?? "", place: "", date: i.date ?? Date(), numberOfPhotos: i.photosNumber as! Int, photos: [], photosLocations: [], networkProblem: i.networkProblem))
+        for i in self.journeys.filter({return $0.email == FirebaseSetup.firebaseInstance.auth.currentUser?.email}) {
+            if !self.downloadedJourneysList.map({return $0.name}).contains(i.name) {
+                self.downloadedJourneysList.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.name ?? "", place: "", date: i.date ?? Date(), numberOfPhotos: i.photosNumber as! Int, photos: [], photosLocations: [], networkProblem: i.networkProblem))
             }
         }
     }
@@ -102,9 +102,9 @@ struct ListWithDownloadedJourneys: View {
      Function is responsible for deleting journey that user downloaded previously.
      */
     func deleteDownloadedJourney() {
-        for i in 0...journeys.count - 1 {
-            if journeys[i].name == journeyToDelete {
-                moc.delete(journeys[i])
+        for i in 0...self.journeys.count - 1 {
+            if self.journeys[i].name == self.journeyToDelete {
+                self.moc.delete(self.journeys[i])
                 break
             }
         }
@@ -113,19 +113,19 @@ struct ListWithDownloadedJourneys: View {
         } catch {}
         
         //Journey has to be deleted from the array right away.
-        for i in 0...downloadedJourneysList.count - 1 {
-            if downloadedJourneysList[i].name == journeyToDelete {
-                downloadedJourneysList.remove(at: i)
+        for i in 0...self.downloadedJourneysList.count - 1 {
+            if self.downloadedJourneysList[i].name == journeyToDelete {
+                self.downloadedJourneysList.remove(at: i)
                 break
             }
         }
         
-        askAboutDeletion = false
-        journeyToDelete = ""
+        self.askAboutDeletion = false
+        self.journeyToDelete = ""
     }
 
     func delete(at offsets: IndexSet) {
-        askAboutDeletion = true
-        journeyToDelete = sortedDownloadedJourneysFilteredList[offsets[offsets.startIndex]].name
+        self.askAboutDeletion = true
+        self.journeyToDelete = self.sortedDownloadedJourneysFilteredList[offsets[offsets.startIndex]].name
     }
 }

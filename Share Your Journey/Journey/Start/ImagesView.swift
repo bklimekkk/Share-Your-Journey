@@ -21,7 +21,7 @@ struct ImagesView: View {
             PhotosAlbumView(showPicture: self.$showPicture,
                             photoIndex: self.$photoIndex,
                             highlightedPhoto: self.$highlightedPhoto,
-                            layout: layout,
+                            layout: self.layout,
                             singleJourney: self.singleJourney)
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {

@@ -36,7 +36,7 @@ struct MapView: UIViewRepresentable {
     @Binding var weatherLongitude: Double
     
     var tintColor: UIColor {
-        colorScheme == .light ? UIColor(red: 0.36, green: 0.09, blue: 0.92, alpha: 1.00) : .white
+        self.colorScheme == .light ? UIColor(red: 0.36, green: 0.09, blue: 0.92, alpha: 1.00) : .white
     }
     //This array is supposed to contain all places that user visited in the StartView screen during the journey.
     var photos: [UIImage]
@@ -57,25 +57,25 @@ struct MapView: UIViewRepresentable {
             if let title = view.annotation?.title, title != "My Location" {
                 
                 if let validTitle = Int(title!) {
-                    parent.photoIndex = validTitle - 1
+                    self.parent.photoIndex = validTitle - 1
                 }
-                parent.clManager.mapView.setCenter(view.annotation!.coordinate, animated: true)
+                self.parent.clManager.mapView.setCenter(view.annotation!.coordinate, animated: true)
             }
             
-            parent.weatherLatitude = view.annotation?.coordinate.latitude ?? 0.0
-            parent.weatherLongitude = view.annotation?.coordinate.longitude ?? 0.0
+            self.parent.weatherLatitude = view.annotation?.coordinate.latitude ?? 0.0
+            self.parent.weatherLongitude = view.annotation?.coordinate.longitude ?? 0.0
             
             withAnimation(.easeInOut(duration: 0.15)) {
-                parent.showWeather = true
+                self.parent.showWeather = true
             }
         }
         
         func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
             withAnimation(.easeInOut(duration: 0.15)) {
-                parent.expandWeather = false
+                self.parent.expandWeather = false
             }
             withAnimation(.easeInOut(duration: 0.15)) {
-                parent.showWeather = false
+                self.parent.showWeather = false
             }
         }
         
@@ -87,7 +87,7 @@ struct MapView: UIViewRepresentable {
             marker.annotation = annotation
             marker.titleVisibility = .hidden
             if annotation.title != "My Location" {
-                marker.markerTintColor = parent.tintColor
+                marker.markerTintColor = self.parent.tintColor
                 marker.glyphText = annotation.title as? String
                 marker.canShowCallout = true
                 
@@ -99,8 +99,8 @@ struct MapView: UIViewRepresentable {
                 leftButton.setImage(UIImage(systemName: "location.north.circle", withConfiguration: iconSizeConfiguration), for: .normal)
                 rightButton.setImage(UIImage(systemName: "camera", withConfiguration: iconSizeConfiguration), for: .normal)
                 
-                leftButton.tintColor = parent.tintColor
-                rightButton.tintColor = parent.tintColor
+                leftButton.tintColor = self.parent.tintColor
+                rightButton.tintColor = self.parent.tintColor
                 
                 marker.leftCalloutAccessoryView = leftButton
                 marker.rightCalloutAccessoryView = rightButton
@@ -119,19 +119,19 @@ struct MapView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
             if view.rightCalloutAccessoryView == control {
                 withAnimation(.easeInOut(duration: 0.15)) {
-                    parent.showPhoto = true
+                    self.parent.showPhoto = true
                 }
             } else {
                 let overlays = mapView.overlays
                 mapView.removeOverlays(overlays)
-                let firstPoint = MKPlacemark(coordinate: parent.clManager.currentRegion.center)
+                let firstPoint = MKPlacemark(coordinate: self.parent.clManager.currentRegion.center)
                 let secondPoint = MKPlacemark(coordinate: view.annotation!.coordinate)
                 let routeRequest = MKDirections.Request()
                 routeRequest.source = MKMapItem(placemark: firstPoint)
                 routeRequest.destination = MKMapItem(placemark: secondPoint)
                 
                 //Depending on the choice, application will present users with different type of directions.
-                if parent.walking {
+                if self.parent.walking {
                     routeRequest.transportType = .walking
                 } else {
                     routeRequest.transportType = .automobile
@@ -180,7 +180,7 @@ struct MapView: UIViewRepresentable {
      */
     func makeUIView(context: Context) -> MKMapView {
         //mapView variable is set to mapView variable of clmanager(CurrentLocationManager object). Thanks to this changes from this object will update this mapView.
-        let mapView = clManager.mapView
+        let mapView = self.clManager.mapView
         
         //mapView's delecate should be assigned to context.coordinator for the map to interact with user fully.
         mapView.delegate = context.coordinator
@@ -194,10 +194,10 @@ struct MapView: UIViewRepresentable {
         //Calling this function over here causes adding all user's locations that were recorded during the journey.
         //        LOCATION FUNCTIONALITY DOESN'T WORK YET
         //        addUserLocations(mapView: mapView)
-        addPhotos(mapView: mapView)
+        self.addPhotos(mapView: mapView)
         
-        if photosLocations.count > 0 {
-            clManager.mapView.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: photosLocations[0].latitude, longitude: photosLocations[0].longitude), latitudinalMeters: 1000, longitudinalMeters: 1000), animated: false)
+        if self.photosLocations.count > 0 {
+            self.clManager.mapView.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: self.photosLocations[0].latitude, longitude: self.photosLocations[0].longitude), latitudinalMeters: 1000, longitudinalMeters: 1000), animated: false)
         }
         return mapView
     }
@@ -207,10 +207,10 @@ struct MapView: UIViewRepresentable {
      */
     func addPhotos(mapView: MKMapView) {
         var index = 0
-        while index < photosLocations.count {
+        while index < self.photosLocations.count {
             let photoPin = MKPointAnnotation()
             photoPin.title = String(index + 1)
-            photoPin.coordinate = photosLocations[index]
+            photoPin.coordinate = self.photosLocations[index]
             mapView.addAnnotation(photoPin)
             index+=1
         }

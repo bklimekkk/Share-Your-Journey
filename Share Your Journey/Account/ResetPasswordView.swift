@@ -25,30 +25,30 @@ struct ResetPasswordView: View {
         VStack (spacing: 20) {
             Text("Enter your email address to reset password")
     
-            EmailTextField(label: "Your e-mail address", email: $email)
+            EmailTextField(label: "Your e-mail address", email: self.$email)
                 .padding(.horizontal, 10)
             Spacer()
             Button{
                 
-                if email.isEmpty {
-                    errorManager.errorBody = "Enter email to reset the password"
-                    errorManager.showErrorMessage = true
+                if self.email.isEmpty {
+                    self.errorManager.errorBody = "Enter email to reset the password"
+                    self.errorManager.showErrorMessage = true
                     return
                 }
                 
                 //Sending a password-reset message to a given email address. 
-                FirebaseSetup.firebaseInstance.auth.sendPasswordReset(withEmail: email) { error in
+                FirebaseSetup.firebaseInstance.auth.sendPasswordReset(withEmail: self.email) { error in
                     if error != nil {
                         print("There was an error while sending reset password email")
                     }
                 }
-                resetEmail = email
-                dismiss()
+                self.resetEmail = self.email
+                self.dismiss()
             } label: {
                 ButtonView(buttonTitle: "Reset password")
             }
-            .alert("Email field is empty", isPresented: $errorManager.showErrorMessage, actions: {}, message: {
-                Text(errorManager.errorBody)
+            .alert("Email field is empty", isPresented: self.$errorManager.showErrorMessage, actions: {}, message: {
+                Text(self.errorManager.errorBody)
             })
             .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))

@@ -26,7 +26,7 @@ struct FriendJourneysList: View {
     
     var body: some View {
         VStack {
-            if sentByFriendFiltered.isEmpty {
+            if self.sentByFriendFiltered.isEmpty {
                 NoDataView(text: "No journeys to show. Tap to refresh.")
                     .onTapGesture {
                         populateFriendsJourneys()
@@ -34,7 +34,7 @@ struct FriendJourneysList: View {
             } else {
                 //List presenting users with journeys sent by their friends.
                 List {
-                    ForEach (sentByFriendFilteredSorted, id: \.self) { journey in
+                    ForEach (self.sentByFriendFilteredSorted, id: \.self) { journey in
                         
                         ZStack {
                             HStack {
@@ -45,7 +45,7 @@ struct FriendJourneysList: View {
                                     .foregroundColor(.gray)
                             }
                             //NavigationLink's destination property is set to struct responsible for showing the relevant journey.
-                            NavigationLink(destination: SeeJourneyView(journey: journey, email: email, downloadMode: false, path: "users/\(email)/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")){
+                            NavigationLink(destination: SeeJourneyView(journey: journey, email: self.email, downloadMode: false, path: "users/\(self.email)/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")){
                                 EmptyView()
                             }
                             .opacity(0)
@@ -54,12 +54,12 @@ struct FriendJourneysList: View {
                 }
                 .listStyle(.inset)
                 .refreshable {
-                    populateFriendsJourneys()
+                    self.populateFriendsJourneys()
                 }
             }
         }
         .onAppear {
-            populateFriendsJourneys()
+            self.populateFriendsJourneys()
         }
     }
     
@@ -67,7 +67,7 @@ struct FriendJourneysList: View {
      Function is responsible for populating the array with journeys sent by friend.
      */
     func populateFriendsJourneys() {
-        let path = "users/\(email)/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys"
+        let path = "users/\(self.email)/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys"
         FirebaseSetup.firebaseInstance.db.collection(path).getDocuments() { (querySnapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
@@ -75,15 +75,15 @@ struct FriendJourneysList: View {
                 
                 let receivedJourneys = querySnapshot!.documents
                 for i in receivedJourneys {
-                    if !sentByFriend.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {
-                        sentByFriend.append(SingleJourney(email: email, name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
+                    if !self.sentByFriend.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {
+                        self.sentByFriend.append(SingleJourney(email: email, name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
                     }
                 }
                 
-                if sentByFriend.count > 0 {
-                    for i in 0...sentByFriend.count - 1 {
-                        if !receivedJourneys.map({return $0.documentID}).contains(sentByFriend[i].name) {
-                            sentByFriend.remove(at: i)
+                if self.sentByFriend.count > 0 {
+                    for i in 0...self.sentByFriend.count - 1 {
+                        if !receivedJourneys.map({return $0.documentID}).contains(self.sentByFriend[i].name) {
+                            self.sentByFriend.remove(at: i)
                             break
                         }
                     }

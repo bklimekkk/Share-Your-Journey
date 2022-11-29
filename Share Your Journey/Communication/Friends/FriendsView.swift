@@ -38,19 +38,19 @@ struct FriendsView: View {
     
     //Variable is calculated by filtering arrays due to date they entered to search window.
     private var filteredRequestsList: [String] {
-        if searchPeople.isEmpty {
-            return requestsSet.requestsList
+        if self.searchPeople.isEmpty {
+            return self.requestsSet.requestsList
         } else {
-            return requestsSet.requestsList.filter { $0.lowercased().contains(searchPeople.lowercased()) }
+            return self.requestsSet.requestsList.filter { $0.lowercased().contains(self.searchPeople.lowercased()) }
         }
     }
     
     //Variable will contain all user's friends filtered by text that user entered in search text field.
     private var filteredFriendsList: [String] {
-        if searchPeople.isEmpty {
-            return friendsSet.friendsList
+        if self.searchPeople.isEmpty {
+            return self.friendsSet.friendsList
         } else {
-            return friendsSet.friendsList.filter { $0.lowercased().contains(searchPeople.lowercased()) }
+            return self.friendsSet.friendsList.filter { $0.lowercased().contains(searchPeople.lowercased()) }
         }
     }
     
@@ -59,22 +59,22 @@ struct FriendsView: View {
             VStack {
                 
                 //Screen allows users to view their friends list and list with requests sent to them.
-                PickerView(choice: $requestMode, firstChoice: "Friends", secondChoice: "Requests")
+                PickerView(choice: self.$requestMode, firstChoice: "Friends", secondChoice: "Requests")
                     .padding(.vertical)
                     .padding(.horizontal, 5)
                 
-                SearchField(text: "Search e-mail address", search: $searchPeople)
+                SearchField(text: "Search e-mail address", search: self.$searchPeople)
                 
                 //Depending on what option user has chosen, different lists are persented.
-                if requestMode {
-                    ListWithRequests(searchPeople: $searchPeople, requestsSet: $requestsSet, filteredRequestsList: filteredRequestsList)
+                if self.requestMode {
+                    ListWithRequests(searchPeople: self.$searchPeople, requestsSet: self.$requestsSet, filteredRequestsList: self.filteredRequestsList)
                 } else {
-                    ListWithFriends(searchPeople: $searchPeople, friendsSet: $friendsSet, filteredFriendsList: filteredFriendsList)
+                    ListWithFriends(searchPeople: self.$searchPeople, friendsSet: self.$friendsSet, filteredFriendsList: self.filteredFriendsList)
                 }
                 
                 Spacer()
                 Button {
-                    addNewFriend = true
+                    self.addNewFriend = true
                 } label: {
                     ButtonView(buttonTitle: "Add a new friend")
                 }
@@ -83,8 +83,8 @@ struct FriendsView: View {
                 .padding(.horizontal)
             }
             .padding(.bottom)
-            .sheet(isPresented: $addNewFriend, onDismiss: nil) {
-                AddFriendView(sheetIsPresented: $addNewFriend)
+            .sheet(isPresented: self.$addNewFriend, onDismiss: nil) {
+                AddFriendView(sheetIsPresented: self.$addNewFriend)
             }
     
     }

@@ -37,26 +37,26 @@ struct AddFriendView: View {
         VStack {
             Text("Add a friend")
             
-            TextField("Enter friend's e-mail", text: $email)
+            TextField("Enter friend's e-mail", text: self.$email)
                 .font(.system(size: 20))
             Spacer()
             Button{
                 //Given email address isn't key sensitive.
-                let lowerCasedEmail = email.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+                let lowerCasedEmail = self.email.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
                 
                 //Each possibility of error connected with inviting friend is checked and prevented with use of if statements below. Statement's aren't contained in separate functions, because each of them contains return key word, which is supposed to stop action performed by button.
                 
                 //If Statement is responsible for checking if users haven't omit entering data.
                 if lowerCasedEmail == "" {
-                    responseType = .emptyField
-                    showMessage = true
+                    self.responseType = .emptyField
+                    self.showMessage = true
                     return
                 }
                 
                 //If statement is responsible for checking if users haven't entered their own email while inviting a friend.
                 if lowerCasedEmail == FirebaseSetup.firebaseInstance.auth.currentUser?.email {
-                    responseType = .yourEmail
-                    showMessage = true
+                    self.responseType = .yourEmail
+                    self.showMessage = true
                     return
                 }
                 
@@ -67,8 +67,8 @@ struct AddFriendView: View {
                     } else {
                         for i in snapshot!.documents {
                             if i.documentID == lowerCasedEmail {
-                                responseType = .requestFromFriend
-                                showMessage = true
+                                self.responseType = .requestFromFriend
+                                self.showMessage = true
                                 return
                             }
                         }
@@ -82,8 +82,8 @@ struct AddFriendView: View {
                     } else {
                         for i in snapshot!.documents {
                             if i.documentID == FirebaseSetup.firebaseInstance.auth.currentUser?.email {
-                                responseType = .alreadyInvited
-                                showMessage = true
+                                self.responseType = .alreadyInvited
+                                self.showMessage = true
                                 return
                             }
                         }
@@ -97,8 +97,8 @@ struct AddFriendView: View {
                     } else {
                         for i in snapshot!.documents {
                             if i.documentID == lowerCasedEmail {
-                                responseType = .friendsAlready
-                                showMessage = true
+                                self.responseType = .friendsAlready
+                                self.showMessage = true
                                 return
                             }
                         }
@@ -119,15 +119,15 @@ struct AddFriendView: View {
                         }
                         
                         if !emailExists {
-                            responseType = .noAccount
-                            showMessage = true
+                            self.responseType = .noAccount
+                            self.showMessage = true
                             return
                         }
                     }
                 }
                 
                 //If error doesn't occur, message will ask users to confirm friend invitation.
-                showMessage = true
+                self.showMessage = true
             } label: {
                 ButtonView(buttonTitle: "Send request")
             }
@@ -135,27 +135,27 @@ struct AddFriendView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
         .padding()
-        .alert(isPresented: $showMessage) {
+        .alert(isPresented: self.$showMessage) {
             
             //Depending on which error occurs, users are presented to relevant message.
-            Alert (title: Text(responseType == .valid ? "Invite friend" : "Invitation error"),
-                   message: Text(responseType == .emptyField ? "You must provide email address" : responseType == .yourEmail ? "This is your email address" : responseType == .requestFromFriend ? "This friend already sent you a friend request" : responseType == .alreadyInvited ? "You already invited this person" : responseType ==  .friendsAlready ? "You are already friends!" : responseType == .noAccount ? "Account doesn't exist" : email),
+            Alert (title: Text(self.responseType == .valid ? "Invite friend" : "Invitation error"),
+                   message: Text(self.responseType == .emptyField ? "You must provide email address" : self.responseType == .yourEmail ? "This is your email address" : self.responseType == .requestFromFriend ? "This friend already sent you a friend request" : responseType == .alreadyInvited ? "You already invited this person" : responseType ==  .friendsAlready ? "You are already friends!" : self.responseType == .noAccount ? "Account doesn't exist" : self.email),
                    primaryButton: .cancel(Text(responseType == .valid ? "Cancel" : "Quit")) {
-                if responseType == .valid {
-                    showMessage = false
+                if self.responseType == .valid {
+                    self.showMessage = false
                 } else {
-                    showMessage = false
-                    sheetIsPresented = false
-                    responseType = .valid
+                    self.showMessage = false
+                    self.sheetIsPresented = false
+                    self.responseType = .valid
                 }
             },
-                   secondaryButton: .default(Text(responseType == .valid ? "Invite" : "Try again")) {
-                if responseType == .valid {
-                    sendRequest()
+                   secondaryButton: .default(Text(self.responseType == .valid ? "Invite" : "Try again")) {
+                if self.responseType == .valid {
+                    self.sendRequest()
                 } else {
-                    showMessage = false
-                    responseType = .valid
-                    email = ""
+                    self.showMessage = false
+                    self.responseType = .valid
+                    self.email = ""
                 }
             }
             )
@@ -171,8 +171,8 @@ struct AddFriendView: View {
             "email": FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",
             "deletedAccount": false
         ])
-        showMessage = false
-        sheetIsPresented = false
+        self.showMessage = false
+        self.sheetIsPresented = false
     }
 }
 

@@ -14,10 +14,10 @@ struct PickerView: View {
     var firstChoice: String
     var secondChoice: String
     var body: some View {
-        Picker(selection: choice, label: Text("")) {
-            Text(firstChoice)
+        Picker(selection: self.choice, label: Text("")) {
+            Text(self.firstChoice)
                 .tag(false)
-            Text(secondChoice)
+            Text(self.secondChoice)
                 .tag(true)
         }
         .pickerStyle(SegmentedPickerStyle())
@@ -34,10 +34,10 @@ struct JourneyPickerView: View {
     var secondChoice: String
     
     var body: some View {
-        Picker(selection: choice, label: Text("")) {
-            Text(firstChoice)
+        Picker(selection: self.choice, label: Text("")) {
+            Text(self.firstChoice)
                 .tag(SeeJourneyView.ViewType.photoAlbum)
-            Text(secondChoice)
+            Text(self.secondChoice)
                 .tag(SeeJourneyView.ViewType.threeDimensional)
         }
         .pickerStyle(SegmentedPickerStyle())

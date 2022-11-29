@@ -50,15 +50,15 @@ struct SubscriptionView: View {
                     }
                     
                 }
-                ForEach(availablePackages, id: \.self.storeProduct) { package in
+                ForEach(self.availablePackages, id: \.self.storeProduct) { package in
                     let timeUnit = String(String(package.id).suffix(String(package.id).count - 4))
                     Section(header: Text("\(timeUnit) subscription")) {
                         Button("Buy for \(package.localizedPriceString)") {
                             
                             Purchases.shared.purchase(package: package) { (transaction, customerInfo, error, userCancelled) in
                                 if customerInfo?.entitlements["allfeatures"]?.isActive == true {
-                                    dismiss()
-                                    subscriber = true
+                                    self.dismiss()
+                                    self.subscriber = true
                                 }
                             }
                         }
@@ -70,7 +70,7 @@ struct SubscriptionView: View {
             .task {
                 Purchases.shared.getOfferings { (offerings, error) in
                     if let packages = offerings?.offering(identifier: "default")?.availablePackages {
-                        availablePackages = packages
+                        self.availablePackages = packages
                     }
                 }
             }
@@ -79,7 +79,7 @@ struct SubscriptionView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done"){
-                        dismiss()
+                        self.dismiss()
                     }
                 }
             }

@@ -20,20 +20,19 @@ struct ListWithJourneys: View {
     @Binding var askAboutDeletion: Bool
 
     var sortedJourneysFilteredList: [SingleJourney] {
-        return journeysFilteredList.sorted(by: {$0.date > $1.date})
+        return self.journeysFilteredList.sorted(by: {$0.date > $1.date})
     }
     var body: some View {
         VStack {
-            
-            if journeysFilteredList.isEmpty {
+            if self.journeysFilteredList.isEmpty {
                 NoDataView(text: "No journeys to show. Tap to refresh.")
                     .onTapGesture {
-                        clearInvalidJourneys()
-                        updateJourneys()
+                        self.clearInvalidJourneys()
+                        self.updateJourneys()
                     }
             } else {
                 List {
-                    ForEach (sortedJourneysFilteredList, id: \.self) { journey in
+                    ForEach (self.sortedJourneysFilteredList, id: \.self) { journey in
                         ZStack {
                             HStack {
                                 Text(journey.place)
@@ -51,15 +50,15 @@ struct ListWithJourneys: View {
                             .opacity(0)
                         }
                     }
-                    .onDelete(perform: delete)
+                    .onDelete(perform: self.delete)
                 }
                 .listStyle(.plain)
-                .alert(isPresented: $askAboutDeletion) {
+                .alert(isPresented: self.$askAboutDeletion) {
                     Alert (title: Text("Delete journey"),
                            message: Text("Are you sure that you want to delete this journey?"),
                            primaryButton: .cancel(Text("Cancel")) {
-                        askAboutDeletion = false
-                        journeyToDelete = ""
+                        self.askAboutDeletion = false
+                        self.journeyToDelete = ""
                     },
                            secondaryButton: .destructive(Text("Delete")) {
                         
@@ -68,13 +67,13 @@ struct ListWithJourneys: View {
                         
                         //Photos need to be leted from both database and storage, if needed.
                         
-                        deleteAllPhotos(path: path)
-                        deleteJourneyFromServer(path: path)
-                        deleteJourneyFromStorage()
+                        self.deleteAllPhotos(path: path)
+                        self.deleteJourneyFromServer(path: path)
+                        self.deleteJourneyFromStorage()
                         
-                        deleteFromStorage = true
-                        askAboutDeletion = false
-                        journeyToDelete = ""
+                        self.deleteFromStorage = true
+                        self.askAboutDeletion = false
+                        self.journeyToDelete = ""
                     }
                     )
                 }
@@ -84,12 +83,12 @@ struct ListWithJourneys: View {
         }
         .onAppear {
             //List is updated every time the screen appears.
-            clearInvalidJourneys()
-            updateJourneys()
+            self.clearInvalidJourneys()
+            self.updateJourneys()
         }
         .refreshable {
-            clearInvalidJourneys()
-            updateJourneys()
+            self.clearInvalidJourneys()
+            self.updateJourneys()
         }
         
         
@@ -114,7 +113,7 @@ struct ListWithJourneys: View {
      Function is responsible for deleting journey collection from firestore database.
      */
     func deleteJourneyFromServer(path: String) {
-        FirebaseSetup.firebaseInstance.db.collection(path).document(journeyToDelete).delete() { error in
+        FirebaseSetup.firebaseInstance.db.collection(path).document(self.journeyToDelete).delete() { error in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
@@ -127,11 +126,11 @@ struct ListWithJourneys: View {
      Function is responsible for deleting entire journey directory from storage, if needed.
      */
     func deleteJourneyFromStorage() {
-        for i in 0...journeysList.count - 1 {
-            if journeysList[i].name == journeyToDelete {
-                if deleteFromStorage {
-                    for j in 0...journeysList[i].numberOfPhotos - 1 {
-                        let deleteReference = FirebaseSetup.firebaseInstance.storage.reference().child("\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/\(journeyToDelete)/\(j)")
+        for i in 0...self.journeysList.count - 1 {
+            if self.journeysList[i].name == self.journeyToDelete {
+                if self.deleteFromStorage {
+                    for j in 0...self.journeysList[i].numberOfPhotos - 1 {
+                        let deleteReference = FirebaseSetup.firebaseInstance.storage.reference().child("\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/\(self.journeyToDelete)/\(j)")
                         deleteReference.delete { error in
                             if error != nil {
                                 print("Error while deleting journey from storage")
@@ -141,7 +140,7 @@ struct ListWithJourneys: View {
                         }
                     }
                 }
-                journeysList.remove(at: i)
+                self.journeysList.remove(at: i)
                 break
             }
         }
@@ -151,8 +150,8 @@ struct ListWithJourneys: View {
      Function is responsible for clearing array containing journeys, if user has changed.
      */
     func clearInvalidJourneys() {
-        if journeysList.count != 0 && journeysList[0].email != FirebaseSetup.firebaseInstance.auth.currentUser?.email {
-            journeysList = []
+        if self.journeysList.count != 0 && self.journeysList[0].email != FirebaseSetup.firebaseInstance.auth.currentUser?.email {
+            self.journeysList = []
         }
     }
     
@@ -168,8 +167,8 @@ struct ListWithJourneys: View {
                 print(error!.localizedDescription)
             } else {
                 for i in querySnapshot!.documents {
-                    if !journeysList.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {
-                        journeysList.append(SingleJourney(email: i.get("email") as! String, name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?
+                    if !self.journeysList.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {
+                        self.journeysList.append(SingleJourney(email: i.get("email") as! String, name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?
                             .dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
                     }
                 }
@@ -196,7 +195,7 @@ struct ListWithJourneys: View {
                             } else {
                                 for j in journeySnapshot!.documents {
                                     if j.documentID == journey.name {
-                                        deleteFromStorage = false
+                                        self.deleteFromStorage = false
                                         break
                                     }
                                 }
@@ -206,11 +205,11 @@ struct ListWithJourneys: View {
                 }
             }
         }
-        askAboutDeletion = true
-        journeyToDelete = journey.name
+        self.askAboutDeletion = true
+        self.journeyToDelete = journey.name
     }
 
     func delete(at offsets: IndexSet) {
-        checkBeforeDeletion(journey: sortedJourneysFilteredList[offsets[offsets.startIndex]])
+        self.checkBeforeDeletion(journey: self.sortedJourneysFilteredList[offsets[offsets.startIndex]])
     }
 }

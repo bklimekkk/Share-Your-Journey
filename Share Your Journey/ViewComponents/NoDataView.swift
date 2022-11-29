@@ -12,7 +12,7 @@ struct NoDataView: View {
     var body: some View {
         VStack {
             Spacer()
-            Text(text)
+            Text(self.text)
                 .foregroundColor(.gray)
             Spacer()
         }

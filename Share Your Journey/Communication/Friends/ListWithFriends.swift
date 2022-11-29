@@ -16,15 +16,15 @@ struct ListWithFriends: View {
     var body: some View {
         VStack {
             
-            if filteredFriendsList.isEmpty {
+            if self.filteredFriendsList.isEmpty {
                 NoDataView(text: "No friends to show. Tap to refresh.")
                     .onTapGesture {
-                        populateFriends()
+                        self.populateFriends()
                     }
             } else {
                 //List is sorted alphabetically.
                 List {
-                    ForEach (filteredFriendsList.sorted(by: {$0 < $1}), id: \.self) { friend in
+                    ForEach (self.filteredFriendsList.sorted(by: {$0 < $1}), id: \.self) { friend in
                         ZStack {
                             HStack {
                                 Text(friend)
@@ -41,13 +41,13 @@ struct ListWithFriends: View {
                 }
                 .listStyle(.plain)
                 .refreshable {
-                    populateFriends()
+                    self.populateFriends()
                 }
             }
         }
         //Array is populated after the screen is shown, but users are also able to refresh the list by dragging it down (thanks to .refreshable).
         .onAppear {
-            populateFriends()
+            self.populateFriends()
         }
     }
     
@@ -58,9 +58,9 @@ struct ListWithFriends: View {
         
         //This block of code ensures that users that are currently logged in, will see their own friends list (even after logging out).
         let currentEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? ""
-        if friendsSet.ownEmail != currentEmail {
-            friendsSet.friendsList = []
-            friendsSet.ownEmail = currentEmail
+        if self.friendsSet.ownEmail != currentEmail {
+            self.friendsSet.friendsList = []
+            self.friendsSet.ownEmail = currentEmail
         }
         
         //Data is pulled out of the appropriate collection in firestore database and array is populated with it.
@@ -69,8 +69,8 @@ struct ListWithFriends: View {
                 print(error!.localizedDescription)
             } else {
                 for i in querySnapshot!.documents {
-                    if i.documentID != currentEmail && !friendsSet.friendsList.contains(i.documentID) && i.get("deletedAccount") as! Bool == false {
-                        friendsSet.friendsList.append(i.documentID)
+                    if i.documentID != currentEmail && !self.friendsSet.friendsList.contains(i.documentID) && i.get("deletedAccount") as! Bool == false {
+                        self.friendsSet.friendsList.append(i.documentID)
                     }
                 }
             }

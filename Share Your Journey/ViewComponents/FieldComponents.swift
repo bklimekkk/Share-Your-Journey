@@ -13,7 +13,7 @@ struct EmailTextField: View {
     var label: String
     var email: Binding<String>
     var body: some View {
-        TextField(label, text: email)
+        TextField(self.label, text: self.email)
             .keyboardType(.emailAddress)
             .autocapitalization(.none)
             .padding(.vertical, 10)
@@ -26,7 +26,7 @@ struct SearchField: View {
     var text: String
     @Binding var search: String
     var body: some View {
-        TextField(text, text: $search)
+        TextField(self.text, text: self.$search)
             .padding(.horizontal)
     }
 }

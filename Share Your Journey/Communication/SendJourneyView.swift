@@ -25,33 +25,33 @@ struct SendJourneyView: View {
     @State private var searchText = ""
     
     var filteredUnsentJourneys: [SingleJourney] {
-        if searchText.isEmpty {
-            return unsentJourneys
+        if self.searchText.isEmpty {
+            return self.unsentJourneys
         } else {
-            return unsentJourneys.filter{$0.name.contains(searchText)}
+            return self.unsentJourneys.filter{$0.name.contains(self.searchText)}
         }
     }
     
     var body: some View {
         NavigationView {
             VStack {
-                SearchField(text: "Search your journeys", search: $searchText)
+                SearchField(text: "Search your journeys", search: self.$searchText)
                     .padding(.top)
                 VStack {
-                    if filteredUnsentJourneys.isEmpty{
+                    if self.filteredUnsentJourneys.isEmpty{
                         NoDataView(text: "No journeys to send. Tap to refresh.")
                     } else {
-                        List(filteredUnsentJourneys.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
+                        List(self.filteredUnsentJourneys.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
                             HStack {
                                 Text("\(journey.place), \(journey.date)")
                                     .padding(.vertical, 15)
                                 Spacer()
                                 Button{
-                                    SendJourneyManager().sendJourney(journey: journey, targetEmail: targetEmail)
+                                    SendJourneyManager().sendJourney(journey: journey, targetEmail: self.targetEmail)
                                     
                                     //After journey is sent, it needs to be deleted from list that gives user a choice of journeys to send.
                                     withAnimation {
-                                        deleteFromSendingList(journeyName: journey.name)
+                                        self.deleteFromSendingList(journeyName: journey.name)
                                     }
                                     
                                 } label:{
@@ -65,11 +65,11 @@ struct SendJourneyView: View {
                     }
                 }
                 .onAppear {
-                    prepareJourneysToSend()
+                    self.prepareJourneysToSend()
                 }
                 
                 Button {
-                    presentationMode.wrappedValue.dismiss()
+                    self.presentationMode.wrappedValue.dismiss()
                 } label: {
                     ButtonView(buttonTitle: "Done")
                         .background(Color.accentColor)
@@ -77,16 +77,16 @@ struct SendJourneyView: View {
                         .padding()
                 }
             }
-            .navigationTitle("Send journey to \(targetEmail)")
+            .navigationTitle("Send journey to \(self.targetEmail)")
             .navigationBarTitleDisplayMode(.inline)
         }
     }
     
     //Function is responsible for deleting particular journey from the list of unsent journeys.
     func deleteFromSendingList(journeyName: String) {
-        for i in 0...unsentJourneys.count - 1 {
-            if unsentJourneys[i].name == journeyName {
-                unsentJourneys.remove(at: i)
+        for i in 0...self.unsentJourneys.count - 1 {
+            if self.unsentJourneys[i].name == journeyName {
+                self.unsentJourneys.remove(at: i)
                 break
             }
         }
@@ -98,13 +98,13 @@ struct SendJourneyView: View {
     func prepareJourneysToSend() {
         //First of all, the program fetches all user's journeys that were sent to particular friend from firebase database and stores them in first array.
         let ownEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.email
-        FirebaseSetup.firebaseInstance.db.collection("users/\(ownEmail ?? "")/friends/\(targetEmail)/journeys").getDocuments { (snapshot, error) in
+        FirebaseSetup.firebaseInstance.db.collection("users/\(ownEmail ?? "")/friends/\(self.targetEmail)/journeys").getDocuments { (snapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
                 for i in snapshot!.documents {
                     if(i.documentID != "-") {
-                        sentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
+                        self.sentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
                     }
                 }
             }
@@ -115,8 +115,8 @@ struct SendJourneyView: View {
                     print(error!.localizedDescription)
                 } else {
                     for i in snapshot!.documents {
-                        if !sentJourneys.map({$0.name}).contains(i.documentID) {
-                            unsentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
+                        if !self.sentJourneys.map({$0.name}).contains(i.documentID) {
+                            self.unsentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
                         }
                     }
                 }

@@ -30,19 +30,19 @@ struct ChatView: View {
    
     //Variable contains all journeys send by users that they searched.
     private var sentByYouFiltered: [SingleJourney] {
-        if searchJourney == "" {
-            return sentByYou
+        if self.searchJourney == "" {
+            return self.sentByYou
         } else {
-            return sentByYou.filter({return $0.name.lowercased().contains(searchJourney.lowercased())})
+            return self.sentByYou.filter({return $0.name.lowercased().contains(self.searchJourney.lowercased())})
         }
     }
     
     //Variable contais all journeys searched by users.
     private var sentByFriendFiltered: [SingleJourney] {
-        if searchJourney == "" {
-            return sentByFriend
+        if self.searchJourney == "" {
+            return self.sentByFriend
         } else {
-            return sentByFriend.filter({return $0.name.lowercased().contains(searchJourney.lowercased())})
+            return self.sentByFriend.filter({return $0.name.lowercased().contains(self.searchJourney.lowercased())})
         }
     }
     
@@ -53,20 +53,20 @@ struct ChatView: View {
         VStack {
             
                 //Picker View controls which part of the screen is visible (array with your journeys or array with your friend's journeys).
-                PickerView(choice: $yourJourneys, firstChoice: "Sent by friend", secondChoice: "Sent by you")
+            PickerView(choice: self.$yourJourneys, firstChoice: "Sent by friend", secondChoice: "Sent by you")
                 .padding(.vertical)
                 .padding(.horizontal, 5)
                 
                 //Field used to search arrays.
-                SearchField(text: "Search journey", search: $searchJourney)
-                if yourJourneys {
-                    YourJourneysList(searchJourney: $searchJourney, sendJourneyScreen: $sendJourneyScreen, askAboutDeletion: $askAboutDeletion, sentByYou: $sentByYou, email: email, sentByYouFiltered: sentByYouFiltered)
+            SearchField(text: "Search journey", search: self.$searchJourney)
+            if self.yourJourneys {
+                YourJourneysList(searchJourney: self.$searchJourney, sendJourneyScreen: self.$sendJourneyScreen, askAboutDeletion: self.$askAboutDeletion, sentByYou: self.$sentByYou, email: self.email, sentByYouFiltered: self.sentByYouFiltered)
                     
                     Spacer()
                     
                     //Clicking this button opens screen enabling users to send selected journey.
                     Button {
-                        sendJourneyScreen.toggle()
+                        self.sendJourneyScreen.toggle()
                     } label: {
                         ButtonView(buttonTitle: "Send journey")
                     }
@@ -74,10 +74,10 @@ struct ChatView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     .padding()
                 } else {
-                    FriendJourneysList(searchJourney: $searchJourney, sentByFriend: $sentByFriend, sentByFriendFiltered: sentByFriendFiltered, email: email)
+                    FriendJourneysList(searchJourney: self.$searchJourney, sentByFriend: self.$sentByFriend, sentByFriendFiltered: self.sentByFriendFiltered, email: self.email)
                 }
         }
-        .navigationTitle(email)
+        .navigationTitle(self.email)
         .navigationBarTitleDisplayMode(.inline)
     }
 }

@@ -24,15 +24,15 @@ class CurrentLocationManager: NSObject, CLLocationManagerDelegate, ObservableObj
     //In this overriden init block, manager object, which was created in this file has its delegate property set to self. Because of this, following lines containing assignments and functions calls, will be able to provide the final map with needed functionality.
     override init() {
         super.init()
-        manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest
+        self.manager.delegate = self
+        self.manager.desiredAccuracy = kCLLocationAccuracyBest
         
         //Application needs to keep track of user's location even if application runs in the background or if the phone is locked.
-        manager.requestWhenInUseAuthorization()
+        self.manager.requestWhenInUseAuthorization()
         
         //These two lines (1) show user's location on the map and (2) enable the map show location changes.
-        manager.startUpdatingLocation()
-        manager.allowsBackgroundLocationUpdates = true
+        self.manager.startUpdatingLocation()
+        self.manager.allowsBackgroundLocationUpdates = true
     }
     
     /**
@@ -43,12 +43,12 @@ class CurrentLocationManager: NSObject, CLLocationManagerDelegate, ObservableObj
         locations.last.map {
             
             //Created earlier object is assigned to coordinates of user. latitudialMeters and longitudalmeters parameters set width and height of the map in the beginning.
-            currentRegion = MKCoordinateRegion(center: $0.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+            self.currentRegion = MKCoordinateRegion(center: $0.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
             
             //When main screen with the map is opened, it is centered on the user's location. It only happens once.
-            if !centeredLocation {
-                centerLocation()
-                centeredLocation = true
+            if !self.centeredLocation {
+                self.centerLocation()
+                self.centeredLocation = true
             }
         }
     }
@@ -57,26 +57,26 @@ class CurrentLocationManager: NSObject, CLLocationManagerDelegate, ObservableObj
      Function is responsible for recentering the map on user's location.
      */
     func recenterLocation() {
-        mapView.setCenter(currentRegion.center, animated: true)
+        self.mapView.setCenter(self.currentRegion.center, animated: true)
         //this line provides a smooth animation to centering aciton.
-        mapView.setVisibleMapRect(mapView.visibleMapRect, animated: true)
+        self.mapView.setVisibleMapRect(self.mapView.visibleMapRect, animated: true)
     }
     
     /**
      Function is responsible for centering the map on user's location.
      */
     func centerLocation() {
-        mapView.setRegion(currentRegion, animated: false)
+        self.mapView.setRegion(self.currentRegion, animated: false)
 }
     
     /**
      This function is responsible for changing the type of map.
      */
     func changeTypeOfMap() {
-        if mapView.mapType == .standard {
-            mapView.mapType = .hybridFlyover
+        if self.mapView.mapType == .standard {
+            self.mapView.mapType = .hybridFlyover
         } else {
-            mapView.mapType = .standard
+            self.mapView.mapType = .standard
         }
     }
 }

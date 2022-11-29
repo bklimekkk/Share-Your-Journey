@@ -29,11 +29,11 @@ struct DownloadChangesView: View {
             Button{
                 
                 //Program require user to enter any name to re-name the journey. 
-                if newName != "" {
-                    download = true
-                    presentSheet = false
+                if self.newName != "" {
+                    self.download = true
+                    self.presentSheet = false
                 } else {
-                    showAlert = true
+                    self.showAlert = true
                 }
             } label: {
                 ButtonView(buttonTitle: "Download")
@@ -41,9 +41,9 @@ struct DownloadChangesView: View {
             .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
-        .alert(isPresented: $showAlert) {
+        .alert(isPresented: self.$showAlert) {
             Alert(title: Text("Empty field"), message: Text("You need to provide a name"), dismissButton: .cancel(Text("Ok")) {
-                showAlert = false
+                self.showAlert = false
             })
         }
         .padding()
