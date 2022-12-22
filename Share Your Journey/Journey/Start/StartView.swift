@@ -107,7 +107,7 @@ struct StartView: View {
                     photos: [],
                     photosLocations: [])
             .environmentObject(self.currentLocationManager)
-                .edgesIgnoringSafeArea(.all)
+            .edgesIgnoringSafeArea(.all)
             
             VStack {
                 HStack {
@@ -211,22 +211,15 @@ struct StartView: View {
                            photoIndex: self.$currentImagesCollection.photoIndex,
                            highlightedPhoto: self.$currentImagesCollection.highlightedPhoto,
                            layout: self.currentImagesCollection.layout,
-                               singleJourney: SingleJourney(email: "",
-                                                            name: "",
-                                                            place: "",
-                                                            date: Date.now,
-                                                            numberOfPhotos: self.arrayOfPhotosLocations.count,
-                                                            photos: self.arrayOfPhotos,
-                                                            photosLocations: self.arrayOfPhotosLocations,
-                                                            networkProblem: false))
+                           singleJourney: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
+                                                        photos: self.arrayOfPhotos,
+                                                        photosLocations: self.arrayOfPhotosLocations))
                 HighlightedPhoto(savedToCameraRoll: self.$currentImagesCollection.savedToCameraRoll,
                                  highlightedPhotoIndex: self.$currentImagesCollection.photoIndex, showPicture: self.$currentImagesCollection.showPicture,
                                  highlightedPhoto: self.$currentImagesCollection.highlightedPhoto, subscriber: self.$subscription.subscriber,
-                                 showPanel: self.$subscription.showPanel, journey: SingleJourney(email: "", name: "", place: "", date: Date.now,
-                                                                                                 numberOfPhotos: self.arrayOfPhotosLocations.count,
+                                 showPanel: self.$subscription.showPanel, journey: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
                                                                                                  photos: self.arrayOfPhotos,
-                                                                                                 photosLocations: self.arrayOfPhotosLocations,
-                                                                                            networkProblem: false))
+                                                                                                 photosLocations: self.arrayOfPhotosLocations))
             }
         })
         .fullScreenCover(isPresented: self.$loggedOut) {
@@ -248,9 +241,7 @@ struct StartView: View {
         //After the journey is finished, StartView is coverd by SumUpView.
         .fullScreenCover(isPresented: self.$journeyStateController.showSumUp, onDismiss: {
             if !self.journeyStateController.goBack {
-                withAnimation {
-                    self.startedJourney = false
-                }
+                self.startedJourney = false
                 self.journeyStateController.paused = false
                 self.arrayOfPhotos = []
                 self.arrayOfPhotosLocations = []
@@ -268,11 +259,7 @@ struct StartView: View {
                 self.journeyStateController.goBack = false
             }
         }) {
-            SumUpView(singleJourney: SingleJourney(email: "",
-                                                   name: "",
-                                                   place: "",
-                                                   date: Date(),
-                                                   numberOfPhotos: self.arrayOfPhotos.count,
+            SumUpView(singleJourney: SingleJourney(numberOfPhotos: self.arrayOfPhotos.count,
                                                    photos: self.arrayOfPhotos,
                                                    photosLocations: self.arrayOfPhotosLocations),
                       showSumUp: self.$journeyStateController.showSumUp,
@@ -295,9 +282,7 @@ struct StartView: View {
             },
                   secondaryButton: .default(Text("Yes")) {
                 if self.alert == .finish {
-                    withAnimation {
-                        self.finishJourney()
-                    }
+                    self.finishJourney()
                 } else {
                     self.alert = .finish
                     
@@ -421,9 +406,7 @@ struct StartView: View {
         self.currentLocationManager.recenterLocation()
         self.arrayOfPhotos = []
         self.arrayOfPhotosLocations = []
-        withAnimation {
-            self.startedJourney = false
-        }
+        self.startedJourney = false
         self.journeyStateController.paused = false
     }
 }

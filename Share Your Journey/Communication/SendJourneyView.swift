@@ -104,7 +104,7 @@ struct SendJourneyView: View {
             } else {
                 for i in snapshot!.documents {
                     if(i.documentID != "-") {
-                        self.sentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
+                        self.sentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int))
                     }
                 }
             }
@@ -116,7 +116,7 @@ struct SendJourneyView: View {
                 } else {
                     for i in snapshot!.documents {
                         if !self.sentJourneys.map({$0.name}).contains(i.documentID) {
-                            self.unsentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
+                            self.unsentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int))
                         }
                     }
                 }

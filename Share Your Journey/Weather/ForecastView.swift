@@ -17,7 +17,7 @@ struct ForecastView: View {
                 ForEach(self.forecastResponse.list, id: \.self.dtTxt) { forecastEntity in
                     VStack(spacing: 0) {
                         Text(self.getDayOfWeekAndTime(dateAndTimeString: forecastEntity.dtTxt))
-                    WeatherIconView(weatherArray: forecastEntity.weather, url: "")
+                    WeatherIconView(weatherArray: forecastEntity.weather)
                     Text("\(Int(forecastEntity.main.temp))°C")
                             .offset(y: -10)
                     }

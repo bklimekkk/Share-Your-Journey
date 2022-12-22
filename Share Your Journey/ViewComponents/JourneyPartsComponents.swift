@@ -97,4 +97,37 @@ struct SingleJourney: Hashable {
     var photos: [SinglePhoto]
     var photosLocations: [CLLocationCoordinate2D]
     var networkProblem: Bool = false
+
+    init(numberOfPhotos: Int, photos: [SinglePhoto], photosLocations: [CLLocationCoordinate2D]) {
+        self.email = ""
+        self.name = ""
+        self.place = ""
+        self.date = Date.now
+        self.numberOfPhotos = numberOfPhotos
+        self.photos = photos
+        self.photosLocations = photosLocations
+        self.networkProblem = false
+    }
+
+    init(email: String, name: String, place: String, date: Date, numberOfPhotos: Int, photos: [SinglePhoto], photosLocations: [CLLocationCoordinate2D], networkProblem: Bool) {
+        self.email = email
+        self.name = name
+        self.place = place
+        self.date = date
+        self.numberOfPhotos = numberOfPhotos
+        self.photos = photos
+        self.photosLocations = photosLocations
+        self.networkProblem = networkProblem
+    }
+
+    init(email: String, name: String, place: String, date: Date, numberOfPhotos: Int) {
+        self.email = email
+        self.name = name
+        self.place = place
+        self.date = date
+        self.numberOfPhotos = numberOfPhotos
+        self.photos = []
+        self.photosLocations = []
+        self.networkProblem = false
+    }
 }

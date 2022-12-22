@@ -13,9 +13,7 @@ struct WeatherView: View {
     @State private var weatherResponse = WeatherResponse(weather: [], main: Main(temp: 0.0,
                                                                                  pressure: 0.0,
                                                                                  humidity: 0.0),
-                                                         wind: Wind(speed: 0.0),
-                                                         name: "",
-                                                         sys: Sys(country: ""))
+                                                         wind: Wind(speed: 0.0))
     @State private var forecastResponse = ForecastResponse(list: [])
     var latitude: Double
     var longitude: Double

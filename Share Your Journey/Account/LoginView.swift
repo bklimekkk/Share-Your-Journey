@@ -30,12 +30,10 @@ class FirebaseSetup: NSObject {
 class AccountAccessManager: ObservableObject {
     //Variable responsible for checking if first screen is in registration or in login mode.
     @Published var register = false
-    
     //Variable checks if users verified themselves already.
     @Published var verificationNeeded = false
     //Variable triggers sheet with verification that is shown after users registers successfully.
     @Published var showVerificationMessage = false
-    
     //Variable checks if users want to reset their password.
     @Published var resetPassword = false
     //Variable justifies if screen should present users with reset password message.
@@ -47,7 +45,6 @@ class AccountAccessManager: ObservableObject {
 class ErrorManager: ObservableObject {
     //This variable is set to true if an error message should be shown.
     @Published var showErrorMessage = false
-    
     //This variable is set to relevant error message when needed.
     @Published var errorBody = ""
 }

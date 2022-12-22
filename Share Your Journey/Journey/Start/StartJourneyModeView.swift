@@ -13,9 +13,7 @@ struct StartJourneyModeView: View {
     var currentLocationManager: CurrentLocationManager
     var body: some View {
         Button {
-            withAnimation {
-                self.startJourney()
-            }
+            self.startJourney()
         } label: {
             ButtonView(buttonTitle: "Start journey")
         }
@@ -28,8 +26,6 @@ struct StartJourneyModeView: View {
      */
     func startJourney() {
         self.currentLocationManager.recenterLocation()
-        withAnimation {
             self.startedJourney = true
-        }
     }
 }

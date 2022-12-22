@@ -13,6 +13,14 @@ struct WeatherResponse: Codable {
     let wind: Wind
     let name: String
     let sys: Sys
+
+    init(weather: [Weather], main: Main, wind: Wind) {
+        self.weather = weather
+        self.main = main
+        self.wind = wind
+        self.name = ""
+        self.sys = Sys()
+    }
 }
 
 struct Weather: Codable {
@@ -33,6 +41,10 @@ struct Wind: Codable {
 
 struct Sys: Codable {
     let country: String
+
+    init() {
+        self.country = ""
+    }
 }
 
 

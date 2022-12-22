@@ -169,7 +169,7 @@ struct ListWithJourneys: View {
                 for i in querySnapshot!.documents {
                     if !self.journeysList.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {
                         self.journeysList.append(SingleJourney(email: i.get("email") as! String, name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?
-                            .dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
+                            .dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int))
                     }
                 }
             }

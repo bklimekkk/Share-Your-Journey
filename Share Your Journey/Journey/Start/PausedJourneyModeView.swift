@@ -68,9 +68,7 @@ struct PausedJourneyModeView: View {
      */
     func resumeJourney() {
         self.currentLocationManager.recenterLocation()
-        withAnimation {
-            self.startedJourney = true
-            self.paused = false
-        }
+        self.startedJourney = true
+        self.paused = false
     }
 }

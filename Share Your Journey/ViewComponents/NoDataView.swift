@@ -9,6 +9,12 @@ import SwiftUI
 
 struct NoDataView: View {
     var text: String
+    init() {
+        self.text = ""
+    }
+    init(text: String) {
+        self.text = text
+    }
     var body: some View {
         VStack {
             Spacer()
@@ -21,6 +27,6 @@ struct NoDataView: View {
 
 struct NoDataView_Previews: PreviewProvider {
     static var previews: some View {
-        NoDataView(text: "")
+        NoDataView()
     }
 }

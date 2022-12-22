@@ -120,7 +120,7 @@ struct YourJourneysList: View {
                     
                     //If conditions are met, journey's data is appended to the array.
                     if !self.sentByYou.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {
-                        self.sentByYou.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int, photos: [], photosLocations: []))
+                        self.sentByYou.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int))
                     }
                 }
             }
@@ -132,12 +132,10 @@ struct YourJourneysList: View {
      */
     func searchJourneyInDatabase(journey: SingleJourney) {
         let friendsPath = "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends"
-        
         FirebaseSetup.firebaseInstance.db.collection(friendsPath).getDocuments { snapshot, error in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
-                
                 //Firstly, algorithm searches for all user's friends, then it checks all journeys sent to them by this user.
                 for i in snapshot!.documents {
                     if i.documentID != self.email {

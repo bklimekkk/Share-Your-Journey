@@ -16,9 +16,7 @@ extension UIImage {
         }
         UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
         self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
-        
         let normalizedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        
         UIGraphicsEndImageContext()
         return normalizedImage;
     }
@@ -46,7 +44,8 @@ struct MapView: UIViewRepresentable {
     //This object is annotated as environmental in order to be called from many views.
     @EnvironmentObject var clManager: CurrentLocationManager
     
-    //Coordinator class is used to provide communication between all user's actions and the map. Each MapView() will need to define enfirontment object of type CurrentLocationManager.
+    //Coordinator class is used to provide communication between all user's actions and the map. Each MapView()
+    //will need to define enfirontment object of type CurrentLocationManager.
     final class Coordinator: NSObject, MKMapViewDelegate {
         var parent: MapView
         init(_ parent: MapView) {
@@ -55,16 +54,13 @@ struct MapView: UIViewRepresentable {
         
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
             if let title = view.annotation?.title, title != "My Location" {
-                
                 if let validTitle = Int(title!) {
                     self.parent.photoIndex = validTitle - 1
                 }
                 self.parent.clManager.mapView.setCenter(view.annotation!.coordinate, animated: true)
             }
-            
             self.parent.weatherLatitude = view.annotation?.coordinate.latitude ?? 0.0
             self.parent.weatherLongitude = view.annotation?.coordinate.longitude ?? 0.0
-            
             withAnimation(.easeInOut(duration: 0.15)) {
                 self.parent.showWeather = true
             }
@@ -90,18 +86,13 @@ struct MapView: UIViewRepresentable {
                 marker.markerTintColor = self.parent.tintColor
                 marker.glyphText = annotation.title as? String
                 marker.canShowCallout = true
-                
                 let leftButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
                 let rightButton = UIButton(frame: CGRect(x: 0, y: 0, width: 45, height: 40))
-                
                 let iconSizeConfiguration = UIImage.SymbolConfiguration(pointSize: 25)
-                
                 leftButton.setImage(UIImage(systemName: "location.north.circle", withConfiguration: iconSizeConfiguration), for: .normal)
                 rightButton.setImage(UIImage(systemName: "camera", withConfiguration: iconSizeConfiguration), for: .normal)
-                
                 leftButton.tintColor = self.parent.tintColor
                 rightButton.tintColor = self.parent.tintColor
-                
                 marker.leftCalloutAccessoryView = leftButton
                 marker.rightCalloutAccessoryView = rightButton
             } else {
@@ -129,21 +120,24 @@ struct MapView: UIViewRepresentable {
                 let routeRequest = MKDirections.Request()
                 routeRequest.source = MKMapItem(placemark: firstPoint)
                 routeRequest.destination = MKMapItem(placemark: secondPoint)
-                
                 //Depending on the choice, application will present users with different type of directions.
                 if self.parent.walking {
                     routeRequest.transportType = .walking
                 } else {
                     routeRequest.transportType = .automobile
                 }
-                
                 let directions = MKDirections(request: routeRequest)
                 directions.calculate { response, error in
                     if let route = response?.routes.first {
                         mapView.addOverlay(route.polyline)
                         
                         //Specifying how map's visible region should change when application displays a route.
-                        mapView.setVisibleMapRect(route.polyline.boundingMapRect, edgePadding: UIEdgeInsets(top: 0, left: 100, bottom: 0, right: 100), animated: true)
+                        mapView.setVisibleMapRect(route.polyline.boundingMapRect,
+                                                  edgePadding: UIEdgeInsets(top: 0,
+                                                                            left: 100,
+                                                                            bottom: 0,
+                                                                            right: 100),
+                                                  animated: true)
                     } else {
                         return
                     }
@@ -162,7 +156,6 @@ struct MapView: UIViewRepresentable {
             renderedRoutes.lineJoin = .round
             renderedRoutes.lineCap = .round
             renderedRoutes.miterLimit = .infinity
-            
             renderedRoutes.lineWidth = 7
             return renderedRoutes
         }
@@ -181,23 +174,22 @@ struct MapView: UIViewRepresentable {
     func makeUIView(context: Context) -> MKMapView {
         //mapView variable is set to mapView variable of clmanager(CurrentLocationManager object). Thanks to this changes from this object will update this mapView.
         let mapView = self.clManager.mapView
-        
         //mapView's delecate should be assigned to context.coordinator for the map to interact with user fully.
         mapView.delegate = context.coordinator
-        
         //Setting this Bool variable to true makes sure that application will present users with their location.
         mapView.showsUserLocation = true
-        
         //Setting this property of mapView object ensures that the map will update user's location when they change it.
         mapView.userTrackingMode = .follow
-        
         //Calling this function over here causes adding all user's locations that were recorded during the journey.
         //        LOCATION FUNCTIONALITY DOESN'T WORK YET
         //        addUserLocations(mapView: mapView)
         self.addPhotos(mapView: mapView)
-        
         if self.photosLocations.count > 0 {
-            self.clManager.mapView.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: self.photosLocations[0].latitude, longitude: self.photosLocations[0].longitude), latitudinalMeters: 1000, longitudinalMeters: 1000), animated: false)
+            self.clManager.mapView.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: self.photosLocations[0].latitude,
+                                                                                               longitude: self.photosLocations[0].longitude),
+                                                                latitudinalMeters: 1000,
+                                                                longitudinalMeters: 1000),
+                                             animated: false)
         }
         return mapView
     }

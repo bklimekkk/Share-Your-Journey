@@ -49,7 +49,10 @@ struct ListWithDownloadedJourneys: View {
                                 Text(DateManager().getDate(date: journey.date))
                                     .foregroundColor(.gray)
                             }
-                            NavigationLink (destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: true, path: "")) {
+                            NavigationLink (destination: SeeJourneyView(journey: journey,
+                                                                        email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",
+                                                                        downloadMode: true,
+                                                                        path: "")) {
                                 EmptyView()
                             }
                             .opacity(0)

@@ -209,6 +209,7 @@ struct SumUpView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Continue journey") {
+                        self.goBack = true
                         self.dismiss()
                     }
                 }

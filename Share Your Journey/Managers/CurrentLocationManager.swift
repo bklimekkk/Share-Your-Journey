@@ -26,7 +26,6 @@ class CurrentLocationManager: NSObject, CLLocationManagerDelegate, ObservableObj
         super.init()
         self.manager.delegate = self
         self.manager.desiredAccuracy = kCLLocationAccuracyBest
-        
         //Application needs to keep track of user's location even if application runs in the background or if the phone is locked.
         self.manager.requestWhenInUseAuthorization()
         

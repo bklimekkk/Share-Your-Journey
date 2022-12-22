@@ -10,6 +10,10 @@ import SwiftUI
 struct WeatherIconView: View {
     var weatherArray: [Weather]
     var url: String
+    init(weatherArray: [Weather]) {
+        self.weatherArray = weatherArray
+        self.url = ""
+    }
     var body: some View {
         AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(self.weatherArray.isEmpty ? "" : self.weatherArray[0].icon)@4x.png")) { image in
             image

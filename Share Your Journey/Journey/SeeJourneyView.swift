@@ -32,22 +32,16 @@ struct SeeJourneyView: View {
         case photoAlbum
         case threeDimensional
     }
-    
     //Variable controls if users want to receive walking or driving directions.
     @State var walking = false
-    
     //Object necessary for tracking user's location.
     @StateObject private var currentLocationManager = CurrentLocationManager()
-    
     //Variable is set to one of ViewType enum's cases.
     @State private var viewMode = ViewType.photoAlbum
-    
     //journey that is currently viewed by the user.
     @State var journey: SingleJourney
-    
     //all locations that are assigned to photos taken by user.
     @State private var locations: [PhotoLocation] = []
-    
     //Similar variables were described in SumUpView struct.
     @State private var highlightedPhotoIndex = 0
     @State private var showPicture = false
@@ -55,25 +49,18 @@ struct SeeJourneyView: View {
     @State private var highlightedPhoto: UIImage = UIImage()
     @State private var downloadedPhotos = false
     @State private var showDownloadAlert = false
-    
     //Variable controls if the journey can be found in user's downloaded journeys in the server.
     @State private var alreadyDownloaded = false
-    
     //Variable's value justifies if users want to change journeys's name before downloading it (if journey's name duplicates.
     @State private var changeName = false
-    
     //Variable's value justifies if journey was downloading after changing its name (if duplication occured).
     @State private var downloadChangedJourney = false
-    
     //Variable's value contains data about journey's new name (after changing it because of duplication).
     @State private var journeyNewName = ""
-    
     //Variable checks if presented journey was already downloaded (not to be mistaken with "areadyDownloaded which search for duplication in the Core Data).
     @State private var journeyIsDownloaded = false
-    
     @State private var showSendingView = false
     @State private var showPhotoDetails = false
-
     @State private var showWeather = false
     @State private var expandWeather = false
     @State private var weatherLatitude = 0.0
@@ -91,7 +78,7 @@ struct SeeJourneyView: View {
     //Variable checks if program is showing downloaded (Core Data) journey or the journey from the server.
     var downloadMode: Bool
     var path: String
-    
+
     var buttonColor: Color {
         self.colorScheme == .dark ? .white : .accentColor
     }
@@ -145,7 +132,15 @@ struct SeeJourneyView: View {
                         }
                     } else {
                         ZStack {
-                            MapView(walking: self.$walking, showPhoto: self.$showPicture, photoIndex: self.$highlightedPhotoIndex, showWeather: self.$showWeather, expandWeather: self.$expandWeather, weatherLatitude: self.$weatherLatitude, weatherLongitude: self.$weatherLongitude, photos: self.journey.photos.sorted{$1.number > $0.number}.map{$0.photo}, photosLocations: self.journey.photosLocations)
+                            MapView(walking: self.$walking,
+                                    showPhoto: self.$showPicture,
+                                    photoIndex: self.$highlightedPhotoIndex,
+                                    showWeather: self.$showWeather,
+                                    expandWeather: self.$expandWeather,
+                                    weatherLatitude: self.$weatherLatitude,
+                                    weatherLongitude: self.$weatherLongitude,
+                                    photos: self.journey.photos.sorted{$1.number > $0.number}.map{$0.photo},
+                                    photosLocations: self.journey.photosLocations)
                                 .edgesIgnoringSafeArea(.all)
                                 .environmentObject(self.currentLocationManager)
                                 .opacity(self.showPicture ? 0 : 1)
