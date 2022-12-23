@@ -155,23 +155,27 @@ struct StartView: View {
                     
                     Spacer()
                 }
-
                 //This else if statements block ensures that starting, pausing, resuming,
                 //quitting and completing the journey works in the most intuitive way.
                 if startedJourney && !journeyStateController.paused {
-                    RunningJourneyModeView(paused: $journeyStateController.paused,
-                                           pickAPhoto: $journeyStateController.pickAPhoto,
-                                           takeAPhoto: $journeyStateController.takeAPhoto,
-                                           currentLocationManager: currentLocationManager)
-                    
+                    HStack {
+                        RunningJourneyModeView(paused: $journeyStateController.paused,
+                                               pickAPhoto: $journeyStateController.pickAPhoto,
+                                               takeAPhoto: $journeyStateController.takeAPhoto,
+                                               currentLocationManager: currentLocationManager)
+                        PhotosCounterView(numberOfPhotos: self.arrayOfPhotos.count)
+                    }
                 } else if startedJourney && journeyStateController.paused {
-                    PausedJourneyModeView(arrayOfPhotos: $arrayOfPhotos,
-                                          alertMessage: $journeyStateController.alertMessage,
-                                          alertError: $journeyStateController.alertError,
-                                          paused: $journeyStateController.paused,
-                                          startedJourney: $startedJourney, alert: $alert,
-                                          alertBody: $journeyStateController.alertBody,
-                                          currentLocationManager: currentLocationManager)
+                    HStack {
+                        PausedJourneyModeView(arrayOfPhotos: $arrayOfPhotos,
+                                              alertMessage: $journeyStateController.alertMessage,
+                                              alertError: $journeyStateController.alertError,
+                                              paused: $journeyStateController.paused,
+                                              startedJourney: $startedJourney, alert: $alert,
+                                              alertBody: $journeyStateController.alertBody,
+                                              currentLocationManager: currentLocationManager)
+                        PhotosCounterView(numberOfPhotos: self.arrayOfPhotos.count)
+                    }
                 } else {
                     StartJourneyModeView(startedJourney: self.$startedJourney, currentLocationManager: self.currentLocationManager)
                 }
@@ -179,20 +183,20 @@ struct StartView: View {
             .padding()
         }
         .task {
-            if !self.currentImages.isEmpty {
+            if !self.currentImages.isEmpty && self.arrayOfPhotos.isEmpty {
                 for i in self.currentImages {
-                    arrayOfPhotos.append(SinglePhoto(number: i.getId,
-                                                     photo: i.getImage,
-                                                     location: i.getLocation,
-                                                     subLocation: i.getSubLocation,
-                                                     administrativeArea: i.getAdministrativeArea,
-                                                     country: i.getCountry,
-                                                     isoCountryCode: i.getIsoCountryCode,
-                                                     name: i.getName,
-                                                     postalCode: i.getPostalCode,
-                                                     ocean: i.getOcean,
-                                                     inlandWater: i.getInlandWater,
-                                                     areasOfInterest: i.getAreasOfInterst.components(separatedBy: ",")))
+                    self.arrayOfPhotos.append(SinglePhoto(number: i.getId,
+                                                          photo: i.getImage,
+                                                          location: i.getLocation,
+                                                          subLocation: i.getSubLocation,
+                                                          administrativeArea: i.getAdministrativeArea,
+                                                          country: i.getCountry,
+                                                          isoCountryCode: i.getIsoCountryCode,
+                                                          name: i.getName,
+                                                          postalCode: i.getPostalCode,
+                                                          ocean: i.getOcean,
+                                                          inlandWater: i.getInlandWater,
+                                                          areasOfInterest: i.getAreasOfInterst.components(separatedBy: ",")))
                 }
             }
             
@@ -221,6 +225,9 @@ struct StartView: View {
                                                                                                  photos: self.arrayOfPhotos,
                                                                                                  photosLocations: self.arrayOfPhotosLocations))
             }
+            .fullScreenCover(isPresented: self.$subscription.showPanel, content: {
+                SubscriptionView(subscriber: self.$subscription.subscriber)
+            })
         })
         .fullScreenCover(isPresented: self.$loggedOut) {
             //If user isn't logged in, screen presented by StartView struct is fully covered by View generated by this struct.

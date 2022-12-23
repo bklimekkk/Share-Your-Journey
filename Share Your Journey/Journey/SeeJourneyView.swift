@@ -43,7 +43,7 @@ struct SeeJourneyView: View {
     //all locations that are assigned to photos taken by user.
     @State private var locations: [PhotoLocation] = []
     //Similar variables were described in SumUpView struct.
-    @State private var highlightedPhotoIndex = 0
+    @State private var currentPhotoIndex = 0
     @State private var showPicture = false
     @State private var savedToCameraRoll = false
     @State private var highlightedPhoto: UIImage = UIImage()
@@ -102,7 +102,7 @@ struct SeeJourneyView: View {
                             DownloadGalleryButton(journey: self.journey, showDownloadAlert: self.$showDownloadAlert, showPicture: self.$showPicture, subscriber: self.$subscription.subscriber, showPanel: self.$subscription.showPanel)
                         }
                         
-                        PhotosAlbumView(showPicture: self.$showPicture, photoIndex: self.$highlightedPhotoIndex, highlightedPhoto: self.$highlightedPhoto, layout: self.layout, singleJourney: self.journey)
+                        PhotosAlbumView(showPicture: self.$showPicture, photoIndex: self.$currentPhotoIndex, highlightedPhoto: self.$highlightedPhoto, layout: self.layout, singleJourney: self.journey)
                             .padding(.horizontal, 5)
                         
                     }
@@ -134,7 +134,7 @@ struct SeeJourneyView: View {
                         ZStack {
                             MapView(walking: self.$walking,
                                     showPhoto: self.$showPicture,
-                                    photoIndex: self.$highlightedPhotoIndex,
+                                    photoIndex: self.$currentPhotoIndex,
                                     showWeather: self.$showWeather,
                                     expandWeather: self.$expandWeather,
                                     weatherLatitude: self.$weatherLatitude,
@@ -251,7 +251,7 @@ struct SeeJourneyView: View {
                     }
                 }
             }
-            HighlightedPhoto(savedToCameraRoll: self.$savedToCameraRoll, highlightedPhotoIndex: self.$highlightedPhotoIndex, showPicture: self.$showPicture, highlightedPhoto: self.$highlightedPhoto, subscriber: self.$subscription.subscriber, showPanel: self.$subscription.showPanel, journey: self.journey)
+            HighlightedPhoto(savedToCameraRoll: self.$savedToCameraRoll, highlightedPhotoIndex: self.$currentPhotoIndex, showPicture: self.$showPicture, highlightedPhoto: self.$highlightedPhoto, subscriber: self.$subscription.subscriber, showPanel: self.$subscription.showPanel, journey: self.journey)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -304,7 +304,7 @@ struct SeeJourneyView: View {
             SubscriptionView(subscriber: self.$subscription.subscriber)
         })
         .sheet(isPresented: self.$showPhotoDetails, content: {
-            PhotoDetailsView(photo: self.journey.photos[self.highlightedPhotoIndex])
+            PhotoDetailsView(photo: self.journey.photos[self.currentPhotoIndex])
         })
         .sheet(isPresented: self.$showSendingView, content: {
             SendViewedJourneyView(journey: self.journey)

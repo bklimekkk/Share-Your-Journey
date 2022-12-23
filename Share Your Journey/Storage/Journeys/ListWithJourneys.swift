@@ -43,7 +43,6 @@ struct ListWithJourneys: View {
                                     .foregroundColor(.gray)
                             }
 
-
                             NavigationLink (destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
                                 EmptyView()
                             }

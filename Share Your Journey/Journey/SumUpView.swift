@@ -42,7 +42,7 @@ struct SumUpView: View {
     //Location manager used for the current view (each view with map is supposed to have it's own lcation manager).
     @StateObject private var currentLocationManager = CurrentLocationManager()
     //Variable representing user's current location. Right now it's set to one default value, but it is changed right after the view appears.
-    @State private var currentLocation = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), latitudinalMeters: 1000, longitudinalMeters: 1000)
+    @State private var currentLocation = MKCoordinateRegion(center: CLLocationCoordinate2D(), latitudinalMeters: 0, longitudinalMeters: 0)
     //Variable controls if viewed image should be saved to camera roll.
     @State private var savedToCameraRoll = false
     //Variable controls if users tapped any picture. If yes, it's set to true and the image is enlarged.

@@ -14,7 +14,7 @@ struct InstructionsView: View {
     var buttonColor: Color {
         self.colorScheme == .dark ? .white : .accentColor
     }
-    
+
     var body: some View {
         NavigationView {
             Form {
@@ -121,9 +121,9 @@ struct InstructionsView: View {
                     
                     HStack {
                         SymbolButtonView(buttonImage: "pause.fill")
-                    .background(Color.accentColor)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .frame(width: 40)
+                            .background(Color.accentColor)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .frame(width: 40)
                         Text("Allows to pause the journey.")
                     }
                     
@@ -142,7 +142,7 @@ struct InstructionsView: View {
                             .padding(.horizontal, 4)
                         Text("Allows users to move downloaded journey to the list of saved journeys.")
                     }
-                 
+
                 }
             }
             
