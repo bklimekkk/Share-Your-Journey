@@ -174,8 +174,10 @@ struct SettingsView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
-                    Button("Back to app") {
+                    Button {
                         self.dismiss()
+                    }label: {
+                        SheetDismissButtonView()
                     }
                 }
             }

@@ -148,8 +148,10 @@ struct InstructionsView: View {
             
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
-                    Button("Back to app") {
+                    Button {
                         self.dismiss()
+                    }label: {
+                       SheetDismissButtonView()
                     }
                 }
             }

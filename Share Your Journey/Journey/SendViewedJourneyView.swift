@@ -30,7 +30,7 @@ struct SendViewedJourneyView: View {
                                 } else {
                                     if querySnapshot!.documents.map({$0.documentID}).contains(self.journey.name) {
                                         self.showDuplicationAlert = true
-
+                                        
                                     } else {
                                         SendJourneyManager().sendJourney(journey: self.journey, targetEmail: friend)
                                         withAnimation {
@@ -52,6 +52,13 @@ struct SendViewedJourneyView: View {
             .navigationTitle("Choose recipients")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                    Button {
+                        self.dismiss()
+                    } label: {
+                        SheetDismissButtonView()
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
                         self.dismiss()

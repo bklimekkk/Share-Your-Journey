@@ -28,8 +28,7 @@ struct ImagesView: View {
                     Button{
                         self.dismiss()
                     }label:{
-                        Image(systemName: "chevron.compact.down")
-                            .font(.system(size: 40))
+                        SheetDismissButtonView()
                     }
                     .opacity(self.showPicture ? 0 : 1)
                     .disabled(self.showPicture ? true : false)

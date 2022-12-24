@@ -32,8 +32,7 @@ struct PhotoDetailsView: View {
                     Button {
                         self.dismiss()
                     } label: {
-                        Image(systemName: "chevron.compact.down")
-                            .font(.system(size: 40))
+                        SheetDismissButtonView()
                     }
                 }
             }

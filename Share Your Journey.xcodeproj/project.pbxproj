@@ -52,6 +52,7 @@
 		86640DB827D588DC00F5BE1A /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 86640DB727D588DC00F5BE1A /* FirebaseFirestore */; };
 		86640DBA27D588DC00F5BE1A /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 86640DB927D588DC00F5BE1A /* FirebaseStorage */; };
 		8665C79129574075007D7354 /* PhotosCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C79029574075007D7354 /* PhotosCounterView.swift */; };
+		8665C79329574592007D7354 /* SheetDismissButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C79229574592007D7354 /* SheetDismissButtonView.swift */; };
 		866A7E1A293221C100CD3340 /* SpotDetailsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A7E19293221C100CD3340 /* SpotDetailsManager.swift */; };
 		866A7E1C29326BF500CD3340 /* PhotoDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */; };
 		8671E6FE2876D24300E4A5AC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8671E6FD2876D24300E4A5AC /* InstructionsView.swift */; };
@@ -147,6 +148,7 @@
 		86573E5D27F8370B003E5CF8 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8665C79029574075007D7354 /* PhotosCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCounterView.swift; sourceTree = "<group>"; };
+		8665C79229574592007D7354 /* SheetDismissButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetDismissButtonView.swift; sourceTree = "<group>"; };
 		866A7E19293221C100CD3340 /* SpotDetailsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotDetailsManager.swift; sourceTree = "<group>"; };
 		866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailsView.swift; sourceTree = "<group>"; };
 		8671E6FD2876D24300E4A5AC /* InstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
@@ -449,6 +451,7 @@
 				864B50CA2872E26B0072A5BB /* ImagesView.swift */,
 				8671E6FD2876D24300E4A5AC /* InstructionsView.swift */,
 				8665C79029574075007D7354 /* PhotosCounterView.swift */,
+				8665C79229574592007D7354 /* SheetDismissButtonView.swift */,
 			);
 			path = Start;
 			sourceTree = "<group>";
@@ -643,6 +646,7 @@
 				864B50C92872D76F0072A5BB /* WebView.swift in Sources */,
 				86FCCC62281025DD005FD678 /* ListWithFriends.swift in Sources */,
 				863CF4FF27BA2A31007B82D4 /* ChatView.swift in Sources */,
+				8665C79329574592007D7354 /* SheetDismissButtonView.swift in Sources */,
 				86FCCC79281079BD005FD678 /* PickerComponents.swift in Sources */,
 				865452AD2809D452008041A8 /* DownloadChangesView.swift in Sources */,
 				86C649F627D1B43A00891C24 /* Journey+CoreDataClass.swift in Sources */,
