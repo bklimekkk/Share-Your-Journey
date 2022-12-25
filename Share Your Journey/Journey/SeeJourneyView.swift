@@ -141,9 +141,9 @@ struct SeeJourneyView: View {
                                     weatherLongitude: self.$weatherLongitude,
                                     photos: self.journey.photos.sorted{$1.number > $0.number}.map{$0.photo},
                                     photosLocations: self.journey.photosLocations)
-                                .edgesIgnoringSafeArea(.all)
-                                .environmentObject(self.currentLocationManager)
-                                .opacity(self.showPicture ? 0 : 1)
+                            .edgesIgnoringSafeArea(.all)
+                            .environmentObject(self.currentLocationManager)
+                            .opacity(self.showPicture ? 0 : 1)
                             
                             if self.showWeather {
                                 VStack {
@@ -172,7 +172,6 @@ struct SeeJourneyView: View {
                                 HStack {
                                     VStack {
                                         Spacer()
-                                        
                                         if !self.downloadMode && !self.journeyIsDownloaded {
                                             if self.journey.photos.map ({return $0.photo}).contains(UIImage()) {
                                                 ProgressView()
@@ -210,17 +209,17 @@ struct SeeJourneyView: View {
                                                             break
                                                         }
                                                     }
-                                                    
-                                                    
                                                     withAnimation {
                                                         self.journey.networkProblem = false
                                                     }
                                                 }
-                                                
                                             } label: {
                                                 MapButton(imageName: "plus")
                                                     .foregroundColor(self.colorScheme == .light ? Color.accentColor : .white)
                                             }
+                                        } else {
+                                            MapButton(imageName: "checkmark")
+                                                .disabled(true)
                                         }
                                         
                                         //Icons enabling users to choose between walking and driving directions.
@@ -233,8 +232,6 @@ struct SeeJourneyView: View {
                                             MapTypeButton()
                                         }
                                         .foregroundColor(self.buttonColor)
-                                        
-                                        
                                         Button {
                                             self.currentLocationManager.recenterLocation()
                                         } label: {
@@ -243,10 +240,17 @@ struct SeeJourneyView: View {
                                         .foregroundColor(self.buttonColor)
                                     }
                                     Spacer()
+                                    if self.journey.numberOfPhotos > 1 {
+                                        JourneyControlView(journey: self.journey,
+                                                           currentLocationManager: self.currentLocationManager,
+                                                           currentPhotoIndex: self.$currentPhotoIndex)
+                                    }
                                 }
                                 .padding()
-                                
                             }
+                        }
+                        .task {
+                            self.currentPhotoIndex = 0
                         }
                     }
                 }
@@ -262,12 +266,12 @@ struct SeeJourneyView: View {
                         Image(systemName: "info.circle")
                     }
                 } else {
-                Button {
-                    self.showSendingView = true
-                }label:{
-                    Image(systemName: "square.and.arrow.up")
+                    Button {
+                        self.showSendingView = true
+                    }label:{
+                        Image(systemName: "square.and.arrow.up")
+                    }
                 }
-            }
             }
         }
         .task {
@@ -394,7 +398,7 @@ struct SeeJourneyView: View {
      */
     func downloadPhotoDetails(queryDocumentSnapshot: QueryDocumentSnapshot) {
         self.journey.photosLocations.append(CLLocationCoordinate2D(latitude: queryDocumentSnapshot.get("latitude") as! CLLocationDegrees,
-                                                              longitude: queryDocumentSnapshot.get("longitude") as! CLLocationDegrees))
+                                                                   longitude: queryDocumentSnapshot.get("longitude") as! CLLocationDegrees))
         
         //Image's reverence / url is used for downloading image from storage later on.
         let photoReference = FirebaseSetup.firebaseInstance.storage.reference().child(queryDocumentSnapshot.get("photoUrl") as! String)

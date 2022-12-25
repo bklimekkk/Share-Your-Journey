@@ -33,7 +33,7 @@ struct SumUpView: View {
     //this variable controls which of three modes program should currently display.
     @State private var viewType = SeeJourneyView.ViewType.photoAlbum
     //variable represents the journey user has taken before sum-up screen appeared.
-    @State var singleJourney: SingleJourney
+    @State var journey: SingleJourney
     //Variables are set to false and are never changed in this struct. They are used to be passed as parameters for MapView.
     @State var walking = false
     @State var done = false
@@ -74,135 +74,143 @@ struct SumUpView: View {
         NavigationView {
             ZStack {
                 if !self.showPicture {
-                VStack {
-                    if self.viewType == .photoAlbum {
-                        JourneyPickerView(choice: self.$viewType, firstChoice: "Album", secondChoice: "Map")
-                            .padding(.horizontal, 5)
-                        VStack {
-                            if !self.downloadedPhotos {
-
-                                //Button used to download all journey images.
-                                DownloadGalleryButton(journey: self.singleJourney, showDownloadAlert: self.$showDownloadAlert, showPicture: self.$showPicture, subscriber: self.$subscription.subscriber, showPanel: self.$subscription.showPanel)
-                            }
-
-                            //List containing all photos.
-                            PhotosAlbumView(showPicture: self.$showPicture,
-                                            photoIndex: self.$photoIndex,
-                                            highlightedPhoto: self.$highlightedPhoto,
-                                            layout: layout, singleJourney: self.singleJourney)
+                    VStack {
+                        if self.viewType == .photoAlbum {
+                            JourneyPickerView(choice: self.$viewType, firstChoice: "Album", secondChoice: "Map")
                                 .padding(.horizontal, 5)
-                        }
-                        .alert("Download all images", isPresented: self.$showDownloadAlert) {
-                            Button("Cancel", role: .cancel){}
-                            Button("Download") {
-                                for photo in self.singleJourney.photos.map({return $0.photo}) {
+                            VStack {
+                                if !self.downloadedPhotos {
 
-                                    //Each photo is saved to camera roll.
-                                    UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
+                                    //Button used to download all journey images.
+                                    DownloadGalleryButton(journey: self.journey, showDownloadAlert: self.$showDownloadAlert, showPicture: self.$showPicture, subscriber: self.$subscription.subscriber, showPanel: self.$subscription.showPanel)
                                 }
-                                withAnimation {
-                                    self.downloadedPhotos = true
-                                }
+
+                                //List containing all photos.
+                                PhotosAlbumView(showPicture: self.$showPicture,
+                                                photoIndex: self.$photoIndex,
+                                                highlightedPhoto: self.$highlightedPhoto,
+                                                layout: layout, singleJourney: self.journey)
+                                .padding(.horizontal, 5)
                             }
-                        } message: {
-                            Text("Are you sure that you want to download all images to your gallery?")
-                        }
-                    } else {
+                            .alert("Download all images", isPresented: self.$showDownloadAlert) {
+                                Button("Cancel", role: .cancel){}
+                                Button("Download") {
+                                    for photo in self.journey.photos.map({return $0.photo}) {
 
-                        //As users have 3 options of viewing photos, they are presented with picker that contains three values to choose.
-                        JourneyPickerView(choice: $viewType, firstChoice: "Album", secondChoice: "Map")
-                            .padding(.horizontal, 5)
+                                        //Each photo is saved to camera roll.
+                                        UIImageWriteToSavedPhotosAlbum(photo, nil, nil, nil)
+                                    }
+                                    withAnimation {
+                                        self.downloadedPhotos = true
+                                    }
+                                }
+                            } message: {
+                                Text("Are you sure that you want to download all images to your gallery?")
+                            }
+                        } else {
+
+                            //As users have 3 options of viewing photos, they are presented with picker that contains three values to choose.
+                            JourneyPickerView(choice: $viewType, firstChoice: "Album", secondChoice: "Map")
+                                .padding(.horizontal, 5)
 
 
-                        ZStack {
-                            //Depending on option chosen by users, program will present them with different type of map (or photo album).
+                            ZStack {
+                                //Depending on option chosen by users, program will present them with different type of map (or photo album).
 
-                            MapView(walking: self.$walking,
-                                    showPhoto: self.$showPicture,
-                                    photoIndex: self.$photoIndex,
-                                    showWeather: self.$showWeather,
-                                    expandWeather: self.$expandWeather,
-                                    weatherLatitude: self.$weatherLatitude,
-                                    weatherLongitude: self.$weatherLongitude,
-                                    photos: self.singleJourney.photos.sorted{$1.number > $0.number}.map{$0.photo},
-                                    photosLocations: self.singleJourney.photosLocations)
+                                MapView(walking: self.$walking,
+                                        showPhoto: self.$showPicture,
+                                        photoIndex: self.$photoIndex,
+                                        showWeather: self.$showWeather,
+                                        expandWeather: self.$expandWeather,
+                                        weatherLatitude: self.$weatherLatitude,
+                                        weatherLongitude: self.$weatherLongitude,
+                                        photos: self.journey.photos.sorted{$1.number > $0.number}.map{$0.photo},
+                                        photosLocations: self.journey.photosLocations)
                                 .edgesIgnoringSafeArea(.all)
                                 .environmentObject(self.currentLocationManager)
                                 .opacity(self.showPicture ? 0 : 1)
-                            VStack {
-                                Spacer()
                                 VStack {
-                                    HStack {
-                                        VStack {
-                                            DirectionIcons(mapType: self.$currentLocationManager.mapView.mapType,
-                                                           subscriber: self.$subscription.subscriber,
-                                                           showPanel: self.$subscription.showPanel,
-                                                           walking: self.$walking)
-                                            Button {
-                                                self.currentLocationManager.changeTypeOfMap()
-                                            } label: {
-                                                MapTypeButton()
-                                            }
-                                            .foregroundColor(self.buttonColor)
+                                    Spacer()
+                                    VStack {
+                                        HStack {
+                                            VStack {
+                                                DirectionIcons(mapType: self.$currentLocationManager.mapView.mapType,
+                                                               subscriber: self.$subscription.subscriber,
+                                                               showPanel: self.$subscription.showPanel,
+                                                               walking: self.$walking)
+                                                Button {
+                                                    self.currentLocationManager.changeTypeOfMap()
+                                                } label: {
+                                                    MapTypeButton()
+                                                }
+                                                .foregroundColor(self.buttonColor)
 
-                                            Button {
-                                                self.currentLocationManager.recenterLocation()
-                                            } label: {
-                                                LocationButton()
+                                                Button {
+                                                    self.currentLocationManager.recenterLocation()
+                                                } label: {
+                                                    LocationButton()
+                                                }
+                                                .foregroundColor(self.buttonColor)
                                             }
-                                            .foregroundColor(self.buttonColor)
+                                            Spacer()
+                                            if self.journey.numberOfPhotos > 1 {
+                                                JourneyControlView(journey: self.journey,
+                                                                   currentLocationManager: self.currentLocationManager,
+                                                                   currentPhotoIndex: self.$photoIndex)
+                                            }
                                         }
-                                        Spacer()
                                     }
                                 }
+                                .padding()
                             }
-                            .padding()
+                            .task {
+                                self.photoIndex = 0
+                            }
+                        }
+
+                        if self.done {
+                            HStack(spacing: 10) {
+                                Button {
+                                    self.sendJourney = true
+                                } label: {
+                                    //Button is shown only if the journey is saved.
+                                    ButtonView(buttonTitle: "Send To Friend")
+                                        .background(Color.blue)
+                                }
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                Button {
+                                    self.showSumUp = false
+                                    self.dismiss()
+                                } label: {
+
+                                    //Button is shown only if the journey is saved.
+                                    ButtonView(buttonTitle: "Done")
+                                        .background(Color.green)
+                                }
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                            }
+                            .padding(.horizontal, 5)
+                            .padding(.bottom, 5)
+                        } else {
+                            SumUpFunctionalityButtonsView(journey: self.$journey, showDeleteAlert: self.$showDeleteAlert, done: self.$done)
                         }
                     }
-
-                    if self.done {
-                        HStack(spacing: 10) {
-                            Button {
-                                self.sendJourney = true
-                            } label: {
-                                //Button is shown only if the journey is saved.
-                                ButtonView(buttonTitle: "Send To Friend")
-                                    .background(Color.blue)
-                            }
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            Button {
-                                self.showSumUp = false
-                                self.dismiss()
-                            } label: {
-
-                                //Button is shown only if the journey is saved.
-                                ButtonView(buttonTitle: "Done")
-                                    .background(Color.green)
-                            }
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .alert("Quit", isPresented: $showDeleteAlert) {
+                        Button("Cancel", role: .cancel){}
+                        Button("Quit", role: .destructive){
+                            self.showSumUp = false
                         }
-                        .padding(.horizontal, 5)
-                        .padding(.bottom, 5)
-                    } else {
-                        SumUpFunctionalityButtonsView(journey: self.$singleJourney, showDeleteAlert: self.$showDeleteAlert, done: self.$done)
+                    } message: {
+                        Text("Are you sure that you want to quit? The journey will be deleted.")
                     }
                 }
-                .alert("Quit", isPresented: $showDeleteAlert) {
-                    Button("Cancel", role: .cancel){}
-                    Button("Quit", role: .destructive){
-                        self.showSumUp = false
-                    }
-                } message: {
-                    Text("Are you sure that you want to quit? The journey will be deleted.")
-                }
-            }
                 HighlightedPhoto(savedToCameraRoll: self.$savedToCameraRoll,
                                  highlightedPhotoIndex: self.$photoIndex,
                                  showPicture: self.$showPicture,
                                  highlightedPhoto: self.$highlightedPhoto,
                                  subscriber: self.$subscription.subscriber,
                                  showPanel: self.$subscription.showPanel,
-                                 journey: self.singleJourney)
+                                 journey: self.journey)
             }
             .navigationTitle("Sum up")
             .navigationBarTitleDisplayMode(.inline)
@@ -218,7 +226,7 @@ struct SumUpView: View {
                 SubscriptionView(subscriber: self.$subscription.subscriber)
             }
             .sheet(isPresented: self.$sendJourney, content: {
-                SendViewedJourneyView(journey: self.singleJourney)
+                SendViewedJourneyView(journey: self.journey)
             })
             .task {
                 Purchases.shared.getCustomerInfo { (customerInfo, error) in

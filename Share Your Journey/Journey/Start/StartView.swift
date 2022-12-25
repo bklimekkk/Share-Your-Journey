@@ -163,7 +163,7 @@ struct StartView: View {
                                                pickAPhoto: $journeyStateController.pickAPhoto,
                                                takeAPhoto: $journeyStateController.takeAPhoto,
                                                currentLocationManager: currentLocationManager)
-                        PhotosCounterView(numberOfPhotos: self.arrayOfPhotos.count)
+                        PhotosCounterView(number: self.arrayOfPhotos.count)
                     }
                 } else if startedJourney && journeyStateController.paused {
                     HStack {
@@ -174,7 +174,7 @@ struct StartView: View {
                                               startedJourney: $startedJourney, alert: $alert,
                                               alertBody: $journeyStateController.alertBody,
                                               currentLocationManager: currentLocationManager)
-                        PhotosCounterView(numberOfPhotos: self.arrayOfPhotos.count)
+                        PhotosCounterView(number: self.arrayOfPhotos.count)
                     }
                 } else {
                     StartJourneyModeView(startedJourney: self.$startedJourney, currentLocationManager: self.currentLocationManager)
@@ -266,7 +266,7 @@ struct StartView: View {
                 self.journeyStateController.goBack = false
             }
         }) {
-            SumUpView(singleJourney: SingleJourney(numberOfPhotos: self.arrayOfPhotos.count,
+            SumUpView(journey: SingleJourney(numberOfPhotos: self.arrayOfPhotos.count,
                                                    photos: self.arrayOfPhotos,
                                                    photosLocations: self.arrayOfPhotosLocations),
                       showSumUp: self.$journeyStateController.showSumUp,

@@ -53,6 +53,7 @@
 		86640DBA27D588DC00F5BE1A /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 86640DB927D588DC00F5BE1A /* FirebaseStorage */; };
 		8665C79129574075007D7354 /* PhotosCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C79029574075007D7354 /* PhotosCounterView.swift */; };
 		8665C79329574592007D7354 /* SheetDismissButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C79229574592007D7354 /* SheetDismissButtonView.swift */; };
+		8665C7952958CA50007D7354 /* JourneyControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C7942958CA50007D7354 /* JourneyControlView.swift */; };
 		866A7E1A293221C100CD3340 /* SpotDetailsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A7E19293221C100CD3340 /* SpotDetailsManager.swift */; };
 		866A7E1C29326BF500CD3340 /* PhotoDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */; };
 		8671E6FE2876D24300E4A5AC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8671E6FD2876D24300E4A5AC /* InstructionsView.swift */; };
@@ -149,6 +150,7 @@
 		8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8665C79029574075007D7354 /* PhotosCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCounterView.swift; sourceTree = "<group>"; };
 		8665C79229574592007D7354 /* SheetDismissButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetDismissButtonView.swift; sourceTree = "<group>"; };
+		8665C7942958CA50007D7354 /* JourneyControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyControlView.swift; sourceTree = "<group>"; };
 		866A7E19293221C100CD3340 /* SpotDetailsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotDetailsManager.swift; sourceTree = "<group>"; };
 		866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailsView.swift; sourceTree = "<group>"; };
 		8671E6FD2876D24300E4A5AC /* InstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
@@ -345,6 +347,7 @@
 				8639E00E289694D100D7A3F5 /* SendViewedJourneyView.swift */,
 				86C649FC27D1DF0700891C24 /* SeeJourneyView.swift */,
 				865452AC2809D452008041A8 /* DownloadChangesView.swift */,
+				8665C7942958CA50007D7354 /* JourneyControlView.swift */,
 			);
 			path = Journey;
 			sourceTree = "<group>";
@@ -617,6 +620,7 @@
 				86C649F727D1B43A00891C24 /* Journey+CoreDataProperties.swift in Sources */,
 				8672551E27B80C8A00DC5001 /* FriendsView.swift in Sources */,
 				864FEF4228A7E4010060E94D /* CurrentImage+CoreDataProperties.swift in Sources */,
+				8665C7952958CA50007D7354 /* JourneyControlView.swift in Sources */,
 				864FEEF5289B092D0060E94D /* ForecastModel.swift in Sources */,
 				86FCCC6028102449005FD678 /* ListWithRequests.swift in Sources */,
 				8639E00F289694D100D7A3F5 /* SendViewedJourneyView.swift in Sources */,

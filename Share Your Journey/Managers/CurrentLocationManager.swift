@@ -66,7 +66,16 @@ class CurrentLocationManager: NSObject, CLLocationManagerDelegate, ObservableObj
      */
     func centerLocation() {
         self.mapView.setRegion(self.currentRegion, animated: false)
-}
+    }
+
+    /**
+     Function is responsible for centering the map's visible region on specific coordinates.
+     */
+    func centerMapOnPin(location: CLLocationCoordinate2D) {
+        self.mapView.setCenter(location, animated: true)
+        //this line provides a smooth animation to centering aciton.
+        self.mapView.setVisibleMapRect(self.mapView.visibleMapRect, animated: true)
+    }
     
     /**
      This function is responsible for changing the type of map.

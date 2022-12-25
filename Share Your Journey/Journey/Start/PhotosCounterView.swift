@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct PhotosCounterView: View {
-    var numberOfPhotos: Int
+    var number: Int
     var body: some View {
-        Text(String(numberOfPhotos))
+        Text(String(number))
             .foregroundColor(.gray)
             .bold()
             .font(.system(size: 40))
@@ -20,6 +20,6 @@ struct PhotosCounterView: View {
 
 struct PhotosCounterView_Previews: PreviewProvider {
     static var previews: some View {
-        PhotosCounterView(numberOfPhotos: 0)
+        PhotosCounterView(number: 0)
     }
 }
