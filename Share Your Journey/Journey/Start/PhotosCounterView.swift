@@ -10,7 +10,7 @@ import SwiftUI
 struct PhotosCounterView: View {
     var number: Int
     var body: some View {
-        Text(String(number))
+        Text(String(self.number))
             .foregroundColor(.gray)
             .bold()
             .font(.system(size: 40))

@@ -196,7 +196,7 @@ struct SeeJourneyView: View {
                                                             self.alreadyDownloaded = true
                                                             return
                                                         }
-                                                        self.downloadJourney(name: self.journey.name)
+                                                        self.downloadJourney(name: self.journey.place)
                                                         withAnimation {
                                                             self.journeyIsDownloaded = true
                                                         }
@@ -207,14 +207,11 @@ struct SeeJourneyView: View {
                                                     MapButton(imageName: "square.and.arrow.down")
                                                         .foregroundColor(self.subscription.subscriber ? self.buttonColor : self.gold)
                                                 }
-                                                
                                             }
                                         } else if self.downloadMode && self.journey.networkProblem {
                                             Button{
-                                                
                                                 if self.network.connected {
                                                     self.createJourney()
-                                                    
                                                     for i in self.journeys {
                                                         if i.name == self.journey.name {
                                                             self.moc.delete(i)
@@ -288,9 +285,14 @@ struct SeeJourneyView: View {
                         Image(systemName: "info.circle")
                     }
                 } else {
-                    Button {
-                        self.showSendingView = true
-                    }label:{
+                    Menu {
+                        Button("Send journey in the app") {
+                            self.showSendingView = true
+                        }
+                        Button("Send photos via social media") {
+                            self.sendPhotosViaSocialMedia()
+                        }
+                    } label: {
                         Image(systemName: "square.and.arrow.up")
                     }
                 }
@@ -464,14 +466,12 @@ struct SeeJourneyView: View {
      */
     func downloadJourney(name: String) {
         let newJourney = Journey(context: self.moc)
-        
         newJourney.name = name
         newJourney.email = FirebaseSetup.firebaseInstance.auth.currentUser?.email
         newJourney.date = Date()
         newJourney.networkProblem = false
         newJourney.photosNumber = (self.journey.numberOfPhotos) as NSNumber
         var index = 0
-        
         while index < self.journey.photos.count {
             let newImage = Photo(context: moc)
             newImage.id = Double(index + 1)
@@ -551,5 +551,10 @@ struct SeeJourneyView: View {
                 "areasOfInterest": self.journey.photos[index].areasOfInterest.joined(separator: ",")
             ])
         }
+    }
+
+    func sendPhotosViaSocialMedia() {
+        let activityViewController = UIActivityViewController(activityItems: self.journey.photos.map{$0.photo}, applicationActivities: nil)
+        UIApplication.shared.windows.first?.rootViewController!.present(activityViewController, animated: true, completion: nil)
     }
 }
