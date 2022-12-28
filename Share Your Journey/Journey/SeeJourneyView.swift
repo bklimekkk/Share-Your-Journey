@@ -99,12 +99,25 @@ struct SeeJourneyView: View {
                 if self.viewMode == .photoAlbum {
                     VStack {
                         if !self.downloadedPhotos {
-                            DownloadGalleryButton(journey: self.journey, showDownloadAlert: self.$showDownloadAlert, showPicture: self.$showPicture, subscriber: self.$subscription.subscriber, showPanel: self.$subscription.showPanel)
+                            DownloadGalleryButton(journey: self.journey,
+                                                  showDownloadAlert: self.$showDownloadAlert,
+                                                  showPicture: self.$showPicture,
+                                                  subscriber: self.$subscription.subscriber,
+                                                  showPanel: self.$subscription.showPanel)
                         }
-                        
-                        PhotosAlbumView(showPicture: self.$showPicture, photoIndex: self.$currentPhotoIndex, highlightedPhoto: self.$highlightedPhoto, layout: self.layout, singleJourney: self.journey)
+
+                        if self.journey.photos.map ({return $0.photo}).contains(UIImage()) {
+                            Spacer()
+                            ProgressView()
+                            Spacer()
+                        } else {
+                            PhotosAlbumView(showPicture: self.$showPicture,
+                                            photoIndex: self.$currentPhotoIndex,
+                                            highlightedPhoto: self.$highlightedPhoto,
+                                            layout: self.layout,
+                                            singleJourney: self.journey)
                             .padding(.horizontal, 5)
-                        
+                        }
                     }
                     .alert("Download all images", isPresented: self.$showDownloadAlert) {
                         Button("Cancel", role: .cancel){}
@@ -223,7 +236,10 @@ struct SeeJourneyView: View {
                                         }
                                         
                                         //Icons enabling users to choose between walking and driving directions.
-                                        DirectionIcons(mapType: self.$currentLocationManager.mapView.mapType, subscriber: self.$subscription.subscriber, showPanel: self.$subscription.showPanel, walking: self.$walking)
+                                        DirectionIcons(mapType: self.$currentLocationManager.mapView.mapType,
+                                                       subscriber: self.$subscription.subscriber,
+                                                       showPanel: self.$subscription.showPanel,
+                                                       walking: self.$walking)
                                         
                                         //Buttons enabling users to re-center the map and change map's mode.
                                         Button {
@@ -255,7 +271,13 @@ struct SeeJourneyView: View {
                     }
                 }
             }
-            HighlightedPhoto(savedToCameraRoll: self.$savedToCameraRoll, highlightedPhotoIndex: self.$currentPhotoIndex, showPicture: self.$showPicture, highlightedPhoto: self.$highlightedPhoto, subscriber: self.$subscription.subscriber, showPanel: self.$subscription.showPanel, journey: self.journey)
+            HighlightedPhoto(savedToCameraRoll: self.$savedToCameraRoll,
+                             highlightedPhotoIndex: self.$currentPhotoIndex,
+                             showPicture: self.$showPicture,
+                             highlightedPhoto: self.$highlightedPhoto,
+                             subscriber: self.$subscription.subscriber,
+                             showPanel: self.$subscription.showPanel,
+                             journey: self.journey)
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -359,7 +381,8 @@ struct SeeJourneyView: View {
                 for index in 0...i.photosArray.count - 1 {
                     let singlePhoto = SinglePhoto(number: index, photo: i.photosArray[index].getImage)
                     self.journey.photos.append(singlePhoto)
-                    self.journey.photosLocations.append(CLLocationCoordinate2D(latitude: i.photosArray[index].latitude, longitude: i.photosArray[index].longitude))
+                    self.journey.photosLocations.append(CLLocationCoordinate2D(latitude: i.photosArray[index].latitude,
+                                                                               longitude: i.photosArray[index].longitude))
                 }
                 break
             }

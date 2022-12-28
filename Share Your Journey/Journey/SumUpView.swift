@@ -82,7 +82,11 @@ struct SumUpView: View {
                                 if !self.downloadedPhotos {
 
                                     //Button used to download all journey images.
-                                    DownloadGalleryButton(journey: self.journey, showDownloadAlert: self.$showDownloadAlert, showPicture: self.$showPicture, subscriber: self.$subscription.subscriber, showPanel: self.$subscription.showPanel)
+                                    DownloadGalleryButton(journey: self.journey,
+                                                          showDownloadAlert: self.$showDownloadAlert,
+                                                          showPicture: self.$showPicture,
+                                                          subscriber: self.$subscription.subscriber,
+                                                          showPanel: self.$subscription.showPanel)
                                 }
 
                                 //List containing all photos.
@@ -220,6 +224,7 @@ struct SumUpView: View {
                         self.goBack = true
                         self.dismiss()
                     }
+                    .disabled(self.done)
                 }
             }
             .fullScreenCover(isPresented: self.$subscription.showPanel) {
