@@ -19,7 +19,7 @@ struct DirectionIcons: View {
         self.colorScheme == .dark ? .white : .accentColor
     }
     var gold: Color {
-        Color(uiColor: UIColor(red: 0.90, green: 0.42, blue: 0.00, alpha: 1.00))
+        Color(uiColor: Colors.premiumColor)
     }
     @Environment(\.colorScheme) var colorScheme
     @Binding var walking: Bool
@@ -34,10 +34,10 @@ struct DirectionIcons: View {
             }
         } label : {
             if self.walking {
-                MapButton(imageName: "figure.walk")
+                MapButton(imageName: Icons.figureWalk)
                     .foregroundColor(Color.green)
             } else {
-                 MapButton(imageName: "figure.walk")
+                 MapButton(imageName: Icons.figureWalk)
                     .foregroundColor(self.subscriber ? self.buttonColor : self.gold)
             }
         }
@@ -46,10 +46,10 @@ struct DirectionIcons: View {
             self.walking = false
         } label : {
             if self.walking {
-                MapButton(imageName: "car")
+                MapButton(imageName: Icons.car)
                     .foregroundColor(self.buttonColor)
             } else {
-                MapButton(imageName: "car")
+                MapButton(imageName: Icons.car)
                     .foregroundColor(Color.green)
             }
         }
@@ -68,7 +68,7 @@ struct SumUpFunctionalityButtonsView: View {
             Button {
                 self.showDeleteAlert = true
             } label: {
-                ButtonView(buttonTitle: "Quit")
+                ButtonView(buttonTitle: UIStrings.quitButtonTitle)
                     .background(.red)
             }
             .background(Color.gray)
@@ -86,7 +86,7 @@ struct SumUpFunctionalityButtonsView: View {
                 self.createJourney(journey: self.journey)
                 self.done = true
             } label: {
-                ButtonView(buttonTitle: "Save journey")
+                ButtonView(buttonTitle: UIStrings.saveJourneyButtonTitle)
             }
             .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -100,7 +100,7 @@ struct SumUpFunctionalityButtonsView: View {
      */
     func createJourney(journey: SingleJourney) {
         let instanceReference = FirebaseSetup.firebaseInstance
-        instanceReference.db.collection("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? "")/journeys").document(journey.name).setData([
+        instanceReference.db.collection("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? UIStrings.emptyString)/journeys").document(journey.name).setData([
             "name" : journey.name,
             "place" : journey.place,
             "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",

@@ -14,7 +14,7 @@ struct ForecastRequest {
     var longitude: Double
     
     func fetchForecastData() async {
-        guard let url = URL(string: "https://api.openweathermap.org/data/2.5/forecast?lat=\(self.latitude)&lon=\(self.longitude)&units=metric&appid=de4cd596a3675b54b7984438a796ad56") else {
+        guard let url = URL(string: "\(Links.openWeatherEndpoint)forecast?lat=\(self.latitude)&lon=\(self.longitude)&units=metric&appid=\(Links.openWeatherAPIKey)") else {
             print("Invalid url")
             return
         }

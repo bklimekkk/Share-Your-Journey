@@ -9,45 +9,38 @@ import SwiftUI
 
 //Struct contains code responsible for generating a button allowing users to reset their password with their e-mail address, if needed. 
 struct ResetPasswordView: View {
-    
     //This variable is set to e-mail address given by user.
     @Binding var resetEmail: String
-    
     //Variable responsible for dismissing reset sheet.
     @Environment(\.dismiss) var dismiss
-    
-    //Variable containing data input by user. 
+    //Variable containing data input by user.
     @State var email: String
-    
     @StateObject private var errorManager = ErrorManager()
     
     var body: some View {
         VStack (spacing: 20) {
-            Text("Enter your email address to reset password")
-    
-            EmailTextField(label: "Your e-mail address", email: self.$email)
+            Text(UIStrings.enterEmailToReset)
+            EmailTextField(label: UIStrings.yourEmail, email: self.$email)
                 .padding(.horizontal, 10)
             Spacer()
             Button{
-                
                 if self.email.isEmpty {
-                    self.errorManager.errorBody = "Enter email to reset the password"
+                    self.errorManager.errorBody = UIStrings.enterEmailToReset
                     self.errorManager.showErrorMessage = true
                     return
                 }
-                
-                //Sending a password-reset message to a given email address. 
+                //Sending a password-reset message to a given email address.
                 FirebaseSetup.firebaseInstance.auth.sendPasswordReset(withEmail: self.email) { error in
                     if error != nil {
-                        print("There was an error while sending reset password email")
+                        print(UIStrings.resetPasswordEmailError)
                     }
                 }
                 self.resetEmail = self.email
                 self.dismiss()
             } label: {
-                ButtonView(buttonTitle: "Reset password")
+                ButtonView(buttonTitle: UIStrings.resetPassword)
             }
-            .alert("Email field is empty", isPresented: self.$errorManager.showErrorMessage, actions: {}, message: {
+            .alert(UIStrings.emailFieldIsEmpty, isPresented: self.$errorManager.showErrorMessage, actions: {}, message: {
                 Text(self.errorManager.errorBody)
             })
             .background(Color.accentColor)

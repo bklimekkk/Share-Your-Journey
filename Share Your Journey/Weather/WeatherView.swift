@@ -17,15 +17,15 @@ struct WeatherView: View {
     @State private var forecastResponse = ForecastResponse(list: [])
     var latitude: Double
     var longitude: Double
-    @State private var currentWeatherInformation = "current"
-    var currentOrForecast = ["current", "forecast"]
+    @State private var currentWeatherInformation = UIStrings.current
+    var currentOrForecast = [UIStrings.current, UIStrings.forecast]
     var body: some View {
         VStack {
             HStack {
-                Text("\(self.weatherResponse.name)\(self.weatherResponse.name.isEmpty ? "" : ",") \(self.weatherResponse.sys.country)")
+                Text("\(self.weatherResponse.name)\(self.weatherResponse.name.isEmpty ? UIStrings.emptyString : ",") \(self.weatherResponse.sys.country)")
                     .font(.headline).bold()
                 Spacer()
-                Picker("current", selection: self.$currentWeatherInformation) {
+                Picker(UIStrings.current, selection: self.$currentWeatherInformation) {
                     ForEach(self.currentOrForecast, id: \.self) { service in
                         Text(service)
                     }
@@ -33,7 +33,7 @@ struct WeatherView: View {
                 .pickerStyle(.segmented)
             }
             .padding(.horizontal, 7)
-            if self.currentWeatherInformation == "current" {
+            if self.currentWeatherInformation == UIStrings.current {
                 CurrentWeatherView(weatherResponse: self.weatherResponse)
             } else {
                 ForecastView(forecastResponse: self.forecastResponse, latitude: self.latitude, longitude: self.longitude)
@@ -41,8 +41,6 @@ struct WeatherView: View {
         }
         .padding(.vertical, 7)
         .background(
-//            colorScheme == .light ? Color(red: 0.81, green: 0.93, blue: 0.99) : Color(red: 0.00, green: 0.20, blue: 0.30),
-//            in: RoundedRectangle(cornerRadius: 10, style: .continuous)
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(.ultraThinMaterial)
         )
@@ -62,7 +60,7 @@ struct CurrentWeatherView: View {
     var body: some View {
         HStack (alignment: .top) {
             VStack(spacing: 0) {
-                AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(self.weatherResponse.weather.isEmpty ? "" : self.weatherResponse.weather[0].icon)@4x.png")) { image in
+                AsyncImage(url: URL(string: "\(Links.openWeatherImageEndpoint)\(self.weatherResponse.weather.isEmpty ? UIStrings.emptyString : self.weatherResponse.weather[0].icon)@4x.png")) { image in
                     image
                         .resizable()
                         .scaledToFit()
@@ -81,7 +79,7 @@ struct CurrentWeatherView: View {
             .padding(.top, 6)
             Spacer()
             VStack(spacing: 0) {
-                Image(systemName: "wind")
+                Image(systemName: Icons.wind)
                     .foregroundColor(.gray)
                     .font(.system(size: 41))
                 Text("\(Int(self.weatherResponse.wind.speed))km/h")
@@ -92,7 +90,7 @@ struct CurrentWeatherView: View {
             .offset(x: -15, y: 7)
             Spacer()
             VStack(spacing: 0) {
-                Image(systemName: "drop.fill")
+                Image(systemName: Icons.dropFill)
                     .foregroundColor(.blue)
                     .font(.system(size: 38))
                 Text("\(Int(self.weatherResponse.main.humidity))%")

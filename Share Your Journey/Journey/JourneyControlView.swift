@@ -21,7 +21,7 @@ struct JourneyControlView: View {
                     self.currentLocationManager.centerMapOnPin(location:
                                                                 self.journey.photosLocations[currentPhotoIndex])
                 }label: {
-                    MapButton(imageName: "arrow.left")
+                    MapButton(imageName: Icons.arrowLeft)
                 }
                 .disabled(self.currentPhotoIndex == 0)
                 Button{
@@ -29,7 +29,7 @@ struct JourneyControlView: View {
                     self.currentLocationManager.centerMapOnPin(location:
                                                                 self.journey.photosLocations[currentPhotoIndex])
                 }label: {
-                    MapButton(imageName: "arrow.right")
+                    MapButton(imageName: Icons.arrowRight)
                 }
                 .disabled(self.currentPhotoIndex == self.journey.numberOfPhotos - 1)
             }

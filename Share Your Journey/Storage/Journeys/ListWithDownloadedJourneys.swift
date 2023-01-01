@@ -14,7 +14,6 @@ struct ListWithDownloadedJourneys: View {
 
     //Similar variable was described in SeeJourneyView struct.
     @FetchRequest(entity: Journey.entity(), sortDescriptors: [], predicate: nil, animation: nil) var journeys: FetchedResults<Journey>
-    
     //Variable is used to save changes made to journeys collection in Core Data.
     @Environment(\.managedObjectContext) var moc
     
@@ -31,7 +30,7 @@ struct ListWithDownloadedJourneys: View {
     var body: some View {
         VStack {
             if self.downloadedJourneysFilteredList.isEmpty {
-                NoDataView(text: "No journeys to show. Tap to refresh.")
+                NoDataView(text: UIStrings.noJourneysToShow)
                     .onTapGesture {
                         self.populateWithDownloadedJourneys()
                     }
@@ -50,12 +49,12 @@ struct ListWithDownloadedJourneys: View {
                                     .foregroundColor(.gray)
                             }
                             NavigationLink (destination: SeeJourneyView(journey: journey,
-                                                                        email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",
+                                                                        email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
                                                                         downloadMode: true,
-                                                                        path: "")) {
+                                                                        path: UIStrings.emptyString)) {
                                 EmptyView()
                             }
-                            .opacity(0)
+                                                                        .opacity(0)
                         }
                     }
                     .onDelete(perform: self.delete)
@@ -63,13 +62,13 @@ struct ListWithDownloadedJourneys: View {
                 .listStyle(.plain)
                 .alert(isPresented: self.$askAboutDeletion) {
                     //After tapping "x" button, users are always asked if they are sure to delete this particular journey.
-                    Alert (title: Text("Delete journey"),
-                           message: Text("Are you sure that you want to delete this journey?"),
-                           primaryButton: .cancel(Text("Cancel")) {
+                    Alert (title: Text(UIStrings.deleteJourney),
+                           message: Text(UIStrings.sureToDelete),
+                           primaryButton: .cancel(Text(UIStrings.cancel)) {
                         self.askAboutDeletion = false
-                        self.journeyToDelete = ""
+                        self.journeyToDelete = UIStrings.emptyString
                     },
-                           secondaryButton: .destructive(Text("Delete")) {
+                           secondaryButton: .destructive(Text(UIStrings.delete)) {
                         self.deleteDownloadedJourney()
                     }
                     )
@@ -96,7 +95,7 @@ struct ListWithDownloadedJourneys: View {
 
         for i in self.journeys.filter({return $0.email == FirebaseSetup.firebaseInstance.auth.currentUser?.email}) {
             if !self.downloadedJourneysList.map({return $0.name}).contains(i.name) {
-                self.downloadedJourneysList.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", name: i.name ?? "", place: "", date: i.date ?? Date(), numberOfPhotos: i.photosNumber as! Int, photos: [], photosLocations: [], networkProblem: i.networkProblem))
+                self.downloadedJourneysList.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString, name: i.name ?? UIStrings.emptyString, place: UIStrings.emptyString, date: i.date ?? Date(), numberOfPhotos: i.photosNumber as! Int, photos: [], photosLocations: [], networkProblem: i.networkProblem))
             }
         }
     }
@@ -124,7 +123,7 @@ struct ListWithDownloadedJourneys: View {
         }
         
         self.askAboutDeletion = false
-        self.journeyToDelete = ""
+        self.journeyToDelete = UIStrings.emptyString
     }
 
     func delete(at offsets: IndexSet) {

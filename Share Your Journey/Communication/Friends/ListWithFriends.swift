@@ -17,7 +17,7 @@ struct ListWithFriends: View {
         VStack {
             
             if self.filteredFriendsList.isEmpty {
-                NoDataView(text: "No friends to show. Tap to refresh.")
+                NoDataView(text: UIStrings.noFriendsToShow)
                     .onTapGesture {
                         self.populateFriends()
                     }
@@ -31,7 +31,6 @@ struct ListWithFriends: View {
                                     .padding(.vertical, 15)
                                 Spacer()
                             }
-
                             NavigationLink(destination: ChatView(email: friend)) {
                                 EmptyView()
                             }

@@ -22,15 +22,15 @@ struct PausedJourneyModeView: View {
     
     var body: some View {
         HStack {
-            MapButton(imageName: "plus.app.fill")
+            MapButton(imageName: Icons.plusAppFill)
                 .disabled(true)
-            MapButton(imageName: "camera.fill")
+            MapButton(imageName: Icons.cameraFill)
                 .disabled(true)
                 .padding(.trailing, 10)
             Button {
                 self.resumeJourney()
             } label: {
-                SymbolButtonView(buttonImage: "play.fill")
+                SymbolButtonView(buttonImage: Icons.playFill)
             }
             .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -41,11 +41,11 @@ struct PausedJourneyModeView: View {
                 if self.arrayOfPhotos.count > 0 {
                     self.alertMessage = true
                 } else {
-                    self.alertBody = "Journey should contain at least one photo"
+                    self.alertBody = UIStrings.shouldContainOnePhoto
                     self.alertError = true
                 }
             } label: {
-                SymbolButtonView(buttonImage: "checkmark")
+                SymbolButtonView(buttonImage: Icons.checkmark)
             }
             .background(Color.green)
             .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -56,7 +56,7 @@ struct PausedJourneyModeView: View {
                 self.alert = .quit
                 self.alertMessage = true
             } label: {
-                SymbolButtonView(buttonImage: "xmark")
+                SymbolButtonView(buttonImage: Icons.xmark)
             }
             .background(Color.red)
             .clipShape(RoundedRectangle(cornerRadius: 10))

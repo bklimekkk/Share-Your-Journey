@@ -13,19 +13,19 @@ struct PhotoDetailsView: View {
     var body: some View {
         NavigationView {
             List {
-                PhotoDetailView(title: "Location", information: self.photo.location)
-                PhotoDetailView(title: "Sublocation", information: self.photo.subLocation)
-                PhotoDetailView(title: "Administrative Area", information: self.photo.administrativeArea)
-                PhotoDetailView(title: "Country", information: self.photo.country)
-                PhotoDetailView(title: "Country Code", information: self.photo.isoCountryCode)
-                PhotoDetailView(title: "Name", information: self.photo.name)
-                PhotoDetailView(title: "Postal Code", information: self.photo.postalCode)
-                PhotoDetailView(title: "Ocean", information: self.photo.ocean)
-                PhotoDetailView(title: "Inland Water", information: self.photo.inlandWater)
-                PhotoDetailView(title: "AreasOfInterest", information: self.photo.areasOfInterest.joined(separator: ","))
+                PhotoDetailView(title: UIStrings.location, information: self.photo.location)
+                PhotoDetailView(title: UIStrings.subLocation, information: self.photo.subLocation)
+                PhotoDetailView(title: UIStrings.administrativeArea, information: self.photo.administrativeArea)
+                PhotoDetailView(title: UIStrings.country, information: self.photo.country)
+                PhotoDetailView(title: UIStrings.countryCode, information: self.photo.isoCountryCode)
+                PhotoDetailView(title: UIStrings.name, information: self.photo.name)
+                PhotoDetailView(title: UIStrings.postalCode, information: self.photo.postalCode)
+                PhotoDetailView(title: UIStrings.ocean, information: self.photo.ocean)
+                PhotoDetailView(title: UIStrings.inlandWater, information: self.photo.inlandWater)
+                PhotoDetailView(title: UIStrings.areasOfInterest, information: self.photo.areasOfInterest.joined(separator: ","))
             }
             .listStyle(.plain)
-            .navigationTitle("Details")
+            .navigationTitle(UIStrings.details)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {

@@ -12,28 +12,22 @@ struct JourneysView: View {
     
     //Variable's value justifies if program should show list of downloaded journeys or list of journeys pulled from the server.
     @State private var downloaded = false
-    
     //Variable is supposed to contain all journeys that belong to the user.
     @State private var journeysList: [SingleJourney] = []
-    
     //Variable is supposed to contain all journeys that user has downloaded before.
     @State private var downloadedJourneysList: [SingleJourney] = []
-    
     //Variable is supposed to contain name of journey that needs to be deleted.
-    @State private var journeyToDelete = ""
-    
+    @State private var journeyToDelete = UIStrings.emptyString
     //Variable's value justifies if program should as user about deleting journey with alert.
     @State private var askAboutDeletion = false
-    
     //Variable contains data entered by user to search through list of existing journeys.
-    @State private var searchedJourney = ""
-    
+    @State private var searchedJourney = UIStrings.emptyString
     //Variable's value justifies if deleted journey should be deleted from storage as well (if it doesn't exist anywhere else in the system.
     @State private var deleteFromStorage = true
     
     //Variable is calculated by filtering list with user's journeys.
     private var journeysFilteredList: [SingleJourney]  {
-        if self.searchedJourney == "" {
+        if self.searchedJourney == UIStrings.emptyString {
             return self.journeysList
         } else {
             return self.journeysList.filter({return $0.name.lowercased().contains(self.searchedJourney.lowercased())})
@@ -42,7 +36,7 @@ struct JourneysView: View {
     
     //Variable is calculated by filtering list with user's downloaded journeys.
     private var downloadedJourneysFilteredList: [SingleJourney]  {
-        if self.searchedJourney == "" {
+        if self.searchedJourney == UIStrings.emptyString {
             return self.downloadedJourneysList
         } else {
             return self.downloadedJourneysList.filter({return $0.name.lowercased().contains(self.searchedJourney.lowercased())})
@@ -53,10 +47,10 @@ struct JourneysView: View {
         
 
         VStack {
-            PickerView(choice: self.$downloaded, firstChoice: "Saved", secondChoice: "Downloaded")
+            PickerView(choice: self.$downloaded, firstChoice: UIStrings.saved, secondChoice: UIStrings.downloaded)
                 .padding()
             
-            SearchField(text: "Search journey", search: self.$searchedJourney)
+            SearchField(text: UIStrings.searchJourney, search: self.$searchedJourney)
             
             if self.downloaded {
                 ListWithDownloadedJourneys(downloadedJourneysFilteredList: self.downloadedJourneysFilteredList, downloadedJourneysList: self.$downloadedJourneysList, journeyToDelete: self.$journeyToDelete, askAboutDeletion: self.$askAboutDeletion)

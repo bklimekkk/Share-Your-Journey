@@ -15,7 +15,7 @@ struct SendViewedJourneyView: View {
     @State private var showDuplicationAlert = false
     @State private var sendDuplicate = false
     var email: String {
-        FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? ""
+        FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
     }
     var body: some View {
         NavigationView {
@@ -49,7 +49,7 @@ struct SendViewedJourneyView: View {
                 
             }
             .listStyle(.plain)
-            .navigationTitle("Choose recipients")
+            .navigationTitle(UIStrings.chooseRecipients)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
@@ -60,15 +60,15 @@ struct SendViewedJourneyView: View {
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button(UIStrings.done) {
                         self.dismiss()
                     }
                 }
             }
-            .alert("Duplicate journey", isPresented: self.$showDuplicationAlert, actions: {
-                Button("Ok", role: .cancel){ }
+            .alert(UIStrings.duplicateJourney, isPresented: self.$showDuplicationAlert, actions: {
+                Button(UIStrings.ok, role: .cancel){ }
             },message: {
-                Text("This journey already exists in your conversation with this person.")
+                Text(UIStrings.journeyAlreadyExists)
             })
             .task {
                 FirebaseSetup.firebaseInstance.db.collection("users/\(self.email)/friends").getDocuments { querySnapshot, error in
@@ -85,7 +85,6 @@ struct SendViewedJourneyView: View {
                                             self.listOfFriends.append(i.documentID)
                                         }
                                     }
-                                    
                                 }
                             }
                         }

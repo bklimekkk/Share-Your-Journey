@@ -15,7 +15,7 @@ struct WeatherIconView: View {
         self.url = ""
     }
     var body: some View {
-        AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(self.weatherArray.isEmpty ? "" : self.weatherArray[0].icon)@4x.png")) { image in
+        AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(self.weatherArray.isEmpty ? UIStrings.emptyString : self.weatherArray[0].icon)@4x.png")) { image in
             image
                 .resizable()
                 .scaledToFit()

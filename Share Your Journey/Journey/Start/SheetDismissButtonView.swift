@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SheetDismissButtonView: View {
     var body: some View {
-        Image(systemName: "chevron.compact.down")
+        Image(systemName: Icons.chevronCompactDown)
             .font(.system(size: 40))
     }
 }

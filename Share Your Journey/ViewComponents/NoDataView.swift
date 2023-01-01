@@ -10,7 +10,7 @@ import SwiftUI
 struct NoDataView: View {
     var text: String
     init() {
-        self.text = ""
+        self.text = UIStrings.emptyString
     }
     init(text: String) {
         self.text = text

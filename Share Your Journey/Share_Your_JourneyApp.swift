@@ -24,7 +24,7 @@ struct Share_Your_JourneyApp: App {
     func setupRevenueCat() {
        // appl_UjmZibTkIjZGigTrJdEeDDVHqqQ
         Purchases.logLevel = .debug
-        Purchases.configure(withAPIKey: "appl_UjmZibTkIjZGigTrJdEeDDVHqqQ")
+        Purchases.configure(withAPIKey: Links.revenueCatAPIKey)
 //        Purchases.configure(withAPIKey: "appl_UjmZibTkIjZGigTrJdEeDDVHqqQ", appUserID: nil, observerMode: false, userDefaults: UserDefaults.standard, useStoreKit2IfAvailable: true)
     }
     

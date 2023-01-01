@@ -14,23 +14,23 @@ struct VerificationInformation: View {
     var buttonColor: Color {
         self.colorScheme == .dark ? .white : .accentColor
     }
-    //An environment variable responsible for dismissing the sheet after "OK" button is clicked.
+    //An environment variable responsible for dismissing the sheet after "Ok" button is clicked.
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         NavigationView {
             Form {
-                Image(systemName: "person.fill.checkmark")
+                Image(systemName: Icons.personFillCheckmark)
                     .foregroundColor(self.buttonColor)
           
-                Text("A verification e-mail has been sent to \(self.email), verify yourself to be able to log in. If you don't find the e-mail, make sure you check the spam.")
+                Text("\(UIStrings.verificationEmailSent) \(self.email)\(UIStrings.verifyYourself)")
             }
-            .navigationTitle("Verification e-mail")
+            .navigationTitle(UIStrings.verificationEmail)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
-                    Button("Proceed to app") {
+                    Button(UIStrings.proceedToApp) {
                         self.presentationMode.wrappedValue.dismiss()
                     }
                 }

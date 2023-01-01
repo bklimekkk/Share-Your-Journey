@@ -19,7 +19,6 @@ extension CLLocationCoordinate2D: Hashable {
         hasher.combine(longitude)
     }
 }
-
 //Struct contains code that generates screen that users see after finishing the journey.
 struct SumUpView: View {
     @StateObject var subscription = Subscription()
@@ -29,7 +28,6 @@ struct SumUpView: View {
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-    
     //this variable controls which of three modes program should currently display.
     @State private var viewType = SeeJourneyView.ViewType.photoAlbum
     //variable represents the journey user has taken before sum-up screen appeared.
@@ -76,11 +74,10 @@ struct SumUpView: View {
                 if !self.showPicture {
                     VStack {
                         if self.viewType == .photoAlbum {
-                            JourneyPickerView(choice: self.$viewType, firstChoice: "Album", secondChoice: "Map")
+                            JourneyPickerView(choice: self.$viewType, firstChoice: UIStrings.album, secondChoice: UIStrings.map)
                                 .padding(.horizontal, 5)
                             VStack {
                                 if !self.downloadedPhotos {
-
                                     //Button used to download all journey images.
                                     DownloadGalleryButton(journey: self.journey,
                                                           showDownloadAlert: self.$showDownloadAlert,
@@ -88,7 +85,6 @@ struct SumUpView: View {
                                                           subscriber: self.$subscription.subscriber,
                                                           showPanel: self.$subscription.showPanel)
                                 }
-
                                 //List containing all photos.
                                 PhotosAlbumView(showPicture: self.$showPicture,
                                                 photoIndex: self.$photoIndex,
@@ -96,9 +92,9 @@ struct SumUpView: View {
                                                 layout: layout, singleJourney: self.journey)
                                 .padding(.horizontal, 5)
                             }
-                            .alert("Download all images", isPresented: self.$showDownloadAlert) {
-                                Button("Cancel", role: .cancel){}
-                                Button("Download") {
+                            .alert(UIStrings.downloadAllImages, isPresented: self.$showDownloadAlert) {
+                                Button(UIStrings.cancel, role: .cancel){}
+                                Button(UIStrings.download) {
                                     for photo in self.journey.photos.map({return $0.photo}) {
 
                                         //Each photo is saved to camera roll.
@@ -109,18 +105,15 @@ struct SumUpView: View {
                                     }
                                 }
                             } message: {
-                                Text("Are you sure that you want to download all images to your gallery?")
+                                Text(UIStrings.areYouSureToDownload)
                             }
                         } else {
 
                             //As users have 3 options of viewing photos, they are presented with picker that contains three values to choose.
-                            JourneyPickerView(choice: $viewType, firstChoice: "Album", secondChoice: "Map")
+                            JourneyPickerView(choice: $viewType, firstChoice: UIStrings.album, secondChoice: UIStrings.map)
                                 .padding(.horizontal, 5)
-
-
                             ZStack {
                                 //Depending on option chosen by users, program will present them with different type of map (or photo album).
-
                                 MapView(walking: self.$walking,
                                         showPhoto: self.$showPicture,
                                         photoIndex: self.$photoIndex,
@@ -171,14 +164,13 @@ struct SumUpView: View {
                                 self.photoIndex = 0
                             }
                         }
-
                         if self.done {
                             HStack(spacing: 10) {
                                 Button {
                                     self.sendJourney = true
                                 } label: {
                                     //Button is shown only if the journey is saved.
-                                    ButtonView(buttonTitle: "Send To Friend")
+                                    ButtonView(buttonTitle: UIStrings.sendToFriend)
                                         .background(Color.blue)
                                 }
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -188,7 +180,7 @@ struct SumUpView: View {
                                 } label: {
 
                                     //Button is shown only if the journey is saved.
-                                    ButtonView(buttonTitle: "Done")
+                                    ButtonView(buttonTitle: UIStrings.done)
                                         .background(Color.green)
                                 }
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -199,13 +191,13 @@ struct SumUpView: View {
                             SumUpFunctionalityButtonsView(journey: self.$journey, showDeleteAlert: self.$showDeleteAlert, done: self.$done)
                         }
                     }
-                    .alert("Quit", isPresented: $showDeleteAlert) {
-                        Button("Cancel", role: .cancel){}
-                        Button("Quit", role: .destructive){
+                    .alert(UIStrings.quit, isPresented: $showDeleteAlert) {
+                        Button(UIStrings.cancel, role: .cancel){}
+                        Button(UIStrings.quit, role: .destructive){
                             self.showSumUp = false
                         }
                     } message: {
-                        Text("Are you sure that you want to quit? The journey will be deleted.")
+                        Text(UIStrings.areYouSureToQuit)
                     }
                 }
                 HighlightedPhoto(savedToCameraRoll: self.$savedToCameraRoll,
@@ -216,11 +208,11 @@ struct SumUpView: View {
                                  showPanel: self.$subscription.showPanel,
                                  journey: self.journey)
             }
-            .navigationTitle("Sum up")
+            .navigationTitle(UIStrings.sumUp)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Continue journey") {
+                    Button(UIStrings.continueJourney) {
                         self.goBack = true
                         self.dismiss()
                     }
@@ -235,12 +227,11 @@ struct SumUpView: View {
             })
             .task {
                 Purchases.shared.getCustomerInfo { (customerInfo, error) in
-                    if customerInfo!.entitlements["allfeatures"]?.isActive == true {
+                    if customerInfo!.entitlements[Links.allFeaturesEntitlement]?.isActive == true {
                         self.subscription.subscriber = true
                     }
                 }
             }
         }
-        
     }
 }

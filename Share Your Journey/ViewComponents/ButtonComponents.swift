@@ -40,20 +40,20 @@ struct SymbolButtonView: View {
 //Struct generating standard map type button used to change type of map.
 struct LocationButton: View {
     var body: some View {
-        MapButton(imageName: "location.fill")
+        MapButton(imageName: Icons.locationFill)
     }
 }
 
 //Struct generating standard map type button used to center the the map on user's location.
 struct MapTypeButton: View {
     var body: some View {
-        MapButton(imageName: "map")
+        MapButton(imageName: Icons.map)
     }
 }
 
 struct ImageButton: View {
     var body: some View {
-        MapButton(imageName: "photo.fill.on.rectangle.fill")
+        MapButton(imageName: Icons.photoFillOnRectangleFill)
     }
 }
 
@@ -68,7 +68,7 @@ struct DownloadGalleryButton: View {
     @Binding var showPanel: Bool
     
     var gold: Color {
-        Color(uiColor: UIColor(red: 0.90, green: 0.42, blue: 0.00, alpha: 1.00))
+        Color(uiColor: Colors.premiumColor)
     }
     
     var body: some View {
@@ -79,7 +79,7 @@ struct DownloadGalleryButton: View {
                 self.showPanel = true
             }
         } label: {
-            ButtonView(buttonTitle: "Save all images to camera roll")
+            ButtonView(buttonTitle: UIStrings.saveAllImagesToCameraRoll)
         }
         .background(subscriber ? (self.journey.photos.map ({return $0.photo}).contains(UIImage()) ? Color.gray : Color.accentColor) : self.gold)
         .clipShape(RoundedRectangle(cornerRadius: 10))

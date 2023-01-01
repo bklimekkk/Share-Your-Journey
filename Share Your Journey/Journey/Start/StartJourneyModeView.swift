@@ -15,7 +15,7 @@ struct StartJourneyModeView: View {
         Button {
             self.startJourney()
         } label: {
-            ButtonView(buttonTitle: "Start journey")
+            ButtonView(buttonTitle: UIStrings.startJourney)
         }
         .background(Color.accentColor)
         .clipShape(RoundedRectangle(cornerRadius: 10))

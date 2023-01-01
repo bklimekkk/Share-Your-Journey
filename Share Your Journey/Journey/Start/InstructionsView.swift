@@ -23,129 +23,114 @@ struct InstructionsView: View {
                         SettingsButton()
                             .foregroundColor(self.buttonColor)
                             .padding(.horizontal, 7)
-                        Text("Viewing settings options.")
+                        Text(UIStrings.viewingSettingOptions)
                     }
-                    
                     HStack {
                         Button {} label: {
-                            SymbolButtonView(buttonImage: "play.fill")
+                            SymbolButtonView(buttonImage: Icons.playFill)
                         }
                         .disabled(true)
                         .background(Color.accentColor)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .frame(width: 50)
-                        Text("Resuming the journey that was paused.")
+                        Text(UIStrings.resumingTheJourney)
                     }
-                    
                     HStack {
                         Button {} label: {
-                            SymbolButtonView(buttonImage: "checkmark")
+                            SymbolButtonView(buttonImage: Icons.checkmark)
                         }
                         .disabled(true)
                         .background(Color.green)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .frame(width: 50)
-                        Text("Finishing the journey.")
+                        Text(UIStrings.finishingTheJourney)
                     }
                     
                     HStack {
                         Button {} label: {
-                            SymbolButtonView(buttonImage: "xmark")
+                            SymbolButtonView(buttonImage: Icons.xmark)
                         }
                         .disabled(true)
                         .background(Color.red)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .frame(width: 50)
-                        Text("Deleting the journey.")
+                        Text(UIStrings.deletingTheJourney)
                     }
                     HStack {
                         MapTypeButton()
                             .foregroundColor(self.buttonColor)
                             .padding(.horizontal, 5)
                         
-                        Text("Switching map types.")
+                        Text(UIStrings.switchingMapTypes)
                     }
-                    
                     HStack {
                         LocationButton()
                             .foregroundColor(self.buttonColor)
                             .padding(.horizontal, 5)
-                        
-                        
-                        Text("Re-centering the map on user's location.")
+                        Text(UIStrings.recenteringTheMap)
                     }
-                    
                     HStack {
                         ImageButton()
                             .foregroundColor(self.buttonColor)
-                        Text("Viewing photos that have already been taken.")
+                        Text(UIStrings.viewingTakenPhotos)
                     }
-                    
                     HStack {
-                        Image(systemName: "figure.walk")
+                        Image(systemName: Icons.figureWalk)
                             .font(.system(size: 30))
                             .foregroundColor(self.buttonColor)
                             .padding(.horizontal, 7)
-                        Text("Switching directions options to walking directions.")
+                        Text(UIStrings.switchingToWalking)
                     }
                     HStack {
-                        Image(systemName: "car")
+                        Image(systemName: Icons.car)
                             .font(.system(size: 30))
                             .foregroundColor(self.buttonColor)
                         
-                        Text("Switching directions options to driving directions.")
+                        Text(UIStrings.switchingToDriving)
                     }
                     HStack{
-                        Image(systemName: "arrow.backward.circle.fill")
+                        Image(systemName: Icons.arrowBackwardCircleFill)
                             .foregroundColor(buttonColor)
                             .font(.system(size: 35))
-                        Text("Logging out from the their account.")
+                        Text(UIStrings.loggingOut)
                     }
                 }
-                
                 Group {
                     HStack{
-                        Image(systemName: "plus.app.fill")
+                        Image(systemName: Icons.plusAppFill)
                             .font(.system(size: 35))
                             .foregroundColor(self.buttonColor)
-                        Text("Uploading image from user's camera roll.")
+                        Text(UIStrings.uploadingImage)
                     }
-                    
-                    
                     HStack {
-                        Image(systemName: "camera.fill")
+                        Image(systemName: Icons.cameraFill)
                             .font(.system(size: 27))
                             .foregroundColor(self.buttonColor)
-                        Text("Taking a picture during the journey.")
+                        Text(UIStrings.takingAPicture)
                     }
-                    
                     HStack {
-                        SymbolButtonView(buttonImage: "pause.fill")
+                        SymbolButtonView(buttonImage: Icons.pauseFill)
                             .background(Color.accentColor)
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                             .frame(width: 40)
-                        Text("Allows to pause the journey.")
+                        Text(UIStrings.allowsToPause)
                     }
-                    
                     HStack {
-                        Image(systemName: "square.and.arrow.down")
+                        Image(systemName: Icons.squareAndArrowDown)
                             .font(.system(size: 30))
                             .foregroundColor(self.buttonColor)
                             .padding(.horizontal, 3)
-                        Text("Downloading the journey to device.")
+                        Text(UIStrings.downloadingToDevice)
                     }
-                    
                     HStack {
-                        Image(systemName: "plus")
+                        Image(systemName: Icons.plus)
                             .font(.system(size: 30))
                             .foregroundColor(self.buttonColor)
                             .padding(.horizontal, 4)
-                        Text("Allows users to move downloaded journey to the list of saved journeys.")
+                        Text(UIStrings.allowsToMoveDownloaded)
                     }
-
                 }
             }
-            
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
                     Button {
@@ -155,7 +140,7 @@ struct InstructionsView: View {
                     }
                 }
             }
-            .navigationTitle("Instructions")
+            .navigationTitle(UIStrings.instructions)
             .navigationBarTitleDisplayMode(.inline)
         }
     }

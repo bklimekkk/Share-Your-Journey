@@ -34,7 +34,7 @@ struct MapView: UIViewRepresentable {
     @Binding var weatherLongitude: Double
     
     var tintColor: UIColor {
-        self.colorScheme == .light ? UIColor(red: 0.36, green: 0.09, blue: 0.92, alpha: 1.00) : .white
+        self.colorScheme == .light ? Colors.darkTintColor : .white
     }
     //This array is supposed to contain all places that user visited in the StartView screen during the journey.
     var photos: [UIImage]
@@ -53,7 +53,7 @@ struct MapView: UIViewRepresentable {
         }
         
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-            if let title = view.annotation?.title, title != "My Location" {
+            if let title = view.annotation?.title, title != UIStrings.myLocationString {
                 if let validTitle = Int(title!) {
                     self.parent.photoIndex = validTitle - 1
                 }
@@ -61,16 +61,16 @@ struct MapView: UIViewRepresentable {
             }
             self.parent.weatherLatitude = view.annotation?.coordinate.latitude ?? 0.0
             self.parent.weatherLongitude = view.annotation?.coordinate.longitude ?? 0.0
-            withAnimation(.easeInOut(duration: 0.15)) {
+            withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
                 self.parent.showWeather = true
             }
         }
         
         func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-            withAnimation(.easeInOut(duration: 0.15)) {
+            withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
                 self.parent.expandWeather = false
             }
-            withAnimation(.easeInOut(duration: 0.15)) {
+            withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
                 self.parent.showWeather = false
             }
         }
@@ -82,23 +82,23 @@ struct MapView: UIViewRepresentable {
             let marker = MKMarkerAnnotationView()
             marker.annotation = annotation
             marker.titleVisibility = .hidden
-            if annotation.title != "My Location" {
+            if annotation.title != UIStrings.myLocationString {
                 marker.markerTintColor = self.parent.tintColor
                 marker.glyphText = annotation.title as? String
                 marker.canShowCallout = true
                 let leftButton = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
                 let rightButton = UIButton(frame: CGRect(x: 0, y: 0, width: 45, height: 40))
                 let iconSizeConfiguration = UIImage.SymbolConfiguration(pointSize: 25)
-                leftButton.setImage(UIImage(systemName: "location.north.circle", withConfiguration: iconSizeConfiguration), for: .normal)
-                rightButton.setImage(UIImage(systemName: "camera", withConfiguration: iconSizeConfiguration), for: .normal)
+                leftButton.setImage(UIImage(systemName: Icons.locationNorthCircle, withConfiguration: iconSizeConfiguration), for: .normal)
+                rightButton.setImage(UIImage(systemName: Icons.camera, withConfiguration: iconSizeConfiguration), for: .normal)
                 leftButton.tintColor = self.parent.tintColor
                 rightButton.tintColor = self.parent.tintColor
                 marker.leftCalloutAccessoryView = leftButton
                 marker.rightCalloutAccessoryView = rightButton
             } else {
                 marker.markerTintColor = .systemBlue
-                marker.glyphImage = UIImage(systemName: "person.fill")
-                marker.selectedGlyphImage = UIImage(systemName: "person")
+                marker.glyphImage = UIImage(systemName: Icons.personFill)
+                marker.selectedGlyphImage = UIImage(systemName: Icons.person)
             }
             
             return marker
@@ -109,7 +109,7 @@ struct MapView: UIViewRepresentable {
          */
         func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
             if view.rightCalloutAccessoryView == control {
-                withAnimation(.easeInOut(duration: 0.15)) {
+                withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
                     self.parent.showPhoto = true
                 }
             } else {
@@ -156,7 +156,7 @@ struct MapView: UIViewRepresentable {
             renderedRoutes.lineJoin = .round
             renderedRoutes.lineCap = .round
             renderedRoutes.miterLimit = .infinity
-            renderedRoutes.lineWidth = 7
+            renderedRoutes.lineWidth = CGFloat(IntConstants.routeWidth)
             return renderedRoutes
         }
     }
@@ -187,8 +187,8 @@ struct MapView: UIViewRepresentable {
         if self.photosLocations.count > 0 {
             self.clManager.mapView.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: self.photosLocations[0].latitude,
                                                                                                longitude: self.photosLocations[0].longitude),
-                                                                latitudinalMeters: 1000,
-                                                                longitudinalMeters: 1000),
+                                                                latitudinalMeters: CLLocationDistance(IntConstants.initialMapVisibleMeters),
+                                                                longitudinalMeters: CLLocationDistance(IntConstants.initialMapVisibleMeters)),
                                              animated: false)
         }
         return mapView

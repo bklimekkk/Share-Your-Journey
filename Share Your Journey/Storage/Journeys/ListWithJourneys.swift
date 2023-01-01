@@ -25,7 +25,7 @@ struct ListWithJourneys: View {
     var body: some View {
         VStack {
             if self.journeysFilteredList.isEmpty {
-                NoDataView(text: "No journeys to show. Tap to refresh.")
+                NoDataView(text: UIStrings.noJourneysToShow)
                     .onTapGesture {
                         self.clearInvalidJourneys()
                         self.updateJourneys()
@@ -43,7 +43,7 @@ struct ListWithJourneys: View {
                                     .foregroundColor(.gray)
                             }
 
-                            NavigationLink (destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "", downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
+                            NavigationLink (destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString, downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
                                 EmptyView()
                             }
                             .opacity(0)
@@ -53,15 +53,15 @@ struct ListWithJourneys: View {
                 }
                 .listStyle(.plain)
                 .alert(isPresented: self.$askAboutDeletion) {
-                    Alert (title: Text("Delete journey"),
-                           message: Text("Are you sure that you want to delete this journey?"),
-                           primaryButton: .cancel(Text("Cancel")) {
+                    Alert (title: Text(UIStrings.deleteJourney),
+                           message: Text(UIStrings.sureToDelete),
+                           primaryButton: .cancel(Text(UIStrings.cancel)) {
                         self.askAboutDeletion = false
-                        self.journeyToDelete = ""
+                        self.journeyToDelete = UIStrings.emptyString
                     },
-                           secondaryButton: .destructive(Text("Delete")) {
+                           secondaryButton: .destructive(Text(UIStrings.delete)) {
                         
-                        let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? ""
+                        let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
                         let path = "users/\(email)/friends/\(email)/journeys"
                         
                         //Photos need to be leted from both database and storage, if needed.
@@ -72,13 +72,11 @@ struct ListWithJourneys: View {
                         
                         self.deleteFromStorage = true
                         self.askAboutDeletion = false
-                        self.journeyToDelete = ""
+                        self.journeyToDelete = UIStrings.emptyString
                     }
                     )
                 }
-                
             }
-            
         }
         .onAppear {
             //List is updated every time the screen appears.
@@ -89,8 +87,6 @@ struct ListWithJourneys: View {
             self.clearInvalidJourneys()
             self.updateJourneys()
         }
-        
-        
     }
     
     /**
@@ -116,7 +112,7 @@ struct ListWithJourneys: View {
             if error != nil {
                 print(error!.localizedDescription)
             } else {
-                print("journey deleted successfully")
+                print(UIStrings.journeyDeletedSuccesfully)
             }
         }
     }

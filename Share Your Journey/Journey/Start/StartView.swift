@@ -37,7 +37,7 @@ class JourneyStateController: ObservableObject {
     //Variables responsible for showing potential journey error messages.
     @Published var alertError = false
     @Published var alertMessage = false
-    @Published var alertBody = ""
+    @Published var alertBody = UIStrings.emptyString
 }
 
 class CurrentImagesCollection: ObservableObject {
@@ -274,7 +274,7 @@ struct StartView: View {
         }
         //Alert is presented only if error occurs
         .alert("No photos", isPresented: self.$journeyStateController.alertError) {
-            Button("Ok", role: .cancel) {
+            Button(UIStrings.ok, role: .cancel) {
                 self.journeyStateController.alertMessage = false
             }
         } message: {
@@ -282,31 +282,27 @@ struct StartView: View {
         }
         //Alert is presented after user chooses to finish the journey. They have two ways of doing it and depending on which one they choose, alert will be looking differently.
         .alert(isPresented: self.$journeyStateController.alertMessage) {
-            Alert(title: Text(self.alert == .finish ? "Finish Journey" : "Delete Journey"),
-                  message: Text(self.alert == .finish ? "Are you sure that you want to finish the journey?" : "Are you sure of deleting this yourney?"),
-                  primaryButton: .destructive(Text("Cancel")) {
+            Alert(title: Text(self.alert == .finish ? UIStrings.finishJourney : UIStrings.deleteJourney),
+                  message: Text(self.alert == .finish ? UIStrings.areYouSureToFinish : UIStrings.areYouSureToDelete),
+                  primaryButton: .destructive(Text(UIStrings.cancel)) {
                 self.journeyStateController.alertMessage = false
             },
-                  secondaryButton: .default(Text("Yes")) {
+                  secondaryButton: .default(Text(UIStrings.yes)) {
                 if self.alert == .finish {
                     self.finishJourney()
                 } else {
                     self.alert = .finish
-                    
                     for i in self.currentImages {
                         self.moc.delete(i)
                     }
-                    
                     for i in self.currentLocations {
                         self.moc.delete(i)
                     }
                     self.quitJourney()
                 }
-                
                 if self.moc.hasChanges {
                     try? self.moc.save()
                 }
-                
                 self.journeyStateController.alertMessage = false
             })
         }
@@ -337,16 +333,16 @@ struct StartView: View {
 
             let locationCoordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
             SpotDetailsManager().calculatePlace(locationCoordinate: locationCoordinate) { placemark in
-                let locality = placemark?.locality ?? ""
-                let subLocality = placemark?.subLocality ?? ""
-                let administrativeArea = placemark?.administrativeArea ?? ""
-                let country = placemark?.country ?? ""
-                let isoCountryCode = placemark?.isoCountryCode ?? ""
-                let name = placemark?.name ?? ""
-                let postalCode = placemark?.postalCode ?? ""
-                let ocean = placemark?.ocean ?? ""
-                let inlandWater = placemark?.inlandWater ?? ""
-                let areasOfInterest = placemark?.areasOfInterest?.joined(separator: ",") ?? ""
+                let locality = placemark?.locality ?? UIStrings.emptyString
+                let subLocality = placemark?.subLocality ?? UIStrings.emptyString
+                let administrativeArea = placemark?.administrativeArea ?? UIStrings.emptyString
+                let country = placemark?.country ?? UIStrings.emptyString
+                let isoCountryCode = placemark?.isoCountryCode ?? UIStrings.emptyString
+                let name = placemark?.name ?? UIStrings.emptyString
+                let postalCode = placemark?.postalCode ?? UIStrings.emptyString
+                let ocean = placemark?.ocean ?? UIStrings.emptyString
+                let inlandWater = placemark?.inlandWater ?? UIStrings.emptyString
+                let areasOfInterest = placemark?.areasOfInterest?.joined(separator: ",") ?? UIStrings.emptyString
                 print("locality: \(locality)")
                 print("subLocality: \(subLocality)")
                 print("administrative area: \(administrativeArea)")
@@ -420,6 +416,6 @@ struct StartView: View {
 
 struct SettingsButton: View {
     var body: some View {
-        MapButton(imageName: "gearshape.fill")
+        MapButton(imageName: Icons.gearshapeFill)
     }
 }

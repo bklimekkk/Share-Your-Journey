@@ -14,23 +14,23 @@ struct WelcomeView: View {
         
         NavigationView {
             Form {
-                Text("1. Create your account / Log in to existing one.")
-                Text("2. Start the journey, travel wherever you want and take pictures.")
-                Text("3. Finish and save the journey")
-                Text("4. Invite friends using their e-mails.")
-                Text("5. Send any previously saved journey to your friend.")
-                Text("6. See where your firends went by viewing pictures they took on the map.")
-                Text("7. Enjoy!")
+                Text(UIStrings.firstWelcomeText)
+                Text(UIStrings.secondWelcomeText)
+                Text(UIStrings.thirdWelcomeText)
+                Text(UIStrings.fourthWelcomeText)
+                Text(UIStrings.fifthWelcomeText)
+                Text(UIStrings.sixthWelcomeText)
+                Text(UIStrings.seventhWelcomeText)
             }
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
-                    Button("Start using the app") {
+                    Button(UIStrings.startUsingTheApp) {
                         self.showInstructions = false
                         self.dismiss()
                     }
                 }
             }
-            .navigationTitle("Welcome to Share Your Journey app")
+            .navigationTitle(UIStrings.welcome)
             .navigationBarTitleDisplayMode(.inline)
         }
     }

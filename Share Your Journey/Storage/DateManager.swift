@@ -10,7 +10,7 @@ import Foundation
 struct DateManager {
     func getDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/YY, hh:mm"
+        dateFormatter.dateFormat = Links.regularDateFormat
         return dateFormatter.string(from: date)
     }
 }

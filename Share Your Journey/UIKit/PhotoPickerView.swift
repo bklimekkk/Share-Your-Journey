@@ -19,7 +19,8 @@ struct PhotoPickerView: UIViewControllerRepresentable {
         init(photoPickerView: PhotoPickerView) {
             self.photoPickerView = photoPickerView
         }
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        func imagePickerController(_ picker: UIImagePickerController,
+                                   didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             
             if let photo = info[.originalImage] as? UIImage {
                 let photoArraySize = self.photoPickerView.photosArray.count

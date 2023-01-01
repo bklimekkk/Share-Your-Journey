@@ -23,21 +23,17 @@ struct AddFriendView: View {
     
     //Variable described in ChatView struct.
     @Binding var sheetIsPresented: Bool
-    
     //Friend's email address.
-    @State private var email = ""
-    
+    @State private var email = UIStrings.emptyString
     //Variable's value justifies if application should present users with any message.
     @State private var showMessage: Bool = false
-    
     //Variable is set to one of enum values from InvitationError.
     @State private var responseType = InvitationError.valid
     
     var body: some View {
         VStack {
-            Text("Add a friend")
-            
-            TextField("Enter friend's e-mail", text: self.$email)
+            Text(UIStrings.addAFriend)
+            TextField(UIStrings.enterFriendsEmail, text: self.$email)
                 .font(.system(size: 20))
             Spacer()
             Button{
@@ -47,7 +43,7 @@ struct AddFriendView: View {
                 //Each possibility of error connected with inviting friend is checked and prevented with use of if statements below. Statement's aren't contained in separate functions, because each of them contains return key word, which is supposed to stop action performed by button.
                 
                 //If Statement is responsible for checking if users haven't omit entering data.
-                if lowerCasedEmail == "" {
+                if lowerCasedEmail == UIStrings.emptyString {
                     self.responseType = .emptyField
                     self.showMessage = true
                     return
@@ -117,7 +113,6 @@ struct AddFriendView: View {
                                 break
                             }
                         }
-                        
                         if !emailExists {
                             self.responseType = .noAccount
                             self.showMessage = true
@@ -129,7 +124,7 @@ struct AddFriendView: View {
                 //If error doesn't occur, message will ask users to confirm friend invitation.
                 self.showMessage = true
             } label: {
-                ButtonView(buttonTitle: "Send request")
+                ButtonView(buttonTitle: UIStrings.sendRequest)
             }
             .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
@@ -138,9 +133,9 @@ struct AddFriendView: View {
         .alert(isPresented: self.$showMessage) {
             
             //Depending on which error occurs, users are presented to relevant message.
-            Alert (title: Text(self.responseType == .valid ? "Invite friend" : "Invitation error"),
-                   message: Text(self.responseType == .emptyField ? "You must provide email address" : self.responseType == .yourEmail ? "This is your email address" : self.responseType == .requestFromFriend ? "This friend already sent you a friend request" : responseType == .alreadyInvited ? "You already invited this person" : responseType ==  .friendsAlready ? "You are already friends!" : self.responseType == .noAccount ? "Account doesn't exist" : self.email),
-                   primaryButton: .cancel(Text(responseType == .valid ? "Cancel" : "Quit")) {
+            Alert (title: Text(self.responseType == .valid ? UIStrings.inviteFriend : UIStrings.invitationError),
+                   message: Text(self.responseType == .emptyField ? UIStrings.mustProvideEmailAddress : self.responseType == .yourEmail ? UIStrings.yourEmailAddress : self.responseType == .requestFromFriend ? UIStrings.alreadySentYouRequest : responseType == .alreadyInvited ? UIStrings.alreadyInvitedThisPerson : responseType ==  .friendsAlready ? UIStrings.alreadyFriends : self.responseType == .noAccount ? UIStrings.accountDoesntExist : self.email),
+                   primaryButton: .cancel(Text(responseType == .valid ? UIStrings.cancel : UIStrings.quit)) {
                 if self.responseType == .valid {
                     self.showMessage = false
                 } else {
@@ -149,13 +144,13 @@ struct AddFriendView: View {
                     self.responseType = .valid
                 }
             },
-                   secondaryButton: .default(Text(self.responseType == .valid ? "Invite" : "Try again")) {
+                   secondaryButton: .default(Text(self.responseType == .valid ? UIStrings.invite : UIStrings.tryAgain)) {
                 if self.responseType == .valid {
                     self.sendRequest()
                 } else {
                     self.showMessage = false
                     self.responseType = .valid
-                    self.email = ""
+                    self.email = UIStrings.emptyString
                 }
             }
             )
@@ -168,7 +163,7 @@ struct AddFriendView: View {
     func sendRequest() {
         
         FirebaseSetup.firebaseInstance.db.document("users/\(email.lowercased())/requests/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")").setData([
-            "email": FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",
+            "email": FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
             "deletedAccount": false
         ])
         self.showMessage = false

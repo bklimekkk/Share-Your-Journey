@@ -19,30 +19,30 @@ struct DownloadChangesView: View {
     
     var body: some View {
         VStack {
-            Text("Change name")
+            Text(UIStrings.changeName)
                 .font(.system(size:30))
             
             Spacer()
-            TextField("Enter new name", text: $newName)
+            TextField(UIStrings.enterNewName, text: $newName)
                 .font(.system(size: 30))
             Spacer()
             Button{
                 
                 //Program require user to enter any name to re-name the journey. 
-                if self.newName != "" {
+                if self.newName != UIStrings.emptyString {
                     self.download = true
                     self.presentSheet = false
                 } else {
                     self.showAlert = true
                 }
             } label: {
-                ButtonView(buttonTitle: "Download")
+                ButtonView(buttonTitle: UIStrings.download)
             }
             .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
         .alert(isPresented: self.$showAlert) {
-            Alert(title: Text("Empty field"), message: Text("You need to provide a name"), dismissButton: .cancel(Text("Ok")) {
+            Alert(title: Text(UIStrings.emptyField), message: Text(UIStrings.youNeedToProvideAName), dismissButton: .cancel(Text(UIStrings.ok)) {
                 self.showAlert = false
             })
         }

@@ -54,6 +54,13 @@
 		8665C79129574075007D7354 /* PhotosCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C79029574075007D7354 /* PhotosCounterView.swift */; };
 		8665C79329574592007D7354 /* SheetDismissButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C79229574592007D7354 /* SheetDismissButtonView.swift */; };
 		8665C7952958CA50007D7354 /* JourneyControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C7942958CA50007D7354 /* JourneyControlView.swift */; };
+		8665C798295F5A59007D7354 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C797295F5A59007D7354 /* Colors.swift */; };
+		8665C79A2961FBC1007D7354 /* UIStrings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C7992961FBC1007D7354 /* UIStrings.swift */; };
+		8665C79C2961FDFC007D7354 /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C79B2961FDFC007D7354 /* Icons.swift */; };
+		8665C79E2961FF90007D7354 /* IntConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C79D2961FF90007D7354 /* IntConstants.swift */; };
+		8665C7A029620014007D7354 /* FloatConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C79F29620014007D7354 /* FloatConstants.swift */; };
+		8665C7A22962D2F1007D7354 /* FirestorePaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C7A12962D2F1007D7354 /* FirestorePaths.swift */; };
+		8665C7A429633A51007D7354 /* Links.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C7A329633A51007D7354 /* Links.swift */; };
 		866A7E1A293221C100CD3340 /* SpotDetailsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A7E19293221C100CD3340 /* SpotDetailsManager.swift */; };
 		866A7E1C29326BF500CD3340 /* PhotoDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */; };
 		8671E6FE2876D24300E4A5AC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8671E6FD2876D24300E4A5AC /* InstructionsView.swift */; };
@@ -151,6 +158,13 @@
 		8665C79029574075007D7354 /* PhotosCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCounterView.swift; sourceTree = "<group>"; };
 		8665C79229574592007D7354 /* SheetDismissButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetDismissButtonView.swift; sourceTree = "<group>"; };
 		8665C7942958CA50007D7354 /* JourneyControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyControlView.swift; sourceTree = "<group>"; };
+		8665C797295F5A59007D7354 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		8665C7992961FBC1007D7354 /* UIStrings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIStrings.swift; sourceTree = "<group>"; };
+		8665C79B2961FDFC007D7354 /* Icons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icons.swift; sourceTree = "<group>"; };
+		8665C79D2961FF90007D7354 /* IntConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntConstants.swift; sourceTree = "<group>"; };
+		8665C79F29620014007D7354 /* FloatConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatConstants.swift; sourceTree = "<group>"; };
+		8665C7A12962D2F1007D7354 /* FirestorePaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestorePaths.swift; sourceTree = "<group>"; };
+		8665C7A329633A51007D7354 /* Links.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Links.swift; sourceTree = "<group>"; };
 		866A7E19293221C100CD3340 /* SpotDetailsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotDetailsManager.swift; sourceTree = "<group>"; };
 		866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailsView.swift; sourceTree = "<group>"; };
 		8671E6FD2876D24300E4A5AC /* InstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
@@ -250,6 +264,7 @@
 		862AA45927B14D6C001B9312 /* Share Your Journey */ = {
 			isa = PBXGroup;
 			children = (
+				8665C796295F5A39007D7354 /* Constants */,
 				86D9F71728991DFE0092832E /* Weather */,
 				862AA45A27B14D6C001B9312 /* Share_Your_JourneyApp.swift */,
 				8652A17027BFC8EF00ADBB25 /* Share-Your-Journey-Info.plist */,
@@ -371,6 +386,20 @@
 				8639E00C28968E0800D7A3F5 /* SendJourneyManager.swift */,
 			);
 			path = Communication;
+			sourceTree = "<group>";
+		};
+		8665C796295F5A39007D7354 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				8665C797295F5A59007D7354 /* Colors.swift */,
+				8665C7992961FBC1007D7354 /* UIStrings.swift */,
+				8665C79B2961FDFC007D7354 /* Icons.swift */,
+				8665C79D2961FF90007D7354 /* IntConstants.swift */,
+				8665C79F29620014007D7354 /* FloatConstants.swift */,
+				8665C7A12962D2F1007D7354 /* FirestorePaths.swift */,
+				8665C7A329633A51007D7354 /* Links.swift */,
+			);
+			path = Constants;
 			sourceTree = "<group>";
 		};
 		8683852727E95DDB0005FEE2 /* ViewComponents */ = {
@@ -615,6 +644,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				864FEF4628A7E86C0060E94D /* CurrentLocation+CoreDataProperties.swift in Sources */,
+				8665C798295F5A59007D7354 /* Colors.swift in Sources */,
 				864FEF4128A7E4010060E94D /* CurrentImage+CoreDataClass.swift in Sources */,
 				8653A2D4280418EB00852374 /* JourneysView.swift in Sources */,
 				86C649F727D1B43A00891C24 /* Journey+CoreDataProperties.swift in Sources */,
@@ -625,21 +655,26 @@
 				86FCCC6028102449005FD678 /* ListWithRequests.swift in Sources */,
 				8639E00F289694D100D7A3F5 /* SendViewedJourneyView.swift in Sources */,
 				86FCCC7B28107A2F005FD678 /* FieldComponents.swift in Sources */,
+				8665C7A029620014007D7354 /* FloatConstants.swift in Sources */,
 				867254DD27B47B7B00DC5001 /* StartView.swift in Sources */,
 				86C6494C27CFAFD500891C24 /* JourneyDataManager.swift in Sources */,
 				862AA45D27B14D6D001B9312 /* LoginView.swift in Sources */,
 				8671E6FE2876D24300E4A5AC /* InstructionsView.swift in Sources */,
+				8665C79E2961FF90007D7354 /* IntConstants.swift in Sources */,
 				864FEF4528A7E86C0060E94D /* CurrentLocation+CoreDataClass.swift in Sources */,
 				86FCCC652810272B005FD678 /* YourJourneysList.swift in Sources */,
 				86FCCC6C28102A75005FD678 /* PausedJourneyModeView.swift in Sources */,
 				8672551C27B80A9000DC5001 /* TabsView.swift in Sources */,
 				86197618288D3D1C0034FF2C /* NoDataView.swift in Sources */,
 				864B50C7287232660072A5BB /* SettingsView.swift in Sources */,
+				8665C79C2961FDFC007D7354 /* Icons.swift in Sources */,
 				86FCCC6A28102A4B005FD678 /* RunningJourneyModeView.swift in Sources */,
 				86FCCC7528102E02005FD678 /* ListWithJourneys.swift in Sources */,
 				866A7E1C29326BF500CD3340 /* PhotoDetailsView.swift in Sources */,
+				8665C7A22962D2F1007D7354 /* FirestorePaths.swift in Sources */,
 				864FEF4828A952830060E94D /* DateManager.swift in Sources */,
 				8665C79129574075007D7354 /* PhotosCounterView.swift in Sources */,
+				8665C7A429633A51007D7354 /* Links.swift in Sources */,
 				86C6494827CFAE4300891C24 /* Journey.xcdatamodeld in Sources */,
 				86FCCC7F28107C00005FD678 /* SubViewComponents.swift in Sources */,
 				8652A17527C254C700ADBB25 /* MapView.swift in Sources */,
@@ -653,6 +688,7 @@
 				8665C79329574592007D7354 /* SheetDismissButtonView.swift in Sources */,
 				86FCCC79281079BD005FD678 /* PickerComponents.swift in Sources */,
 				865452AD2809D452008041A8 /* DownloadChangesView.swift in Sources */,
+				8665C79A2961FBC1007D7354 /* UIStrings.swift in Sources */,
 				86C649F627D1B43A00891C24 /* Journey+CoreDataClass.swift in Sources */,
 				864FEEF9289B24380060E94D /* ForecastRequest.swift in Sources */,
 				86D9F71D28992D0E0092832E /* WeatherView.swift in Sources */,

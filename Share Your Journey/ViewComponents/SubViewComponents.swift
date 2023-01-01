@@ -20,7 +20,7 @@ struct HighlightedPhoto: View {
     @Binding var showPanel: Bool
     var journey: SingleJourney
     var gold: Color {
-        Color(uiColor: UIColor(red: 0.90, green: 0.42, blue: 0.00, alpha: 1.00))
+        Color(uiColor: Colors.premiumColor)
     }
     
     var body: some View {
@@ -49,20 +49,20 @@ struct HighlightedPhoto: View {
                 HStack {
                     
                     Button {
-                        withAnimation(.easeInOut(duration: 0.15)) {
+                        withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
                             self.showPicture = false
                             self.savedToCameraRoll = false
                         }
                     } label:{
-                        Image(systemName: "xmark")
+                        Image(systemName: Icons.xmark)
                             .font(.system(size: 30))
-                            .foregroundColor(Color(UIColor(named:"SystemImageColor") ?? .gray))
+                            .foregroundColor(Color(Colors.systemImageColor ?? .gray))
                     }
                     
                     Spacer()
                     
                     Text(String(self.highlightedPhotoIndex + 1))
-                        .foregroundColor(Color(UIColor(named:"SystemImageColor") ?? .white))
+                        .foregroundColor(Color(Colors.systemImageColor ?? .white))
                         .font(.system(size: 40))
                     
                     Spacer()
@@ -70,7 +70,7 @@ struct HighlightedPhoto: View {
                     //While the image is highlighted, users can download it only once, after clicking the button, it disappears.
                     if self.savedToCameraRoll {
                         Button {} label:{
-                            Image(systemName: "checkmark")
+                            Image(systemName: Icons.checkmark)
                                 .font(.system(size: 30))
                                 .foregroundColor(.green)
                                 .offset(y: -5)
@@ -89,9 +89,9 @@ struct HighlightedPhoto: View {
                             }
                             
                         } label:{
-                            Image(systemName: "square.and.arrow.down")
+                            Image(systemName: Icons.squareAndArrowDown)
                                 .font(.system(size: 30))
-                                .foregroundColor(self.subscriber ? Color(UIColor(named:"SystemImageColor") ?? .gray) : self.gold)
+                                .foregroundColor(self.subscriber ? Color(Colors.systemImageColor ?? .gray) : self.gold)
                                 .offset(y: -5)
                         }
                     }
@@ -127,7 +127,7 @@ struct PhotosAlbumView: View {
                         .cornerRadius(10)
                         .padding(.vertical, 5)
                         .onTapGesture {
-                            withAnimation(.easeInOut(duration: 0.15)) {
+                            withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
                                 self.photoIndex = photo.number
                                 self.highlightedPhoto = self.singleJourney.photos[photoIndex].photo
                                 self.showPicture = true
@@ -159,7 +159,7 @@ struct PhotoAnnotationView: View {
                 .frame(width: 60)
                 .shadow(color: .gray, radius: 2)
                 .onTapGesture(count: 1) {
-                    withAnimation(.easeInOut(duration: 0.15)) {
+                    withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
                         self.photoIndex = self.location.id
                         self.highlightedPhoto = self.singleJourney.photos[location.id].photo
                         self.showPicture = true

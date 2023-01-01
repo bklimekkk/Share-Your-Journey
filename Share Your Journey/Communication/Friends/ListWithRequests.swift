@@ -18,7 +18,7 @@ struct ListWithRequests: View {
         
         VStack {
             if self.filteredRequestsList.isEmpty {
-                NoDataView(text: "No requests to show. Tap to refresh.")
+                NoDataView(text: UIStrings.noRequestsToShow)
                     .onTapGesture {
                         self.populateRequests()
                     }
@@ -29,7 +29,7 @@ struct ListWithRequests: View {
                         Button{
                             self.removeRequest(request: request)
                         } label: {
-                            Image(systemName: "xmark")
+                            Image(systemName: Icons.xmark)
                                 .padding(5)
                                 .foregroundColor(.gray)
                         }
@@ -43,7 +43,7 @@ struct ListWithRequests: View {
                         Button{
                             self.acceptRequest(request: request)
                         } label: {
-                            Image(systemName: "checkmark")
+                            Image(systemName: Icons.checkmark)
                                 .foregroundColor(Color.green)
                         }
                         .buttonStyle(PlainButtonStyle())
@@ -51,9 +51,7 @@ struct ListWithRequests: View {
                 }
                 .listStyle(.inset)
                 .navigationBarHidden(true)
-                
                 .refreshable {
-                    
                     //Users are able to refresh list if any changes were made in the meantime.
                     self.populateRequests()
                 }
@@ -92,7 +90,6 @@ struct ListWithRequests: View {
             }
         }
     }
-    
     
     /**
      Function is responsible for removing requests picked by user.

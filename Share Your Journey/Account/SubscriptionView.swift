@@ -16,37 +16,37 @@ struct SubscriptionView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Unlock all app's functions")) {
+                Section(header: Text(UIStrings.unlockAllFunctions)) {
                     HStack {
-                        Image(systemName: "figure.walk")
+                        Image(systemName: Icons.figureWalk)
                             .frame(width: 20)
-                        Text("Get walking directions to any part of the journey")
+                        Text(UIStrings.getWalkingDirections)
                     }
                     
                     HStack {
-                        Image(systemName: "square.and.arrow.down")
+                        Image(systemName: Icons.squareAndArrowDown)
                             .frame(width: 20)
-                        Text("Be able to save any photo to camera roll")
+                        Text(UIStrings.beAbleToSaveAnyPhoto)
                     }
                     
                     HStack {
-                        Image(systemName: "square.and.arrow.down.on.square")
+                        Image(systemName: Icons.squareAndArrowDownOnSquare)
                             .frame(width: 20)
-                        Text("Be able to save all photos to camera roll at once")
+                        Text(UIStrings.beAbleToSaveAllPhotos)
                     }
                     
                     HStack {
-                        Image(systemName: "platter.filled.bottom.and.arrow.down.iphone")
+                        Image(systemName: Icons.platterFilledBottomAndArrowDownIphone)
                             .frame(width: 20)
-                        Text("Be able to save any journey to your own device")
+                        Text(UIStrings.beAbleToSaveAnyJourney)
                     }
                 }
                 
-                Section(header: Text("Free trial")) {
+                Section(header: Text(UIStrings.freeTrial)) {
                     HStack {
-                        Image(systemName: "dollarsign.circle.fill")
+                        Image(systemName: Icons.dollarsignCircleFill)
                             .frame(width: 20)
-                        Text("The first week is free. You can cancel subscription at any time.")
+                        Text(UIStrings.firstWeekIsFree)
                     }
                     
                 }
@@ -56,7 +56,7 @@ struct SubscriptionView: View {
                         Button("Buy for \(package.localizedPriceString)") {
                             
                             Purchases.shared.purchase(package: package) { (transaction, customerInfo, error, userCancelled) in
-                                if customerInfo?.entitlements["allfeatures"]?.isActive == true {
+                                if customerInfo?.entitlements[Links.allFeaturesEntitlement]?.isActive == true {
                                     self.dismiss()
                                     self.subscriber = true
                                 }
@@ -69,16 +69,16 @@ struct SubscriptionView: View {
             }
             .task {
                 Purchases.shared.getOfferings { (offerings, error) in
-                    if let packages = offerings?.offering(identifier: "default")?.availablePackages {
+                    if let packages = offerings?.offering(identifier: Links.defaultOffering)?.availablePackages {
                         self.availablePackages = packages
                     }
                 }
             }
-            .navigationTitle("Premium Access")
+            .navigationTitle(UIStrings.premiumAccess)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done"){
+                    Button(UIStrings.done){
                         self.dismiss()
                     }
                 }

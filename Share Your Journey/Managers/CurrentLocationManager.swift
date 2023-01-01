@@ -42,7 +42,9 @@ class CurrentLocationManager: NSObject, CLLocationManagerDelegate, ObservableObj
         locations.last.map {
             
             //Created earlier object is assigned to coordinates of user. latitudialMeters and longitudalmeters parameters set width and height of the map in the beginning.
-            self.currentRegion = MKCoordinateRegion(center: $0.coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
+            self.currentRegion = MKCoordinateRegion(center: $0.coordinate,
+                                                    latitudinalMeters: CLLocationDistance(IntConstants.initialMapVisibleMeters),
+                                                    longitudinalMeters: CLLocationDistance(IntConstants.initialMapVisibleMeters))
             
             //When main screen with the map is opened, it is centered on the user's location. It only happens once.
             if !self.centeredLocation {

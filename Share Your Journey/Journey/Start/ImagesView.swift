@@ -35,7 +35,7 @@ struct ImagesView: View {
                 }
             }
             .padding(.horizontal, 5)
-            .navigationTitle("Current Journey Images")
+            .navigationTitle(UIStrings.currentJourneyImages)
             .navigationBarTitleDisplayMode(.inline)
         }
     }

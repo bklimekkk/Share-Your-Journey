@@ -32,7 +32,7 @@ struct ForecastView: View {
         let daysOfTheWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        dateFormatter.dateFormat = Links.weatherDateFormat
         
         guard let date = dateFormatter.date(from: dateAndTimeString) else {return ""}
         

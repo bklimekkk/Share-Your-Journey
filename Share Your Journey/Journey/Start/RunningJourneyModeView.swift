@@ -26,21 +26,21 @@ struct RunningJourneyModeView: View {
                 self.pickAPhoto = true
                 self.takeAPhoto = true
             } label: {
-                MapButton(imageName: "plus")
+                MapButton(imageName: Icons.plus)
             }
             
             Button{
                 self.pickAPhoto = false
                 self.takeAPhoto = true
             } label: {
-                MapButton(imageName: "camera.fill")
+                MapButton(imageName: Icons.cameraFill)
                     .padding(.trailing, 10)
             }
             
             Button {
                 self.pauseJourney()
             } label: {
-                SymbolButtonView(buttonImage: "pause.fill")
+                SymbolButtonView(buttonImage: Icons.pauseFill)
             }
             .background(Color.accentColor)
             .clipShape(RoundedRectangle(cornerRadius: 10))

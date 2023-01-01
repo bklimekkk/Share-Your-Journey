@@ -21,8 +21,7 @@ struct SendJourneyView: View {
     //Arrays contains journeys already sent to particular friend an these that haven't been sent yet.
     @State private var sentJourneys: [SingleJourney] = []
     @State private var unsentJourneys: [SingleJourney] = []
-    
-    @State private var searchText = ""
+    @State private var searchText = UIStrings.emptyString
     
     var filteredUnsentJourneys: [SingleJourney] {
         if self.searchText.isEmpty {
@@ -35,11 +34,11 @@ struct SendJourneyView: View {
     var body: some View {
         NavigationView {
             VStack {
-                SearchField(text: "Search your journeys", search: self.$searchText)
+                SearchField(text: UIStrings.searchYourJourneys, search: self.$searchText)
                     .padding(.top)
                 VStack {
                     if self.filteredUnsentJourneys.isEmpty{
-                        NoDataView(text: "No journeys to send. Tap to refresh.")
+                        NoDataView(text: UIStrings.noJourneysToSend)
                     } else {
                         List(self.filteredUnsentJourneys.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
                             HStack {
@@ -53,9 +52,8 @@ struct SendJourneyView: View {
                                     withAnimation {
                                         self.deleteFromSendingList(journeyName: journey.name)
                                     }
-                                    
                                 } label:{
-                                    Text("Send")
+                                    Text(UIStrings.send)
                                 }
                                 .buttonStyle(PlainButtonStyle())
                                 .foregroundColor(Color.accentColor)
@@ -71,7 +69,7 @@ struct SendJourneyView: View {
                 Button {
                     self.presentationMode.wrappedValue.dismiss()
                 } label: {
-                    ButtonView(buttonTitle: "Done")
+                    ButtonView(buttonTitle: UIStrings.done)
                         .background(Color.accentColor)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .padding()

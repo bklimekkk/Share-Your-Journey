@@ -27,7 +27,7 @@ struct FriendJourneysList: View {
     var body: some View {
         VStack {
             if self.sentByFriendFiltered.isEmpty {
-                NoDataView(text: "No journeys to show. Tap to refresh.")
+                NoDataView(text: UIStrings.noJourneysToShow)
                     .onTapGesture {
                         populateFriendsJourneys()
                     }
@@ -72,7 +72,6 @@ struct FriendJourneysList: View {
             if error != nil {
                 print(error!.localizedDescription)
             } else {
-                
                 let receivedJourneys = querySnapshot!.documents
                 for i in receivedJourneys {
                     if !self.sentByFriend.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {

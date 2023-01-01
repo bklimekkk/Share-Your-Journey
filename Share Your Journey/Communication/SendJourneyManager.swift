@@ -23,9 +23,7 @@ struct SendJourneyManager {
             "date" : Date(),
             "deletedJourney" : false
         ])
-        
-        let path = "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "" )/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys/\(journey.name)/photos"
-        
+        let path = "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString )/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)/journeys/\(journey.name)/photos"
         FirebaseSetup.firebaseInstance.db.collection(path).getDocuments { (querySnapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
@@ -52,5 +50,4 @@ struct SendJourneyManager {
             }
         }
     }
-    
 }

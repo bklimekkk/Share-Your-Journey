@@ -18,14 +18,11 @@ struct YourJourneysList: View {
     @Binding var sentByYou: [SingleJourney]
     
     //Variable is supposed to contain name of the journey that currently is supposed to be deleted.
-    @State private var journeyToDelete = ""
-    
+    @State private var journeyToDelete = UIStrings.emptyString
     //Variable's value controls if program should delete journey from storage or not.
     @State private var deleteFromStorage = true
-    
     //Friend's email address.
     var email: String
-    
     var sentByYouFiltered: [SingleJourney]
 
     var sentByYouFilteredSorted: [SingleJourney] {
@@ -36,7 +33,7 @@ struct YourJourneysList: View {
         
         VStack {
             if self.sentByYouFiltered.isEmpty{
-                NoDataView(text: "No journeys to show. Tap to refresh.")
+                NoDataView(text: UIStrings.noJourneysToShow)
                     .onTapGesture {
                         self.populateYourJourneys()
                     }
@@ -69,13 +66,13 @@ struct YourJourneysList: View {
                 
                 //Alert is shown if users want to delete any journey they sent.
                 .alert(isPresented: self.$askAboutDeletion) {
-                    Alert (title: Text("Delete journey"),
-                           message: Text("Are you sure that you want to delete this journey?"),
-                           primaryButton: .cancel(Text("Cancel")) {
+                    Alert (title: Text(UIStrings.deleteJourney),
+                           message: Text(UIStrings.sureToDelete),
+                           primaryButton: .cancel(Text(UIStrings.cancel)) {
                         self.askAboutDeletion = false
-                        self.journeyToDelete = ""
+                        self.journeyToDelete = UIStrings.emptyString
                     },
-                           secondaryButton: .destructive(Text("Delete")) {
+                           secondaryButton: .destructive(Text(UIStrings.delete)) {
                         
                         self.deleteJourneyFromDatabase()
                         
@@ -91,7 +88,7 @@ struct YourJourneysList: View {
                         }
                         self.deleteFromStorage = true
                         self.askAboutDeletion = false
-                        self.journeyToDelete = ""
+                        self.journeyToDelete = UIStrings.emptyString
                     }
                     )
                 }
@@ -155,7 +152,6 @@ struct YourJourneysList: View {
                 }
             }
         }
-        
         self.askAboutDeletion = true
         self.journeyToDelete = journey.name
     }

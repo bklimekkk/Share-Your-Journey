@@ -33,30 +33,30 @@ struct SinglePhoto: Hashable {
     init() {
         self.number = 0
         self.photo = UIImage()
-        self.location = ""
-        self.subLocation = ""
-        self.administrativeArea = ""
-        self.country = ""
-        self.isoCountryCode = ""
-        self.name = ""
-        self.postalCode = ""
-        self.ocean = ""
-        self.inlandWater = ""
+        self.location = UIStrings.emptyString
+        self.subLocation = UIStrings.emptyString
+        self.administrativeArea = UIStrings.emptyString
+        self.country = UIStrings.emptyString
+        self.isoCountryCode = UIStrings.emptyString
+        self.name = UIStrings.emptyString
+        self.postalCode = UIStrings.emptyString
+        self.ocean = UIStrings.emptyString
+        self.inlandWater = UIStrings.emptyString
         self.areasOfInterest = []
     }
 
     init(number: Int, photo: UIImage) {
         self.number = number
         self.photo = photo
-        self.location = ""
-        self.subLocation = ""
-        self.administrativeArea = ""
-        self.country = ""
-        self.isoCountryCode = ""
-        self.name = ""
-        self.postalCode = ""
-        self.ocean = ""
-        self.inlandWater = ""
+        self.location = UIStrings.emptyString
+        self.subLocation = UIStrings.emptyString
+        self.administrativeArea = UIStrings.emptyString
+        self.country = UIStrings.emptyString
+        self.isoCountryCode = UIStrings.emptyString
+        self.name = UIStrings.emptyString
+        self.postalCode = UIStrings.emptyString
+        self.ocean = UIStrings.emptyString
+        self.inlandWater = UIStrings.emptyString
         self.areasOfInterest = []
     }
 
@@ -99,9 +99,9 @@ struct SingleJourney: Hashable {
     var networkProblem: Bool = false
 
     init(numberOfPhotos: Int, photos: [SinglePhoto], photosLocations: [CLLocationCoordinate2D]) {
-        self.email = ""
-        self.name = ""
-        self.place = ""
+        self.email = UIStrings.emptyString
+        self.name = UIStrings.emptyString
+        self.place = UIStrings.emptyString
         self.date = Date.now
         self.numberOfPhotos = numberOfPhotos
         self.photos = photos

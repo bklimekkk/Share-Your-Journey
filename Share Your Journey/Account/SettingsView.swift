@@ -21,15 +21,15 @@ struct SettingsView: View {
         NavigationView {
             Form {
                 Section {
-                    Button("shareyourjourneyhelp@gmail.com") {}
+                    Button(Links.helpEmail) {}
                         .buttonStyle(.plain)
                         .foregroundColor(.blue)
-                    Button("Instructions") {
+                    Button(UIStrings.instructions) {
                         self.showInstructions = true
                     }
                     .buttonStyle(.plain)
                     .foregroundColor(.blue)
-                    Button("Privacy Policy") {
+                    Button(UIStrings.privacyPolicy) {
                         self.showPrivacyPolicy = true
                     }
                     .buttonStyle(.plain)
@@ -37,29 +37,27 @@ struct SettingsView: View {
                 }
                 
                 if !self.subscription.subscriber {
-                    Section(header: Text("premium access")) {
-                        Button("Premium Access") {
+                    Section(header: Text(UIStrings.premiumAccess)) {
+                        Button(UIStrings.premiumAccess) {
                             self.subscription.showPanel = true
                         }
                         .buttonStyle(.plain)
                         .foregroundColor(self.subscription.subscriber ? .red : .blue)
-                        Button("Restore Your Premium Access") {
+                        Button(UIStrings.restorePremiumAccess) {
                             Purchases.shared.restorePurchases { customerInfo, error in
-                                if customerInfo?.entitlements["allfeatures"]?.isActive == true {
+                                if customerInfo?.entitlements[Links.allFeaturesEntitlement]?.isActive == true {
                                     withAnimation {
                                         self.subscription.subscriber = true
                                     }
                                 }
                             }
-                            
                         }
                         .buttonStyle(.plain)
                         .foregroundColor(self.subscription.subscriber ? .red : .blue)
                     }
                 }
-                
-                Section(header: Text("account deletion")) {
-                    Button("Delete Your Account"){
+                Section(header: Text(UIStrings.accountDeletion)) {
+                    Button(UIStrings.deleteYourAccount){
                         self.askAboutAccountDeletion = true
                     }
                     .buttonStyle(.plain)
@@ -68,7 +66,7 @@ struct SettingsView: View {
             }
             .task {
                 Purchases.shared.getCustomerInfo { (customerInfo, error) in
-                    if customerInfo!.entitlements["allfeatures"]?.isActive == true {
+                    if customerInfo!.entitlements[Links.allFeaturesEntitlement]?.isActive == true {
                         self.subscription.subscriber = true
                     }
                 }
@@ -80,23 +78,21 @@ struct SettingsView: View {
                 SubscriptionView(subscriber: self.$subscription.subscriber)
             })
             .sheet(isPresented: self.$showPrivacyPolicy, content: {
-                WebView(url: URL(string: "https://bklimekkk.github.io/share-your-journey-privacy-policy/")!)
+                WebView(url: URL(string: Links.privacyPolicyPage)!)
             })
-            .navigationTitle(self.subscription.subscriber ? "Premium Account" : "Regular Account")
+            .navigationTitle(self.subscription.subscriber ? UIStrings.premiumAccount : UIStrings.regularAccount)
             .navigationBarTitleDisplayMode(.inline)
-            .alert("Account deleted", isPresented: self.$deletedAccount, actions: {
-                Button("Ok", role: .cancel){
+            .alert(UIStrings.accountDeleted, isPresented: self.$deletedAccount, actions: {
+                Button(UIStrings.ok, role: .cancel){
                     self.loggedOut = true
                     self.dismiss()
                 }
             }, message: {
-                Text("Your account has been deleted")
+                Text(UIStrings.accountDeletedInformation)
             })
-            .alert("Account deletion", isPresented: self.$askAboutAccountDeletion) {
-                Button("Delete account", role: .destructive) {
-                    let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? ""
-                    
-                    
+            .alert(UIStrings.accountDeletion, isPresented: self.$askAboutAccountDeletion) {
+                Button(UIStrings.deleteAccount, role: .destructive) {
+                    let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
                     FirebaseSetup.firebaseInstance.db.collection("users/\(email)/friends/\(email)/journeys").getDocuments { querySnapshot, error in
                         if let error = error {
                             print(error.localizedDescription)
@@ -170,7 +166,7 @@ struct SettingsView: View {
                     self.deletedAccount = true
                 }
             } message: {
-                Text("Are you sure that you want to delete your account? You won't be able to create account using the same e-mail address.")
+                Text(UIStrings.accountDeletionChecker)
             }
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
@@ -206,7 +202,7 @@ struct SettingsView: View {
             if error != nil {
                 print(error!.localizedDescription)
             } else {
-                print("journey deleted successfully")
+                print(UIStrings.journeyDeletedSuccesfully)
             }
         }
     }
