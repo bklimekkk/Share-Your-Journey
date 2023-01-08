@@ -51,6 +51,7 @@ struct FriendJourneysList: View {
                         }
                     }
                 }
+                .scrollDismissesKeyboard(.interactively)
                 .listStyle(.inset)
                 .refreshable {
                     self.populateFriendsJourneys()
@@ -81,7 +82,6 @@ struct FriendJourneysList: View {
                                                                numberOfPhotos: i.get("photosNumber") as! Int))
                     }
                 }
-                
                 if self.sentByFriend.count > 0 {
                     for i in 0...self.sentByFriend.count - 1 {
                         if !receivedJourneys.map({return $0.documentID}).contains(self.sentByFriend[i].name) {

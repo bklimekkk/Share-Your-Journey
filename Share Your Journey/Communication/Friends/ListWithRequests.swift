@@ -34,12 +34,9 @@ struct ListWithRequests: View {
                                 .foregroundColor(.gray)
                         }
                         .buttonStyle(PlainButtonStyle())
-                        
                         Text(request)
                             .padding(.vertical, 15)
-                        
                         Spacer()
-                        
                         Button{
                             self.acceptRequest(request: request)
                         } label: {
@@ -49,6 +46,7 @@ struct ListWithRequests: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
+                .scrollDismissesKeyboard(.interactively)
                 .listStyle(.inset)
                 .navigationBarHidden(true)
                 .refreshable {

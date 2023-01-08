@@ -9,19 +9,6 @@ import Foundation
 import MapKit
 import SwiftUI
 
-extension UIImage {
-    func fixOrientation() -> UIImage {
-        if self.imageOrientation == UIImage.Orientation.up {
-            return self
-        }
-        UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
-        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
-        let normalizedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        return normalizedImage;
-    }
-}
-
 struct MapView: UIViewRepresentable {
     @Environment(\.colorScheme) var colorScheme
     
@@ -39,7 +26,6 @@ struct MapView: UIViewRepresentable {
     //This array is supposed to contain all places that user visited in the StartView screen during the journey.
     var photos: [UIImage]
     var photosLocations: [CLLocationCoordinate2D]
-    
     
     //This object is annotated as environmental in order to be called from many views.
     @EnvironmentObject var clManager: CurrentLocationManager
@@ -100,7 +86,6 @@ struct MapView: UIViewRepresentable {
                 marker.glyphImage = UIImage(systemName: Icons.personFill)
                 marker.selectedGlyphImage = UIImage(systemName: Icons.person)
             }
-            
             return marker
         }
         
@@ -144,7 +129,6 @@ struct MapView: UIViewRepresentable {
                 }
             }
         }
-        
         
         /**
          Code in this function makes sure that all routes that were created, will appear on the map.

@@ -59,6 +59,7 @@ struct YourJourneysList: View {
                     }
                     .onDelete(perform: self.delete)
                 }
+                .scrollDismissesKeyboard(.interactively)
                 .listStyle(.inset)
                 .refreshable {
                     self.populateYourJourneys()

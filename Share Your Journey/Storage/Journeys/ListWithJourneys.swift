@@ -51,6 +51,7 @@ struct ListWithJourneys: View {
                     }
                     .onDelete(perform: self.delete)
                 }
+                .scrollDismissesKeyboard(.interactively)
                 .listStyle(.plain)
                 .alert(isPresented: self.$askAboutDeletion) {
                     Alert (title: Text(UIStrings.deleteJourney),
@@ -60,16 +61,12 @@ struct ListWithJourneys: View {
                         self.journeyToDelete = UIStrings.emptyString
                     },
                            secondaryButton: .destructive(Text(UIStrings.delete)) {
-                        
                         let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
                         let path = "\(FirestorePaths.getFriends(email: email))/\(email)/journeys"
-                        
                         //Photos need to be leted from both database and storage, if needed.
-                        
                         self.deleteAllPhotos(path: path)
                         self.deleteJourneyFromServer(path: path)
                         self.deleteJourneyFromStorage()
-                        
                         self.deleteFromStorage = true
                         self.askAboutDeletion = false
                         self.journeyToDelete = UIStrings.emptyString

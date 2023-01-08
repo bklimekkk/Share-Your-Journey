@@ -12,7 +12,8 @@ import RevenueCat
 struct Share_Your_JourneyApp: App {
     @StateObject private var journeyDataManager = JourneyDataManager()
     init() {
-        setupRevenueCat()
+        self.setupRevenueCat()
+        UITableView.appearance().keyboardDismissMode = .interactive
     }
     var body: some Scene {
         WindowGroup {

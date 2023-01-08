@@ -15,7 +15,6 @@ struct ListWithFriends: View {
     
     var body: some View {
         VStack {
-            
             if self.filteredFriendsList.isEmpty {
                 NoDataView(text: UIStrings.noFriendsToShow)
                     .onTapGesture {
@@ -38,6 +37,7 @@ struct ListWithFriends: View {
                         }
                     }
                 }
+                .scrollDismissesKeyboard(.interactively)
                 .listStyle(.plain)
                 .refreshable {
                     self.populateFriends()

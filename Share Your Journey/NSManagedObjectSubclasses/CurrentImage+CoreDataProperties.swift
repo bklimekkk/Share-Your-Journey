@@ -38,43 +38,43 @@ extension CurrentImage {
     }
 
     public var getLocation: String {
-        return self.location ?? ""
+        return self.location ?? UIStrings.emptyString
     }
 
     public var getSubLocation: String {
-        return self.subLocation ?? ""
+        return self.subLocation ?? UIStrings.emptyString
     }
 
     public var getAdministrativeArea: String {
-        return self.administrativeArea ?? ""
+        return self.administrativeArea ?? UIStrings.emptyString
     }
 
     public var getCountry: String {
-        return self.country ?? ""
+        return self.country ?? UIStrings.emptyString
     }
 
     public var getIsoCountryCode: String {
-        return self.isoCountryCode ?? ""
+        return self.isoCountryCode ?? UIStrings.emptyString
     }
 
     public var getName: String {
-        return self.name ?? ""
+        return self.name ?? UIStrings.emptyString
     }
 
     public var getPostalCode: String {
-        return self.postalCode ?? ""
+        return self.postalCode ?? UIStrings.emptyString
     }
 
     public var getOcean: String {
-        return self.ocean ?? ""
+        return self.ocean ?? UIStrings.emptyString
     }
 
     public var getInlandWater: String {
-        return self.inlandWater ?? ""
+        return self.inlandWater ?? UIStrings.emptyString
     }
 
     public var getAreasOfInterst: String {
-        return self.areasOfInterest ?? ""
+        return self.areasOfInterest ?? UIStrings.emptyString
     }
 }
 

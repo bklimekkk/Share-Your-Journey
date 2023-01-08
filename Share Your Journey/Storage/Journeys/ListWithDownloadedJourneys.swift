@@ -59,6 +59,7 @@ struct ListWithDownloadedJourneys: View {
                     }
                     .onDelete(perform: self.delete)
                 }
+                .scrollDismissesKeyboard(.interactively)
                 .listStyle(.plain)
                 .alert(isPresented: self.$askAboutDeletion) {
                     //After tapping "x" button, users are always asked if they are sure to delete this particular journey.

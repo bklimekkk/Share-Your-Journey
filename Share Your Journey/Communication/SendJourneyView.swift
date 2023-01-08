@@ -59,6 +59,7 @@ struct SendJourneyView: View {
                                 .foregroundColor(Color.accentColor)
                             }
                         }
+                        .scrollDismissesKeyboard(.interactively)
                         .listStyle(.plain)
                     }
                 }
