@@ -80,7 +80,7 @@ struct SumUpFunctionalityButtonsView: View {
                 let hapticFeedback = UIImpactFeedbackGenerator(style: .heavy)
                 hapticFeedback.impactOccurred()
                 if let location = self.journey.photos.last?.location, let subLocation = self.journey.photos.last?.subLocation {
-                    self.journey.place = subLocation.isEmpty ? location : "\(location), \(subLocation)"
+                    self.journey.place = subLocation.isEmpty || location == subLocation ? location : "\(location), \(subLocation)"
                 }
                 self.journey.name = UUID().uuidString
                 self.createJourney(journey: self.journey)

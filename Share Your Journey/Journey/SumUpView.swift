@@ -168,7 +168,6 @@ struct SumUpView: View {
                                     self.showSumUp = false
                                     self.dismiss()
                                 } label: {
-
                                     //Button is shown only if the journey is saved.
                                     ButtonView(buttonTitle: UIStrings.done)
                                         .background(Color.green)
