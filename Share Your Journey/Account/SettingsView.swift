@@ -74,10 +74,12 @@ struct SettingsView: View {
             .fullScreenCover(isPresented: $showInstructions, content: {
                 InstructionsView()
             })
-            .fullScreenCover(isPresented: self.$subscription.showPanel, content: {
+            .fullScreenCover(isPresented: self.$subscription.showPanel,
+                             content: {
                 SubscriptionView(subscriber: self.$subscription.subscriber)
             })
-            .sheet(isPresented: self.$showPrivacyPolicy, content: {
+            .sheet(isPresented: self.$showPrivacyPolicy,
+                   content: {
                 WebView(url: URL(string: Links.privacyPolicyPage)!)
             })
             .navigationTitle(self.subscription.subscriber ? UIStrings.premiumAccount : UIStrings.regularAccount)
@@ -110,9 +112,7 @@ struct SettingsView: View {
                             }
                         }
                     }
-                    
                     FirebaseSetup.firebaseInstance.auth.currentUser?.delete()
-                    
                     FirebaseSetup.firebaseInstance.db.collection("users").document(email).updateData(["deletedAccount" : true]) { error in
                         if let error = error {
                             print(error.localizedDescription)
@@ -176,6 +176,7 @@ struct SettingsView: View {
             }
         }
     }
+    
     /**
      Function is responsible for deleting all images' references from firestore database.
      */

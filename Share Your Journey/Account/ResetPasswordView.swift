@@ -40,7 +40,10 @@ struct ResetPasswordView: View {
             } label: {
                 ButtonView(buttonTitle: UIStrings.resetPassword)
             }
-            .alert(UIStrings.emailFieldIsEmpty, isPresented: self.$errorManager.showErrorMessage, actions: {}, message: {
+            .alert(UIStrings.emailFieldIsEmpty,
+                   isPresented: self.$errorManager.showErrorMessage,
+                   actions: {},
+                   message: {
                 Text(self.errorManager.errorBody)
             })
             .background(Color.accentColor)

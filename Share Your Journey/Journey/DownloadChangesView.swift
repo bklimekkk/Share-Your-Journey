@@ -42,7 +42,9 @@ struct DownloadChangesView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
         .alert(isPresented: self.$showAlert) {
-            Alert(title: Text(UIStrings.emptyField), message: Text(UIStrings.youNeedToProvideAName), dismissButton: .cancel(Text(UIStrings.ok)) {
+            Alert(title: Text(UIStrings.emptyField),
+                  message: Text(UIStrings.youNeedToProvideAName),
+                  dismissButton: .cancel(Text(UIStrings.ok)) {
                 self.showAlert = false
             })
         }

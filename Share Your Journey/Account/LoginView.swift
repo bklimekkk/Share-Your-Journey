@@ -70,7 +70,9 @@ struct LoginView: View {
             ScrollView {
                 VStack {
                     //PickerView struct enables users to choos between two "sub" screens.
-                    PickerView(choice: self.$accountAccessManager.register, firstChoice: UIStrings.login, secondChoice: UIStrings.createAccount)
+                    PickerView(choice: self.$accountAccessManager.register,
+                               firstChoice: UIStrings.login,
+                               secondChoice: UIStrings.createAccount)
                     EmailTextField(label: UIStrings.emailAddress, email: $email)
                     SecureField(UIStrings.password, text: self.$password)
                         .padding(.vertical, 10)
@@ -257,30 +259,30 @@ struct LoginView: View {
         //Firebase is used to add user's data to the database.
         let instanceReference = FirebaseSetup.firebaseInstance.db
         //Each of three collections in Firebase server needs to be populated with new user's date.
-        instanceReference.document("users/\(email)").setData([
+        instanceReference.document("\(FirestorePaths.getUsers())/\(email)").setData([
             "email": email,
             "deletedAccount": false
         ])
-        instanceReference.document("users/\(email)/friends/\(email)").setData([
+        instanceReference.document("\(FirestorePaths.getFriends(email: email))/\(email)").setData([
             "email": email,
             "deletedAccount": false
         ])
-        instanceReference.document("users/\(email)/requests/\(email)").setData([
+        instanceReference.document("\(FirestorePaths.getRequests(email: email))/\(email)").setData([
             "email": email,
             "deletedAccount": false
         ])
-        instanceReference.collection("users/\(email)/friends").getDocuments { querySnapshot, error in
+        instanceReference.collection(FirestorePaths.getFriends(email: email)).getDocuments { querySnapshot, error in
             if let error = error {
                 print(error.localizedDescription)
             } else {
                 for i in querySnapshot!.documents {
-                    instanceReference.collection("users/\(i.documentID)/friends").getDocuments { querySnapshot, error in
+                    instanceReference.collection(FirestorePaths.getFriends(email: i.documentID)).getDocuments { querySnapshot, error in
                         if let error = error {
                             print(error.localizedDescription)
                         } else {
                             for j in querySnapshot!.documents {
                                 if j.documentID == email {
-                                    instanceReference.collection("users/\(i.documentID)/friends").document(email).updateData(["deletedAccount" : false])
+                                    instanceReference.collection(FirestorePaths.getFriends(email: i.documentID)).document(email).updateData(["deletedAccount" : false])
                                 }
                             }
                         }

@@ -178,7 +178,9 @@ struct SumUpView: View {
                             .padding(.horizontal, 5)
                             .padding(.bottom, 5)
                         } else {
-                            SumUpFunctionalityButtonsView(journey: self.$journey, showDeleteAlert: self.$showDeleteAlert, done: self.$done)
+                            SumUpFunctionalityButtonsView(journey: self.$journey,
+                                                          showDeleteAlert: self.$showDeleteAlert,
+                                                          done: self.$done)
                         }
                     }
                     .alert(UIStrings.quit, isPresented: $showDeleteAlert) {

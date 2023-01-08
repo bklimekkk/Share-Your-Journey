@@ -26,9 +26,9 @@ struct FriendsView: View {
     //Variable responsible for justifying if users want to add new friend at the particular moment.
     @State private var addNewFriend = false
     //Variable contains detalis about user's requests.
-    @State private var requestsSet = RequestsSet(ownEmail: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")
+    @State private var requestsSet = RequestsSet(ownEmail: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)
     //Variable will contain data necessary to populate array with user's friends.
-    @State private var friendsSet = FriendsSet(ownEmail: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")
+    @State private var friendsSet = FriendsSet(ownEmail: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)
     //Variable contains data entered by user while searching both arrays (requests and friends).
     @State private var searchPeople = UIStrings.emptyString
 
@@ -54,7 +54,9 @@ struct FriendsView: View {
 
             VStack {
                 //Screen allows users to view their friends list and list with requests sent to them.
-                PickerView(choice: self.$requestMode, firstChoice: UIStrings.friends, secondChoice: UIStrings.requests)
+                PickerView(choice: self.$requestMode,
+                           firstChoice: UIStrings.friends,
+                           secondChoice: UIStrings.requests)
                     .padding(.vertical)
                     .padding(.horizontal, 5)
                 
@@ -62,9 +64,13 @@ struct FriendsView: View {
                 
                 //Depending on what option user has chosen, different lists are persented.
                 if self.requestMode {
-                    ListWithRequests(searchPeople: self.$searchPeople, requestsSet: self.$requestsSet, filteredRequestsList: self.filteredRequestsList)
+                    ListWithRequests(searchPeople: self.$searchPeople,
+                                     requestsSet: self.$requestsSet,
+                                     filteredRequestsList: self.filteredRequestsList)
                 } else {
-                    ListWithFriends(searchPeople: self.$searchPeople, friendsSet: self.$friendsSet, filteredFriendsList: self.filteredFriendsList)
+                    ListWithFriends(searchPeople: self.$searchPeople,
+                                    friendsSet: self.$friendsSet,
+                                    filteredFriendsList: self.filteredFriendsList)
                 }
                 
                 Spacer()

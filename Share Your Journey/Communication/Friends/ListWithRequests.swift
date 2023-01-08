@@ -102,7 +102,7 @@ struct ListWithRequests: View {
         }
         
         //Request is deleted from the appropriate array.
-        for i in 0...self.requestsSet.requestsList.count-1 {
+        for i in 0...self.requestsSet.requestsList.count - 1 {
             if self.requestsSet.requestsList[i] == request {
                 self.requestsSet.requestsList.remove(at: i)
                 break

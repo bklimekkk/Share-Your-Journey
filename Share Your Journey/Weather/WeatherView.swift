@@ -36,7 +36,9 @@ struct WeatherView: View {
             if self.currentWeatherInformation == UIStrings.current {
                 CurrentWeatherView(weatherResponse: self.weatherResponse)
             } else {
-                ForecastView(forecastResponse: self.forecastResponse, latitude: self.latitude, longitude: self.longitude)
+                ForecastView(forecastResponse: self.forecastResponse,
+                             latitude: self.latitude,
+                             longitude: self.longitude)
             }
         }
         .padding(.vertical, 7)
@@ -49,8 +51,12 @@ struct WeatherView: View {
                 .stroke(.gray, lineWidth: 0.5)
         )
         .task {
-            await WeatherRequest(weatherResponse: self.$weatherResponse, latitude: self.latitude, longitude: self.longitude).fetchWeatherData()
-            await ForecastRequest(forecastResponse: self.$forecastResponse, latitude: self.latitude, longitude: self.longitude).fetchForecastData()
+            await WeatherRequest(weatherResponse: self.$weatherResponse,
+                                 latitude: self.latitude,
+                                 longitude: self.longitude).fetchWeatherData()
+            await ForecastRequest(forecastResponse: self.$forecastResponse,
+                                  latitude: self.latitude,
+                                  longitude: self.longitude).fetchForecastData()
         }
     }
 }
