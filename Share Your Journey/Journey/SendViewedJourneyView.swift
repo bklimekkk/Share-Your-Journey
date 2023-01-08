@@ -24,7 +24,7 @@ struct SendViewedJourneyView: View {
                     Text(friend)
                         .padding(.vertical, 15)
                         .onTapGesture {
-                            FirebaseSetup.firebaseInstance.db.collection("users/\(email)/friends/\(friend)/journeys").getDocuments { querySnapshot, error in
+                            FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(email: self.email))/\(friend)/journeys").getDocuments { querySnapshot, error in
                                 if let error = error {
                                     print(error.localizedDescription)
                                 } else {
@@ -71,13 +71,13 @@ struct SendViewedJourneyView: View {
                 Text(UIStrings.journeyAlreadyExists)
             })
             .task {
-                FirebaseSetup.firebaseInstance.db.collection("users/\(self.email)/friends").getDocuments { querySnapshot, error in
+                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(email: self.email)).getDocuments { querySnapshot, error in
                     if let error = error {
                         print(error.localizedDescription)
                     } else {
                         for i in querySnapshot!.documents {
                             if i.documentID != self.email {
-                                FirebaseSetup.firebaseInstance.db.collection("users/\(self.email)/friends/\(i)/journeys").getDocuments() { querySnapshot, error in
+                                FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(email: self.email))/\(i)/journeys").getDocuments() { querySnapshot, error in
                                     if let error = error {
                                         print(error.localizedDescription)
                                     } else {

@@ -69,7 +69,7 @@ struct ListWithRequests: View {
     func populateRequests() {
         
         //Variable controls which user is currently logged in into the application.
-        let currentEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? ""
+        let currentEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
         
         //Users can change account while being on the same phone. This statement detects it and refreshes the array accordingly.
         if self.requestsSet.ownEmail != currentEmail {
@@ -78,7 +78,7 @@ struct ListWithRequests: View {
         }
         
         //Program searches through requests collection in Firebase in order to fetch user's requests.
-        FirebaseSetup.firebaseInstance.db.collection("users/\(currentEmail)/requests").getDocuments { (querySnapshot, error) in
+        FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(email: currentEmail)).getDocuments { (querySnapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
@@ -97,7 +97,7 @@ struct ListWithRequests: View {
     func removeRequest(request: String) {
         
         //Chosen request is deleted from Firestore database.
-        FirebaseSetup.firebaseInstance.db.collection("users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/requests").document(request).delete() { error in
+        FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)).document(request).delete() { error in
             if error != nil {
                 print(error!.localizedDescription)
             }
@@ -118,24 +118,24 @@ struct ListWithRequests: View {
     func acceptRequest(request: String) {
         
         //Email from which the request was sent from, is added to friends collection in Firestore database.
-        FirebaseSetup.firebaseInstance.db.document("users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(request)").setData([
+        FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getFriends(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString))/\(request)").setData([
             "email" : request,
             "deletedAccount" : false
         ])
         
         //Collection needs to contain at least one document in order to exist, so It's populated with one. This collection is going to contain qll journeys sent from user.
-        FirebaseSetup.firebaseInstance.db.document("users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(request)/journeys/-").setData([
+        FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getFriends(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString))/\(request)/journeys/-").setData([
             "name" : "-"
         ])
         
         //Program also needs to take care about adding user to their friend's "friends" collection.
-        FirebaseSetup.firebaseInstance.db.document("users/\(request)/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")").setData([
-            "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",
+        FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getFriends(email: request))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)").setData([
+            "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
             "deletedAccount" : false
         ])
         
         //This collection is going to contain all journeys sent to user.
-        FirebaseSetup.firebaseInstance.db.document("users/\(request)/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys/-").setData([
+        FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getFriends(email: request))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys/-").setData([
             "name" : "-"
         ])
         

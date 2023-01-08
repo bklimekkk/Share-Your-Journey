@@ -43,7 +43,7 @@ struct ListWithJourneys: View {
                                     .foregroundColor(.gray)
                             }
 
-                            NavigationLink (destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString, downloadMode: false, path: "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/journeys")) {
+                            NavigationLink (destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString, downloadMode: false, path: "\(FirestorePaths.getFriends(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)/journeys")) {
                                 EmptyView()
                             }
                             .opacity(0)
@@ -62,7 +62,7 @@ struct ListWithJourneys: View {
                            secondaryButton: .destructive(Text(UIStrings.delete)) {
                         
                         let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
-                        let path = "users/\(email)/friends/\(email)/journeys"
+                        let path = "\(FirestorePaths.getFriends(email: email))/\(email)/journeys"
                         
                         //Photos need to be leted from both database and storage, if needed.
                         
@@ -125,7 +125,7 @@ struct ListWithJourneys: View {
             if self.journeysList[i].name == self.journeyToDelete {
                 if self.deleteFromStorage {
                     for j in 0...self.journeysList[i].numberOfPhotos - 1 {
-                        let deleteReference = FirebaseSetup.firebaseInstance.storage.reference().child("\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/\(self.journeyToDelete)/\(j)")
+                        let deleteReference = FirebaseSetup.firebaseInstance.storage.reference().child("\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)/\(self.journeyToDelete)/\(j)")
                         deleteReference.delete { error in
                             if error != nil {
                                 print("Error while deleting journey from storage")
@@ -154,8 +154,8 @@ struct ListWithJourneys: View {
      Function is responsible for adding journeys to array, and refreshing it if needed.
      */
     func updateJourneys() {
-        let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? ""
-        let path = "users/\(email)/friends/\(email)/journeys"
+        let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
+        let path = "\(FirestorePaths.getFriends(email: email))/\(email)/journeys"
         
         FirebaseSetup.firebaseInstance.db.collection(path).getDocuments() { (querySnapshot, error) in
             if error != nil {
@@ -175,7 +175,7 @@ struct ListWithJourneys: View {
      Function is responsible for checking if journey occurs anywhere else in the database. If it doesn't, journey is ready to be deleted from storage as well.
      */
     func checkBeforeDeletion(journey: SingleJourney) {
-        let friendsPath = "users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends"
+        let friendsPath = FirestorePaths.getFriends(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)
         
         FirebaseSetup.firebaseInstance.db.collection(friendsPath).getDocuments { snapshot, error in
             if error != nil {

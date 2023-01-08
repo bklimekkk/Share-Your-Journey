@@ -57,7 +57,7 @@ struct AddFriendView: View {
                 }
                 
                 //If statement is responsible for checking if user's friend haven't sent them invitation.
-                FirebaseSetup.firebaseInstance.db.collection("users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/requests").getDocuments { snapshot, error in
+                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)).getDocuments { snapshot, error in
                     if error != nil {
                         print("Error while retrieving the list of requests")
                     } else {
@@ -72,7 +72,7 @@ struct AddFriendView: View {
                 }
                 
                 //If statement is responsible for checking if user haven't sent invitation to friend.
-                FirebaseSetup.firebaseInstance.db.collection("users/\(lowerCasedEmail)/requests").getDocuments { snapshot, error in
+                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(email: lowerCasedEmail)).getDocuments { snapshot, error in
                     if error != nil {
                         print("Error while retrieving the list of requests")
                     } else {
@@ -87,7 +87,7 @@ struct AddFriendView: View {
                 }
                 
                 //If statement is responsible for checking if invited friend is user's friend already.
-                FirebaseSetup.firebaseInstance.db.collection("users/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")/friends").getDocuments { snapshot, error in
+                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)).getDocuments { snapshot, error in
                     if error != nil {
                         print("Error while retrieving the list of current friends")
                     } else {
@@ -102,7 +102,7 @@ struct AddFriendView: View {
                 }
                 
                 //If statement is responsible for checking if email adress given by user exists in the database.
-                FirebaseSetup.firebaseInstance.db.collection("users").getDocuments { snapshot, error in
+                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getUsers()).getDocuments { snapshot, error in
                     if error != nil {
                         print("Error while retrieving the list of users")
                     } else {
@@ -162,7 +162,7 @@ struct AddFriendView: View {
      */
     func sendRequest() {
         
-        FirebaseSetup.firebaseInstance.db.document("users/\(email.lowercased())/requests/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "")").setData([
+        FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getRequests(email: email.lowercased()))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)").setData([
             "email": FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
             "deletedAccount": false
         ])

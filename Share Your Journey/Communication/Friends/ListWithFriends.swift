@@ -56,14 +56,14 @@ struct ListWithFriends: View {
     func populateFriends() {
         
         //This block of code ensures that users that are currently logged in, will see their own friends list (even after logging out).
-        let currentEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? ""
+        let currentEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
         if self.friendsSet.ownEmail != currentEmail {
             self.friendsSet.friendsList = []
             self.friendsSet.ownEmail = currentEmail
         }
         
         //Data is pulled out of the appropriate collection in firestore database and array is populated with it.
-        FirebaseSetup.firebaseInstance.db.collection("users/\(currentEmail)/friends").getDocuments { (querySnapshot, error) in
+        FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(email: currentEmail)).getDocuments { (querySnapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
             } else {

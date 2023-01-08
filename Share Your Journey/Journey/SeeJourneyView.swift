@@ -502,7 +502,7 @@ struct SeeJourneyView: View {
      */
     func createJourney() {
         let instanceReference = FirebaseSetup.firebaseInstance
-        instanceReference.db.collection("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? "")/journeys").document(self.journey.name).setData([
+        instanceReference.db.collection("\(FirestorePaths.getFriends(email: instanceReference.auth.currentUser?.email ?? UIStrings.emptyString))/\(instanceReference.auth.currentUser?.email ?? UIStrings.emptyString)/journeys").document(self.journey.name).setData([
             "name" : self.journey.name,
             "place" : self.journey.place,
             "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,

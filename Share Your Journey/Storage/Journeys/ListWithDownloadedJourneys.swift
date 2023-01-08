@@ -95,7 +95,13 @@ struct ListWithDownloadedJourneys: View {
 
         for i in self.journeys.filter({return $0.email == FirebaseSetup.firebaseInstance.auth.currentUser?.email}) {
             if !self.downloadedJourneysList.map({return $0.name}).contains(i.name) {
-                self.downloadedJourneysList.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString, name: i.name ?? UIStrings.emptyString, place: UIStrings.emptyString, date: i.date ?? Date(), numberOfPhotos: i.photosNumber as! Int, photos: [], photosLocations: [], networkProblem: i.networkProblem))
+                self.downloadedJourneysList.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
+                                                                 name: i.name ?? UIStrings.emptyString,
+                                                                 place: UIStrings.emptyString, date: i.date ?? Date(),
+                                                                 numberOfPhotos: i.photosNumber as! Int,
+                                                                 photos: [],
+                                                                 photosLocations: [],
+                                                                 networkProblem: i.networkProblem))
             }
         }
     }

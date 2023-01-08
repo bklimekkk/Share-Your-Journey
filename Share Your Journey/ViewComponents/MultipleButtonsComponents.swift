@@ -100,10 +100,10 @@ struct SumUpFunctionalityButtonsView: View {
      */
     func createJourney(journey: SingleJourney) {
         let instanceReference = FirebaseSetup.firebaseInstance
-        instanceReference.db.collection("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? UIStrings.emptyString)/journeys").document(journey.name).setData([
+        instanceReference.db.collection(FirestorePaths.myJourneys(email: instanceReference.auth.currentUser?.email ?? UIStrings.emptyString)).document(journey.name).setData([
             "name" : journey.name,
             "place" : journey.place,
-            "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? "",
+            "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
             "photosNumber" : journey.numberOfPhotos,
             "date" : Date(),
             "deletedJourney" : false
@@ -122,7 +122,7 @@ struct SumUpFunctionalityButtonsView: View {
         }
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpeg"
-        let photoReference = "\(instanceReference.auth.currentUser?.email ?? "")/\(name)/\(index)"
+        let photoReference = "\(instanceReference.auth.currentUser?.email ?? UIStrings.emptyString)/\(name)/\(index)"
         let storageReference = instanceReference.storage.reference(withPath: photoReference)
 
         //Storage is populated with the image.
@@ -132,7 +132,7 @@ struct SumUpFunctionalityButtonsView: View {
             }
 
             //Image's details are added to appropriate collection in firetore's database.
-            instanceReference.db.document("users/\(instanceReference.auth.currentUser?.email ?? "")/friends/\(instanceReference.auth.currentUser?.email ?? "")/journeys/\(name)/photos/\(index)").setData([
+            instanceReference.db.document("\(FirestorePaths.myJourneys(email: instanceReference.auth.currentUser?.email ?? UIStrings.emptyString))/\(name)/photos/\(index)").setData([
                 "latitude": journey.photosLocations[index].latitude,
                 "longitude": journey.photosLocations[index].longitude,
                 "photoUrl": photoReference,
