@@ -104,8 +104,7 @@ struct StartView: View {
                     expandWeather: self.$weatherController.expandWeather,
                     weatherLatitude: self.$weatherController.weatherLatitude,
                     weatherLongitude: self.$weatherController.weatherLongitude,
-                    photos: [],
-                    photosLocations: [])
+                    photosLocations: self.$arrayOfPhotosLocations)
             .environmentObject(self.currentLocationManager)
             .edgesIgnoringSafeArea(.all)
             
@@ -205,6 +204,15 @@ struct StartView: View {
                 for i in self.currentLocations {
                     self.arrayOfPhotosLocations.append(CLLocationCoordinate2D(latitude: i.latitude, longitude: i.longitude))
                 }
+            }
+
+            var index = 0
+            while index < self.arrayOfPhotosLocations.count {
+                let photoPin = MKPointAnnotation()
+                photoPin.title = String(index + 1)
+                photoPin.coordinate = self.arrayOfPhotosLocations[index]
+                self.currentLocationManager.mapView.addAnnotation(photoPin)
+                index += 1
             }
         }
         .fullScreenCover(isPresented: self.$journeyStateController.showSettings, content: {
@@ -369,6 +377,10 @@ struct StartView: View {
                 image.areasOfInterest = areasOfInterest
             }
         }
+        let photoPin = MKPointAnnotation()
+        photoPin.title = String(self.arrayOfPhotosLocations.count)
+        photoPin.coordinate = self.arrayOfPhotosLocations[self.arrayOfPhotosLocations.count - 1]
+        self.currentLocationManager.mapView.addAnnotation(photoPin)
     }
     
     /**

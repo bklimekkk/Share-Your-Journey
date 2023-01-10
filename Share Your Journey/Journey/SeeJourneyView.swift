@@ -149,12 +149,11 @@ struct SeeJourneyView: View {
                                     expandWeather: self.$expandWeather,
                                     weatherLatitude: self.$weatherLatitude,
                                     weatherLongitude: self.$weatherLongitude,
-                                    photos: self.journey.photos.sorted{$1.number > $0.number}.map{$0.photo},
-                                    photosLocations: self.journey.photosLocations)
+                                    photosLocations: self.$journey.photosLocations)
                             .edgesIgnoringSafeArea(.all)
                             .environmentObject(self.currentLocationManager)
                             .opacity(self.showPicture ? 0 : 1)
-                            
+                        
                             if self.showWeather {
                                 VStack {
                                     HStack {

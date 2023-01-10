@@ -23,9 +23,7 @@ struct MapView: UIViewRepresentable {
     var tintColor: UIColor {
         self.colorScheme == .light ? Colors.darkTintColor : .white
     }
-    //This array is supposed to contain all places that user visited in the StartView screen during the journey.
-    var photos: [UIImage]
-    var photosLocations: [CLLocationCoordinate2D]
+    @Binding var photosLocations: [CLLocationCoordinate2D]
     
     //This object is annotated as environmental in order to be called from many views.
     @EnvironmentObject var clManager: CurrentLocationManager
