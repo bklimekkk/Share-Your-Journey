@@ -31,8 +31,6 @@ struct SumUpView: View {
     @StateObject private var currentLocationManager = CurrentLocationManager()
     //Variable representing user's current location. Right now it's set to one default value, but it is changed right after the view appears.
     @State private var currentLocation = MKCoordinateRegion(center: CLLocationCoordinate2D(), latitudinalMeters: 0, longitudinalMeters: 0)
-    //Variable controls if viewed image should be saved to camera roll.
-    @State private var savedToCameraRoll = false
     //Variable controls if users tapped any picture. If yes, it's set to true and the image is enlarged.
     @State private var showPicture = false
     //Variable contains data of image that should be enlarged at particular moment.
@@ -189,12 +187,9 @@ struct SumUpView: View {
                         Text(UIStrings.areYouSureToQuit)
                     }
                 }
-                HighlightedPhoto(savedToCameraRoll: self.$savedToCameraRoll,
-                                 highlightedPhotoIndex: self.$photoIndex,
+                HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
                                  showPicture: self.$showPicture,
                                  highlightedPhoto: self.$highlightedPhoto,
-                                 subscriber: self.$subscription.subscriber,
-                                 showPanel: self.$subscription.showPanel,
                                  journey: self.journey)
             }
             .navigationTitle(UIStrings.sumUp)

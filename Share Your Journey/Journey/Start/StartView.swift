@@ -219,10 +219,10 @@ struct StartView: View {
                            singleJourney: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
                                                         photos: self.arrayOfPhotos,
                                                         photosLocations: self.arrayOfPhotosLocations))
-                HighlightedPhoto(savedToCameraRoll: self.$currentImagesCollection.savedToCameraRoll,
-                                 highlightedPhotoIndex: self.$currentImagesCollection.photoIndex, showPicture: self.$currentImagesCollection.showPicture,
-                                 highlightedPhoto: self.$currentImagesCollection.highlightedPhoto, subscriber: self.$subscription.subscriber,
-                                 showPanel: self.$subscription.showPanel, journey: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
+                HighlightedPhoto(highlightedPhotoIndex: self.$currentImagesCollection.photoIndex,
+                                 showPicture: self.$currentImagesCollection.showPicture,
+                                 highlightedPhoto: self.$currentImagesCollection.highlightedPhoto,
+                                 journey: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
                                                                                                  photos: self.arrayOfPhotos,
                                                                                                  photosLocations: self.arrayOfPhotosLocations))
             }

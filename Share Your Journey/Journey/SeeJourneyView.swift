@@ -45,7 +45,6 @@ struct SeeJourneyView: View {
     //Similar variables were described in SumUpView struct.
     @State private var currentPhotoIndex = 0
     @State private var showPicture = false
-    @State private var savedToCameraRoll = false
     @State private var highlightedPhoto: UIImage = UIImage()
     @State private var downloadedPhotos = false
     @State private var showDownloadAlert = false
@@ -266,12 +265,9 @@ struct SeeJourneyView: View {
                     }
                 }
             }
-            HighlightedPhoto(savedToCameraRoll: self.$savedToCameraRoll,
-                             highlightedPhotoIndex: self.$currentPhotoIndex,
+            HighlightedPhoto(highlightedPhotoIndex: self.$currentPhotoIndex,
                              showPicture: self.$showPicture,
                              highlightedPhoto: self.$highlightedPhoto,
-                             subscriber: self.$subscription.subscriber,
-                             showPanel: self.$subscription.showPanel,
                              journey: self.journey)
         }
         .toolbar {

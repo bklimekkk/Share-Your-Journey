@@ -12,12 +12,9 @@ import SwiftUI
 struct HighlightedPhoto: View {
     
     //Variables described in SeeJourneyView struct.
-    @Binding var savedToCameraRoll: Bool
     @Binding var highlightedPhotoIndex: Int
     @Binding var showPicture: Bool
     @Binding var highlightedPhoto: UIImage
-    @Binding var subscriber: Bool
-    @Binding var showPanel: Bool
     var journey: SingleJourney
     var gold: Color {
         Color(uiColor: Colors.premiumColor)
@@ -35,23 +32,19 @@ struct HighlightedPhoto: View {
                             if value.translation.width > 0 && self.highlightedPhotoIndex > 0 {
                                 self.highlightedPhotoIndex -= 1
                                 self.highlightedPhoto = self.journey.photos[highlightedPhotoIndex].photo
-                                self.savedToCameraRoll = false
                             }
                             if value.translation.width < 0 && self.highlightedPhotoIndex < self.journey.photos.count - 1 {
                                 self.highlightedPhotoIndex += 1
                                 self.highlightedPhoto = self.journey.photos[highlightedPhotoIndex].photo
-                                self.savedToCameraRoll = false
                             }
                         }))
-            
+
                 Spacer()
                 //This HStack contains code responsible for generating functionality provided along with highlighted image: Ability to go back to the map, number of image and ability to download the image.
                 HStack {
-                    
                     Button {
                         withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
                             self.showPicture = false
-                            self.savedToCameraRoll = false
                         }
                     } label:{
                         Image(systemName: Icons.xmark)
@@ -64,43 +57,28 @@ struct HighlightedPhoto: View {
                     Text(String(self.highlightedPhotoIndex + 1))
                         .foregroundColor(Color(Colors.systemImageColor ?? .white))
                         .font(.system(size: 40))
-                    
                     Spacer()
-                    
-                    //While the image is highlighted, users can download it only once, after clicking the button, it disappears.
-                    if self.savedToCameraRoll {
-                        Button {} label:{
-                            Image(systemName: Icons.checkmark)
-                                .font(.system(size: 30))
-                                .foregroundColor(.green)
-                                .offset(y: -5)
-                        }
-                        .disabled(true)
-                    } else {
-                        Button {
-                            
-                            if self.subscriber {
-                                UIImageWriteToSavedPhotosAlbum(self.highlightedPhoto, nil, nil, nil)
-                            withAnimation {
-                                self.savedToCameraRoll = true
-                            }
-                            } else {
-                                self.showPanel = true
-                            }
-                            
-                        } label:{
-                            Image(systemName: Icons.squareAndArrowDown)
-                                .font(.system(size: 30))
-                                .foregroundColor(self.subscriber ? Color(Colors.systemImageColor ?? .gray) : self.gold)
-                                .offset(y: -5)
-                        }
+                    Button {
+                        self.sendPhotoViaSocialMedia()
+                    } label:{
+                        Image(systemName: Icons.squareAndArrowUp)
+                            .font(.system(size: 30))
+                            .foregroundColor(Color(Colors.systemImageColor ?? .gray))
+                            .offset(y: -5)
                     }
+
                 }
                 .padding(.horizontal)
             }
             .transition(.scale)
             .zIndex(1)
         }
+    }
+    
+    func sendPhotoViaSocialMedia() {
+        let activityViewController = UIActivityViewController(activityItems: [self.journey.photos[self.highlightedPhotoIndex].photo],
+                                                              applicationActivities: nil)
+        UIApplication.shared.windows.first?.rootViewController!.present(activityViewController, animated: true, completion: nil)
     }
 }
 
