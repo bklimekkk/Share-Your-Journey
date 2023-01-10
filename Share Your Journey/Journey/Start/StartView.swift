@@ -185,7 +185,8 @@ struct StartView: View {
         .task {
             if !self.currentImages.isEmpty && self.arrayOfPhotos.isEmpty {
                 for i in self.currentImages {
-                    self.arrayOfPhotos.append(SinglePhoto(number: i.getId,
+                    self.arrayOfPhotos.append(SinglePhoto(date: i.getDate,
+                                                          number: i.getId,
                                                           photo: i.getImage,
                                                           location: i.getLocation,
                                                           subLocation: i.getSubLocation,
@@ -343,16 +344,8 @@ struct StartView: View {
                 let ocean = placemark?.ocean ?? UIStrings.emptyString
                 let inlandWater = placemark?.inlandWater ?? UIStrings.emptyString
                 let areasOfInterest = placemark?.areasOfInterest?.joined(separator: ",") ?? UIStrings.emptyString
-                print("locality: \(locality)")
-                print("subLocality: \(subLocality)")
-                print("administrative area: \(administrativeArea)")
-                print("areas of interest: \(areasOfInterest)")
-                print("country: \(country)")
-                print("inland water: \(inlandWater)")
-                print("iso country code: \(isoCountryCode)")
-                print("name: \(name)")
-                print("ocean: \(ocean)")
-                print("postal code: \(postalCode)")
+                let date = Date()
+                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].date = date
                 self.arrayOfPhotos[self.arrayOfPhotos.count - 1].location = locality
                 self.arrayOfPhotos[self.arrayOfPhotos.count - 1].subLocation = subLocality
                 self.arrayOfPhotos[self.arrayOfPhotos.count - 1].administrativeArea = administrativeArea
@@ -363,6 +356,7 @@ struct StartView: View {
                 self.arrayOfPhotos[self.arrayOfPhotos.count - 1].ocean = ocean
                 self.arrayOfPhotos[self.arrayOfPhotos.count - 1].inlandWater = inlandWater
                 self.arrayOfPhotos[self.arrayOfPhotos.count - 1].areasOfInterest = areasOfInterest.components(separatedBy: ",")
+                image.date = date
                 image.location = locality
                 image.subLocation = subLocality
                 image.administrativeArea = administrativeArea

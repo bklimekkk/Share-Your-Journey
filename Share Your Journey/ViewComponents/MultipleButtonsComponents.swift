@@ -137,6 +137,7 @@ struct SumUpFunctionalityButtonsView: View {
                 "longitude": journey.photosLocations[index].longitude,
                 "photoUrl": photoReference,
                 "photoNumber": index,
+                "date": journey.photos[index].date,
                 "location": journey.photos[index].location,
                 "subLocation": journey.photos[index].subLocation,
                 "administrativeArea": journey.photos[index].administrativeArea,

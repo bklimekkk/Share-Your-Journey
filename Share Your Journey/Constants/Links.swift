@@ -12,7 +12,7 @@ struct Links {
     static let privacyPolicyPage = "https://bklimekkk.github.io/share-your-journey-privacy-policy/"
     static let allFeaturesEntitlement = "allfeatures"
     static let defaultOffering = "default"
-    static let regularDateFormat = "dd/MM/YY, hh:mm"
+    static let regularDateFormat = "dd/MM/YY, hh:mm a"
     static let weatherDateFormat = "yyyy-MM-dd HH:mm:ss"
     static let revenueCatAPIKey = "appl_UjmZibTkIjZGigTrJdEeDDVHqqQ"
     static let openWeatherEndpoint = "https://api.openweathermap.org/data/2.5/"

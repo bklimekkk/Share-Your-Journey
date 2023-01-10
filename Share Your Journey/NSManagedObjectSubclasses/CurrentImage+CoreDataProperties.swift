@@ -16,6 +16,7 @@ extension CurrentImage {
         return NSFetchRequest<CurrentImage>(entityName: "CurrentImage")
     }
 
+    @NSManaged public var date: Date?
     @NSManaged public var image: Data?
     @NSManaged public var id: Int16
     @NSManaged public var location: String?
@@ -75,6 +76,10 @@ extension CurrentImage {
 
     public var getAreasOfInterst: String {
         return self.areasOfInterest ?? UIStrings.emptyString
+    }
+
+    public var getDate: Date {
+        return self.date ?? Date()
     }
 }
 

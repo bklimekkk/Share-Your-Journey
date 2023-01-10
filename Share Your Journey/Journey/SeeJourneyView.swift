@@ -379,7 +379,6 @@ struct SeeJourneyView: View {
             if i.name == self.journey.name {
                 self.journey.email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
                 self.journey.numberOfPhotos = i.photosArray.count
-                
                 for index in 0...i.photosArray.count - 1 {
                     let singlePhoto = SinglePhoto(number: index, photo: i.photosArray[index].getImage)
                     self.journey.photos.append(singlePhoto)
@@ -443,17 +442,20 @@ struct SeeJourneyView: View {
                     //Image is appended to photos array on main thread so running application isn't interrupted.
                     DispatchQueue.main.async {
                         journey.photos[queryDocumentSnapshot.get("photoNumber") as! Int] =
-                        (SinglePhoto(number: queryDocumentSnapshot.get("photoNumber") as! Int,photo: image,
-                                     location: queryDocumentSnapshot.get("location") as! String,
-                                     subLocation: queryDocumentSnapshot.get("subLocation") as! String,
-                                     administrativeArea: queryDocumentSnapshot.get("administrativeArea") as! String,
-                                     country: queryDocumentSnapshot.get("country") as! String,
-                                     isoCountryCode: queryDocumentSnapshot.get("isoCountryCode") as! String,
-                                     name: queryDocumentSnapshot.get("name") as! String,
-                                     postalCode: queryDocumentSnapshot.get("postalCode") as! String,
-                                     ocean: queryDocumentSnapshot.get("ocean") as! String,
-                                     inlandWater: queryDocumentSnapshot.get("inlandWater") as! String,
-                                     areasOfInterest: (queryDocumentSnapshot.get("areasOfInterest") as! String).components(separatedBy: ",")))
+                        (SinglePhoto(
+                            date: (queryDocumentSnapshot.get("date") as? Timestamp)?.dateValue() ?? Date(),
+                            number: queryDocumentSnapshot.get("photoNumber") as! Int,
+                            photo: image,
+                            location: queryDocumentSnapshot.get("location") as! String,
+                            subLocation: queryDocumentSnapshot.get("subLocation") as! String,
+                            administrativeArea: queryDocumentSnapshot.get("administrativeArea") as! String,
+                            country: queryDocumentSnapshot.get("country") as! String,
+                            isoCountryCode: queryDocumentSnapshot.get("isoCountryCode") as! String,
+                            name: queryDocumentSnapshot.get("name") as! String,
+                            postalCode: queryDocumentSnapshot.get("postalCode") as! String,
+                            ocean: queryDocumentSnapshot.get("ocean") as! String,
+                            inlandWater: queryDocumentSnapshot.get("inlandWater") as! String,
+                            areasOfInterest: (queryDocumentSnapshot.get("areasOfInterest") as! String).components(separatedBy: ",")))
                     }
                 }
                 .resume()

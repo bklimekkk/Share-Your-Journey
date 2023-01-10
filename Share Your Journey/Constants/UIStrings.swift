@@ -166,4 +166,6 @@ struct UIStrings {
     static let downloaded = "Downloaded"
     static let current = "current"
     static let forecast = "forecast"
+    static let date = "Date"
+    static let time = "Time"
 }

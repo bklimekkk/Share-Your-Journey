@@ -13,16 +13,22 @@ struct PhotoDetailsView: View {
     var body: some View {
         NavigationView {
             List {
-                PhotoDetailView(title: UIStrings.location, information: self.photo.location)
-                PhotoDetailView(title: UIStrings.subLocation, information: self.photo.subLocation)
-                PhotoDetailView(title: UIStrings.administrativeArea, information: self.photo.administrativeArea)
-                PhotoDetailView(title: UIStrings.country, information: self.photo.country)
-                PhotoDetailView(title: UIStrings.countryCode, information: self.photo.isoCountryCode)
-                PhotoDetailView(title: UIStrings.name, information: self.photo.name)
-                PhotoDetailView(title: UIStrings.postalCode, information: self.photo.postalCode)
-                PhotoDetailView(title: UIStrings.ocean, information: self.photo.ocean)
-                PhotoDetailView(title: UIStrings.inlandWater, information: self.photo.inlandWater)
-                PhotoDetailView(title: UIStrings.areasOfInterest, information: self.photo.areasOfInterest.joined(separator: ","))
+                Section {
+                    PhotoDetailView(title: UIStrings.date, information: self.getDateString(date: self.photo.date))
+                    PhotoDetailView(title: UIStrings.time, information: self.getTimeString(date: self.photo.date))
+                    PhotoDetailView(title: UIStrings.location, information: self.photo.location)
+                    PhotoDetailView(title: UIStrings.subLocation, information: self.photo.subLocation)
+                    PhotoDetailView(title: UIStrings.administrativeArea, information: self.photo.administrativeArea)
+                    PhotoDetailView(title: UIStrings.country, information: self.photo.country)
+                    PhotoDetailView(title: UIStrings.countryCode, information: self.photo.isoCountryCode)
+                    PhotoDetailView(title: UIStrings.name, information: self.photo.name)
+                    PhotoDetailView(title: UIStrings.postalCode, information: self.photo.postalCode)
+                    PhotoDetailView(title: UIStrings.ocean, information: self.photo.ocean)
+                }
+                Section {
+                    PhotoDetailView(title: UIStrings.inlandWater, information: self.photo.inlandWater)
+                    PhotoDetailView(title: UIStrings.areasOfInterest, information: self.photo.areasOfInterest.joined(separator: ","))
+                }
             }
             .listStyle(.plain)
             .navigationTitle(UIStrings.details)
@@ -37,6 +43,18 @@ struct PhotoDetailsView: View {
                 }
             }
         }
+    }
+
+    func getDateString(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/YYYY"
+        return dateFormatter.string(from: date)
+    }
+
+    func getTimeString(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "hh:mm a"
+        return dateFormatter.string(from: date)
     }
 }
 
