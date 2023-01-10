@@ -71,9 +71,7 @@ struct SumUpView: View {
                                     //Button used to download all journey images.
                                     DownloadGalleryButton(journey: self.journey,
                                                           showDownloadAlert: self.$showDownloadAlert,
-                                                          showPicture: self.$showPicture,
-                                                          subscriber: self.$subscription.subscriber,
-                                                          showPanel: self.$subscription.showPanel)
+                                                          showPicture: self.$showPicture)
                                 }
                                 //List containing all photos.
                                 PhotosAlbumView(showPicture: self.$showPicture,

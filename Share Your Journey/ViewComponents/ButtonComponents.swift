@@ -64,8 +64,6 @@ struct DownloadGalleryButton: View {
     var journey: SingleJourney
     @Binding var showDownloadAlert: Bool
     @Binding var showPicture: Bool
-    @Binding var subscriber: Bool
-    @Binding var showPanel: Bool
     
     var gold: Color {
         Color(uiColor: Colors.premiumColor)
@@ -73,15 +71,11 @@ struct DownloadGalleryButton: View {
     
     var body: some View {
         Button{
-            if self.subscriber {
-                self.showDownloadAlert = true
-            } else {
-                self.showPanel = true
-            }
+            self.showDownloadAlert = true
         } label: {
             ButtonView(buttonTitle: UIStrings.saveAllImagesToCameraRoll)
         }
-        .background(subscriber ? (self.journey.photos.map ({return $0.photo}).contains(UIImage()) ? Color.gray : Color.accentColor) : self.gold)
+        .background(Color.accentColor)
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .padding(.horizontal, 5)
         .padding(.top, 5)

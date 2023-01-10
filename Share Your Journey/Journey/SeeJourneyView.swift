@@ -101,9 +101,7 @@ struct SeeJourneyView: View {
                         if !self.downloadedPhotos {
                             DownloadGalleryButton(journey: self.journey,
                                                   showDownloadAlert: self.$showDownloadAlert,
-                                                  showPicture: self.$showPicture,
-                                                  subscriber: self.$subscription.subscriber,
-                                                  showPanel: self.$subscription.showPanel)
+                                                  showPicture: self.$showPicture)
                         }
 
                         if self.journey.photos.map ({return $0.photo}).contains(UIImage()) {
