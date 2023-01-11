@@ -26,7 +26,7 @@
 		863CF50827BAF558007B82D4 /* CurrentLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863CF50727BAF558007B82D4 /* CurrentLocationManager.swift */; };
 		864B50C7287232660072A5BB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864B50C6287232660072A5BB /* SettingsView.swift */; };
 		864B50C92872D76F0072A5BB /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864B50C82872D76F0072A5BB /* WebView.swift */; };
-		864B50CB2872E26C0072A5BB /* ImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864B50CA2872E26B0072A5BB /* ImagesView.swift */; };
+		864B50CB2872E26C0072A5BB /* ImagesGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864B50CA2872E26B0072A5BB /* ImagesGrid.swift */; };
 		864FEEF5289B092D0060E94D /* ForecastModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864FEEF4289B092D0060E94D /* ForecastModel.swift */; };
 		864FEEF7289B227E0060E94D /* ForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864FEEF6289B227E0060E94D /* ForecastView.swift */; };
 		864FEEF9289B24380060E94D /* ForecastRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864FEEF8289B24380060E94D /* ForecastRequest.swift */; };
@@ -80,6 +80,7 @@
 		86D9F7192899207C0092832E /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D9F7182899207B0092832E /* WeatherModel.swift */; };
 		86D9F71B2899234E0092832E /* WeatherRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D9F71A2899234D0092832E /* WeatherRequest.swift */; };
 		86D9F71D28992D0E0092832E /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D9F71C28992D0E0092832E /* WeatherView.swift */; };
+		86E9FEE0296ED05B005544B1 /* ImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E9FEDF296ED05B005544B1 /* ImagesView.swift */; };
 		86FCCC6028102449005FD678 /* ListWithRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC5F28102449005FD678 /* ListWithRequests.swift */; };
 		86FCCC62281025DD005FD678 /* ListWithFriends.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC61281025DD005FD678 /* ListWithFriends.swift */; };
 		86FCCC652810272B005FD678 /* YourJourneysList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC642810272B005FD678 /* YourJourneysList.swift */; };
@@ -136,7 +137,7 @@
 		863CF50727BAF558007B82D4 /* CurrentLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentLocationManager.swift; sourceTree = "<group>"; };
 		864B50C6287232660072A5BB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		864B50C82872D76F0072A5BB /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
-		864B50CA2872E26B0072A5BB /* ImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesView.swift; sourceTree = "<group>"; };
+		864B50CA2872E26B0072A5BB /* ImagesGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesGrid.swift; sourceTree = "<group>"; };
 		864FEEF4289B092D0060E94D /* ForecastModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastModel.swift; sourceTree = "<group>"; };
 		864FEEF6289B227E0060E94D /* ForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastView.swift; sourceTree = "<group>"; };
 		864FEEF8289B24380060E94D /* ForecastRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastRequest.swift; sourceTree = "<group>"; };
@@ -185,6 +186,7 @@
 		86D9F7182899207B0092832E /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		86D9F71A2899234D0092832E /* WeatherRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRequest.swift; sourceTree = "<group>"; };
 		86D9F71C28992D0E0092832E /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
+		86E9FEDF296ED05B005544B1 /* ImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesView.swift; sourceTree = "<group>"; };
 		86FCCC5F28102449005FD678 /* ListWithRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListWithRequests.swift; sourceTree = "<group>"; };
 		86FCCC61281025DD005FD678 /* ListWithFriends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListWithFriends.swift; sourceTree = "<group>"; };
 		86FCCC642810272B005FD678 /* YourJourneysList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourJourneysList.swift; sourceTree = "<group>"; };
@@ -491,7 +493,8 @@
 				86FCCC6928102A4B005FD678 /* RunningJourneyModeView.swift */,
 				86FCCC6B28102A75005FD678 /* PausedJourneyModeView.swift */,
 				86FCCC6D28102A9A005FD678 /* StartJourneyModeView.swift */,
-				864B50CA2872E26B0072A5BB /* ImagesView.swift */,
+				86E9FEDF296ED05B005544B1 /* ImagesView.swift */,
+				864B50CA2872E26B0072A5BB /* ImagesGrid.swift */,
 				8671E6FD2876D24300E4A5AC /* InstructionsView.swift */,
 				8665C79029574075007D7354 /* PhotosCounterView.swift */,
 				8665C79229574592007D7354 /* SheetDismissButtonView.swift */,
@@ -688,6 +691,7 @@
 				8665C79129574075007D7354 /* PhotosCounterView.swift in Sources */,
 				8665C7A429633A51007D7354 /* Links.swift in Sources */,
 				86C6494827CFAE4300891C24 /* Journey.xcdatamodeld in Sources */,
+				86E9FEE0296ED05B005544B1 /* ImagesView.swift in Sources */,
 				86FCCC7F28107C00005FD678 /* SubViewComponents.swift in Sources */,
 				8652A17527C254C700ADBB25 /* MapView.swift in Sources */,
 				86FCCC7D28107B3B005FD678 /* MultipleButtonsComponents.swift in Sources */,
@@ -708,7 +712,7 @@
 				866A7E1A293221C100CD3340 /* SpotDetailsManager.swift in Sources */,
 				86D9F7192899207C0092832E /* WeatherModel.swift in Sources */,
 				8652A17227BFEAE900ADBB25 /* SumUpView.swift in Sources */,
-				864B50CB2872E26C0072A5BB /* ImagesView.swift in Sources */,
+				864B50CB2872E26C0072A5BB /* ImagesGrid.swift in Sources */,
 				86FCCC67281027E0005FD678 /* FriendJourneysList.swift in Sources */,
 				863CF50827BAF558007B82D4 /* CurrentLocationManager.swift in Sources */,
 				862AA45B27B14D6C001B9312 /* Share_Your_JourneyApp.swift in Sources */,

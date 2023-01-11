@@ -86,6 +86,7 @@ struct SumUpFunctionalityButtonsView: View {
                 self.journey.name = UUID().uuidString
                 self.createJourney(journey: self.journey)
                 self.previousLocationManager.mapView.removeAnnotations(self.previousLocationManager.mapView.annotations)
+                self.previousLocationManager.mapView.removeOverlays(self.previousLocationManager.mapView.overlays)
                 self.done = true
             } label: {
                 ButtonView(buttonTitle: UIStrings.saveJourneyButtonTitle)

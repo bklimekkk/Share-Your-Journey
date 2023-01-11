@@ -2,11 +2,11 @@
 //  ImagesView.swift
 //  Share Your Journey
 //
-//  Created by Bartosz Klimek on 04/07/2022.
+//  Created by Bartosz Klimek on 11/01/2023.
 //
 
+import Foundation
 import SwiftUI
-import MapKit
 
 struct ImagesView: View {
     @Binding var showPicture: Bool
@@ -14,29 +14,18 @@ struct ImagesView: View {
     @Binding var highlightedPhoto: UIImage
     var layout: [GridItem]
     var singleJourney: SingleJourney
-    @Environment(\.dismiss) var dismiss
 
     var body: some View {
-        NavigationView {
-            PhotosAlbumView(showPicture: self.$showPicture,
-                            photoIndex: self.$photoIndex,
-                            highlightedPhoto: self.$highlightedPhoto,
-                            layout: self.layout,
-                            singleJourney: self.singleJourney)
-            .toolbar {
-                ToolbarItem(placement: .bottomBar) {
-                    Button{
-                        self.dismiss()
-                    }label:{
-                        SheetDismissButtonView()
-                    }
-                    .opacity(self.showPicture ? 0 : 1)
-                    .disabled(self.showPicture ? true : false)
-                }
-            }
-            .padding(.horizontal, 5)
-            .navigationTitle(UIStrings.currentJourneyImages)
-            .navigationBarTitleDisplayMode(.inline)
+        ZStack {
+            ImagesGrid(showPicture: self.$showPicture,
+                       photoIndex: self.$photoIndex,
+                       highlightedPhoto: self.$highlightedPhoto,
+                       layout: self.layout,
+                       singleJourney: self.singleJourney)
+            HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
+                             showPicture: self.$showPicture,
+                             highlightedPhoto: self.$highlightedPhoto,
+                             journey: self.singleJourney)
         }
     }
 }

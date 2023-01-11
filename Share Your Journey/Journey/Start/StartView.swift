@@ -85,9 +85,9 @@ struct StartView: View {
     @StateObject private var journeyStateController = JourneyStateController()
     @StateObject private var currentImagesCollection = CurrentImagesCollection()
     @StateObject private var subscription = Subscription()
-    //Variables are set to false (and 0) and are never changed in this struct. They are used to be passed as parameters for MapView.
-    @State var showPhoto = false
-    @State var photoIndex = 0
+    @State private var showPhoto = false
+    @State private var photoIndex = 0
+    @State private var highlightedPhoto: UIImage = UIImage()
 
     var buttonColor: Color {
         colorScheme == .dark ? .white : .accentColor
@@ -95,91 +95,99 @@ struct StartView: View {
     
     var body: some View {
         ZStack {
-            
-            //This struct contains MapView struct, which means that during they journey, users are able to use 3D map.
-            MapView(walking: self.$journeyStateController.walking,
-                    showPhoto: self.$showPhoto,
-                    photoIndex: self.$photoIndex,
-                    showWeather: self.$weatherController.showWeather,
-                    expandWeather: self.$weatherController.expandWeather,
-                    weatherLatitude: self.$weatherController.weatherLatitude,
-                    weatherLongitude: self.$weatherController.weatherLongitude,
-                    photosLocations: self.$arrayOfPhotosLocations)
-            .environmentObject(self.currentLocationManager)
-            .edgesIgnoringSafeArea(.all)
-            
-            VStack {
-                HStack {
-                    Button {
-                        self.logOut()
-                    } label:{
-                        MapButton(imageName: "arrow.backward")
+            ZStack {
+                //This struct contains MapView struct, which means that during they journey, users are able to use 3D map.
+                MapView(walking: self.$journeyStateController.walking,
+                        showPhoto: self.$showPhoto,
+                        photoIndex: self.$photoIndex,
+                        showWeather: self.$weatherController.showWeather,
+                        expandWeather: self.$weatherController.expandWeather,
+                        weatherLatitude: self.$weatherController.weatherLatitude,
+                        weatherLongitude: self.$weatherController.weatherLongitude,
+                        photosLocations: self.$arrayOfPhotosLocations)
+                .environmentObject(self.currentLocationManager)
+                .edgesIgnoringSafeArea(.all)
+
+                VStack {
+                    HStack {
+                        Button {
+                            self.logOut()
+                        } label:{
+                            MapButton(imageName: "arrow.backward")
+                        }
+                        Spacer()
                     }
                     Spacer()
-                }
-                Spacer()
-                
-                HStack {
-                    VStack {
-                        Button{
-                            self.journeyStateController.showSettings = true
-                        } label: {
-                            SettingsButton()
-                        }
-                        .foregroundColor(buttonColor)
-                        
-                        if self.startedJourney {
+
+                    HStack {
+                        VStack {
+                            Button{
+                                self.journeyStateController.showSettings = true
+                            } label: {
+                                SettingsButton()
+                            }
+                            .foregroundColor(buttonColor)
+
+                            if self.startedJourney {
+                                Button {
+                                    self.journeyStateController.showImages = true
+                                }label: {
+                                    ImageButton()
+                                }
+                                .foregroundColor(self.buttonColor)
+                            }
+
                             Button {
-                                self.journeyStateController.showImages = true
-                            }label: {
-                                ImageButton()
+                                self.currentLocationManager.changeTypeOfMap()
+                            } label: {
+                                MapTypeButton()
+                            }
+                            .foregroundColor(self.buttonColor)
+
+                            Button {
+                                self.currentLocationManager.recenterLocation()
+                            } label: {
+                                LocationButton()
                             }
                             .foregroundColor(self.buttonColor)
                         }
-                        
-                        Button {
-                            self.currentLocationManager.changeTypeOfMap()
-                        } label: {
-                            MapTypeButton()
+                        Spacer()
+                    }
+                    //This else if statements block ensures that starting, pausing, resuming,
+                    //quitting and completing the journey works in the most intuitive way.
+                    if startedJourney && !journeyStateController.paused {
+                        HStack {
+                            RunningJourneyModeView(paused: $journeyStateController.paused,
+                                                   pickAPhoto: $journeyStateController.pickAPhoto,
+                                                   takeAPhoto: $journeyStateController.takeAPhoto,
+                                                   currentLocationManager: currentLocationManager)
+                            PhotosCounterView(number: self.arrayOfPhotos.count)
                         }
-                        .foregroundColor(self.buttonColor)
-                        
-                        Button {
-                            self.currentLocationManager.recenterLocation()
-                        } label: {
-                            LocationButton()
+                    } else if startedJourney && journeyStateController.paused {
+                        HStack {
+                            PausedJourneyModeView(arrayOfPhotos: $arrayOfPhotos,
+                                                  alertMessage: $journeyStateController.alertMessage,
+                                                  alertError: $journeyStateController.alertError,
+                                                  paused: $journeyStateController.paused,
+                                                  startedJourney: $startedJourney, alert: $alert,
+                                                  alertBody: $journeyStateController.alertBody,
+                                                  currentLocationManager: currentLocationManager)
+                            PhotosCounterView(number: self.arrayOfPhotos.count)
                         }
-                        .foregroundColor(self.buttonColor)
+                    } else {
+                        StartJourneyModeView(startedJourney: self.$startedJourney, currentLocationManager: self.currentLocationManager)
                     }
-                    
-                    Spacer()
                 }
-                //This else if statements block ensures that starting, pausing, resuming,
-                //quitting and completing the journey works in the most intuitive way.
-                if startedJourney && !journeyStateController.paused {
-                    HStack {
-                        RunningJourneyModeView(paused: $journeyStateController.paused,
-                                               pickAPhoto: $journeyStateController.pickAPhoto,
-                                               takeAPhoto: $journeyStateController.takeAPhoto,
-                                               currentLocationManager: currentLocationManager)
-                        PhotosCounterView(number: self.arrayOfPhotos.count)
-                    }
-                } else if startedJourney && journeyStateController.paused {
-                    HStack {
-                        PausedJourneyModeView(arrayOfPhotos: $arrayOfPhotos,
-                                              alertMessage: $journeyStateController.alertMessage,
-                                              alertError: $journeyStateController.alertError,
-                                              paused: $journeyStateController.paused,
-                                              startedJourney: $startedJourney, alert: $alert,
-                                              alertBody: $journeyStateController.alertBody,
-                                              currentLocationManager: currentLocationManager)
-                        PhotosCounterView(number: self.arrayOfPhotos.count)
-                    }
-                } else {
-                    StartJourneyModeView(startedJourney: self.$startedJourney, currentLocationManager: self.currentLocationManager)
-                }
+                .padding()
             }
-            .padding()
+            .opacity(self.showPhoto ? 0 : 1)
+            .disabled(self.showPhoto)
+            HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
+                             showPicture: self.$showPhoto,
+                             highlightedPhoto: self.$highlightedPhoto,
+                             journey: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
+                                                    photos: self.arrayOfPhotos,
+                                                    photosLocations: self.arrayOfPhotosLocations))
         }
         .task {
             if !self.currentImages.isEmpty && self.arrayOfPhotos.isEmpty {
@@ -219,24 +227,13 @@ struct StartView: View {
             SettingsView(loggedOut: $loggedOut)
         })
         .fullScreenCover(isPresented: self.$journeyStateController.showImages, content: {
-            ZStack {
-                ImagesView(showPicture: self.$currentImagesCollection.showPicture,
-                           photoIndex: self.$currentImagesCollection.photoIndex,
-                           highlightedPhoto: self.$currentImagesCollection.highlightedPhoto,
-                           layout: self.currentImagesCollection.layout,
-                           singleJourney: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
-                                                        photos: self.arrayOfPhotos,
-                                                        photosLocations: self.arrayOfPhotosLocations))
-                HighlightedPhoto(highlightedPhotoIndex: self.$currentImagesCollection.photoIndex,
-                                 showPicture: self.$currentImagesCollection.showPicture,
-                                 highlightedPhoto: self.$currentImagesCollection.highlightedPhoto,
-                                 journey: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
-                                                                                                 photos: self.arrayOfPhotos,
-                                                                                                 photosLocations: self.arrayOfPhotosLocations))
-            }
-            .fullScreenCover(isPresented: self.$subscription.showPanel, content: {
-                SubscriptionView(subscriber: self.$subscription.subscriber)
-            })
+            ImagesView(showPicture: self.$currentImagesCollection.showPicture,
+                       photoIndex: self.$currentImagesCollection.photoIndex,
+                       highlightedPhoto: self.$currentImagesCollection.highlightedPhoto,
+                       layout: self.currentImagesCollection.layout,
+                       singleJourney: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
+                                                    photos: self.arrayOfPhotos,
+                                                    photosLocations: self.arrayOfPhotosLocations))
         })
         .fullScreenCover(isPresented: self.$loggedOut) {
             //If user isn't logged in, screen presented by StartView struct is fully covered by View generated by this struct.
@@ -276,8 +273,8 @@ struct StartView: View {
             }
         }) {
             SumUpView(journey: SingleJourney(numberOfPhotos: self.arrayOfPhotos.count,
-                                                   photos: self.arrayOfPhotos,
-                                                   photosLocations: self.arrayOfPhotosLocations),
+                                             photos: self.arrayOfPhotos,
+                                             photosLocations: self.arrayOfPhotosLocations),
                       showSumUp: self.$journeyStateController.showSumUp,
                       goBack: self.$journeyStateController.goBack, previousLocationManager: self.currentLocationManager)
         }
@@ -353,17 +350,18 @@ struct StartView: View {
                 let inlandWater = placemark?.inlandWater ?? UIStrings.emptyString
                 let areasOfInterest = placemark?.areasOfInterest?.joined(separator: ",") ?? UIStrings.emptyString
                 let date = Date()
-                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].date = date
-                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].location = locality
-                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].subLocation = subLocality
-                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].administrativeArea = administrativeArea
-                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].country = country
-                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].isoCountryCode = isoCountryCode
-                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].name = name
-                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].postalCode = postalCode
-                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].ocean = ocean
-                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].inlandWater = inlandWater
-                self.arrayOfPhotos[self.arrayOfPhotos.count - 1].areasOfInterest = areasOfInterest.components(separatedBy: ",")
+                let currentPhotoIndex = self.arrayOfPhotos.count - 1
+                self.arrayOfPhotos[currentPhotoIndex].date = date
+                self.arrayOfPhotos[currentPhotoIndex].location = locality
+                self.arrayOfPhotos[currentPhotoIndex].subLocation = subLocality
+                self.arrayOfPhotos[currentPhotoIndex].administrativeArea = administrativeArea
+                self.arrayOfPhotos[currentPhotoIndex].country = country
+                self.arrayOfPhotos[currentPhotoIndex].isoCountryCode = isoCountryCode
+                self.arrayOfPhotos[currentPhotoIndex].name = name
+                self.arrayOfPhotos[currentPhotoIndex].postalCode = postalCode
+                self.arrayOfPhotos[currentPhotoIndex].ocean = ocean
+                self.arrayOfPhotos[currentPhotoIndex].inlandWater = inlandWater
+                self.arrayOfPhotos[currentPhotoIndex].areasOfInterest = areasOfInterest.components(separatedBy: ",")
                 image.date = date
                 image.location = locality
                 image.subLocation = subLocality
@@ -414,6 +412,7 @@ struct StartView: View {
     func quitJourney() {
         self.currentLocationManager.recenterLocation()
         self.currentLocationManager.mapView.removeAnnotations(self.currentLocationManager.mapView.annotations)
+        self.currentLocationManager.mapView.removeOverlays(self.currentLocationManager.mapView.overlays)
         self.arrayOfPhotos = []
         self.arrayOfPhotosLocations = []
         self.startedJourney = false
