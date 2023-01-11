@@ -175,10 +175,14 @@ struct SeeJourneyView: View {
                                                     .padding(.vertical)
                                                     .padding(.leading)
                                             }
-                                            Button{}label: {
+                                            Button{
+                                                UIApplication.shared.open(URL(string: "http://maps.apple.com/?saddr=&daddr=\(self.journey.photosLocations[self.currentPhotoIndex].latitude),\(self.journey.photosLocations[self.currentPhotoIndex].longitude)&dirflg=d")!)
+                                            }label: {
                                                 MapTextButton(imageName: Icons.locationNorthCircleFill, text: UIStrings.apple)
                                             }
-                                            Button{}label: {
+                                            Button{
+                                                UIApplication.shared.open(URL(string: "comgooglemaps://?saddr=&daddr=\(self.journey.photosLocations[self.currentPhotoIndex].latitude),\(self.journey.photosLocations[self.currentPhotoIndex].longitude)&directionsmode=driving")!)
+                                            }label: {
                                                 MapTextButton(imageName: Icons.locationNorthCircleFill, text: UIStrings.google)
                                             }
                                         }
