@@ -13,6 +13,8 @@ struct SubscriptionView: View {
     @Environment(\.dismiss) var dismiss
     @Binding var subscriber: Bool
     @State private var availablePackages: [Package] = []
+    @State private var tappedBuyForButton = false
+    @State private var choice = ""
     var body: some View {
         NavigationView {
             Form {
@@ -22,19 +24,7 @@ struct SubscriptionView: View {
                             .frame(width: 20)
                         Text(UIStrings.getWalkingDirections)
                     }
-                    
-                    HStack {
-                        Image(systemName: Icons.squareAndArrowDown)
-                            .frame(width: 20)
-                        Text(UIStrings.beAbleToSaveAnyPhoto)
-                    }
-                    
-                    HStack {
-                        Image(systemName: Icons.squareAndArrowDownOnSquare)
-                            .frame(width: 20)
-                        Text(UIStrings.beAbleToSaveAllPhotos)
-                    }
-                    
+
                     HStack {
                         Image(systemName: Icons.platterFilledBottomAndArrowDownIphone)
                             .frame(width: 20)
@@ -53,15 +43,26 @@ struct SubscriptionView: View {
                 ForEach(self.availablePackages, id: \.self.storeProduct) { package in
                     let timeUnit = String(String(package.id).suffix(String(package.id).count - 4))
                     Section(header: Text("\(timeUnit) subscription")) {
-                        Button("Buy for \(package.localizedPriceString)") {
-                            
+                        Button {
+                            tappedBuyForButton = true
+                            choice = package.localizedPriceString
                             Purchases.shared.purchase(package: package) { (transaction, customerInfo, error, userCancelled) in
+                                if error != nil {
+                                    tappedBuyForButton = false
+                                }
                                 if customerInfo?.entitlements[Links.allFeaturesEntitlement]?.isActive == true {
                                     self.dismiss()
                                     self.subscriber = true
                                 }
                             }
+                        } label: {
+                            if self.tappedBuyForButton && self.choice == package.localizedPriceString {
+                                ProgressView()
+                            } else {
+                                Text("Buy for \(package.localizedPriceString)")
+                            }
                         }
+                        .disabled(self.tappedBuyForButton && self.choice == package.localizedPriceString)
                         .buttonStyle(.plain)
                         .foregroundColor(.blue)
                     }

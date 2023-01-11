@@ -67,8 +67,6 @@ struct UIStrings {
     static let accountDeletionChecker = "Are you sure that you want to delete your account? You won't be able to create account using the same e-mail address."
     static let unlockAllFunctions = "Unlock all app's functions"
     static let getWalkingDirections = "Get walking directions to any part of the journey"
-    static let beAbleToSaveAnyPhoto = "Be able to save any photo to camera roll"
-    static let beAbleToSaveAllPhotos = "Be able to save all photos to camera roll at once"
     static let beAbleToSaveAnyJourney = "Be able to save any journey to your own device"
     static let freeTrial = "Free trial"
     static let firstWeekIsFree = "The first week is free. You can cancel subscription at any time."

@@ -109,7 +109,7 @@ struct MapTextButton: View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
                 .fill(.ultraThickMaterial)
-                .frame(width: 100, height: 40)
+                .frame(width: 120, height: 40)
             HStack {
                 Image(systemName: self.imageName)
                     .font(.system(size: 20))

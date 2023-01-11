@@ -179,11 +179,13 @@ struct SeeJourneyView: View {
                                                 UIApplication.shared.open(URL(string: "http://maps.apple.com/?saddr=&daddr=\(self.journey.photosLocations[self.currentPhotoIndex].latitude),\(self.journey.photosLocations[self.currentPhotoIndex].longitude)&dirflg=d")!)
                                             }label: {
                                                 MapTextButton(imageName: Icons.locationNorthCircleFill, text: UIStrings.apple)
+                                                    .foregroundColor(self.colorScheme == .light ? .accentColor : .white)
                                             }
                                             Button{
                                                 UIApplication.shared.open(URL(string: "comgooglemaps://?saddr=&daddr=\(self.journey.photosLocations[self.currentPhotoIndex].latitude),\(self.journey.photosLocations[self.currentPhotoIndex].longitude)&directionsmode=driving")!)
                                             }label: {
                                                 MapTextButton(imageName: Icons.locationNorthCircleFill, text: UIStrings.google)
+                                                    .foregroundColor(self.colorScheme == .light ? .accentColor : .white)
                                             }
                                         }
                                         Spacer()
