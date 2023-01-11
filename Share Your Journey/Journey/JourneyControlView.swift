@@ -18,6 +18,8 @@ struct JourneyControlView: View {
                 PhotosCounterView(number: self.currentPhotoIndex + 1)
                 Button{
                     self.currentPhotoIndex -= 1
+                    self.currentLocationManager.mapView.deselectAnnotation(self.currentLocationManager.mapView.selectedAnnotations.first,
+                                                                           animated: true)
                     self.currentLocationManager.centerMapOnPin(location:
                                                                 self.journey.photosLocations[currentPhotoIndex])
                 }label: {
@@ -26,6 +28,8 @@ struct JourneyControlView: View {
                 .disabled(self.currentPhotoIndex == 0)
                 Button{
                     self.currentPhotoIndex += 1
+                    self.currentLocationManager.mapView.deselectAnnotation(self.currentLocationManager.mapView.selectedAnnotations.first,
+                                                                           animated: true)
                     self.currentLocationManager.centerMapOnPin(location:
                                                                 self.journey.photosLocations[currentPhotoIndex])
                 }label: {
