@@ -55,7 +55,8 @@ struct SumUpView: View {
     
     @Binding var showSumUp: Bool
     @Binding var goBack: Bool
-    
+    var previousLocationManager: CurrentLocationManager
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -174,7 +175,7 @@ struct SumUpView: View {
                         } else {
                             SumUpFunctionalityButtonsView(journey: self.$journey,
                                                           showDeleteAlert: self.$showDeleteAlert,
-                                                          done: self.$done)
+                                                          done: self.$done, previousLocationManager: self.previousLocationManager)
                         }
                     }
                     .alert(UIStrings.quit, isPresented: $showDeleteAlert) {

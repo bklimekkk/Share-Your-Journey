@@ -63,6 +63,7 @@ struct SumUpFunctionalityButtonsView: View {
     @Binding var journey: SingleJourney
     @Binding var showDeleteAlert: Bool
     @Binding var done: Bool
+    var previousLocationManager: CurrentLocationManager
     var body: some View {
         HStack {
             Button {
@@ -84,6 +85,7 @@ struct SumUpFunctionalityButtonsView: View {
                 }
                 self.journey.name = UUID().uuidString
                 self.createJourney(journey: self.journey)
+                self.previousLocationManager.mapView.removeAnnotations(self.previousLocationManager.mapView.annotations)
                 self.done = true
             } label: {
                 ButtonView(buttonTitle: UIStrings.saveJourneyButtonTitle)
@@ -108,6 +110,9 @@ struct SumUpFunctionalityButtonsView: View {
             "date" : Date(),
             "deletedJourney" : false
         ])
+        //TODO: - remove these print lines
+        print("number of photos locations: \(journey.photosLocations.count)")
+        print("number of photos: \(journey.photos.count)")
         for index in 0...journey.photosLocations.count - 1 {
             self.uploadPhoto(journey: journey, name: journey.name, index: index, instanceReference: instanceReference)
         }

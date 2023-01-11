@@ -279,10 +279,10 @@ struct StartView: View {
                                                    photos: self.arrayOfPhotos,
                                                    photosLocations: self.arrayOfPhotosLocations),
                       showSumUp: self.$journeyStateController.showSumUp,
-                      goBack: self.$journeyStateController.goBack)
+                      goBack: self.$journeyStateController.goBack, previousLocationManager: self.currentLocationManager)
         }
         //Alert is presented only if error occurs
-        .alert("No photos", isPresented: self.$journeyStateController.alertError) {
+        .alert(UIStrings.noPhotos, isPresented: self.$journeyStateController.alertError) {
             Button(UIStrings.ok, role: .cancel) {
                 self.journeyStateController.alertMessage = false
             }
@@ -413,6 +413,7 @@ struct StartView: View {
      */
     func quitJourney() {
         self.currentLocationManager.recenterLocation()
+        self.currentLocationManager.mapView.removeAnnotations(self.currentLocationManager.mapView.annotations)
         self.arrayOfPhotos = []
         self.arrayOfPhotosLocations = []
         self.startedJourney = false

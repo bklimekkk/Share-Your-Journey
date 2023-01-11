@@ -168,4 +168,5 @@ struct UIStrings {
     static let forecast = "forecast"
     static let date = "Date"
     static let time = "Time"
+    static let noPhotos = "No photos"
 }
