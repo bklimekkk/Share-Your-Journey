@@ -41,4 +41,5 @@ struct Icons {
     static let arrowRight = "arrow.right"
     static let wind = "wind"
     static let dropFill = "drop.fill"
+    static let locationNorthCircleFill = "location.north.circle.fill"
 }

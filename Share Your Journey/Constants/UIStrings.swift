@@ -169,4 +169,6 @@ struct UIStrings {
     static let date = "Date"
     static let time = "Time"
     static let noPhotos = "No photos"
+    static let apple = "Apple"
+    static let google = "Google"
 }

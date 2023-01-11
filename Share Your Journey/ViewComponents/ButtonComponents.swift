@@ -102,6 +102,28 @@ struct MapButton: View {
     }
 }
 
+struct MapTextButton: View {
+    let imageName: String
+    let text: String
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(.ultraThickMaterial)
+                .frame(width: 100, height: 40)
+            HStack {
+                Image(systemName: self.imageName)
+                    .font(.system(size: 20))
+                Text(text)
+            }
+        }
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(.gray, lineWidth: 1)
+        )
+        .padding(.vertical, 5)
+    }
+}
+
 
 
 
