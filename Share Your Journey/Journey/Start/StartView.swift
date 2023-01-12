@@ -37,6 +37,7 @@ class JourneyStateController: ObservableObject {
     //Variables responsible for showing potential journey error messages.
     @Published var alertError = false
     @Published var alertMessage = false
+    @Published var loadCamera = false
     @Published var alertBody = UIStrings.emptyString
 }
 
@@ -160,6 +161,7 @@ struct StartView: View {
                             RunningJourneyModeView(paused: $journeyStateController.paused,
                                                    pickAPhoto: $journeyStateController.pickAPhoto,
                                                    takeAPhoto: $journeyStateController.takeAPhoto,
+                                                   loadCamera: $journeyStateController.loadCamera,
                                                    currentLocationManager: currentLocationManager)
                             PhotosCounterView(number: self.arrayOfPhotos.count)
                         }
@@ -241,6 +243,7 @@ struct StartView: View {
         }
         .fullScreenCover(isPresented: self.$journeyStateController.takeAPhoto, onDismiss: {
             //Photo's location is added to the aproppriate array after view with camera is dismissed.
+            self.journeyStateController.loadCamera = false
             self.addPhotoLocation()
             if self.moc.hasChanges {
                 try? self.moc.save()
@@ -250,7 +253,7 @@ struct StartView: View {
             PhotoPickerView(pickPhoto: $journeyStateController.pickAPhoto, photosArray: $arrayOfPhotos)
                 .ignoresSafeArea()
         })
-        
+
         //After the journey is finished, StartView is coverd by SumUpView.
         .fullScreenCover(isPresented: self.$journeyStateController.showSumUp, onDismiss: {
             if !self.journeyStateController.goBack {
@@ -374,11 +377,11 @@ struct StartView: View {
                 image.inlandWater = inlandWater
                 image.areasOfInterest = areasOfInterest
             }
+            let photoPin = MKPointAnnotation()
+            photoPin.title = String(self.arrayOfPhotosLocations.count)
+            photoPin.coordinate = self.arrayOfPhotosLocations[self.arrayOfPhotosLocations.count - 1]
+            self.currentLocationManager.mapView.addAnnotation(photoPin)
         }
-        let photoPin = MKPointAnnotation()
-        photoPin.title = String(self.arrayOfPhotosLocations.count)
-        photoPin.coordinate = self.arrayOfPhotosLocations[self.arrayOfPhotosLocations.count - 1]
-        self.currentLocationManager.mapView.addAnnotation(photoPin)
     }
     
     /**
