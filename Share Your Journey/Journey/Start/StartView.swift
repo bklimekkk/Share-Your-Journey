@@ -89,6 +89,7 @@ struct StartView: View {
     @State private var showPhoto = false
     @State private var photoIndex = 0
     @State private var highlightedPhoto: UIImage = UIImage()
+    @State private var showDirections = false
 
     var buttonColor: Color {
         colorScheme == .dark ? .white : .accentColor
@@ -102,6 +103,7 @@ struct StartView: View {
                         showPhoto: self.$showPhoto,
                         photoIndex: self.$photoIndex,
                         showWeather: self.$weatherController.showWeather,
+                        showDirections: self.$showDirections,
                         expandWeather: self.$weatherController.expandWeather,
                         weatherLatitude: self.$weatherController.weatherLatitude,
                         weatherLongitude: self.$weatherController.weatherLongitude,

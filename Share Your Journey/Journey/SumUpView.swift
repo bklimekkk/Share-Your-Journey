@@ -48,7 +48,7 @@ struct SumUpView: View {
     @State private var expandWeather = false
     @State private var weatherLatitude = 0.0
     @State private var weatherLongitude = 0.0
-    
+    @State private var showDirections = false
     var buttonColor: Color {
         self.colorScheme == .dark ? .white : .accentColor
     }
@@ -105,6 +105,7 @@ struct SumUpView: View {
                                         showPhoto: self.$showPicture,
                                         photoIndex: self.$photoIndex,
                                         showWeather: self.$showWeather,
+                                        showDirections: self.$showDirections,
                                         expandWeather: self.$expandWeather,
                                         weatherLatitude: self.$weatherLatitude,
                                         weatherLongitude: self.$weatherLongitude,

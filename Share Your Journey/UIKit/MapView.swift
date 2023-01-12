@@ -16,6 +16,7 @@ struct MapView: UIViewRepresentable {
     @Binding var showPhoto: Bool
     @Binding var photoIndex: Int
     @Binding var showWeather: Bool
+    @Binding var showDirections: Bool
     @Binding var expandWeather: Bool
     @Binding var weatherLatitude: Double
     @Binding var weatherLongitude: Double
@@ -42,6 +43,9 @@ struct MapView: UIViewRepresentable {
                     self.parent.photoIndex = validTitle - 1
                 }
                 self.parent.clManager.mapView.setCenter(view.annotation!.coordinate, animated: true)
+                self.parent.showDirections = true
+            } else {
+                self.parent.showDirections = false
             }
             self.parent.weatherLatitude = view.annotation?.coordinate.latitude ?? 0.0
             self.parent.weatherLongitude = view.annotation?.coordinate.longitude ?? 0.0

@@ -64,7 +64,7 @@ struct SeeJourneyView: View {
     @State private var expandWeather = false
     @State private var weatherLatitude = 0.0
     @State private var weatherLongitude = 0.0
-    
+    @State private var showDirections = false
     //Variable is responsible for saving data to Core Data.
     @Environment(\.managedObjectContext) var moc
     
@@ -150,6 +150,7 @@ struct SeeJourneyView: View {
                                     showPhoto: self.$showPicture,
                                     photoIndex: self.$currentPhotoIndex,
                                     showWeather: self.$showWeather,
+                                    showDirections: self.$showDirections,
                                     expandWeather: self.$expandWeather,
                                     weatherLatitude: self.$weatherLatitude,
                                     weatherLongitude: self.$weatherLongitude,
@@ -175,17 +176,19 @@ struct SeeJourneyView: View {
                                                     .padding(.vertical)
                                                     .padding(.leading)
                                             }
-                                            Button{
-                                                UIApplication.shared.open(URL(string: "http://maps.apple.com/?saddr=&daddr=\(self.journey.photosLocations[self.currentPhotoIndex].latitude),\(self.journey.photosLocations[self.currentPhotoIndex].longitude)&dirflg=d")!)
-                                            }label: {
-                                                MapTextButton(imageName: Icons.locationNorthCircleFill, text: UIStrings.apple)
-                                                    .foregroundColor(self.colorScheme == .light ? .accentColor : .white)
-                                            }
-                                            Button{
-                                                UIApplication.shared.open(URL(string: "comgooglemaps://?saddr=&daddr=\(self.journey.photosLocations[self.currentPhotoIndex].latitude),\(self.journey.photosLocations[self.currentPhotoIndex].longitude)&directionsmode=driving")!)
-                                            }label: {
-                                                MapTextButton(imageName: Icons.locationNorthCircleFill, text: UIStrings.google)
-                                                    .foregroundColor(self.colorScheme == .light ? .accentColor : .white)
+                                            if self.showDirections {
+                                                Button{
+                                                    UIApplication.shared.open(URL(string: "http://maps.apple.com/?saddr=&daddr=\(self.journey.photosLocations[self.currentPhotoIndex].latitude),\(self.journey.photosLocations[self.currentPhotoIndex].longitude)&dirflg=d")!)
+                                                }label: {
+                                                    MapTextButton(imageName: Icons.locationNorthCircleFill, text: UIStrings.apple)
+                                                        .foregroundColor(self.colorScheme == .light ? .accentColor : .white)
+                                                }
+                                                Button{
+                                                    UIApplication.shared.open(URL(string: "comgooglemaps://?saddr=&daddr=\(self.journey.photosLocations[self.currentPhotoIndex].latitude),\(self.journey.photosLocations[self.currentPhotoIndex].longitude)&directionsmode=driving")!)
+                                                }label: {
+                                                    MapTextButton(imageName: Icons.locationNorthCircleFill, text: UIStrings.google)
+                                                        .foregroundColor(self.colorScheme == .light ? .accentColor : .white)
+                                                }
                                             }
                                         }
                                         Spacer()
