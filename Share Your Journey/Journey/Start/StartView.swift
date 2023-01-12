@@ -210,7 +210,7 @@ struct StartView: View {
                 }
             }
             
-            if !self.currentLocations.isEmpty {
+            if !self.currentLocations.isEmpty && self.arrayOfPhotosLocations.isEmpty {
                 for i in self.currentLocations {
                     self.arrayOfPhotosLocations.append(CLLocationCoordinate2D(latitude: i.latitude, longitude: i.longitude))
                 }
