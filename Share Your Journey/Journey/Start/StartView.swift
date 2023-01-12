@@ -238,6 +238,8 @@ struct StartView: View {
             ImagesView(showPicture: self.$currentImagesCollection.showPicture,
                        photoIndex: self.$currentImagesCollection.photoIndex,
                        highlightedPhoto: self.$currentImagesCollection.highlightedPhoto,
+                       takeAPhoto: self.$journeyStateController.takeAPhoto,
+                       numberOfPhotos: self.$arrayOfPhotosLocations.count,
                        layout: self.currentImagesCollection.layout,
                        singleJourney: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
                                                     photos: self.arrayOfPhotos,
@@ -252,7 +254,9 @@ struct StartView: View {
         }
         .fullScreenCover(isPresented: self.$journeyStateController.takeAPhoto, onDismiss: {
             //Photo's location is added to the aproppriate array after view with camera is dismissed.
-            self.addPhotoLocation()
+            withAnimation {
+                self.addPhotoLocation()
+            }
             if self.moc.hasChanges {
                 try? self.moc.save()
             }
