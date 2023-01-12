@@ -15,6 +15,7 @@ struct RunningJourneyModeView: View {
     @Binding var paused: Bool
     @Binding var pickAPhoto: Bool
     @Binding var takeAPhoto: Bool
+    @Binding var loadCamera: Bool
     @ObservedObject var currentLocationManager: CurrentLocationManager
     
     var buttonColor: Color {
@@ -30,10 +31,11 @@ struct RunningJourneyModeView: View {
             }
             
             Button{
+                self.loadCamera = true
                 self.pickAPhoto = false
                 self.takeAPhoto = true
             } label: {
-                MapButton(imageName: Icons.cameraFill)
+                MapButton(imageName: Icons.cameraFill, load: self.loadCamera)
                     .padding(.trailing, 10)
             }
             

@@ -243,7 +243,6 @@ struct StartView: View {
         }
         .fullScreenCover(isPresented: self.$journeyStateController.takeAPhoto, onDismiss: {
             //Photo's location is added to the aproppriate array after view with camera is dismissed.
-            self.journeyStateController.loadCamera = false
             self.addPhotoLocation()
             if self.moc.hasChanges {
                 try? self.moc.save()
@@ -251,6 +250,9 @@ struct StartView: View {
         }, content: {
             //Struct represents view that user is supposed to see while taking a picture.
             PhotoPickerView(pickPhoto: $journeyStateController.pickAPhoto, photosArray: $arrayOfPhotos)
+                .onAppear {
+                    self.journeyStateController.loadCamera = false
+                }
                 .ignoresSafeArea()
         })
 

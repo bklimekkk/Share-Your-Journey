@@ -86,18 +86,32 @@ struct DownloadGalleryButton: View {
 
 struct MapButton: View {
     let imageName: String
+    var load: Bool
+    init(imageName: String, load: Bool) {
+        self.imageName = imageName
+        self.load = load
+    }
+    init(imageName: String) {
+        self.imageName = imageName
+        self.load = false
+    }
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10)
                 .fill(.ultraThickMaterial)
                 .frame(width: 40, height: 40)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(.gray, lineWidth: 1)
-                )
-            Image(systemName: self.imageName)
-                .font(.system(size: 20))
+            if load {
+                ProgressView()
+                    .padding(.leading, 5)
+            } else {
+                Image(systemName: self.imageName)
+                    .font(.system(size: 20))
+            }
         }
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(.gray, lineWidth: 1)
+        )
         .padding(.vertical, 5)
     }
 }
