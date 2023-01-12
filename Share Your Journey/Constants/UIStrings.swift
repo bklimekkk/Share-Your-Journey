@@ -169,4 +169,6 @@ struct UIStrings {
     static let noPhotos = "No photos"
     static let apple = "Apple"
     static let google = "Google"
+    static let viewInTheMap = "View in the map"
+    static let checkInfo = "Check photo's info"
 }

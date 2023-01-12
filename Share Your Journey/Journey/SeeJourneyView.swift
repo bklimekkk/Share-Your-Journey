@@ -289,10 +289,18 @@ struct SeeJourneyView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 if self.showPicture {
-                    Button{
-                        self.showPhotoDetails = true
-                    }label:{
-                        Image(systemName: Icons.infoCircle)
+                    Menu {
+                        Button(UIStrings.viewInTheMap) {
+                            self.showPicture = false
+                            self.viewMode = .threeDimensional
+                            self.currentLocationManager.centerMapOnPin(location: self.journey.photosLocations[self.currentPhotoIndex])
+                            // TODO: - select the centered pin
+                        }
+                        Button(UIStrings.checkInfo) {
+                            self.showPhotoDetails = true
+                        }
+                    } label: {
+                        Image(systemName: Icons.ellipsisCircle)
                     }
                 } else {
                     Menu {
