@@ -100,9 +100,8 @@ struct MapButton: View {
             RoundedRectangle(cornerRadius: 10)
                 .fill(.ultraThickMaterial)
                 .frame(width: 40, height: 40)
-            if load {
+            if self.load {
                 ProgressView()
-                    .padding(.leading, 5)
             } else {
                 Image(systemName: self.imageName)
                     .font(.system(size: 20))
@@ -113,6 +112,7 @@ struct MapButton: View {
                 .stroke(.gray, lineWidth: 1)
         )
         .padding(.vertical, 5)
+        .padding(.leading, self.load ? 0.5 : 0)
     }
 }
 

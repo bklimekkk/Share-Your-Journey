@@ -21,7 +21,7 @@ struct SettingsView: View {
         NavigationView {
             Form {
                 Section {
-                    Button(Links.helpEmail) {}
+                    Button("shareyourjourneyhelp@gmail.com") {}
                         .buttonStyle(.plain)
                         .foregroundColor(.blue)
                     Button(UIStrings.instructions) {
