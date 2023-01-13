@@ -68,7 +68,7 @@ struct ListWithFriends: View {
                 print(error!.localizedDescription)
             } else {
                 for i in querySnapshot!.documents {
-                    if i.documentID != currentEmail && !self.friendsSet.friendsList.contains(i.documentID) && i.get("deletedAccount") as! Bool == false {
+                    if i.documentID != currentEmail && !self.friendsSet.friendsList.contains(i.documentID) && i.get("deletedAccount") as? Bool ?? false == false {
                         self.friendsSet.friendsList.append(i.documentID)
                     }
                 }

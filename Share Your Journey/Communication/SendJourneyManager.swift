@@ -29,22 +29,22 @@ struct SendJourneyManager {
                 print(error!.localizedDescription)
             } else {
                 //All photos details are stored inside document representing particular journey.
-                for i in querySnapshot!.documents.sorted(by: { $0["photoNumber"] as! Int > $1["photoNumber"] as! Int }) {
+                for i in querySnapshot!.documents.sorted(by: { $0["photoNumber"] as? Int ?? IntConstants.defaultValue > $1["photoNumber"] as? Int ?? IntConstants.defaultValue }) {
                     FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getFriends(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString))/\(targetEmail)/journeys/\(journey.name)/photos/\(i.documentID)").setData([
-                        "photoUrl": i.get("photoUrl") as! String,
-                        "photoNumber": i.get("photoNumber") as! Int,
-                        "latitude": i.get("latitude") as! CLLocationDegrees,
-                        "longitude": i.get("longitude") as! CLLocationDegrees,
-                        "location": i.get("location") as! String,
-                        "subLocation": i.get("subLocation") as! String,
-                        "administrativeArea": i.get("administrativeArea") as! String,
-                        "country": i.get("country") as! String,
-                        "isoCountryCode": i.get("isoCountryCode") as! String,
-                        "name": i.get("name") as! String,
-                        "postalCode": i.get("postalCode") as! String,
-                        "ocean": i.get("ocean") as! String,
-                        "inlandWater": i.get("inlandWater") as! String,
-                        "areasOfInterest": i.get("areasOfInterest") as! String
+                        "photoUrl": i.get("photoUrl") as? String ?? UIStrings.emptyString,
+                        "photoNumber": i.get("photoNumber") as? Int ?? IntConstants.defaultValue,
+                        "latitude": i.get("latitude") as? CLLocationDegrees ?? CLLocationDegrees(),
+                        "longitude": i.get("longitude") as? CLLocationDegrees ?? CLLocationDegrees(),
+                        "location": i.get("location") as? String ?? UIStrings.emptyString,
+                        "subLocation": i.get("subLocation") as? String ?? UIStrings.emptyString,
+                        "administrativeArea": i.get("administrativeArea") as? String ?? UIStrings.emptyString,
+                        "country": i.get("country") as? String ?? UIStrings.emptyString,
+                        "isoCountryCode": i.get("isoCountryCode") as? String ?? UIStrings.emptyString,
+                        "name": i.get("name") as? String ?? UIStrings.emptyString,
+                        "postalCode": i.get("postalCode") as? String ?? UIStrings.emptyString,
+                        "ocean": i.get("ocean") as? String ?? UIStrings.emptyString,
+                        "inlandWater": i.get("inlandWater") as? String ?? UIStrings.emptyString,
+                        "areasOfInterest": i.get("areasOfInterest") as? String ?? UIStrings.emptyString
                     ])
                 }
             }

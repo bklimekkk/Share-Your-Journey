@@ -159,9 +159,9 @@ struct ListWithJourneys: View {
                 print(error!.localizedDescription)
             } else {
                 for i in querySnapshot!.documents {
-                    if !self.journeysList.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {
-                        self.journeysList.append(SingleJourney(email: i.get("email") as! String, name: i.documentID, place: i.get("place") as! String, date: (i.get("date") as? Timestamp)?
-                            .dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as! Int))
+                    if !self.journeysList.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as? Bool ?? false) {
+                        self.journeysList.append(SingleJourney(email: i.get("email") as? String ?? UIStrings.emptyString, name: i.documentID, place: i.get("place") as? String ?? UIStrings.emptyString, date: (i.get("date") as? Timestamp)?
+                            .dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                     }
                 }
             }

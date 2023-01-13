@@ -116,12 +116,12 @@ struct YourJourneysList: View {
                 for i in querySnapshot!.documents {
                     
                     //If conditions are met, journey's data is appended to the array.
-                    if !self.sentByYou.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {
+                    if !self.sentByYou.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as? Bool ?? false) {
                         self.sentByYou.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
                                                             name: i.documentID,
-                                                            place: i.get("place") as! String,
+                                                            place: i.get("place") as? String ?? UIStrings.emptyString,
                                                             date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(),
-                                                            numberOfPhotos: i.get("photosNumber") as! Int))
+                                                            numberOfPhotos: i.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                     }
                 }
             }

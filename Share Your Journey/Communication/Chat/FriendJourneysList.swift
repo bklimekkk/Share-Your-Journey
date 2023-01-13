@@ -74,12 +74,12 @@ struct FriendJourneysList: View {
             } else {
                 let receivedJourneys = querySnapshot!.documents
                 for i in receivedJourneys {
-                    if !self.sentByFriend.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as! Bool) {
+                    if !self.sentByFriend.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as? Bool ?? false) {
                         self.sentByFriend.append(SingleJourney(email: email,
                                                                name: i.documentID,
-                                                               place: i.get("place") as! String,
+                                                               place: i.get("place") as? String ?? UIStrings.emptyString,
                                                                date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(),
-                                                               numberOfPhotos: i.get("photosNumber") as! Int))
+                                                               numberOfPhotos: i.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                     }
                 }
                 if self.sentByFriend.count > 0 {

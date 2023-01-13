@@ -385,7 +385,7 @@ struct SeeJourneyView: View {
                 print(error!.localizedDescription)
             } else {
                 self.preparePhotosArray()
-                for i in querySnapshot!.documents.sorted(by: { $1["photoNumber"] as! Int > $0["photoNumber"] as! Int }) {
+                for i in querySnapshot!.documents.sorted(by: { $1["photoNumber"] as? Int ?? IntConstants.defaultValue > $0["photoNumber"] as? Int ?? IntConstants.defaultValue }) {
                     self.downloadPhotoDetails(queryDocumentSnapshot: i)
                 }
             }
@@ -442,11 +442,11 @@ struct SeeJourneyView: View {
      Function is responsible for downloading for all photo's details from the database and storage.
      */
     func downloadPhotoDetails(queryDocumentSnapshot: QueryDocumentSnapshot) {
-        self.journey.photosLocations.append(CLLocationCoordinate2D(latitude: queryDocumentSnapshot.get("latitude") as! CLLocationDegrees,
-                                                                   longitude: queryDocumentSnapshot.get("longitude") as! CLLocationDegrees))
+        self.journey.photosLocations.append(CLLocationCoordinate2D(latitude: queryDocumentSnapshot.get("latitude") as? CLLocationDegrees ?? CLLocationDegrees(),
+                                                                   longitude: queryDocumentSnapshot.get("longitude") as? CLLocationDegrees ?? CLLocationDegrees()))
         
         //Image's reverence / url is used for downloading image from storage later on.
-        let photoReference = FirebaseSetup.firebaseInstance.storage.reference().child(queryDocumentSnapshot.get("photoUrl") as! String)
+        let photoReference = FirebaseSetup.firebaseInstance.storage.reference().child(queryDocumentSnapshot.get("photoUrl") as? String ?? UIStrings.emptyString)
         
         //Image is downloaded from the storage.
         photoReference.downloadURL { url, error in
@@ -462,21 +462,21 @@ struct SeeJourneyView: View {
                     
                     //Image is appended to photos array on main thread so running application isn't interrupted.
                     DispatchQueue.main.async {
-                        journey.photos[queryDocumentSnapshot.get("photoNumber") as! Int] =
+                        journey.photos[queryDocumentSnapshot.get("photoNumber") as? Int ?? IntConstants.defaultValue] =
                         (SinglePhoto(
                             date: (queryDocumentSnapshot.get("date") as? Timestamp)?.dateValue() ?? Date(),
-                            number: queryDocumentSnapshot.get("photoNumber") as! Int,
+                            number: queryDocumentSnapshot.get("photoNumber") as? Int ?? IntConstants.defaultValue,
                             photo: image,
-                            location: queryDocumentSnapshot.get("location") as! String,
-                            subLocation: queryDocumentSnapshot.get("subLocation") as! String,
-                            administrativeArea: queryDocumentSnapshot.get("administrativeArea") as! String,
-                            country: queryDocumentSnapshot.get("country") as! String,
-                            isoCountryCode: queryDocumentSnapshot.get("isoCountryCode") as! String,
-                            name: queryDocumentSnapshot.get("name") as! String,
-                            postalCode: queryDocumentSnapshot.get("postalCode") as! String,
-                            ocean: queryDocumentSnapshot.get("ocean") as! String,
-                            inlandWater: queryDocumentSnapshot.get("inlandWater") as! String,
-                            areasOfInterest: (queryDocumentSnapshot.get("areasOfInterest") as! String).components(separatedBy: ",")))
+                            location: queryDocumentSnapshot.get("location") as? String ?? UIStrings.emptyString,
+                            subLocation: queryDocumentSnapshot.get("subLocation") as? String ?? UIStrings.emptyString,
+                            administrativeArea: queryDocumentSnapshot.get("administrativeArea") as? String ?? UIStrings.emptyString,
+                            country: queryDocumentSnapshot.get("country") as? String ?? UIStrings.emptyString,
+                            isoCountryCode: queryDocumentSnapshot.get("isoCountryCode") as? String ?? UIStrings.emptyString,
+                            name: queryDocumentSnapshot.get("name") as? String ?? UIStrings.emptyString,
+                            postalCode: queryDocumentSnapshot.get("postalCode") as? String ?? UIStrings.emptyString,
+                            ocean: queryDocumentSnapshot.get("ocean") as? String ?? UIStrings.emptyString,
+                            inlandWater: queryDocumentSnapshot.get("inlandWater") as? String ?? UIStrings.emptyString,
+                            areasOfInterest: (queryDocumentSnapshot.get("areasOfInterest") as? String ?? UIStrings.emptyString).components(separatedBy: ",")))
                     }
                 }
                 .resume()

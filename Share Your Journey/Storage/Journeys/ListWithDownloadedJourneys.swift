@@ -99,7 +99,7 @@ struct ListWithDownloadedJourneys: View {
                 self.downloadedJourneysList.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
                                                                  name: i.name ?? UIStrings.emptyString,
                                                                  place: UIStrings.emptyString, date: i.date ?? Date(),
-                                                                 numberOfPhotos: i.photosNumber as! Int,
+                                                                 numberOfPhotos: i.photosNumber as? Int ?? IntConstants.defaultValue,
                                                                  photos: [],
                                                                  photosLocations: [],
                                                                  networkProblem: i.networkProblem))

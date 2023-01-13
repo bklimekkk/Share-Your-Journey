@@ -8,6 +8,7 @@
 import Foundation
 
 struct IntConstants {
+    static let defaultValue = 0
     static let routeWidth = 7
     static let initialMapVisibleMeters = 1000
 }

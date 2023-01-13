@@ -100,7 +100,7 @@ struct SettingsView: View {
                             print(error.localizedDescription)
                         } else {
                             for i in querySnapshot!.documents {
-                                let photosNumber = i.get("photosNumber") as! Int
+                                let photosNumber = i.get("photosNumber") as? Int ?? IntConstants.defaultValue
                                 for j in 0...photosNumber - 1 {
                                     let deleteReference = FirebaseSetup.firebaseInstance.storage.reference().child("\(email)/\(i.documentID)/\(j)")
                                     deleteReference.delete { error in

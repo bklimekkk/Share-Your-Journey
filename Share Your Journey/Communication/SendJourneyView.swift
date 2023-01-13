@@ -105,9 +105,9 @@ struct SendJourneyView: View {
                     if(i.documentID != "-") {
                         self.sentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
                                                                name: i.documentID,
-                                                               place: i.get("place") as! String,
+                                                               place: i.get("place") as? String ?? UIStrings.emptyString,
                                                                date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(),
-                                                               numberOfPhotos: i.get("photosNumber") as! Int))
+                                                               numberOfPhotos: i.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                     }
                 }
             }
@@ -121,9 +121,9 @@ struct SendJourneyView: View {
                         if !self.sentJourneys.map({$0.name}).contains(i.documentID) {
                             self.unsentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
                                                                      name: i.documentID,
-                                                                     place: i.get("place") as! String,
+                                                                     place: i.get("place") as? String ?? UIStrings.emptyString,
                                                                      date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(),
-                                                                     numberOfPhotos: i.get("photosNumber") as! Int))
+                                                                     numberOfPhotos: i.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                         }
                     }
                 }
