@@ -20,26 +20,18 @@ struct JourneyControlView: View {
                 Button {
                     self.currentLocationManager.mapView.deselectAnnotation(self.currentLocationManager.mapView.selectedAnnotations.first,
                                                                            animated: true)
-                    print(self.currentPhotoIndex)
                     self.currentPhotoIndex -= 1
-                    print(self.currentPhotoIndex)
-                    self.currentLocationManager.centerMapOnPin(location:
-                                                                self.journey.photosLocations[currentPhotoIndex])
                     let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String(self.currentPhotoIndex + 1)}) ??
                     self.currentLocationManager.mapView.userLocation
                     self.currentLocationManager.mapView.selectAnnotation(annotationToSelect, animated: true)
-                }label: {
+                } label: {
                     MapButton(imageName: Icons.arrowLeft)
                 }
                 .disabled(self.currentPhotoIndex == 0)
                 Button {
                     self.currentLocationManager.mapView.deselectAnnotation(self.currentLocationManager.mapView.selectedAnnotations.first,
                                                                            animated: true)
-                    print(self.currentPhotoIndex)
                     self.currentPhotoIndex += 1
-                    print(self.currentPhotoIndex)
-                    self.currentLocationManager.centerMapOnPin(location:
-                                                                self.journey.photosLocations[currentPhotoIndex])
                     let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String(self.currentPhotoIndex + 1)}) ??
                     self.currentLocationManager.mapView.userLocation
                     self.currentLocationManager.mapView.selectAnnotation(annotationToSelect, animated: true)

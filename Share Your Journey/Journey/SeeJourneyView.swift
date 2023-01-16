@@ -96,6 +96,9 @@ struct SeeJourneyView: View {
                     .onChange(of: viewMode, perform: { newValue in
                         self.currentLocationManager.mapView.deselectAnnotation(self.currentLocationManager.mapView.selectedAnnotations.first,
                                                                                animated: true)
+                        let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String(self.currentPhotoIndex + 1)}) ??
+                        self.currentLocationManager.mapView.userLocation
+                        self.currentLocationManager.mapView.selectAnnotation(annotationToSelect, animated: true)
                     })
                     .padding(.horizontal, 5)
                 
@@ -293,7 +296,6 @@ struct SeeJourneyView: View {
                         Button(UIStrings.viewInTheMap) {
                             self.showPicture = false
                             self.viewMode = .threeDimensional
-                            self.currentLocationManager.centerMapOnPin(location: self.journey.photosLocations[self.currentPhotoIndex])
                             // TODO: - select the centered pin
                         }
                         Button(UIStrings.checkInfo) {
