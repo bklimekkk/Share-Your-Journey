@@ -278,9 +278,6 @@ struct SeeJourneyView: View {
                                 .padding()
                             }
                         }
-                        .task {
-                            self.currentPhotoIndex = 0
-                        }
                     }
                 }
             }

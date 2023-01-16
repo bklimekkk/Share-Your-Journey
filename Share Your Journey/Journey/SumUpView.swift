@@ -147,9 +147,6 @@ struct SumUpView: View {
                                 }
                                 .padding()
                             }
-                            .task {
-                                self.photoIndex = 0
-                            }
                         }
                         if self.done {
                             HStack(spacing: 10) {
