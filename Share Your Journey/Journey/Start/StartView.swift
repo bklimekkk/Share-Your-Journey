@@ -274,6 +274,7 @@ struct StartView: View {
         //After the journey is finished, StartView is coverd by SumUpView.
         .fullScreenCover(isPresented: self.$journeyStateController.showSumUp, onDismiss: {
             if !self.journeyStateController.goBack {
+                self.currentLocationManager.mapView.removeAnnotations(self.currentLocationManager.mapView.annotations)
                 self.startedJourney = false
                 self.journeyStateController.paused = false
                 self.arrayOfPhotos = []
@@ -398,6 +399,7 @@ struct StartView: View {
             photoPin.title = String(self.arrayOfPhotosLocations.count)
             photoPin.coordinate = self.arrayOfPhotosLocations[self.arrayOfPhotosLocations.count - 1]
             self.currentLocationManager.mapView.addAnnotation(photoPin)
+            self.currentLocationManager.mapView.selectAnnotation(photoPin, animated: true)
         }
     }
     

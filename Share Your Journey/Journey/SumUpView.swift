@@ -178,7 +178,7 @@ struct SumUpView: View {
                     }
                     .alert(UIStrings.quit, isPresented: $showDeleteAlert) {
                         Button(UIStrings.cancel, role: .cancel){}
-                        Button(UIStrings.quit, role: .destructive){
+                        Button(UIStrings.quit, role: .destructive) {
                             self.showSumUp = false
                         }
                     } message: {
