@@ -244,6 +244,7 @@ struct StartView: View {
                        photoIndex: self.$currentImagesCollection.photoIndex,
                        highlightedPhoto: self.$currentImagesCollection.highlightedPhoto,
                        takeAPhoto: self.$journeyStateController.takeAPhoto,
+                       currentLocationManager: self.currentLocationManager,
                        numberOfPhotos: self.$arrayOfPhotosLocations.count,
                        layout: self.currentImagesCollection.layout,
                        singleJourney: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,

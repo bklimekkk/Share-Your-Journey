@@ -15,28 +15,24 @@ struct ImagesGrid: View {
     var layout: [GridItem]
     var singleJourney: SingleJourney
     @Environment(\.dismiss) var dismiss
-
+    
     var body: some View {
-        NavigationView {
-            PhotosAlbumView(showPicture: self.$showPicture,
-                            photoIndex: self.$photoIndex,
-                            highlightedPhoto: self.$highlightedPhoto,
-                            layout: self.layout,
-                            singleJourney: self.singleJourney)
-            .toolbar {
-                ToolbarItem(placement: .bottomBar) {
-                    Button{
-                        self.dismiss()
-                    }label:{
-                        SheetDismissButtonView()
-                    }
-                    .opacity(self.showPicture ? 0 : 1)
-                    .disabled(self.showPicture ? true : false)
+        PhotosAlbumView(showPicture: self.$showPicture,
+                        photoIndex: self.$photoIndex,
+                        highlightedPhoto: self.$highlightedPhoto,
+                        layout: self.layout,
+                        singleJourney: self.singleJourney)
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                Button{
+                    self.dismiss()
+                }label:{
+                    SheetDismissButtonView()
                 }
+                .opacity(self.showPicture ? 0 : 1)
+                .disabled(self.showPicture ? true : false)
             }
-            .padding(.horizontal, 5)
-            .navigationTitle(UIStrings.currentJourneyImages)
-            .navigationBarTitleDisplayMode(.inline)
         }
+        .padding(.horizontal, 5)
     }
 }
