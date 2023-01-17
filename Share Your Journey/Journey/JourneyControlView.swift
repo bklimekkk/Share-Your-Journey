@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 struct JourneyControlView: View {
-    var journey: SingleJourney
+    var numberOfPhotos: Int
     var currentLocationManager: CurrentLocationManager
     @Binding var currentPhotoIndex: Int
     var body: some View {
@@ -35,11 +35,11 @@ struct JourneyControlView: View {
                     let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String(self.currentPhotoIndex + 1)}) ??
                     self.currentLocationManager.mapView.userLocation
                     self.currentLocationManager.mapView.selectAnnotation(annotationToSelect, animated: true)
-
+                    
                 }label: {
                     MapButton(imageName: Icons.arrowRight)
                 }
-                .disabled(self.currentPhotoIndex == self.journey.numberOfPhotos - 1)
+                .disabled(self.currentPhotoIndex == self.numberOfPhotos - 1)
             }
         }
     }

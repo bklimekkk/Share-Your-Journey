@@ -111,7 +111,7 @@ struct StartView: View {
                 .environmentObject(self.currentLocationManager)
                 .edgesIgnoringSafeArea(.all)
 
-                VStack {
+                VStack (spacing: 0) {
                     HStack {
                         Button {
                             self.logOut()
@@ -127,6 +127,7 @@ struct StartView: View {
 
                     HStack {
                         VStack {
+                            Spacer()
                             if !self.arrayOfPhotosLocations.isEmpty && self.startedJourney {
                                 DirectionIcons(mapType: self.$currentLocationManager.mapView.mapType,
                                                subscriber: self.$subscription.subscriber,
@@ -164,20 +165,21 @@ struct StartView: View {
                             .foregroundColor(self.buttonColor)
                         }
                         Spacer()
+                        if self.arrayOfPhotosLocations.count > 1 {
+                            JourneyControlView(numberOfPhotos: self.arrayOfPhotosLocations.count,
+                                                   currentLocationManager: self.currentLocationManager,
+                                                   currentPhotoIndex: self.$photoIndex)
+                        }
                     }
                     //This else if statements block ensures that starting, pausing, resuming,
                     //quitting and completing the journey works in the most intuitive way.
                     if startedJourney && !journeyStateController.paused {
-                        HStack {
                             RunningJourneyModeView(paused: $journeyStateController.paused,
                                                    pickAPhoto: $journeyStateController.pickAPhoto,
                                                    takeAPhoto: $journeyStateController.takeAPhoto,
                                                    loadCamera: $journeyStateController.loadCamera,
                                                    currentLocationManager: currentLocationManager)
-                            PhotosCounterView(number: self.arrayOfPhotos.count)
-                        }
                     } else if startedJourney && journeyStateController.paused {
-                        HStack {
                             PausedJourneyModeView(arrayOfPhotos: $arrayOfPhotos,
                                                   alertMessage: $journeyStateController.alertMessage,
                                                   alertError: $journeyStateController.alertError,
@@ -185,8 +187,6 @@ struct StartView: View {
                                                   startedJourney: $startedJourney, alert: $alert,
                                                   alertBody: $journeyStateController.alertBody,
                                                   currentLocationManager: currentLocationManager)
-                            PhotosCounterView(number: self.arrayOfPhotos.count)
-                        }
                     } else {
                         StartJourneyModeView(startedJourney: self.$startedJourney, currentLocationManager: self.currentLocationManager)
                     }

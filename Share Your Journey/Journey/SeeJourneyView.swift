@@ -259,7 +259,7 @@ struct SeeJourneyView: View {
                                     }
                                     Spacer()
                                     if self.journey.numberOfPhotos > 1 {
-                                        JourneyControlView(journey: self.journey,
+                                        JourneyControlView(numberOfPhotos: self.journey.photosLocations.count,
                                                            currentLocationManager: self.currentLocationManager,
                                                            currentPhotoIndex: self.$currentPhotoIndex)
                                     }
