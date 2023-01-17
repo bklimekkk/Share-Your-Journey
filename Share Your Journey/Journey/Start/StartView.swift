@@ -118,6 +118,9 @@ struct StartView: View {
                         } label:{
                             MapButton(imageName: "arrow.backward")
                         }
+                        if self.showDirections {
+                            DirectionsView(location: self.arrayOfPhotosLocations[self.photoIndex])
+                        }
                         Spacer()
                     }
                     Spacer()

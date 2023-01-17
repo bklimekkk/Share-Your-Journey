@@ -64,7 +64,6 @@ struct SeeJourneyView: View {
     @State private var expandWeather = false
     @State private var weatherLatitude = 0.0
     @State private var weatherLongitude = 0.0
-    @State private var showDirections = false
     //Variable is responsible for saving data to Core Data.
     @Environment(\.managedObjectContext) var moc
     
@@ -153,7 +152,7 @@ struct SeeJourneyView: View {
                                     showPhoto: self.$showPicture,
                                     photoIndex: self.$currentPhotoIndex,
                                     showWeather: self.$showWeather,
-                                    showDirections: self.$showDirections,
+                                    showDirections: self.$showWeather,
                                     expandWeather: self.$expandWeather,
                                     weatherLatitude: self.$weatherLatitude,
                                     weatherLongitude: self.$weatherLongitude,
@@ -169,7 +168,7 @@ struct SeeJourneyView: View {
                                             WeatherView(latitude: self.weatherLatitude, longitude: self.weatherLongitude)
                                                 .padding()
                                         } else {
-                                            Button{
+                                            Button {
                                                 withAnimation(.easeInOut(duration: 0.15)) {
                                                     self.expandWeather = true
                                                 }
@@ -179,20 +178,7 @@ struct SeeJourneyView: View {
                                                     .padding(.vertical)
                                                     .padding(.leading)
                                             }
-                                            if self.showDirections {
-                                                Button{
-                                                    UIApplication.shared.open(URL(string: "http://maps.apple.com/?saddr=&daddr=\(self.journey.photosLocations[self.currentPhotoIndex].latitude),\(self.journey.photosLocations[self.currentPhotoIndex].longitude)&dirflg=d")!)
-                                                }label: {
-                                                    MapTextButton(imageName: Icons.locationNorthCircleFill, text: UIStrings.apple)
-                                                        .foregroundColor(self.colorScheme == .light ? .accentColor : .white)
-                                                }
-                                                Button{
-                                                    UIApplication.shared.open(URL(string: "comgooglemaps://?saddr=&daddr=\(self.journey.photosLocations[self.currentPhotoIndex].latitude),\(self.journey.photosLocations[self.currentPhotoIndex].longitude)&directionsmode=driving")!)
-                                                }label: {
-                                                    MapTextButton(imageName: Icons.locationNorthCircleFill, text: UIStrings.google)
-                                                        .foregroundColor(self.colorScheme == .light ? .accentColor : .white)
-                                                }
-                                            }
+                                            DirectionsView(location: self.journey.photosLocations[self.currentPhotoIndex])
                                         }
                                         Spacer()
                                     }
@@ -293,10 +279,12 @@ struct SeeJourneyView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 if self.showPicture {
                     Menu {
-                        Button(UIStrings.viewInTheMap) {
-                            self.showPicture = false
-                            self.viewMode = .threeDimensional
-                            // TODO: - select the centered pin
+                        if self.viewMode == .photoAlbum {
+                            Button(UIStrings.viewInTheMap) {
+                                self.showPicture = false
+                                self.viewMode = .threeDimensional
+                                // TODO: - select the centered pin
+                            }
                         }
                         Button(UIStrings.checkInfo) {
                             self.showPhotoDetails = true

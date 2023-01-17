@@ -61,6 +61,7 @@ struct MapView: UIViewRepresentable {
             withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
                 self.parent.showWeather = false
             }
+            self.parent.showDirections = false
         }
         
         /**

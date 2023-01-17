@@ -80,6 +80,7 @@
 		86D9F7192899207C0092832E /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D9F7182899207B0092832E /* WeatherModel.swift */; };
 		86D9F71B2899234E0092832E /* WeatherRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D9F71A2899234D0092832E /* WeatherRequest.swift */; };
 		86D9F71D28992D0E0092832E /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D9F71C28992D0E0092832E /* WeatherView.swift */; };
+		86E3AA5629761DF400BD79F1 /* DirectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E3AA5529761DF300BD79F1 /* DirectionsView.swift */; };
 		86E9FEE0296ED05B005544B1 /* ImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E9FEDF296ED05B005544B1 /* ImagesView.swift */; };
 		86FCCC6028102449005FD678 /* ListWithRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC5F28102449005FD678 /* ListWithRequests.swift */; };
 		86FCCC62281025DD005FD678 /* ListWithFriends.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FCCC61281025DD005FD678 /* ListWithFriends.swift */; };
@@ -186,6 +187,7 @@
 		86D9F7182899207B0092832E /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		86D9F71A2899234D0092832E /* WeatherRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherRequest.swift; sourceTree = "<group>"; };
 		86D9F71C28992D0E0092832E /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
+		86E3AA5529761DF300BD79F1 /* DirectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsView.swift; sourceTree = "<group>"; };
 		86E9FEDF296ED05B005544B1 /* ImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesView.swift; sourceTree = "<group>"; };
 		86FCCC5F28102449005FD678 /* ListWithRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListWithRequests.swift; sourceTree = "<group>"; };
 		86FCCC61281025DD005FD678 /* ListWithFriends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListWithFriends.swift; sourceTree = "<group>"; };
@@ -498,6 +500,7 @@
 				8671E6FD2876D24300E4A5AC /* InstructionsView.swift */,
 				8665C79029574075007D7354 /* PhotosCounterView.swift */,
 				8665C79229574592007D7354 /* SheetDismissButtonView.swift */,
+				86E3AA5529761DF300BD79F1 /* DirectionsView.swift */,
 			);
 			path = Start;
 			sourceTree = "<group>";
@@ -679,6 +682,7 @@
 				864FEF4528A7E86C0060E94D /* CurrentLocation+CoreDataClass.swift in Sources */,
 				86FCCC652810272B005FD678 /* YourJourneysList.swift in Sources */,
 				86FCCC6C28102A75005FD678 /* PausedJourneyModeView.swift in Sources */,
+				86E3AA5629761DF400BD79F1 /* DirectionsView.swift in Sources */,
 				8672551C27B80A9000DC5001 /* TabsView.swift in Sources */,
 				86197618288D3D1C0034FF2C /* NoDataView.swift in Sources */,
 				864B50C7287232660072A5BB /* SettingsView.swift in Sources */,
