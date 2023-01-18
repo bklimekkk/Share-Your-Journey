@@ -30,7 +30,7 @@ struct JourneysView: View {
         if self.searchedJourney == UIStrings.emptyString {
             return self.journeysList
         } else {
-            return self.journeysList.filter({return $0.name.lowercased().contains(self.searchedJourney.lowercased())})
+            return self.journeysList.filter({return $0.place.lowercased().contains(self.searchedJourney.lowercased())})
         }
     }
     
@@ -39,7 +39,7 @@ struct JourneysView: View {
         if self.searchedJourney == UIStrings.emptyString {
             return self.downloadedJourneysList
         } else {
-            return self.downloadedJourneysList.filter({return $0.name.lowercased().contains(self.searchedJourney.lowercased())})
+            return self.downloadedJourneysList.filter({return $0.place.lowercased().contains(self.searchedJourney.lowercased())})
         }
     }
     

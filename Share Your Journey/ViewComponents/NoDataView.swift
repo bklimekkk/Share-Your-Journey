@@ -9,8 +9,6 @@ import SwiftUI
 
 struct NoDataView: View {
     var text: String
-    @State var time = 5
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     init() {
         self.text = UIStrings.emptyString
     }
@@ -20,17 +18,8 @@ struct NoDataView: View {
     var body: some View {
         VStack {
             Spacer()
-            if time > 0 {
-                ProgressView()
-                    .onReceive(timer) { _ in
-                        if time > 0 {
-                            time -= 1
-                        }
-                    }
-            } else {
                 Text(self.text)
                     .foregroundColor(.gray)
-            }
             Spacer()
         }
     }

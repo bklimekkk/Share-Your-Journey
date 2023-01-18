@@ -22,7 +22,7 @@ struct WeatherIconView: View {
                 .frame(width: 60)
             
             
-        }placeholder: {
+        } placeholder: {
             ZStack {
                 VStack{}
                     .frame(width: 60, height: 40)

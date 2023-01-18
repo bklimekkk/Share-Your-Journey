@@ -27,7 +27,7 @@ struct SendJourneyView: View {
         if self.searchText.isEmpty {
             return self.unsentJourneys
         } else {
-            return self.unsentJourneys.filter{$0.name.contains(self.searchText)}
+            return self.unsentJourneys.filter{$0.place.contains(self.searchText)}
         }
     }
     

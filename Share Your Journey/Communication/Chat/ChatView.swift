@@ -28,7 +28,7 @@ struct ChatView: View {
         if self.searchJourney == UIStrings.emptyString {
             return self.sentByYou
         } else {
-            return self.sentByYou.filter({return $0.name.lowercased().contains(self.searchJourney.lowercased())})
+            return self.sentByYou.filter({return $0.place.lowercased().contains(self.searchJourney.lowercased())})
         }
     }
     
@@ -37,7 +37,7 @@ struct ChatView: View {
         if self.searchJourney == UIStrings.emptyString {
             return self.sentByFriend
         } else {
-            return self.sentByFriend.filter({return $0.name.lowercased().contains(self.searchJourney.lowercased())})
+            return self.sentByFriend.filter({return $0.place.lowercased().contains(self.searchJourney.lowercased())})
         }
     }
     

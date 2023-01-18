@@ -64,6 +64,7 @@ struct SeeJourneyView: View {
     @State private var expandWeather = false
     @State private var weatherLatitude = 0.0
     @State private var weatherLongitude = 0.0
+    @State private var routeIsDisplayed = false
     //Variable is responsible for saving data to Core Data.
     @Environment(\.managedObjectContext) var moc
     
