@@ -50,6 +50,8 @@ struct SumUpView: View {
     @State private var weatherLongitude = 0.0
     @State private var showDirections = false
     @State private var routeIsDisplayed = false
+    @State private var showInfo = false
+
     var buttonColor: Color {
         self.colorScheme == .dark ? .white : .accentColor
     }
@@ -63,9 +65,16 @@ struct SumUpView: View {
             ZStack {
                 if !self.showPicture {
                     VStack {
+                        JourneyPickerView(choice: self.$viewType, firstChoice: UIStrings.album, secondChoice: UIStrings.map)
+                            .onChange(of: self.viewType, perform: { newValue in
+                                self.currentLocationManager.mapView.deselectAnnotation(self.currentLocationManager.mapView.selectedAnnotations.first,
+                                                                                       animated: true)
+                                let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String(self.photoIndex + 1)}) ??
+                                self.currentLocationManager.mapView.userLocation
+                                self.currentLocationManager.mapView.selectAnnotation(annotationToSelect, animated: true)
+                            })
+                            .padding(.horizontal, 5)
                         if self.viewType == .photoAlbum {
-                            JourneyPickerView(choice: self.$viewType, firstChoice: UIStrings.album, secondChoice: UIStrings.map)
-                                .padding(.horizontal, 5)
                             VStack {
                                 if !self.downloadedPhotos {
                                     //Button used to download all journey images.
@@ -96,10 +105,6 @@ struct SumUpView: View {
                                 Text(UIStrings.areYouSureToDownload)
                             }
                         } else {
-
-                            //As users have 3 options of viewing photos, they are presented with picker that contains three values to choose.
-                            JourneyPickerView(choice: $viewType, firstChoice: UIStrings.album, secondChoice: UIStrings.map)
-                                .padding(.horizontal, 5)
                             ZStack {
                                 //Depending on option chosen by users, program will present them with different type of map (or photo album).
                                 MapView(walking: self.$walking,
@@ -116,6 +121,25 @@ struct SumUpView: View {
                                 .environmentObject(self.currentLocationManager)
                                 .opacity(self.showPicture ? 0 : 1)
                                 VStack {
+                                    if self.showWeather {
+                                        HStack {
+                                            if self.expandWeather {
+                                                WeatherView(latitude: self.weatherLatitude, longitude: self.weatherLongitude)
+                                            } else {
+                                                Button {
+                                                    withAnimation(.easeInOut(duration: 0.15)) {
+                                                        self.expandWeather = true
+                                                    }
+                                                }label: {
+                                                    MapButton(imageName: Icons.cloudSunFill)
+                                                        .foregroundColor(self.colorScheme == .light ? .accentColor : .white)
+                                                }
+                                                DirectionsView(location: self.journey.photosLocations[self.photoIndex])
+                                            }
+                                            Spacer()
+                                        }
+                                        .opacity(self.showPicture ? 0 : 1)
+                                    }
                                     Spacer()
                                     VStack {
                                         HStack {
@@ -151,7 +175,7 @@ struct SumUpView: View {
                                         }
                                     }
                                 }
-                                .padding(.horizontal)
+                                .padding(.horizontal, 5)
                                 .padding(.vertical, 5)
                             }
                         }
@@ -200,12 +224,28 @@ struct SumUpView: View {
             .navigationTitle(UIStrings.sumUp)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(UIStrings.continueJourney) {
-                        self.goBack = true
-                        self.dismiss()
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        if self.showPicture {
+                            if self.viewType == .photoAlbum {
+                                Button(UIStrings.viewInTheMap) {
+                                    self.viewType = .threeDimensional
+                                    self.showPicture = false
+                                }
+                            }
+                            Button(UIStrings.checkInfo) {
+                                self.showInfo = true
+                            }
+                        }
+                        if !self.done {
+                            Button(UIStrings.continueJourney) {
+                                self.goBack = true
+                                self.dismiss()
+                            }
+                        }
+                    } label: {
+                        Image(systemName: Icons.ellipsisCircle)
                     }
-                    .disabled(self.done)
                 }
             }
             .fullScreenCover(isPresented: self.$subscription.showPanel) {
@@ -213,6 +253,11 @@ struct SumUpView: View {
             }
             .sheet(isPresented: self.$sendJourney, content: {
                 SendViewedJourneyView(journey: self.journey)
+            })
+            .sheet(isPresented: self.$showInfo, onDismiss: {
+
+            }, content: {
+                PhotoDetailsView(photo: self.journey.photos[self.photoIndex])
             })
             .task {
                 Purchases.shared.getCustomerInfo { (customerInfo, error) in

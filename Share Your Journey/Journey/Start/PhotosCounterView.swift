@@ -8,18 +8,13 @@
 import SwiftUI
 
 struct PhotosCounterView: View {
-    var number: Int
+    var currentNumber: Int
+    var overallNumber: Int
     var body: some View {
-        Text(String(self.number))
+        Text("\(self.currentNumber)/\(self.overallNumber)")
             .foregroundColor(.gray)
             .bold()
             .font(.system(size: 40))
             .padding(.leading, 5)
-    }
-}
-
-struct PhotosCounterView_Previews: PreviewProvider {
-    static var previews: some View {
-        PhotosCounterView(number: 0)
     }
 }

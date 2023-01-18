@@ -168,7 +168,6 @@ struct SeeJourneyView: View {
                                     HStack {
                                         if self.expandWeather {
                                             WeatherView(latitude: self.weatherLatitude, longitude: self.weatherLongitude)
-                                                .padding()
                                         } else {
                                             Button {
                                                 withAnimation(.easeInOut(duration: 0.15)) {
@@ -177,8 +176,6 @@ struct SeeJourneyView: View {
                                             }label: {
                                                 MapButton(imageName: Icons.cloudSunFill)
                                                     .foregroundColor(self.colorScheme == .light ? .accentColor : .white)
-                                                    .padding(.vertical)
-                                                    .padding(.leading)
                                             }
                                             DirectionsView(location: self.journey.photosLocations[self.currentPhotoIndex])
                                         }
@@ -269,7 +266,7 @@ struct SeeJourneyView: View {
                                                            currentPhotoIndex: self.$currentPhotoIndex)
                                     }
                                 }
-                                .padding(.horizontal)
+                                .padding(.horizontal, 5)
                                 .padding(.vertical, 5)
                             }
                         }

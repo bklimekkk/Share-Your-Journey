@@ -195,7 +195,7 @@ struct StartView: View {
                         StartJourneyModeView(startedJourney: self.$startedJourney, currentLocationManager: self.currentLocationManager)
                     }
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, 5)
                 .padding(.bottom, 5)
             }
             .opacity(self.showPhoto ? 0 : 1)

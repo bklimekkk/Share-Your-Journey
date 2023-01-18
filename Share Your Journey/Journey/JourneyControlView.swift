@@ -16,7 +16,7 @@ struct JourneyControlView: View {
         VStack {
             Spacer()
             HStack {
-                PhotosCounterView(number: self.currentPhotoIndex + 1)
+                PhotosCounterView(currentNumber: self.currentPhotoIndex + 1, overallNumber: self.numberOfPhotos)
                 Button {
                     self.currentLocationManager.mapView.deselectAnnotation(self.currentLocationManager.mapView.selectedAnnotations.first,
                                                                            animated: true)
@@ -35,7 +35,7 @@ struct JourneyControlView: View {
                     let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String(self.currentPhotoIndex + 1)}) ??
                     self.currentLocationManager.mapView.userLocation
                     self.currentLocationManager.mapView.selectAnnotation(annotationToSelect, animated: true)
-                    
+
                 }label: {
                     MapButton(imageName: Icons.arrowRight)
                 }
