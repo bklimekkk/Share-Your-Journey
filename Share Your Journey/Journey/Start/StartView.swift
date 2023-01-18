@@ -91,6 +91,7 @@ struct StartView: View {
     @State private var highlightedPhoto: UIImage = UIImage()
     @State private var showDirections = false
     @State private var routeIsDisplayed = false
+    @State private var showInfo = false
     var buttonColor: Color {
         colorScheme == .dark ? .white : .accentColor
     }
@@ -200,12 +201,23 @@ struct StartView: View {
             }
             .opacity(self.showPhoto ? 0 : 1)
             .disabled(self.showPhoto)
-            HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
-                             showPicture: self.$showPhoto,
-                             highlightedPhoto: self.$highlightedPhoto,
-                             journey: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
-                                                    photos: self.arrayOfPhotos,
-                                                    photosLocations: self.arrayOfPhotosLocations))
+            NavigationView {
+                HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
+                                 showPicture: self.$showPhoto,
+                                 highlightedPhoto: self.$highlightedPhoto,
+                                 journey: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
+                                                        photos: self.arrayOfPhotos,
+                                                        photosLocations: self.arrayOfPhotosLocations))
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(UIStrings.checkInfo) {
+                            self.showInfo = true
+                        }
+                        .disabled(!self.showPhoto)
+                    }
+                }
+            }
+            .opacity(self.showPhoto ? 1 : 0)
         }
         .task {
             if !self.currentImages.isEmpty && self.arrayOfPhotos.isEmpty {
@@ -241,6 +253,9 @@ struct StartView: View {
                 index += 1
             }
         }
+        .sheet(isPresented: self.$showInfo, content: {
+            PhotoDetailsView(photo: self.arrayOfPhotos[self.photoIndex])
+        })
         .fullScreenCover(isPresented: self.$journeyStateController.showSettings, content: {
             SettingsView(loggedOut: $loggedOut)
         })
