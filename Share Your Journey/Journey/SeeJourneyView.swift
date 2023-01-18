@@ -157,6 +157,7 @@ struct SeeJourneyView: View {
                                     expandWeather: self.$expandWeather,
                                     weatherLatitude: self.$weatherLatitude,
                                     weatherLongitude: self.$weatherLongitude,
+                                    routeIsDisplayed: self.$routeIsDisplayed,
                                     photosLocations: self.$journey.photosLocations)
                             .edgesIgnoringSafeArea(.all)
                             .environmentObject(self.currentLocationManager)
@@ -191,6 +192,9 @@ struct SeeJourneyView: View {
                                 HStack {
                                     VStack {
                                         Spacer()
+                                        if self.routeIsDisplayed {
+                                            RemoveRouteView(routeIsDisplayed: self.$routeIsDisplayed, currentLocationManager: self.currentLocationManager)
+                                        }
                                         if !self.downloadMode && !self.journeyIsDownloaded {
                                             if self.journey.photos.map ({return $0.photo}).contains(UIImage()) {
                                                 ProgressView()
@@ -265,7 +269,8 @@ struct SeeJourneyView: View {
                                                            currentPhotoIndex: self.$currentPhotoIndex)
                                     }
                                 }
-                                .padding()
+                                .padding(.horizontal)
+                                .padding(.vertical, 5)
                             }
                         }
                     }

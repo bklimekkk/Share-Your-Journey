@@ -20,7 +20,8 @@ struct MapView: UIViewRepresentable {
     @Binding var expandWeather: Bool
     @Binding var weatherLatitude: Double
     @Binding var weatherLongitude: Double
-    
+    @Binding var routeIsDisplayed: Bool
+
     var tintColor: UIColor {
         self.colorScheme == .light ? Colors.darkTintColor : .white
     }
@@ -101,6 +102,9 @@ struct MapView: UIViewRepresentable {
                     self.parent.showPhoto = true
                 }
             } else {
+                withAnimation {
+                    self.parent.routeIsDisplayed = true
+                }
                 let overlays = mapView.overlays
                 mapView.removeOverlays(overlays)
                 let firstPoint = MKPlacemark(coordinate: self.parent.clManager.currentRegion.center)

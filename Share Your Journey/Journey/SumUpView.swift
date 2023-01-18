@@ -49,6 +49,7 @@ struct SumUpView: View {
     @State private var weatherLatitude = 0.0
     @State private var weatherLongitude = 0.0
     @State private var showDirections = false
+    @State private var routeIsDisplayed = false
     var buttonColor: Color {
         self.colorScheme == .dark ? .white : .accentColor
     }
@@ -109,6 +110,7 @@ struct SumUpView: View {
                                         expandWeather: self.$expandWeather,
                                         weatherLatitude: self.$weatherLatitude,
                                         weatherLongitude: self.$weatherLongitude,
+                                        routeIsDisplayed: self.$routeIsDisplayed,
                                         photosLocations: self.$journey.photosLocations)
                                 .edgesIgnoringSafeArea(.all)
                                 .environmentObject(self.currentLocationManager)
@@ -118,6 +120,10 @@ struct SumUpView: View {
                                     VStack {
                                         HStack {
                                             VStack {
+                                                Spacer()
+                                                if self.routeIsDisplayed {
+                                                    RemoveRouteView(routeIsDisplayed: self.$routeIsDisplayed, currentLocationManager: self.currentLocationManager)
+                                                }
                                                 DirectionIcons(mapType: self.$currentLocationManager.mapView.mapType,
                                                                subscriber: self.$subscription.subscriber,
                                                                showPanel: self.$subscription.showPanel,
@@ -145,7 +151,8 @@ struct SumUpView: View {
                                         }
                                     }
                                 }
-                                .padding()
+                                .padding(.horizontal)
+                                .padding(.vertical, 5)
                             }
                         }
                         if self.done {

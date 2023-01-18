@@ -90,7 +90,7 @@ struct StartView: View {
     @State private var photoIndex = 0
     @State private var highlightedPhoto: UIImage = UIImage()
     @State private var showDirections = false
-
+    @State private var routeIsDisplayed = false
     var buttonColor: Color {
         colorScheme == .dark ? .white : .accentColor
     }
@@ -107,6 +107,7 @@ struct StartView: View {
                         expandWeather: self.$weatherController.expandWeather,
                         weatherLatitude: self.$weatherController.weatherLatitude,
                         weatherLongitude: self.$weatherController.weatherLongitude,
+                        routeIsDisplayed: self.$routeIsDisplayed,
                         photosLocations: self.$arrayOfPhotosLocations)
                 .environmentObject(self.currentLocationManager)
                 .edgesIgnoringSafeArea(.all)
@@ -128,6 +129,9 @@ struct StartView: View {
                     HStack {
                         VStack {
                             Spacer()
+                            if self.routeIsDisplayed {
+                                RemoveRouteView(routeIsDisplayed: self.$routeIsDisplayed, currentLocationManager: self.currentLocationManager)
+                            }
                             if !self.arrayOfPhotosLocations.isEmpty && self.startedJourney {
                                 DirectionIcons(mapType: self.$currentLocationManager.mapView.mapType,
                                                subscriber: self.$subscription.subscriber,
@@ -192,7 +196,7 @@ struct StartView: View {
                     }
                 }
                 .padding(.horizontal)
-                .padding(.bottom)
+                .padding(.bottom, 5)
             }
             .opacity(self.showPhoto ? 0 : 1)
             .disabled(self.showPhoto)
