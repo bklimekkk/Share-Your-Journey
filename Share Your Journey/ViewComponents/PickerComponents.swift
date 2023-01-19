@@ -28,7 +28,7 @@ struct PickerView: View {
 struct JourneyPickerView: View {
     
     //This variable's value is set to one of three cases of ViewType enum.
-    var choice: Binding<SeeJourneyView.ViewType>
+    var choice: Binding<ViewType>
     
     var firstChoice: String
     var secondChoice: String
@@ -36,9 +36,9 @@ struct JourneyPickerView: View {
     var body: some View {
         Picker(selection: self.choice, label: Text(UIStrings.emptyString)) {
             Text(self.firstChoice)
-                .tag(SeeJourneyView.ViewType.photoAlbum)
+                .tag(ViewType.photoAlbum)
             Text(self.secondChoice)
-                .tag(SeeJourneyView.ViewType.threeDimensional)
+                .tag(ViewType.threeDimensional)
         }
         .pickerStyle(SegmentedPickerStyle())
     }

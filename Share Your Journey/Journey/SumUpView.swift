@@ -19,7 +19,7 @@ struct SumUpView: View {
         GridItem(.flexible())
     ]
     //this variable controls which of three modes program should currently display.
-    @State private var viewType = SeeJourneyView.ViewType.photoAlbum
+    @State private var viewType = ViewType.photoAlbum
     //variable represents the journey user has taken before sum-up screen appeared.
     @State var journey: SingleJourney
     //Variables are set to false and are never changed in this struct. They are used to be passed as parameters for MapView.
@@ -66,13 +66,6 @@ struct SumUpView: View {
                 if !self.showPicture {
                     VStack {
                         JourneyPickerView(choice: self.$viewType, firstChoice: UIStrings.album, secondChoice: UIStrings.map)
-                            .onChange(of: self.viewType, perform: { newValue in
-                                self.currentLocationManager.mapView.deselectAnnotation(self.currentLocationManager.mapView.selectedAnnotations.first,
-                                                                                       animated: true)
-                                let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String(self.photoIndex + 1)}) ??
-                                self.currentLocationManager.mapView.userLocation
-                                self.currentLocationManager.mapView.selectAnnotation(annotationToSelect, animated: true)
-                            })
                             .padding(.horizontal, 5)
                         if self.viewType == .photoAlbum {
                             VStack {
@@ -225,26 +218,26 @@ struct SumUpView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
-                        if self.showPicture {
-                            if self.viewType == .photoAlbum {
-                                Button(UIStrings.viewInTheMap) {
-                                    self.viewType = .threeDimensional
-                                    self.showPicture = false
-                                }
-                            }
+                    if self.showPicture {
+                        Menu {
                             Button(UIStrings.checkInfo) {
                                 self.showInfo = true
                             }
-                        }
-                        if !self.done {
-                            Button(UIStrings.continueJourney) {
-                                self.goBack = true
-                                self.dismiss()
+
+                            if !self.done {
+                                Button(UIStrings.continueJourney) {
+                                    self.goBack = true
+                                    self.dismiss()
+                                }
                             }
+                        } label: {
+                            Image(systemName: Icons.ellipsisCircle)
                         }
-                    } label: {
-                        Image(systemName: Icons.ellipsisCircle)
+                    } else {
+                        Button(UIStrings.continueJourney) {
+                            self.goBack = true
+                            self.dismiss()
+                        }
                     }
                 }
             }

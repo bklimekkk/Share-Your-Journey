@@ -26,12 +26,7 @@ struct SeeJourneyView: View {
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-    
-    //Enum's cases control how users view journey's photos at the particular moment.
-    enum ViewType {
-        case photoAlbum
-        case threeDimensional
-    }
+
     //Variable controls if users want to receive walking or driving directions.
     @State var walking = false
     //Object necessary for tracking user's location.
@@ -286,7 +281,6 @@ struct SeeJourneyView: View {
                             Button(UIStrings.viewInTheMap) {
                                 self.showPicture = false
                                 self.viewMode = .threeDimensional
-                                // TODO: - select the centered pin
                             }
                         }
                         Button(UIStrings.checkInfo) {
