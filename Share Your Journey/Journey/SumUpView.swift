@@ -136,7 +136,7 @@ struct SumUpView: View {
                                     Spacer()
                                     VStack {
                                         HStack {
-                                            VStack {
+                                            VStack (spacing: 10) {
                                                 Spacer()
                                                 if self.routeIsDisplayed {
                                                     RemoveRouteView(routeIsDisplayed: self.$routeIsDisplayed, currentLocationManager: self.currentLocationManager)

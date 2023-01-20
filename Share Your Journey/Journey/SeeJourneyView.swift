@@ -176,13 +176,14 @@ struct SeeJourneyView: View {
                                         }
                                         Spacer()
                                     }
+                                    .padding(.top, 5)
                                     Spacer()
                                 }
                                 .opacity(self.showPicture ? 0 : 1)
                             }
                             if !self.showPicture {
                                 HStack {
-                                    VStack {
+                                    VStack (spacing: 10) {
                                         Spacer()
                                         if self.routeIsDisplayed {
                                             RemoveRouteView(routeIsDisplayed: self.$routeIsDisplayed, currentLocationManager: self.currentLocationManager)
@@ -256,13 +257,14 @@ struct SeeJourneyView: View {
                                     }
                                     Spacer()
                                     if self.journey.numberOfPhotos > 1 {
-                                        JourneyControlView(numberOfPhotos: self.journey.photosLocations.count,
-                                                           currentLocationManager: self.currentLocationManager,
-                                                           currentPhotoIndex: self.$currentPhotoIndex)
+                                            JourneyControlView(numberOfPhotos: self.journey.photosLocations.count,
+                                                               currentLocationManager: self.currentLocationManager,
+                                                               currentPhotoIndex: self.$currentPhotoIndex)
                                     }
                                 }
                                 .padding(.horizontal, 5)
-                                .padding(.vertical, 5)
+                                .padding(.top, 5)
+                                .padding(.bottom, 10)
                             }
                         }
                     }

@@ -125,10 +125,10 @@ struct StartView: View {
                         }
                         Spacer()
                     }
+                    .padding(.top, 5)
                     Spacer()
-
                     HStack {
-                        VStack {
+                        VStack (spacing: 10) {
                             Spacer()
                             if self.routeIsDisplayed {
                                 RemoveRouteView(routeIsDisplayed: self.$routeIsDisplayed, currentLocationManager: self.currentLocationManager)
@@ -170,28 +170,29 @@ struct StartView: View {
                             .foregroundColor(self.buttonColor)
                         }
                         Spacer()
-                        if self.arrayOfPhotosLocations.count > 1 {
-                            JourneyControlView(numberOfPhotos: self.arrayOfPhotosLocations.count,
+                            if self.arrayOfPhotosLocations.count > 1 {
+                                JourneyControlView(numberOfPhotos: self.arrayOfPhotosLocations.count,
                                                    currentLocationManager: self.currentLocationManager,
                                                    currentPhotoIndex: self.$photoIndex)
-                        }
+                            }
                     }
+                    .padding(.bottom, 10)
                     //This else if statements block ensures that starting, pausing, resuming,
                     //quitting and completing the journey works in the most intuitive way.
                     if startedJourney && !journeyStateController.paused {
-                            RunningJourneyModeView(paused: $journeyStateController.paused,
-                                                   pickAPhoto: $journeyStateController.pickAPhoto,
-                                                   takeAPhoto: $journeyStateController.takeAPhoto,
-                                                   loadCamera: $journeyStateController.loadCamera,
-                                                   currentLocationManager: currentLocationManager)
+                        RunningJourneyModeView(paused: $journeyStateController.paused,
+                                               pickAPhoto: $journeyStateController.pickAPhoto,
+                                               takeAPhoto: $journeyStateController.takeAPhoto,
+                                               loadCamera: $journeyStateController.loadCamera,
+                                               currentLocationManager: currentLocationManager)
                     } else if startedJourney && journeyStateController.paused {
-                            PausedJourneyModeView(arrayOfPhotos: $arrayOfPhotos,
-                                                  alertMessage: $journeyStateController.alertMessage,
-                                                  alertError: $journeyStateController.alertError,
-                                                  paused: $journeyStateController.paused,
-                                                  startedJourney: $startedJourney, alert: $alert,
-                                                  alertBody: $journeyStateController.alertBody,
-                                                  currentLocationManager: currentLocationManager)
+                        PausedJourneyModeView(arrayOfPhotos: $arrayOfPhotos,
+                                              alertMessage: $journeyStateController.alertMessage,
+                                              alertError: $journeyStateController.alertError,
+                                              paused: $journeyStateController.paused,
+                                              startedJourney: $startedJourney, alert: $alert,
+                                              alertBody: $journeyStateController.alertBody,
+                                              currentLocationManager: currentLocationManager)
                     } else {
                         StartJourneyModeView(startedJourney: self.$startedJourney, currentLocationManager: self.currentLocationManager)
                     }
