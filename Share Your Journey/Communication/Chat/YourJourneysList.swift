@@ -21,6 +21,7 @@ struct YourJourneysList: View {
     @State private var journeyToDelete = UIStrings.emptyString
     //Variable's value controls if program should delete journey from storage or not.
     @State private var deleteFromStorage = true
+    @State private var loadedYourJourneys = false
     //Friend's email address.
     var email: String
     var sentByYouFiltered: [SingleJourney]
@@ -32,10 +33,15 @@ struct YourJourneysList: View {
     var body: some View {
         
         VStack {
-            if self.sentByYouFiltered.isEmpty{
+            if !self.loadedYourJourneys {
+                LoadingView()
+            } else if self.sentByYouFiltered.isEmpty {
                 NoDataView(text: UIStrings.noJourneysToShow)
                     .onTapGesture {
-                        self.populateYourJourneys()
+                        self.loadedYourJourneys = false
+                        self.populateYourJourneys(completionHandler: {
+                            self.loadedYourJourneys = true
+                        })
                     }
             } else {
                 //List is sorted by date.
@@ -62,7 +68,9 @@ struct YourJourneysList: View {
                 .scrollDismissesKeyboard(.interactively)
                 .listStyle(.inset)
                 .refreshable {
-                    self.populateYourJourneys()
+                    self.populateYourJourneys(completionHandler: {
+                        self.loadedYourJourneys = true
+                    })
                 }
                 //Alert is shown if users want to delete any journey they sent.
                 .alert(isPresented: self.$askAboutDeletion) {
@@ -95,26 +103,30 @@ struct YourJourneysList: View {
             }
         }
         .fullScreenCover(isPresented: self.$sendJourneyScreen, onDismiss: {
-            self.populateYourJourneys()
+            self.populateYourJourneys(completionHandler: {
+                self.loadedYourJourneys = true
+            })
         }) {
             SendJourneyView(targetEmail: self.email)
         }
         .onAppear {
-            self.populateYourJourneys()
+            self.populateYourJourneys(completionHandler: {
+                self.loadedYourJourneys = true
+            })
         }
     }
     
     /**
      Function is responsible for populating array with users' journeys with data from the server.
      */
-    func populateYourJourneys() {
+    func populateYourJourneys(completionHandler: @escaping() -> Void) {
         let path = "\(FirestorePaths.getFriends(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString))/\(email)/journeys"
         FirebaseSetup.firebaseInstance.db.collection(path).getDocuments() { (querySnapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
                 for i in querySnapshot!.documents {
-                    
+                    completionHandler()
                     //If conditions are met, journey's data is appended to the array.
                     if !self.sentByYou.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as? Bool ?? false) {
                         self.sentByYou.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,

@@ -18,8 +18,18 @@ struct NoDataView: View {
     var body: some View {
         VStack {
             Spacer()
-                Text(self.text)
-                    .foregroundColor(.gray)
+            Text(self.text)
+                .foregroundColor(.gray)
+            Spacer()
+        }
+    }
+}
+
+struct LoadingView: View {
+    var body: some View {
+        VStack {
+            Spacer()
+            ProgressView()
             Spacer()
         }
     }

@@ -57,9 +57,7 @@ struct ChatView: View {
             SearchField(text: UIStrings.searchJourney, search: self.$searchJourney)
             if self.yourJourneys {
                 YourJourneysList(searchJourney: self.$searchJourney, sendJourneyScreen: self.$sendJourneyScreen, askAboutDeletion: self.$askAboutDeletion, sentByYou: self.$sentByYou, email: self.email, sentByYouFiltered: self.sentByYouFiltered)
-                    
                     Spacer()
-                    
                     //Clicking this button opens screen enabling users to send selected journey.
                     Button {
                         self.sendJourneyScreen.toggle()

@@ -12,15 +12,21 @@ struct ListWithRequests: View {
     //variable contains data provided by users while searching lists.
     @Binding var searchPeople: String
     @Binding var requestsSet: RequestsSet
+    @State private var loadedRequests = false
     var filteredRequestsList: [String]
     
     var body: some View {
         
         VStack {
-            if self.filteredRequestsList.isEmpty {
+            if !self.loadedRequests {
+                LoadingView()
+            } else if self.filteredRequestsList.isEmpty {
                 NoDataView(text: UIStrings.noRequestsToShow)
                     .onTapGesture {
-                        self.populateRequests()
+                        self.loadedRequests = false
+                        self.populateRequests(completionHandler: {
+                            self.loadedRequests = true
+                        })
                     }
             } else {
                 //List contains all requests searched by user.
@@ -51,12 +57,16 @@ struct ListWithRequests: View {
                 .navigationBarHidden(true)
                 .refreshable {
                     //Users are able to refresh list if any changes were made in the meantime.
-                    self.populateRequests()
+                    self.populateRequests(completionHandler: {
+                        self.loadedRequests = true
+                    })
                 }
             }
         }
         .onAppear {
-            self.populateRequests()
+            self.populateRequests(completionHandler: {
+                self.loadedRequests = true
+            })
         }
         
     }
@@ -64,7 +74,7 @@ struct ListWithRequests: View {
     /**
      Function is responsible for searching server in order to return user list of requests sent to them.
      */
-    func populateRequests() {
+    func populateRequests(completionHandler: @escaping() -> Void) {
         
         //Variable controls which user is currently logged in into the application.
         let currentEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
@@ -77,6 +87,7 @@ struct ListWithRequests: View {
         
         //Program searches through requests collection in Firebase in order to fetch user's requests.
         FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(email: currentEmail)).getDocuments { (querySnapshot, error) in
+            completionHandler()
             if error != nil {
                 print(error!.localizedDescription)
             } else {

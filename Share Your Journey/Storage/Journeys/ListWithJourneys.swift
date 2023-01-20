@@ -18,17 +18,22 @@ struct ListWithJourneys: View {
     @Binding var journeyToDelete: String
     @Binding var deleteFromStorage: Bool
     @Binding var askAboutDeletion: Bool
-
+    @State private var loadedJourneys = false
     var sortedJourneysFilteredList: [SingleJourney] {
         return self.journeysFilteredList.sorted(by: {$0.date > $1.date})
     }
     var body: some View {
         VStack {
-            if self.journeysFilteredList.isEmpty {
+            if !self.loadedJourneys {
+                LoadingView()
+            } else if self.journeysFilteredList.isEmpty {
                 NoDataView(text: UIStrings.noJourneysToShow)
                     .onTapGesture {
                         self.clearInvalidJourneys()
-                        self.updateJourneys()
+                        self.loadedJourneys = false
+                        self.updateJourneys(completionHandler: {
+                            self.loadedJourneys = true
+                        })
                     }
             } else {
                 List {
@@ -78,11 +83,15 @@ struct ListWithJourneys: View {
         .onAppear {
             //List is updated every time the screen appears.
             self.clearInvalidJourneys()
-            self.updateJourneys()
+            self.updateJourneys(completionHandler: {
+                self.loadedJourneys = true
+            })
         }
         .refreshable {
             self.clearInvalidJourneys()
-            self.updateJourneys()
+            self.updateJourneys(completionHandler: {
+                self.loadedJourneys = true
+            })
         }
     }
     
@@ -150,11 +159,12 @@ struct ListWithJourneys: View {
     /**
      Function is responsible for adding journeys to array, and refreshing it if needed.
      */
-    func updateJourneys() {
+    func updateJourneys(completionHandler: @escaping () -> Void) {
         let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
         let path = "\(FirestorePaths.getFriends(email: email))/\(email)/journeys"
         
         FirebaseSetup.firebaseInstance.db.collection(path).getDocuments() { (querySnapshot, error) in
+            completionHandler()
             if error != nil {
                 print(error!.localizedDescription)
             } else {

@@ -11,14 +11,20 @@ import SwiftUI
 struct ListWithFriends: View {
     @Binding var searchPeople: String
     @Binding var friendsSet: FriendsSet
+    @State private var loadedFriends = false
     var filteredFriendsList: [String]
     
     var body: some View {
         VStack {
-            if self.filteredFriendsList.isEmpty {
+            if !self.loadedFriends {
+                LoadingView()
+            } else if self.filteredFriendsList.isEmpty {
                 NoDataView(text: UIStrings.noFriendsToShow)
                     .onTapGesture {
-                        self.populateFriends()
+                        self.loadedFriends = false
+                        self.populateFriends(completionHandler: {
+                            self.loadedFriends = true
+                        })
                     }
             } else {
                 //List is sorted alphabetically.
@@ -40,20 +46,24 @@ struct ListWithFriends: View {
                 .scrollDismissesKeyboard(.interactively)
                 .listStyle(.plain)
                 .refreshable {
-                    self.populateFriends()
+                    self.populateFriends(completionHandler: {
+                        self.loadedFriends = true
+                    })
                 }
             }
         }
         //Array is populated after the screen is shown, but users are also able to refresh the list by dragging it down (thanks to .refreshable).
         .onAppear {
-            self.populateFriends()
+            self.populateFriends(completionHandler: {
+                self.loadedFriends = true
+            })
         }
     }
     
     /**
      Function is responsible for pulling data about user's friends from the server and populating the friends array with it.
      */
-    func populateFriends() {
+    func populateFriends(completionHandler: @escaping() -> Void) {
         
         //This block of code ensures that users that are currently logged in, will see their own friends list (even after logging out).
         let currentEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
@@ -64,6 +74,7 @@ struct ListWithFriends: View {
         
         //Data is pulled out of the appropriate collection in firestore database and array is populated with it.
         FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(email: currentEmail)).getDocuments { (querySnapshot, error) in
+            completionHandler()
             if error != nil {
                 print(error!.localizedDescription)
             } else {

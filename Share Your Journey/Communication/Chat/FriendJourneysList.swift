@@ -14,7 +14,7 @@ struct FriendJourneysList: View {
     //Variables described in ChatView struct.
     @Binding var searchJourney: String
     @Binding var sentByFriend: [SingleJourney]
-    
+    @State private var loadedFriendsJourneys = false
     var sentByFriendFiltered: [SingleJourney]
     
     var sentByFriendFilteredSorted: [SingleJourney] {
@@ -26,10 +26,15 @@ struct FriendJourneysList: View {
     
     var body: some View {
         VStack {
-            if self.sentByFriendFiltered.isEmpty {
+            if !self.loadedFriendsJourneys {
+                LoadingView()
+            } else if self.sentByFriendFiltered.isEmpty {
                 NoDataView(text: UIStrings.noJourneysToShow)
                     .onTapGesture {
-                        self.populateFriendsJourneys()
+                        self.loadedFriendsJourneys = false
+                        self.populateFriendsJourneys(completionHandler: {
+                            self.loadedFriendsJourneys = true
+                        })
                     }
             } else {
                 //List presenting users with journeys sent by their friends.
@@ -54,21 +59,26 @@ struct FriendJourneysList: View {
                 .scrollDismissesKeyboard(.interactively)
                 .listStyle(.inset)
                 .refreshable {
-                    self.populateFriendsJourneys()
+                    self.populateFriendsJourneys(completionHandler: {
+                        self.loadedFriendsJourneys = true
+                    })
                 }
             }
         }
         .onAppear {
-            self.populateFriendsJourneys()
+            self.populateFriendsJourneys(completionHandler: {
+                self.loadedFriendsJourneys = true
+            })
         }
     }
     
     /**
      Function is responsible for populating the array with journeys sent by friend.
      */
-    func populateFriendsJourneys() {
+    func populateFriendsJourneys(completionHandler: @escaping () -> Void) {
         let path = "\(FirestorePaths.getFriends(email: self.email))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)/journeys"
         FirebaseSetup.firebaseInstance.db.collection(path).getDocuments() { (querySnapshot, error) in
+            completionHandler()
             if error != nil {
                 print(error!.localizedDescription)
             } else {
