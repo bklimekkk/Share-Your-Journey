@@ -170,11 +170,11 @@ struct StartView: View {
                             .foregroundColor(self.buttonColor)
                         }
                         Spacer()
-                            if self.arrayOfPhotosLocations.count > 1 {
-                                JourneyControlView(numberOfPhotos: self.arrayOfPhotosLocations.count,
-                                                   currentLocationManager: self.currentLocationManager,
-                                                   currentPhotoIndex: self.$photoIndex)
-                            }
+                        if self.arrayOfPhotosLocations.count > 1 {
+                            JourneyControlView(numberOfPhotos: self.arrayOfPhotosLocations.count,
+                                               currentLocationManager: self.currentLocationManager,
+                                               currentPhotoIndex: self.$photoIndex)
+                        }
                     }
                     .padding(.bottom, 10)
                     //This else if statements block ensures that starting, pausing, resuming,
@@ -202,21 +202,20 @@ struct StartView: View {
             }
             .opacity(self.showPhoto ? 0 : 1)
             .disabled(self.showPhoto)
-            NavigationView {
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(UIStrings.checkInfo) {
+                        self.showInfo = true
+                    }
+                    .disabled(!self.showPhoto)
+                }
                 HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
                                  showPicture: self.$showPhoto,
                                  highlightedPhoto: self.$highlightedPhoto,
                                  journey: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
                                                         photos: self.arrayOfPhotos,
                                                         photosLocations: self.arrayOfPhotosLocations))
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(UIStrings.checkInfo) {
-                            self.showInfo = true
-                        }
-                        .disabled(!self.showPhoto)
-                    }
-                }
             }
             .opacity(self.showPhoto ? 1 : 0)
         }

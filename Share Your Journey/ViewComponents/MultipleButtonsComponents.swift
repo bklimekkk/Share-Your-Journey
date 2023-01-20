@@ -80,9 +80,7 @@ struct SumUpFunctionalityButtonsView: View {
             Button {
                 let hapticFeedback = UIImpactFeedbackGenerator(style: .heavy)
                 hapticFeedback.impactOccurred()
-                if let location = self.journey.photos.last?.location, let subLocation = self.journey.photos.last?.subLocation {
-                    self.journey.place = subLocation.isEmpty || location == subLocation ? location : "\(location), \(subLocation)"
-                }
+                self.saveThePlace(index: self.journey.numberOfPhotos - 1)
                 self.journey.name = UUID().uuidString
                 self.createJourney(journey: self.journey)
                 self.previousLocationManager.mapView.removeAnnotations(self.previousLocationManager.mapView.annotations)
@@ -96,6 +94,23 @@ struct SumUpFunctionalityButtonsView: View {
         }
         .padding(.horizontal, 5)
         .padding(.bottom, 5)
+    }
+
+    func saveThePlace(index: Int) {
+        // TODO: - save the place from the photo / reccur back by one index until 0 is reached.
+        let location = self.journey.photos[index].location
+        if location.isEmpty {
+            if index == 0 {
+                self.journey.place = UIStrings.undefined
+                return
+            } else {
+                self.saveThePlace(index: index - 1)
+            }
+        } else {
+            let subLocation = self.journey.photos[index].subLocation
+            self.journey.place = subLocation.isEmpty || location == subLocation ? location : "\(location), \(subLocation)"
+            return
+        }
     }
 
     /**

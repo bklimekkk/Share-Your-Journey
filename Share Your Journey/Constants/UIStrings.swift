@@ -11,6 +11,7 @@ struct UIStrings {
     //general
     //journey
     static let emptyString = ""
+    static let undefined = "Undefined"
     static let tryAgain = "TryAgain"
     static let myLocationString = "My Location"
     static let saveAllImagesToCameraRoll = "Save all images to camera roll"
