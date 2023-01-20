@@ -56,7 +56,7 @@ struct SendJourneyView: View {
                                     Text(UIStrings.send)
                                 }
                                 .buttonStyle(PlainButtonStyle())
-                                .foregroundColor(Color.accentColor)
+                                .foregroundColor(Color.blue)
                             }
                         }
                         .scrollDismissesKeyboard(.interactively)
@@ -71,7 +71,7 @@ struct SendJourneyView: View {
                     self.presentationMode.wrappedValue.dismiss()
                 } label: {
                     ButtonView(buttonTitle: UIStrings.done)
-                        .background(Color.accentColor)
+                        .background(Color.blue)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .padding()
                 }

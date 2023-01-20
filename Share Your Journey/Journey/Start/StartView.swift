@@ -93,7 +93,7 @@ struct StartView: View {
     @State private var routeIsDisplayed = false
     @State private var showInfo = false
     var buttonColor: Color {
-        colorScheme == .dark ? .white : .accentColor
+        colorScheme == .dark ? .white : .blue
     }
     
     var body: some View {

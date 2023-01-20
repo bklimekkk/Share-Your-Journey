@@ -74,7 +74,7 @@ struct SeeJourneyView: View {
     var path: String
 
     var buttonColor: Color {
-        self.colorScheme == .dark ? .white : .accentColor
+        self.colorScheme == .dark ? .white : .blue
     }
     
     var gold: Color {
@@ -170,7 +170,7 @@ struct SeeJourneyView: View {
                                                 }
                                             }label: {
                                                 MapButton(imageName: Icons.cloudSunFill)
-                                                    .foregroundColor(self.colorScheme == .light ? .accentColor : .white)
+                                                    .foregroundColor(self.colorScheme == .light ? .blue : .white)
                                             }
                                             DirectionsView(location: self.journey.photosLocations[self.currentPhotoIndex])
                                         }
@@ -228,7 +228,7 @@ struct SeeJourneyView: View {
                                                 }
                                             } label: {
                                                 MapButton(imageName: Icons.plus)
-                                                    .foregroundColor(self.colorScheme == .light ? Color.accentColor : .white)
+                                                    .foregroundColor(self.colorScheme == .light ? Color.blue : .white)
                                             }
                                         } else {
                                             MapButton(imageName: Icons.checkmark)

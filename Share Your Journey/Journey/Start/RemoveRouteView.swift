@@ -17,7 +17,7 @@ struct RemoveRouteView: View {
             self.routeIsDisplayed = false
         } label:{
             MapButton(imageName: Icons.xmarkSquareFill)
-                .foregroundColor(self.colorScheme == .light ? Color.accentColor : .white)
+                .foregroundColor(self.colorScheme == .light ? Color.blue : .white)
         }
 
     }

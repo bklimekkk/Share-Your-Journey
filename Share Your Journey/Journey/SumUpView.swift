@@ -53,7 +53,7 @@ struct SumUpView: View {
     @State private var showInfo = false
 
     var buttonColor: Color {
-        self.colorScheme == .dark ? .white : .accentColor
+        self.colorScheme == .dark ? .white : .blue
     }
     
     @Binding var showSumUp: Bool
@@ -125,7 +125,7 @@ struct SumUpView: View {
                                                     }
                                                 }label: {
                                                     MapButton(imageName: Icons.cloudSunFill)
-                                                        .foregroundColor(self.colorScheme == .light ? .accentColor : .white)
+                                                        .foregroundColor(self.colorScheme == .light ? .blue : .white)
                                                 }
                                                 DirectionsView(location: self.journey.photosLocations[self.photoIndex])
                                             }

@@ -17,13 +17,13 @@ struct DirectionsView: View {
                     UIApplication.shared.open(URL(string: "http://maps.apple.com/?saddr=&daddr=\(self.location.latitude),\(self.location.longitude)&dirflg=d")!)
                 }label: {
                     MapTextButton(imageName: Icons.locationNorthCircleFill, text: UIStrings.apple)
-                        .foregroundColor(self.colorScheme == .light ? .accentColor : .white)
+                        .foregroundColor(self.colorScheme == .light ? .blue : .white)
                 }
                 Button{
                     UIApplication.shared.open(URL(string: "comgooglemaps://?saddr=&daddr=\(self.location.latitude),\(self.location.longitude)&directionsmode=driving")!)
                 }label: {
                     MapTextButton(imageName: Icons.locationNorthCircleFill, text: UIStrings.google)
-                        .foregroundColor(self.colorScheme == .light ? .accentColor : .white)
+                        .foregroundColor(self.colorScheme == .light ? .blue : .white)
                 }
         }
     }

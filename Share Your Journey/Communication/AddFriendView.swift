@@ -126,7 +126,7 @@ struct AddFriendView: View {
             } label: {
                 ButtonView(buttonTitle: UIStrings.sendRequest)
             }
-            .background(Color.accentColor)
+            .background(Color.blue)
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
         .padding()

@@ -16,7 +16,7 @@ struct DirectionIcons: View {
     @Binding var subscriber: Bool
     @Binding var showPanel: Bool
     var buttonColor: Color {
-        self.colorScheme == .dark ? .white : .accentColor
+        self.colorScheme == .dark ? .white : .blue
     }
     var gold: Color {
         Color(uiColor: Colors.premiumColor)
@@ -89,7 +89,7 @@ struct SumUpFunctionalityButtonsView: View {
             } label: {
                 ButtonView(buttonTitle: UIStrings.saveJourneyButtonTitle)
             }
-            .background(Color.accentColor)
+            .background(Color.blue)
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
         .padding(.horizontal, 5)

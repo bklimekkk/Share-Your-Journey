@@ -62,7 +62,7 @@ struct LoginView: View {
     @StateObject private var errorManager = ErrorManager()
     @Environment(\.colorScheme) var colorScheme
     var forgotPasswordButtonColor: Color {
-        self.colorScheme == .light ? .accentColor : .white
+        self.colorScheme == .light ? .blue : .white
     }
     
     var body: some View {
@@ -90,7 +90,7 @@ struct LoginView: View {
                         //Depending on screen current mode, button will show different message.
                         ButtonView(buttonTitle: self.accountAccessManager.register ? UIStrings.createAccount : UIStrings.login)
                     }
-                    .background(Color.accentColor)
+                    .background(Color.blue)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                     //Reset password option shows up only when screen presents logging in functionality.
                     if !self.accountAccessManager.register {

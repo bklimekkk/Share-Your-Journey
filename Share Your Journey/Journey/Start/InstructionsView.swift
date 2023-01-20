@@ -12,7 +12,7 @@ struct InstructionsView: View {
     @Environment(\.colorScheme) var colorScheme
     
     var buttonColor: Color {
-        self.colorScheme == .dark ? .white : .accentColor
+        self.colorScheme == .dark ? .white : .blue
     }
 
     var body: some View {
@@ -30,7 +30,7 @@ struct InstructionsView: View {
                             SymbolButtonView(buttonImage: Icons.playFill)
                         }
                         .disabled(true)
-                        .background(Color.accentColor)
+                        .background(Color.blue)
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .frame(width: 50)
                         Text(UIStrings.resumingTheJourney)
@@ -110,7 +110,7 @@ struct InstructionsView: View {
                     }
                     HStack {
                         SymbolButtonView(buttonImage: Icons.pauseFill)
-                            .background(Color.accentColor)
+                            .background(Color.blue)
                             .clipShape(RoundedRectangle(cornerRadius: 10))
                             .frame(width: 40)
                         Text(UIStrings.allowsToPause)

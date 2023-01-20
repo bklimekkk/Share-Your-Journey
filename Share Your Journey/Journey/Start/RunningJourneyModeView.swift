@@ -19,7 +19,7 @@ struct RunningJourneyModeView: View {
     @ObservedObject var currentLocationManager: CurrentLocationManager
     
     var buttonColor: Color {
-        self.colorScheme == .dark ? .white : .accentColor
+        self.colorScheme == .dark ? .white : .blue
     }
     var body: some View {
         HStack {
@@ -44,7 +44,7 @@ struct RunningJourneyModeView: View {
             } label: {
                 SymbolButtonView(buttonImage: Icons.pauseFill)
             }
-            .background(Color.accentColor)
+            .background(Color.blue)
             .clipShape(RoundedRectangle(cornerRadius: 10))
         }
     }

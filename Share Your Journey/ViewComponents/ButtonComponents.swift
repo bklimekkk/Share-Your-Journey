@@ -75,7 +75,7 @@ struct DownloadGalleryButton: View {
         } label: {
             ButtonView(buttonTitle: UIStrings.saveAllImagesToCameraRoll)
         }
-        .background(Color.accentColor)
+        .background(Color.blue)
         .clipShape(RoundedRectangle(cornerRadius: 10))
         .padding(.horizontal, 5)
         .padding(.top, 5)

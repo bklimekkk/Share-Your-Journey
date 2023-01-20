@@ -12,7 +12,7 @@ struct VerificationInformation: View {
     //A verification message is sent to this e-mail.
     var email: String
     var buttonColor: Color {
-        self.colorScheme == .dark ? .white : .accentColor
+        self.colorScheme == .dark ? .white : .blue
     }
     //An environment variable responsible for dismissing the sheet after "Ok" button is clicked.
     @Environment(\.presentationMode) var presentationMode

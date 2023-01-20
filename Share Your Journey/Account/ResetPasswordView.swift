@@ -46,7 +46,7 @@ struct ResetPasswordView: View {
                    message: {
                 Text(self.errorManager.errorBody)
             })
-            .background(Color.accentColor)
+            .background(Color.blue)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .padding(.horizontal, 10)
         }

@@ -79,7 +79,7 @@ struct FriendsView: View {
                 } label: {
                     ButtonView(buttonTitle: UIStrings.addANewFriend)
                 }
-                .background(Color.accentColor)
+                .background(Color.blue)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .padding(.horizontal)
             }
