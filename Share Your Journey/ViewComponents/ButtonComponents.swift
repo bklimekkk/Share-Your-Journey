@@ -111,8 +111,6 @@ struct MapButton: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(.gray, lineWidth: 1)
         )
-        .padding(.vertical, 5)
-        .padding(.leading, self.load ? 0.5 : 0)
     }
 }
 
@@ -134,7 +132,6 @@ struct MapTextButton: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(.gray, lineWidth: 1)
         )
-        .padding(.vertical, 5)
     }
 }
 
