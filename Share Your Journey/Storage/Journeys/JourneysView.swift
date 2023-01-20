@@ -46,7 +46,7 @@ struct JourneysView: View {
     var body: some View {
         
 
-        VStack {
+        VStack (spacing: 0) {
             PickerView(choice: self.$downloaded, firstChoice: UIStrings.saved, secondChoice: UIStrings.downloaded)
                 .padding()
             

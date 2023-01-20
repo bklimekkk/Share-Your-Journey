@@ -45,11 +45,12 @@ struct ChatView: View {
     var email: String
     
     var body: some View {
-        VStack {
+        VStack (spacing: 0) {
             
                 //Picker View controls which part of the screen is visible (array with your journeys or array with your friend's journeys).
             PickerView(choice: self.$yourJourneys, firstChoice: UIStrings.sentByFriend, secondChoice: UIStrings.sentByYou)
-                .padding(.vertical)
+                .padding(.top, 5)
+                .padding(.bottom, 15)
                 .padding(.horizontal, 5)
                 
                 //Field used to search arrays.

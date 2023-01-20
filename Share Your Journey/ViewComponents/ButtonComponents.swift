@@ -102,6 +102,8 @@ struct MapButton: View {
                 .frame(width: 40, height: 40)
             if self.load {
                 ProgressView()
+                    .padding(.leading, 5)
+                    .offset(x: -2.5)
             } else {
                 Image(systemName: self.imageName)
                     .font(.system(size: 20))

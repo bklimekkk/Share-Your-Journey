@@ -39,6 +39,15 @@ struct ImagesView: View {
                         }
                         Spacer()
                     }
+                    .toolbar {
+                        ToolbarItem(placement: .bottomBar) {
+                            Button{
+                                self.dismiss()
+                            }label:{
+                                SheetDismissButtonView()
+                            }
+                        }
+                    }
                 } else {
                     ZStack {
                         ImagesGrid(showPicture: self.$showPicture,

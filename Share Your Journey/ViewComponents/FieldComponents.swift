@@ -26,7 +26,10 @@ struct SearchField: View {
     var text: String
     @Binding var search: String
     var body: some View {
-        TextField(self.text, text: self.$search)
-            .padding(.horizontal)
+        VStack {
+            TextField(self.text, text: self.$search)
+                .padding(.horizontal)
+            Divider()
+        }
     }
 }

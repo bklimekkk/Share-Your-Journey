@@ -52,7 +52,7 @@ struct FriendsView: View {
     
     var body: some View {
 
-            VStack {
+        VStack (spacing: 0) {
                 //Screen allows users to view their friends list and list with requests sent to them.
                 PickerView(choice: self.$requestMode,
                            firstChoice: UIStrings.friends,

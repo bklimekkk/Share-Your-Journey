@@ -33,7 +33,7 @@ struct SendJourneyView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
+            VStack (spacing: 0) {
                 SearchField(text: UIStrings.searchYourJourneys, search: self.$searchText)
                     .padding(.top)
                 VStack {

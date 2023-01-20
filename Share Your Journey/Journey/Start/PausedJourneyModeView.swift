@@ -32,7 +32,7 @@ struct PausedJourneyModeView: View {
             } label: {
                 SymbolButtonView(buttonImage: Icons.playFill)
             }
-            .background(Color.accentColor)
+            .background(Color.blue)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             Spacer()
             Button {
