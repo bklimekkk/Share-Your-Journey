@@ -135,7 +135,7 @@ struct UIStrings {
     static let sendToFriend = "Send To Friend"
     static let areYouSureToQuit = "Are you sure that you want to quit? The journey will be deleted."
     static let sumUp = "Sum up"
-    static let continueJourney = "Continue Journey"
+    static let continueJourney = "Continue"
     static let location = "Location"
     static let subLocation = "Sublocation"
     static let administrativeArea = "Administrative Area"

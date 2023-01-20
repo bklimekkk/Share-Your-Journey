@@ -208,6 +208,8 @@ struct StartView: View {
                     Button(UIStrings.checkInfo) {
                         self.showInfo = true
                     }
+                    .padding(.top, 5)
+                    .padding(.trailing, 5)
                     .disabled(!self.showPhoto)
                 }
                 HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,

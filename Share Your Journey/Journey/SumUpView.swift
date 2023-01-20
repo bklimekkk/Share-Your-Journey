@@ -139,7 +139,8 @@ struct SumUpView: View {
                                             VStack (spacing: 10) {
                                                 Spacer()
                                                 if self.routeIsDisplayed {
-                                                    RemoveRouteView(routeIsDisplayed: self.$routeIsDisplayed, currentLocationManager: self.currentLocationManager)
+                                                    RemoveRouteView(routeIsDisplayed: self.$routeIsDisplayed,
+                                                                    currentLocationManager: self.currentLocationManager)
                                                 }
                                                 DirectionIcons(mapType: self.$currentLocationManager.mapView.mapType,
                                                                subscriber: self.$subscription.subscriber,
@@ -217,7 +218,7 @@ struct SumUpView: View {
             .navigationTitle(UIStrings.sumUp)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .navigationBarLeading) {
                     if self.showPicture {
                         Menu {
                             Button(UIStrings.checkInfo) {
