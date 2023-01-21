@@ -12,6 +12,8 @@ struct Links {
     static let privacyPolicyPage = "https://bklimekkk.github.io/share-your-journey-privacy-policy/"
     static let allFeaturesEntitlement = "allfeatures"
     static let defaultOffering = "default"
+    static let regularTimeOnlyFormat = "hh:mm a"
+    static let regularDateOnlyFormat = "dd/MM/YYYY"
     static let regularDateFormat = "dd/MM/YY, hh:mm a"
     static let weatherDateFormat = "yyyy-MM-dd HH:mm:ss"
     static let revenueCatAPIKey = "appl_UjmZibTkIjZGigTrJdEeDDVHqqQ"

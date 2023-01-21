@@ -47,13 +47,13 @@ struct PhotoDetailsView: View {
 
     func getDateString(date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/YYYY"
+        dateFormatter.dateFormat = Links.regularDateOnlyFormat
         return dateFormatter.string(from: date)
     }
 
     func getTimeString(date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "hh:mm a"
+        dateFormatter.dateFormat = Links.regularTimeOnlyFormat
         return dateFormatter.string(from: date)
     }
 }

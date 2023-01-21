@@ -44,7 +44,7 @@ struct ListWithJourneys: View {
                                     .foregroundColor(.primary)
                                     .padding(.vertical, 15)
                                 Spacer()
-                                Text(DateManager().getDate(date: journey.date))
+                                Text(DateManager.getDate(date: journey.date))
                                     .foregroundColor(.gray)
                             }
 

@@ -8,7 +8,7 @@
 import Foundation
 
 struct DateManager {
-    func getDate(date: Date) -> String {
+    static func getDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = Links.regularDateFormat
         return dateFormatter.string(from: date)

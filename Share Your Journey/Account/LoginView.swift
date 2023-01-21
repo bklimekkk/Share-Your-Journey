@@ -190,14 +190,16 @@ struct LoginView: View {
         if self.accountAccessManager.register {
             self.performRegistration()
         } else {
-            self.performLogin()
+            self.performLogin(completion: {
+                HapticFeedback.heavyHapticFeedback()
+            })
         }
     }
     
     /**
      Function is responsible for authenticating the user.
      */
-    func performLogin() {
+    func performLogin(completion: @escaping() -> Void) {
         //Using firebase as a way to authenticate users by email and passord.
         FirebaseSetup.firebaseInstance.auth.signIn(withEmail: self.email, password: self.password) { result, error in
             if(error != nil) {
@@ -221,6 +223,7 @@ struct LoginView: View {
                     print(error.localizedDescription)
                 }
             }
+            completion()
         }
     }
     

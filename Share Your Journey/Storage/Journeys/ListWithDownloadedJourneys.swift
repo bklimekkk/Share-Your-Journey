@@ -45,7 +45,7 @@ struct ListWithDownloadedJourneys: View {
 
                                     .padding(.vertical, 15)
                                 Spacer()
-                                Text(DateManager().getDate(date: journey.date))
+                                Text(DateManager.getDate(date: journey.date))
                                     .foregroundColor(.gray)
                             }
                             NavigationLink (destination: SeeJourneyView(journey: journey,

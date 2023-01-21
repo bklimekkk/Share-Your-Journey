@@ -66,6 +66,15 @@ struct SumUpView: View {
                 if !self.showPicture {
                     VStack {
                         JourneyPickerView(choice: self.$viewType, firstChoice: UIStrings.album, secondChoice: UIStrings.map)
+                            .onChange(of: self.viewType, perform: { newValue in
+                                if newValue == .threeDimensional {
+                                    self.currentLocationManager.mapView.deselectAnnotation(self.currentLocationManager.mapView.selectedAnnotations.first,
+                                                                                           animated: true)
+                                    let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String(self.photoIndex + 1)}) ??
+                                    self.currentLocationManager.mapView.userLocation
+                                    self.currentLocationManager.mapView.selectAnnotation(annotationToSelect, animated: true)
+                                }
+                            })
                             .padding(.horizontal, 5)
                         if self.viewType == .photoAlbum {
                             VStack {

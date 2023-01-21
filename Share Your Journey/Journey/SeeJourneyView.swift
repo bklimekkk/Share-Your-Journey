@@ -26,7 +26,7 @@ struct SeeJourneyView: View {
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-    
+
     //Variable controls if users want to receive walking or driving directions.
     @State var walking = false
     //Object necessary for tracking user's location.
@@ -72,7 +72,7 @@ struct SeeJourneyView: View {
     //Variable checks if program is showing downloaded (Core Data) journey or the journey from the server.
     var downloadMode: Bool
     var path: String
-    
+
     var buttonColor: Color {
         self.colorScheme == .dark ? .white : .blue
     }
@@ -106,7 +106,7 @@ struct SeeJourneyView: View {
                                                   showDownloadAlert: self.$showDownloadAlert,
                                                   showPicture: self.$showPicture)
                         }
-                        
+
                         if self.journey.photos.map ({return $0.photo}).contains(UIImage()) {
                             Spacer()
                             ProgressView()
@@ -159,7 +159,7 @@ struct SeeJourneyView: View {
                             .edgesIgnoringSafeArea(.all)
                             .environmentObject(self.currentLocationManager)
                             .opacity(self.showPicture ? 0 : 1)
-                            
+
                             if self.showWeather {
                                 VStack {
                                     HStack {
@@ -178,7 +178,7 @@ struct SeeJourneyView: View {
                                         }
                                         Spacer()
                                     }
-                                    .padding(.top, 5)
+                                    .padding(EdgeInsets(top: 5, leading: 5, bottom: 0, trailing: 0))
                                     Spacer()
                                 }
                                 .opacity(self.showPicture ? 0 : 1)
@@ -563,7 +563,7 @@ struct SeeJourneyView: View {
             ])
         }
     }
-    
+
     func sendPhotosViaSocialMedia() {
         let activityViewController = UIActivityViewController(activityItems: self.journey.photos.map{$0.photo}, applicationActivities: nil)
         UIApplication.shared.windows.first?.rootViewController!.present(activityViewController, animated: true, completion: nil)

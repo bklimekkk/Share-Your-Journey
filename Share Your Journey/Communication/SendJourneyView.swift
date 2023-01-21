@@ -41,23 +41,23 @@ struct SendJourneyView: View {
                         NoDataView(text: UIStrings.noJourneysToSend)
                     } else {
                         List(self.filteredUnsentJourneys.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
-                            HStack {
-                                Text("\(journey.place), \(journey.date)")
-                                    .padding(.vertical, 15)
-                                Spacer()
-                                Button{
-                                    SendJourneyManager().sendJourney(journey: journey, targetEmail: self.targetEmail)
-                                    
-                                    //After journey is sent, it needs to be deleted from list that gives user a choice of journeys to send.
-                                    withAnimation {
-                                        self.deleteFromSendingList(journeyName: journey.name)
-                                    }
-                                } label:{
-                                    Text(UIStrings.send)
+                            Button {
+                                SendJourneyManager().sendJourney(journey: journey, targetEmail: self.targetEmail)
+
+                                //After journey is sent, it needs to be deleted from list that gives user a choice of journeys to send.
+                                withAnimation {
+                                    self.deleteFromSendingList(journeyName: journey.name)
                                 }
-                                .buttonStyle(PlainButtonStyle())
-                                .foregroundColor(Color.blue)
+                            } label:{
+                                HStack {
+                                    Text(journey.place)
+                                    Spacer()
+                                    Text(DateManager.getDate(date: journey.date))
+                                }
+                                .padding(.vertical, 15)
                             }
+                            .buttonStyle(PlainButtonStyle())
+                            .foregroundColor(Color.primary)
                         }
                         .scrollDismissesKeyboard(.interactively)
                         .listStyle(.plain)
@@ -66,7 +66,7 @@ struct SendJourneyView: View {
                 .onAppear {
                     self.prepareJourneysToSend()
                 }
-                
+                Divider()
                 Button {
                     self.presentationMode.wrappedValue.dismiss()
                 } label: {
@@ -76,7 +76,7 @@ struct SendJourneyView: View {
                         .padding()
                 }
             }
-            .navigationTitle("Send journey to \(self.targetEmail)")
+            .navigationTitle(UIStrings.selectJourneysToSend)
             .navigationBarTitleDisplayMode(.inline)
         }
     }

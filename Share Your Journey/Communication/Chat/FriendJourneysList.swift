@@ -45,7 +45,7 @@ struct FriendJourneysList: View {
                                 Text(journey.place)
                                     .padding(.vertical, 15)
                                 Spacer()
-                                Text(DateManager().getDate(date: journey.date))
+                                Text(DateManager.getDate(date: journey.date))
                                     .foregroundColor(.gray)
                             }
                             //NavigationLink's destination property is set to struct responsible for showing the relevant journey.

@@ -54,7 +54,7 @@ struct YourJourneysList: View {
 
                                 Spacer()
 
-                                Text(DateManager().getDate(date: journey.date))
+                                Text(DateManager.getDate(date: journey.date))
                                     .foregroundColor(.gray)
                             }
                             NavigationLink(destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString, downloadMode: false, path: "\(FirestorePaths.getFriends(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString))/\(self.email)/journeys")) {

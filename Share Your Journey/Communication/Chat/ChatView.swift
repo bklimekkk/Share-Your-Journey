@@ -71,9 +71,12 @@ struct ChatView: View {
                 }
                 .background(Color.blue)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
-                .padding()
+                .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
             } else {
-                FriendJourneysList(searchJourney: self.$searchJourney, sentByFriend: self.$sentByFriend, sentByFriendFiltered: self.sentByFriendFiltered, email: self.email)
+                FriendJourneysList(searchJourney: self.$searchJourney,
+                                   sentByFriend: self.$sentByFriend,
+                                   sentByFriendFiltered: self.sentByFriendFiltered,
+                                   email: self.email)
             }
         }
         .navigationTitle(self.email)

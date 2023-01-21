@@ -13,7 +13,7 @@ class NetworkManager: ObservableObject {
     let queue = DispatchQueue(label: "NetworkManager")
     @Published var connected = true
     init (){
-        self.monitor.pathUpdateHandler = {path in
+        self.monitor.pathUpdateHandler = { path in
             DispatchQueue.main.async {
                 self.connected = path.status == .satisfied
             }

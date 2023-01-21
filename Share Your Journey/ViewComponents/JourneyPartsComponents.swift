@@ -104,7 +104,9 @@ struct SingleJourney: Hashable {
     var photosLocations: [CLLocationCoordinate2D]
     var networkProblem: Bool = false
 
-    init(numberOfPhotos: Int, photos: [SinglePhoto], photosLocations: [CLLocationCoordinate2D]) {
+    init(numberOfPhotos: Int,
+         photos: [SinglePhoto],
+         photosLocations: [CLLocationCoordinate2D]) {
         self.email = UIStrings.emptyString
         self.name = UIStrings.emptyString
         self.place = UIStrings.emptyString
@@ -115,7 +117,14 @@ struct SingleJourney: Hashable {
         self.networkProblem = false
     }
 
-    init(email: String, name: String, place: String, date: Date, numberOfPhotos: Int, photos: [SinglePhoto], photosLocations: [CLLocationCoordinate2D], networkProblem: Bool) {
+    init(email: String,
+         name: String,
+         place: String,
+         date: Date,
+         numberOfPhotos: Int,
+         photos: [SinglePhoto],
+         photosLocations: [CLLocationCoordinate2D],
+         networkProblem: Bool) {
         self.email = email
         self.name = name
         self.place = place
