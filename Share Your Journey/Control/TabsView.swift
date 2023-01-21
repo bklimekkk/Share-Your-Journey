@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 struct TabsView: View {
-    @State private var journeysList: [SingleJourney] = []
+    @State private var selectedTab = 1
     //Default view is always set to StartView (the one containing a map.
     init() {
         UITabBar.appearance().backgroundColor = Colors.tabViewColor
@@ -17,7 +17,7 @@ struct TabsView: View {
     var body: some View {
 
         //This view ensures that the application presents user with bottom navigation containing three elements.
-        TabView () {
+        TabView (selection: $selectedTab) {
             StartView()
                 .tabItem {
                     Label(UIStrings.yourJourneyTabTitle, systemImage: Icons.mapFill)
@@ -45,6 +45,9 @@ struct TabsView: View {
                 Label(UIStrings.friendsTabTitle, systemImage: Icons.personFill)
             }
             .tag(3)
+        }
+        .onChange(of: selectedTab) { newValue in
+            HapticFeedback.mediumHapticFeedback()
         }
     }
 }

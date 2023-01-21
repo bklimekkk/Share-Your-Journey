@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct NoDataView: View {
+    @Environment(\.colorScheme) var colorScheme
     var text: String
     init() {
         self.text = UIStrings.emptyString
@@ -16,11 +17,18 @@ struct NoDataView: View {
         self.text = text
     }
     var body: some View {
-        VStack {
+        HStack {
             Spacer()
-            Text(self.text)
-                .foregroundColor(.gray)
+            VStack {
+                Spacer()
+                Text(self.text)
+                    .foregroundColor(.gray)
+                Spacer()
+            }
             Spacer()
+        }
+        .background {
+            self.colorScheme == .light ? Color.white : Color.black
         }
     }
 }

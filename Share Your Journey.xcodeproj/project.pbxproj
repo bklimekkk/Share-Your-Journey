@@ -63,6 +63,7 @@
 		8665C7A429633A51007D7354 /* Links.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8665C7A329633A51007D7354 /* Links.swift */; };
 		866A7E1A293221C100CD3340 /* SpotDetailsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A7E19293221C100CD3340 /* SpotDetailsManager.swift */; };
 		866A7E1C29326BF500CD3340 /* PhotoDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */; };
+		866ACC84297C0106009A333C /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866ACC83297C0106009A333C /* HapticFeedback.swift */; };
 		8671E6FE2876D24300E4A5AC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8671E6FD2876D24300E4A5AC /* InstructionsView.swift */; };
 		867254DD27B47B7B00DC5001 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867254DC27B47B7B00DC5001 /* StartView.swift */; };
 		8672551C27B80A9000DC5001 /* TabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8672551B27B80A8F00DC5001 /* TabsView.swift */; };
@@ -172,6 +173,7 @@
 		8665C7A329633A51007D7354 /* Links.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Links.swift; sourceTree = "<group>"; };
 		866A7E19293221C100CD3340 /* SpotDetailsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotDetailsManager.swift; sourceTree = "<group>"; };
 		866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailsView.swift; sourceTree = "<group>"; };
+		866ACC83297C0106009A333C /* HapticFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedback.swift; sourceTree = "<group>"; };
 		8671E6FD2876D24300E4A5AC /* InstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
 		867254DC27B47B7B00DC5001 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		8672551B27B80A8F00DC5001 /* TabsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsView.swift; sourceTree = "<group>"; };
@@ -360,6 +362,7 @@
 			isa = PBXGroup;
 			children = (
 				8672551B27B80A8F00DC5001 /* TabsView.swift */,
+				866ACC83297C0106009A333C /* HapticFeedback.swift */,
 			);
 			path = Control;
 			sourceTree = "<group>";
@@ -719,6 +722,7 @@
 				8665C79A2961FBC1007D7354 /* UIStrings.swift in Sources */,
 				86C649F627D1B43A00891C24 /* Journey+CoreDataClass.swift in Sources */,
 				864FEEF9289B24380060E94D /* ForecastRequest.swift in Sources */,
+				866ACC84297C0106009A333C /* HapticFeedback.swift in Sources */,
 				86D9F71D28992D0E0092832E /* WeatherView.swift in Sources */,
 				8633D980286A49EB003D83BB /* WelcomeView.swift in Sources */,
 				866A7E1A293221C100CD3340 /* SpotDetailsManager.swift in Sources */,

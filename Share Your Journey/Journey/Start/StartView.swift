@@ -209,7 +209,7 @@ struct StartView: View {
                         self.showInfo = true
                     }
                     .padding(.top, 5)
-                    .padding(.trailing, 5)
+                    .padding(.trailing, 10)
                     .disabled(!self.showPhoto)
                 }
                 HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,

@@ -31,7 +31,7 @@ struct FriendsView: View {
     @State private var friendsSet = FriendsSet(ownEmail: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)
     //Variable contains data entered by user while searching both arrays (requests and friends).
     @State private var searchPeople = UIStrings.emptyString
-
+    
     //Variable is calculated by filtering arrays due to date they entered to search window.
     private var filteredRequestsList: [String] {
         if self.searchPeople.isEmpty {
@@ -51,42 +51,42 @@ struct FriendsView: View {
     }
     
     var body: some View {
-
+        
         VStack (spacing: 0) {
-                //Screen allows users to view their friends list and list with requests sent to them.
-                PickerView(choice: self.$requestMode,
-                           firstChoice: UIStrings.friends,
-                           secondChoice: UIStrings.requests)
-                    .padding(.vertical)
-                    .padding(.horizontal, 5)
-                
-                SearchField(text: UIStrings.searchEmailAddress, search: self.$searchPeople)
-                
-                //Depending on what option user has chosen, different lists are persented.
-                if self.requestMode {
-                    ListWithRequests(searchPeople: self.$searchPeople,
-                                     requestsSet: self.$requestsSet,
-                                     filteredRequestsList: self.filteredRequestsList)
-                } else {
-                    ListWithFriends(searchPeople: self.$searchPeople,
-                                    friendsSet: self.$friendsSet,
-                                    filteredFriendsList: self.filteredFriendsList)
-                }
-                
-                Spacer()
-                Button {
-                    self.addNewFriend = true
-                } label: {
-                    ButtonView(buttonTitle: UIStrings.addANewFriend)
-                }
-                .background(Color.blue)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .padding(.horizontal)
+            //Screen allows users to view their friends list and list with requests sent to them.
+            PickerView(choice: self.$requestMode,
+                       firstChoice: UIStrings.friends,
+                       secondChoice: UIStrings.requests)
+            .padding(.vertical)
+            .padding(.horizontal, 5)
+            
+            SearchField(text: UIStrings.searchEmailAddress, search: self.$searchPeople)
+            
+            //Depending on what option user has chosen, different lists are persented.
+            if self.requestMode {
+                ListWithRequests(searchPeople: self.$searchPeople,
+                                 requestsSet: self.$requestsSet,
+                                 filteredRequestsList: self.filteredRequestsList)
+            } else {
+                ListWithFriends(searchPeople: self.$searchPeople,
+                                friendsSet: self.$friendsSet,
+                                filteredFriendsList: self.filteredFriendsList)
             }
-            .padding(.bottom)
-            .sheet(isPresented: self.$addNewFriend, onDismiss: nil) {
-                AddFriendView(sheetIsPresented: self.$addNewFriend)
+            Divider()
+            Spacer()
+            Button {
+                self.addNewFriend = true
+            } label: {
+                ButtonView(buttonTitle: UIStrings.addANewFriend)
             }
-    
+            .background(Color.blue)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .padding(.horizontal)
+        }
+        .padding(.bottom)
+        .sheet(isPresented: self.$addNewFriend, onDismiss: nil) {
+            AddFriendView(sheetIsPresented: self.$addNewFriend)
+        }
+        
     }
 }

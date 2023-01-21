@@ -35,7 +35,6 @@ struct JourneyControlView: View {
                     let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String(self.currentPhotoIndex + 1)}) ??
                     self.currentLocationManager.mapView.userLocation
                     self.currentLocationManager.mapView.selectAnnotation(annotationToSelect, animated: true)
-
                 }label: {
                     MapButton(imageName: Icons.arrowRight)
                 }

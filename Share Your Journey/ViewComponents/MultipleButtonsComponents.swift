@@ -78,8 +78,7 @@ struct SumUpFunctionalityButtonsView: View {
             Spacer()
             
             Button {
-                let hapticFeedback = UIImpactFeedbackGenerator(style: .heavy)
-                hapticFeedback.impactOccurred()
+                HapticFeedback.heavyHapticFeedback()
                 self.saveThePlace(index: self.journey.numberOfPhotos - 1)
                 self.journey.name = UUID().uuidString
                 self.createJourney(journey: self.journey)

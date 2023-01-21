@@ -53,6 +53,7 @@ struct MapView: UIViewRepresentable {
             withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
                 self.parent.showWeather = true
             }
+            HapticFeedback.heavyHapticFeedback()
         }
         
         func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {

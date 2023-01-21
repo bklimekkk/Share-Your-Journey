@@ -22,7 +22,7 @@ struct ChatView: View {
     @State private var sentByFriend: [SingleJourney] = []
     //Variable contains text entered by user in order to search items in the array.
     @State private var searchJourney = UIStrings.emptyString
-   
+
     //Variable contains all journeys send by users that they searched.
     private var sentByYouFiltered: [SingleJourney] {
         if self.searchJourney == UIStrings.emptyString {
@@ -47,13 +47,13 @@ struct ChatView: View {
     var body: some View {
         VStack (spacing: 0) {
             
-                //Picker View controls which part of the screen is visible (array with your journeys or array with your friend's journeys).
+            //Picker View controls which part of the screen is visible (array with your journeys or array with your friend's journeys).
             PickerView(choice: self.$yourJourneys, firstChoice: UIStrings.sentByFriend, secondChoice: UIStrings.sentByYou)
                 .padding(.top, 5)
                 .padding(.bottom, 15)
                 .padding(.horizontal, 5)
-                
-                //Field used to search arrays.
+
+            //Field used to search arrays.
             SearchField(text: UIStrings.searchJourney, search: self.$searchJourney)
             if self.yourJourneys {
                 YourJourneysList(searchJourney: self.$searchJourney,
@@ -61,19 +61,20 @@ struct ChatView: View {
                                  askAboutDeletion: self.$askAboutDeletion,
                                  sentByYou: self.$sentByYou, email: self.email,
                                  sentByYouFiltered: self.sentByYouFiltered)
-                    Spacer()
-                    //Clicking this button opens screen enabling users to send selected journey.
-                    Button {
-                        self.sendJourneyScreen.toggle()
-                    } label: {
-                        ButtonView(buttonTitle: UIStrings.sendJourney)
-                    }
-                    .background(Color.blue)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .padding()
-                } else {
-                    FriendJourneysList(searchJourney: self.$searchJourney, sentByFriend: self.$sentByFriend, sentByFriendFiltered: self.sentByFriendFiltered, email: self.email)
+                Divider()
+                Spacer()
+                //Clicking this button opens screen enabling users to send selected journey.
+                Button {
+                    self.sendJourneyScreen.toggle()
+                } label: {
+                    ButtonView(buttonTitle: UIStrings.sendJourney)
                 }
+                .background(Color.blue)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .padding()
+            } else {
+                FriendJourneysList(searchJourney: self.$searchJourney, sentByFriend: self.$sentByFriend, sentByFriendFiltered: self.sentByFriendFiltered, email: self.email)
+            }
         }
         .navigationTitle(self.email)
         .navigationBarTitleDisplayMode(.inline)
