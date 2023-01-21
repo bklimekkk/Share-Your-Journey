@@ -44,4 +44,5 @@ struct Icons {
     static let locationNorthCircleFill = "location.north.circle.fill"
     static let ellipsisCircle = "ellipsis.circle"
     static let xmarkSquareFill = "xmark.square.fill"
+    static let checkmarkRectanglePortrait = "checkmark.rectangle.portrait"
 }

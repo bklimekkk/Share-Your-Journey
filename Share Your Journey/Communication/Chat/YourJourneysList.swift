@@ -36,7 +36,7 @@ struct YourJourneysList: View {
             if !self.loadedYourJourneys {
                 LoadingView()
             } else if self.sentByYouFiltered.isEmpty {
-                NoDataView(text: UIStrings.noJourneysToShow)
+                NoDataView(text: UIStrings.noJourneysToShowTapToRefresh)
                     .onTapGesture {
                         self.loadedYourJourneys = false
                         self.populateYourJourneys(completionHandler: {

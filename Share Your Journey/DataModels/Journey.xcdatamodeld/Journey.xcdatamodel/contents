@@ -25,6 +25,7 @@
         <attribute name="name" attributeType="String"/>
         <attribute name="networkProblem" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="photosNumber" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="place" optional="YES" attributeType="String"/>
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Photo" inverseName="journey" inverseEntity="Photo"/>
     </entity>
     <entity name="Photo" representedClassName="Photo" syncable="YES">

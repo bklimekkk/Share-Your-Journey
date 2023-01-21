@@ -188,31 +188,30 @@ struct SeeJourneyView: View {
                                         if self.routeIsDisplayed {
                                             RemoveRouteView(routeIsDisplayed: self.$routeIsDisplayed, currentLocationManager: self.currentLocationManager)
                                         }
-                                        if !self.downloadMode && !self.journeyIsDownloaded {
-                                            if self.journey.photos.map ({return $0.photo}).contains(UIImage()) {
-                                                ProgressView()
-                                                    .padding(.vertical)
-                                            } else {
-                                                Button {
-                                                    if self.subscription.subscriber {
-                                                        if self.journeys.map({$0.name}).contains(self.journey.name) {
-                                                            self.alreadyDownloaded = true
-                                                            return
-                                                        }
-                                                        self.downloadJourney(name: self.journey.place)
-                                                        withAnimation {
+                                        if !self.journeys.map({$0.name}).contains(self.journey.name) {
+                                            if !self.journeyIsDownloaded {
+                                                if self.journey.photos.map ({return $0.photo}).contains(UIImage()) {
+                                                    ProgressView()
+                                                        .padding(.vertical)
+                                                } else {
+                                                    Button {
+                                                        print("name: \(journey.name)")
+                                                        print("place: \(journey.place)")
+                                                        if self.subscription.subscriber {
+                                                            self.downloadJourney(name: self.journey.name, place: self.journey.place)
                                                             self.journeyIsDownloaded = true
+                                                            HapticFeedback.heavyHapticFeedback()
+                                                        } else {
+                                                            self.subscription.showPanel = true
                                                         }
-                                                    } else {
-                                                        self.subscription.showPanel = true
+                                                    } label: {
+                                                        MapButton(imageName: Icons.squareAndArrowDown)
+                                                            .foregroundColor(self.subscription.subscriber ? self.buttonColor : self.gold)
                                                     }
-                                                } label: {
-                                                    MapButton(imageName: Icons.squareAndArrowDown)
-                                                        .foregroundColor(self.subscription.subscriber ? self.buttonColor : self.gold)
                                                 }
                                             }
                                         } else {
-                                            MapButton(imageName: Icons.checkmark)
+                                            MapButton(imageName: Icons.checkmarkRectanglePortrait)
                                                 .disabled(true)
                                         }
                                         
@@ -255,6 +254,12 @@ struct SeeJourneyView: View {
                              showPicture: self.$showPicture,
                              highlightedPhoto: self.$highlightedPhoto,
                              journey: self.journey)
+        }
+        .task {
+            print(self.journey.name)
+            self.journeys.forEach { journey in
+                print(journey.name)
+            }
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -427,9 +432,10 @@ struct SeeJourneyView: View {
     /**
      Function is responsible for saving the journey in Core Data.
      */
-    func downloadJourney(name: String) {
+    func downloadJourney(name: String, place: String) {
         let newJourney = Journey(context: self.moc)
         newJourney.name = name
+        newJourney.place = place
         newJourney.email = FirebaseSetup.firebaseInstance.auth.currentUser?.email
         newJourney.date = Date()
         newJourney.networkProblem = false
@@ -459,7 +465,7 @@ struct SeeJourneyView: View {
         //After all journey properties are set, changes need to be saved with context variable's function: save().
         try? self.moc.save()
     }
-    
+
     /**
      Function is responsible for creating a new journey document in journeys collection in the firestore database. (Function also exists in SaveJourneyView).
      */

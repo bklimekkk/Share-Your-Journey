@@ -29,7 +29,7 @@ struct FriendJourneysList: View {
             if !self.loadedFriendsJourneys {
                 LoadingView()
             } else if self.sentByFriendFiltered.isEmpty {
-                NoDataView(text: UIStrings.noJourneysToShow)
+                NoDataView(text: UIStrings.noJourneysToShowTapToRefresh)
                     .onTapGesture {
                         self.loadedFriendsJourneys = false
                         self.populateFriendsJourneys(completionHandler: {

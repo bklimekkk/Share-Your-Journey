@@ -11,19 +11,15 @@ import FirebaseStorage
 //Struct contains code responsible for generating list with journeys downloaded by user.
 struct ListWithDownloadedJourneys: View {
     var downloadedJourneysFilteredList: [SingleJourney]
-
     //Similar variable was described in SeeJourneyView struct.
     @FetchRequest(entity: Journey.entity(), sortDescriptors: [], predicate: nil, animation: nil) var journeys: FetchedResults<Journey>
     //Variable is used to save changes made to journeys collection in Core Data.
     @Environment(\.managedObjectContext) var moc
-    
     //Variables are described in JourneysView struct.
     @Binding var downloadedJourneysList: [SingleJourney]
-
     var sortedDownloadedJourneysFilteredList: [SingleJourney] {
         return self.downloadedJourneysFilteredList.sorted(by: {$0.date > $1.date})
     }
-    
     @Binding var journeyToDelete: String
     @Binding var askAboutDeletion: Bool
     
@@ -39,10 +35,8 @@ struct ListWithDownloadedJourneys: View {
                     ForEach (self.sortedDownloadedJourneysFilteredList, id: \.self) { journey in
                         ZStack {
                             HStack {
-                                Text(journey.name)
+                                Text(journey.place)
                                     .foregroundColor(.primary)
-
-
                                     .padding(.vertical, 15)
                                 Spacer()
                                 Text(DateManager.getDate(date: journey.date))
@@ -98,7 +92,8 @@ struct ListWithDownloadedJourneys: View {
             if !self.downloadedJourneysList.map({return $0.name}).contains(i.name) {
                 self.downloadedJourneysList.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
                                                                  name: i.name ?? UIStrings.emptyString,
-                                                                 place: UIStrings.emptyString, date: i.date ?? Date(),
+                                                                 place: i.place ?? UIStrings.emptyString,
+                                                                 date: i.date ?? Date(),
                                                                  numberOfPhotos: i.photosNumber as? Int ?? IntConstants.defaultValue,
                                                                  photos: [],
                                                                  photosLocations: [],

@@ -27,7 +27,7 @@ struct ListWithJourneys: View {
             if !self.loadedJourneys {
                 LoadingView()
             } else if self.journeysFilteredList.isEmpty {
-                NoDataView(text: UIStrings.noJourneysToShow)
+                NoDataView(text: UIStrings.noJourneysToShowTapToRefresh)
                     .onTapGesture {
                         self.clearInvalidJourneys()
                         self.loadedJourneys = false
