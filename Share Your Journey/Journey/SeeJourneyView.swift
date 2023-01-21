@@ -45,8 +45,6 @@ struct SeeJourneyView: View {
     @State private var showDownloadAlert = false
     //Variable controls if the journey can be found in user's downloaded journeys in the server.
     @State private var alreadyDownloaded = false
-    //Variable's value justifies if users want to change journeys's name before downloading it (if journey's name duplicates.
-    @State private var changeName = false
     //Variable's value justifies if journey was downloading after changing its name (if duplication occured).
     @State private var downloadChangedJourney = false
     //Variable's value contains data about journey's new name (after changing it because of duplication).
@@ -305,19 +303,6 @@ struct SeeJourneyView: View {
                 }
             }
         }
-        .alert(isPresented: self.$alreadyDownloaded) {
-            
-            //Alert is triggered if journey with the same name is already downloaded to Core Data.
-            Alert(title: Text(UIStrings.journeyWithTheSameName),
-                  message: Text(UIStrings.journeyWithTheSameNameAlreadyDownloaded),
-                  primaryButton: .default(Text(UIStrings.ok)) {
-                self.alreadyDownloaded = false
-                self.changeName = true
-            },
-                  secondaryButton: .destructive(Text(UIStrings.cancel)) {
-                self.alreadyDownloaded = false
-            })
-        }
         .fullScreenCover(isPresented: self.$subscription.showPanel, content: {
             SubscriptionView(subscriber: self.$subscription.subscriber)
         })
@@ -326,20 +311,6 @@ struct SeeJourneyView: View {
         })
         .sheet(isPresented: self.$showSendingView, content: {
             SendViewedJourneyView(journey: self.journey)
-        })
-        .sheet(isPresented: self.$changeName, onDismiss: {
-            
-            //Sheet is presented to users if they choose to change duplicated journey's name.
-            if self.downloadChangedJourney {
-                self.downloadChangedJourney = false
-                self.downloadJourney(name: journeyNewName)
-                withAnimation {
-                    self.journeyIsDownloaded = true
-                }
-                self.journeyNewName = UIStrings.emptyString
-            }
-        }, content: {
-            DownloadChangesView(presentSheet: self.$changeName, download: self.$downloadChangedJourney, newName: self.$journeyNewName)
         })
         .navigationBarTitle(self.journey.place, displayMode: .inline)
     }

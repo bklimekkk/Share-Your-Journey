@@ -154,8 +154,6 @@ struct UIStrings {
     static let unableToShowTheJourney = "Unable to show the journey"
     static let sendJourneyInTheApp = "Send journey in the app"
     static let sendPhotosViaSocialMedia = "Send photos via social media"
-    static let journeyWithTheSameName = "Journey with the same name"
-    static let journeyWithTheSameNameAlreadyDownloaded = "Journey with the same name is already downloaded. Do you want to provide different name to this journey?"
     static let changeName = "Change name"
     static let enterNewName = "Enter new name"
     static let emptyField = "Empty field"

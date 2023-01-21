@@ -40,7 +40,6 @@
 		8652A17227BFEAE900ADBB25 /* SumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652A17127BFEAE900ADBB25 /* SumUpView.swift */; };
 		8652A17527C254C700ADBB25 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652A17427C254C700ADBB25 /* MapView.swift */; };
 		8653A2D4280418EB00852374 /* JourneysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8653A2D3280418EB00852374 /* JourneysView.swift */; };
-		865452AD2809D452008041A8 /* DownloadChangesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865452AC2809D452008041A8 /* DownloadChangesView.swift */; };
 		86573E5C27F783D3003E5CF8 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86573E5B27F783D2003E5CF8 /* VerificationView.swift */; };
 		86573E5E27F8370B003E5CF8 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86573E5D27F8370B003E5CF8 /* ResetPasswordView.swift */; };
 		8663C26027DE0170007EB1E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */; };
@@ -156,7 +155,6 @@
 		8652A17127BFEAE900ADBB25 /* SumUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SumUpView.swift; sourceTree = "<group>"; };
 		8652A17427C254C700ADBB25 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		8653A2D3280418EB00852374 /* JourneysView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneysView.swift; sourceTree = "<group>"; };
-		865452AC2809D452008041A8 /* DownloadChangesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadChangesView.swift; sourceTree = "<group>"; };
 		86573E5A27F333DA003E5CF8 /* Share-Your-JourneyUITests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Share-Your-JourneyUITests-Info.plist"; sourceTree = SOURCE_ROOT; };
 		86573E5B27F783D2003E5CF8 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
 		86573E5D27F8370B003E5CF8 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
@@ -375,7 +373,6 @@
 				866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */,
 				8639E00E289694D100D7A3F5 /* SendViewedJourneyView.swift */,
 				86C649FC27D1DF0700891C24 /* SeeJourneyView.swift */,
-				865452AC2809D452008041A8 /* DownloadChangesView.swift */,
 				8665C7942958CA50007D7354 /* JourneyControlView.swift */,
 			);
 			path = Journey;
@@ -718,7 +715,6 @@
 				863CF4FF27BA2A31007B82D4 /* ChatView.swift in Sources */,
 				8665C79329574592007D7354 /* SheetDismissButtonView.swift in Sources */,
 				86FCCC79281079BD005FD678 /* PickerComponents.swift in Sources */,
-				865452AD2809D452008041A8 /* DownloadChangesView.swift in Sources */,
 				8665C79A2961FBC1007D7354 /* UIStrings.swift in Sources */,
 				86C649F627D1B43A00891C24 /* Journey+CoreDataClass.swift in Sources */,
 				864FEEF9289B24380060E94D /* ForecastRequest.swift in Sources */,
