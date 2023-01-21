@@ -58,7 +58,7 @@ struct DirectionIcons: View {
 
 //Struct contains code that generate buttons necessary for saving the journey and closing sum-up screen.
 struct SumUpFunctionalityButtonsView: View {
-    
+    @Environment(\.managedObjectContext) var moc
     //Variables are described in SumUpView struct.
     @Binding var journey: SingleJourney
     @Binding var showDeleteAlert: Bool
@@ -81,6 +81,7 @@ struct SumUpFunctionalityButtonsView: View {
                 HapticFeedback.heavyHapticFeedback()
                 self.saveThePlace(index: self.journey.numberOfPhotos - 1)
                 self.journey.name = UUID().uuidString
+                self.downloadJourney(journey: self.journey)
                 self.createJourney(journey: self.journey)
                 self.previousLocationManager.mapView.removeAnnotations(self.previousLocationManager.mapView.annotations)
                 self.previousLocationManager.mapView.removeOverlays(self.previousLocationManager.mapView.overlays)
@@ -112,6 +113,40 @@ struct SumUpFunctionalityButtonsView: View {
         }
     }
 
+    func downloadJourney(journey: SingleJourney) {
+        let newJourney = Journey(context: self.moc)
+        newJourney.name = journey.name
+        newJourney.place = journey.place
+        newJourney.email = FirebaseSetup.firebaseInstance.auth.currentUser?.email
+        newJourney.date = journey.date
+        newJourney.operationDate = Date.now
+        newJourney.photosNumber = (journey.numberOfPhotos) as NSNumber
+        var index = 0
+        while index < journey.photos.count {
+            let newImage = Photo(context: moc)
+            newImage.id = Double(index + 1)
+            newImage.journey = newJourney
+            newImage.image = journey.photos[index].photo.jpegData(compressionQuality: 0.5)
+            newImage.latitude = journey.photosLocations[index].latitude
+            newImage.longitude = journey.photosLocations[index].longitude
+            newImage.location = journey.photos[index].location
+            newImage.subLocation = journey.photos[index].subLocation
+            newImage.administrativeArea = journey.photos[index].administrativeArea
+            newImage.country = journey.photos[index].country
+            newImage.isoCountryCode = journey.photos[index].isoCountryCode
+            newImage.name = journey.photos[index].name
+            newImage.postalCode = journey.photos[index].postalCode
+            newImage.ocean = journey.photos[index].ocean
+            newImage.inlandWater = journey.photos[index].inlandWater
+            newImage.areasOfInterest = journey.photos[index].areasOfInterest.joined(separator: ",")
+            newJourney.addToPhotos(newImage)
+            index+=1
+        }
+
+        //After all journey properties are set, changes need to be saved with context variable's function: save().
+        try? self.moc.save()
+    }
+
     /**
      Function is responsible for creating a new journey document in journeys collection in the firestore database.
      */
@@ -125,9 +160,6 @@ struct SumUpFunctionalityButtonsView: View {
             "date" : Date(),
             "deletedJourney" : false
         ])
-        //TODO: - remove these print lines
-        print("number of photos locations: \(journey.photosLocations.count)")
-        print("number of photos: \(journey.photos.count)")
         for index in 0...journey.photosLocations.count - 1 {
             self.uploadPhoto(journey: journey, name: journey.name, index: index, instanceReference: instanceReference)
         }

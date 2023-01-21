@@ -24,7 +24,7 @@ struct ListWithRequests: View {
                 NoDataView(text: UIStrings.noRequestsToShow)
                     .onTapGesture {
                         self.loadedRequests = false
-                        self.populateRequests(completionHandler: {
+                        self.populateRequests(completion: {
                             self.loadedRequests = true
                         })
                     }
@@ -57,24 +57,23 @@ struct ListWithRequests: View {
                 .navigationBarHidden(true)
                 .refreshable {
                     //Users are able to refresh list if any changes were made in the meantime.
-                    self.populateRequests(completionHandler: {
+                    self.populateRequests(completion: {
                         self.loadedRequests = true
                     })
                 }
             }
         }
         .onAppear {
-            self.populateRequests(completionHandler: {
+            self.populateRequests(completion: {
                 self.loadedRequests = true
             })
         }
-        
     }
     
     /**
      Function is responsible for searching server in order to return user list of requests sent to them.
      */
-    func populateRequests(completionHandler: @escaping() -> Void) {
+    func populateRequests(completion: @escaping() -> Void) {
         
         //Variable controls which user is currently logged in into the application.
         let currentEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
@@ -87,7 +86,7 @@ struct ListWithRequests: View {
         
         //Program searches through requests collection in Firebase in order to fetch user's requests.
         FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(email: currentEmail)).getDocuments { (querySnapshot, error) in
-            completionHandler()
+            completion()
             if error != nil {
                 print(error!.localizedDescription)
             } else {

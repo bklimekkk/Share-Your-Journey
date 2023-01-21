@@ -47,7 +47,7 @@ struct JourneysView: View {
         
 
         VStack (spacing: 0) {
-            PickerView(choice: self.$downloaded, firstChoice: UIStrings.saved, secondChoice: UIStrings.downloaded)
+            PickerView(choice: self.$downloaded, firstChoice: UIStrings.saved, secondChoice: UIStrings.onDevice)
                 .padding()
             
             SearchField(text: UIStrings.searchJourney, search: self.$searchedJourney)

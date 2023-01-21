@@ -22,7 +22,8 @@ struct SendJourneyView: View {
     @State private var sentJourneys: [SingleJourney] = []
     @State private var unsentJourneys: [SingleJourney] = []
     @State private var searchText = UIStrings.emptyString
-    
+    @State private var loadedJourneysToSend = false
+
     var filteredUnsentJourneys: [SingleJourney] {
         if self.searchText.isEmpty {
             return self.unsentJourneys
@@ -37,7 +38,9 @@ struct SendJourneyView: View {
                 SearchField(text: UIStrings.searchYourJourneys, search: self.$searchText)
                     .padding(.top)
                 VStack {
-                    if self.filteredUnsentJourneys.isEmpty{
+                    if !self.loadedJourneysToSend {
+                        LoadingView()
+                    } else if self.filteredUnsentJourneys.isEmpty {
                         NoDataView(text: UIStrings.noJourneysToSend)
                     } else {
                         List(self.filteredUnsentJourneys.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
@@ -64,7 +67,9 @@ struct SendJourneyView: View {
                     }
                 }
                 .onAppear {
-                    self.prepareJourneysToSend()
+                    self.prepareJourneysToSend(completion: {
+                        self.loadedJourneysToSend = true
+                    })
                 }
                 Divider()
                 Button {
@@ -94,7 +99,7 @@ struct SendJourneyView: View {
     /**
      Function is responsible for preapring the list from which users can choose a journey to send.
      */
-    func prepareJourneysToSend() {
+    func prepareJourneysToSend(completion: @escaping () -> Void) {
         //First of all, the program fetches all user's journeys that were sent to particular friend from firebase database and stores them in first array.
         let ownEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.email
         FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(email: ownEmail ?? UIStrings.emptyString))/\(self.targetEmail)/journeys").getDocuments { (snapshot, error) in
@@ -114,6 +119,7 @@ struct SendJourneyView: View {
             
             //Then program fetches all user's journeys and populates another array with journeys that can't be found in the previous array (containing journeys already send). In this way program knows which journeys haven't been sent yet and presents them to user.
             FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(email: ownEmail ?? UIStrings.emptyString))/\(ownEmail ?? UIStrings.emptyString)/journeys").getDocuments { (snapshot, error) in
+                completion()
                 if error != nil {
                     print(error!.localizedDescription)
                 } else {

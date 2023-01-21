@@ -160,7 +160,7 @@ struct UIStrings {
     static let emptyField = "Empty field"
     static let youNeedToProvideAName = "You need to provide a name"
     static let saved = "Saved"
-    static let downloaded = "Downloaded"
+    static let onDevice = "On Device"
     static let current = "current"
     static let forecast = "forecast"
     static let date = "Date"

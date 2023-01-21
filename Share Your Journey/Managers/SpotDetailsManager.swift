@@ -12,15 +12,15 @@ class SpotDetailsManager: ObservableObject {
     /**
      Function is responsible for getting a placemark from the location.
      */
-    func calculatePlace(locationCoordinate: CLLocationCoordinate2D, completionHandler: @escaping (CLPlacemark?) -> Void) {
+    func calculatePlace(locationCoordinate: CLLocationCoordinate2D, completion: @escaping (CLPlacemark?) -> Void) {
         let geocoder = CLGeocoder()
         let location = CLLocation(latitude: locationCoordinate.latitude, longitude: locationCoordinate.longitude)
         geocoder.reverseGeocodeLocation(location) { placemarks, error in
             if error == nil {
                 let locationName = placemarks?[0]
-                completionHandler(locationName)
+                completion(locationName)
             } else {
-                completionHandler(nil)
+                completion(nil)
             }
         }
     }

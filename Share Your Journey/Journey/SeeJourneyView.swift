@@ -195,10 +195,8 @@ struct SeeJourneyView: View {
                                                         .padding(.vertical)
                                                 } else {
                                                     Button {
-                                                        print("name: \(journey.name)")
-                                                        print("place: \(journey.place)")
                                                         if self.subscription.subscriber {
-                                                            self.downloadJourney(name: self.journey.name, place: self.journey.place)
+                                                            self.downloadJourney(journey: self.journey)
                                                             self.journeyIsDownloaded = true
                                                             HapticFeedback.heavyHapticFeedback()
                                                         } else {
@@ -254,12 +252,6 @@ struct SeeJourneyView: View {
                              showPicture: self.$showPicture,
                              highlightedPhoto: self.$highlightedPhoto,
                              journey: self.journey)
-        }
-        .task {
-            print(self.journey.name)
-            self.journeys.forEach { journey in
-                print(journey.name)
-            }
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -432,16 +424,16 @@ struct SeeJourneyView: View {
     /**
      Function is responsible for saving the journey in Core Data.
      */
-    func downloadJourney(name: String, place: String) {
+    func downloadJourney(journey: SingleJourney) {
         let newJourney = Journey(context: self.moc)
-        newJourney.name = name
-        newJourney.place = place
+        newJourney.name = journey.name
+        newJourney.place = journey.place
         newJourney.email = FirebaseSetup.firebaseInstance.auth.currentUser?.email
-        newJourney.date = Date()
-        newJourney.networkProblem = false
-        newJourney.photosNumber = (self.journey.numberOfPhotos) as NSNumber
+        newJourney.date = journey.date
+        newJourney.operationDate = Date.now
+        newJourney.photosNumber = (journey.numberOfPhotos) as NSNumber
         var index = 0
-        while index < self.journey.photos.count {
+        while index < journey.photos.count {
             let newImage = Photo(context: moc)
             newImage.id = Double(index + 1)
             newImage.journey = newJourney

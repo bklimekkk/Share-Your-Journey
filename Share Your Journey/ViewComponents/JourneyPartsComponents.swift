@@ -99,10 +99,10 @@ struct SingleJourney: Hashable {
     var name: String
     var place: String
     var date: Date
+    var operationDate: Date
     var numberOfPhotos: Int
     var photos: [SinglePhoto]
     var photosLocations: [CLLocationCoordinate2D]
-    var networkProblem: Bool = false
 
     init(numberOfPhotos: Int,
          photos: [SinglePhoto],
@@ -110,11 +110,42 @@ struct SingleJourney: Hashable {
         self.email = UIStrings.emptyString
         self.name = UIStrings.emptyString
         self.place = UIStrings.emptyString
-        self.date = Date()
+        self.date = Date.now
+        self.operationDate = Date.now
         self.numberOfPhotos = numberOfPhotos
         self.photos = photos
         self.photosLocations = photosLocations
-        self.networkProblem = false
+    }
+
+    init(email: String,
+         name: String,
+         place: String,
+         date: Date,
+         numberOfPhotos: Int) {
+        self.email = email
+        self.name = name
+        self.place = place
+        self.date = date
+        self.operationDate = Date.now
+        self.numberOfPhotos = numberOfPhotos
+        self.photos = []
+        self.photosLocations = []
+    }
+
+    init(email: String,
+         name: String,
+         place: String,
+         date: Date,
+         operationDate: Date,
+         numberOfPhotos: Int) {
+        self.email = email
+        self.name = name
+        self.place = place
+        self.date = date
+        self.operationDate = operationDate
+        self.numberOfPhotos = numberOfPhotos
+        self.photos = []
+        self.photosLocations = []
     }
 
     init(email: String,
@@ -123,26 +154,34 @@ struct SingleJourney: Hashable {
          date: Date,
          numberOfPhotos: Int,
          photos: [SinglePhoto],
-         photosLocations: [CLLocationCoordinate2D],
-         networkProblem: Bool) {
+         photosLocations: [CLLocationCoordinate2D]) {
         self.email = email
         self.name = name
         self.place = place
         self.date = date
+        self.operationDate = Date.now
         self.numberOfPhotos = numberOfPhotos
         self.photos = photos
         self.photosLocations = photosLocations
-        self.networkProblem = networkProblem
     }
 
-    init(email: String, name: String, place: String, date: Date, numberOfPhotos: Int) {
+    init(email: String,
+         name: String,
+         place: String,
+         date: Date,
+         operationDate: Date,
+         numberOfPhotos: Int,
+         photos: [SinglePhoto],
+         photosLocations: [CLLocationCoordinate2D]) {
         self.email = email
         self.name = name
         self.place = place
         self.date = date
+        self.operationDate = operationDate
+        self.operationDate = Date.now
         self.numberOfPhotos = numberOfPhotos
-        self.photos = []
-        self.photosLocations = []
-        self.networkProblem = false
+        self.photos = photos
+        self.photosLocations = photosLocations
     }
+
 }

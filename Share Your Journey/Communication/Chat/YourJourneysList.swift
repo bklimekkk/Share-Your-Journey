@@ -27,7 +27,7 @@ struct YourJourneysList: View {
     var sentByYouFiltered: [SingleJourney]
 
     var sentByYouFilteredSorted: [SingleJourney] {
-        return self.sentByYouFiltered.sorted(by: {$0.date > $1.date})
+        return self.sentByYouFiltered.sorted(by: {$0.operationDate > $1.operationDate})
     }
 
     var body: some View {
@@ -39,7 +39,7 @@ struct YourJourneysList: View {
                 NoDataView(text: UIStrings.noJourneysToShowTapToRefresh)
                     .onTapGesture {
                         self.loadedYourJourneys = false
-                        self.populateYourJourneys(completionHandler: {
+                        self.populateYourJourneys(completion: {
                             self.loadedYourJourneys = true
                         })
                     }
@@ -51,13 +51,14 @@ struct YourJourneysList: View {
                             HStack {
                                 Text(journey.place)
                                     .padding(.vertical, 15)
-
                                 Spacer()
-
                                 Text(DateManager.getDate(date: journey.date))
                                     .foregroundColor(.gray)
                             }
-                            NavigationLink(destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString, downloadMode: false, path: "\(FirestorePaths.getFriends(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString))/\(self.email)/journeys")) {
+                            NavigationLink(destination: SeeJourneyView(journey: journey,
+                                                                       email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
+                                                                       downloadMode: false,
+                                                                       path: "\(FirestorePaths.getFriends(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString))/\(self.email)/journeys")) {
                                 EmptyView()
                             }
                             .opacity(0)
@@ -68,7 +69,7 @@ struct YourJourneysList: View {
                 .scrollDismissesKeyboard(.interactively)
                 .listStyle(.inset)
                 .refreshable {
-                    self.populateYourJourneys(completionHandler: {
+                    self.populateYourJourneys(completion: {
                         self.loadedYourJourneys = true
                     })
                 }
@@ -103,14 +104,15 @@ struct YourJourneysList: View {
             }
         }
         .fullScreenCover(isPresented: self.$sendJourneyScreen, onDismiss: {
-            self.populateYourJourneys(completionHandler: {
+            self.populateYourJourneys(completion: {
                 self.loadedYourJourneys = true
             })
         }) {
             SendJourneyView(targetEmail: self.email)
         }
         .onAppear {
-            self.populateYourJourneys(completionHandler: {
+            self.sentByYou = []
+            self.populateYourJourneys(completion: {
                 self.loadedYourJourneys = true
             })
         }
@@ -119,20 +121,21 @@ struct YourJourneysList: View {
     /**
      Function is responsible for populating array with users' journeys with data from the server.
      */
-    func populateYourJourneys(completionHandler: @escaping() -> Void) {
+    func populateYourJourneys(completion: @escaping() -> Void) {
         let path = "\(FirestorePaths.getFriends(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString))/\(email)/journeys"
         FirebaseSetup.firebaseInstance.db.collection(path).getDocuments() { (querySnapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
                 for i in querySnapshot!.documents {
-                    completionHandler()
+                    completion()
                     //If conditions are met, journey's data is appended to the array.
                     if !self.sentByYou.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as? Bool ?? false) {
                         self.sentByYou.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
                                                             name: i.documentID,
                                                             place: i.get("place") as? String ?? UIStrings.emptyString,
-                                                            date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(),
+                                                            date: (i.get("date") as? Timestamp)?.dateValue() ?? Date.now,
+                                                            operationDate: (i.get("operationDate") as? Timestamp)?.dateValue() ?? Date.now,
                                                             numberOfPhotos: i.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                     }
                 }

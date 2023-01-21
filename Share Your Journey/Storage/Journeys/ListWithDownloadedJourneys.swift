@@ -18,7 +18,7 @@ struct ListWithDownloadedJourneys: View {
     //Variables are described in JourneysView struct.
     @Binding var downloadedJourneysList: [SingleJourney]
     var sortedDownloadedJourneysFilteredList: [SingleJourney] {
-        return self.downloadedJourneysFilteredList.sorted(by: {$0.date > $1.date})
+        return self.downloadedJourneysFilteredList.sorted(by: {$0.operationDate > $1.operationDate})
     }
     @Binding var journeyToDelete: String
     @Binding var askAboutDeletion: Bool
@@ -96,8 +96,7 @@ struct ListWithDownloadedJourneys: View {
                                                                  date: i.date ?? Date(),
                                                                  numberOfPhotos: i.photosNumber as? Int ?? IntConstants.defaultValue,
                                                                  photos: [],
-                                                                 photosLocations: [],
-                                                                 networkProblem: i.networkProblem))
+                                                                 photosLocations: []))
             }
         }
     }

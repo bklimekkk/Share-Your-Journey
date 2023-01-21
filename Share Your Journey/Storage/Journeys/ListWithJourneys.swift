@@ -31,7 +31,7 @@ struct ListWithJourneys: View {
                     .onTapGesture {
                         self.clearInvalidJourneys()
                         self.loadedJourneys = false
-                        self.updateJourneys(completionHandler: {
+                        self.updateJourneys(completion: {
                             self.loadedJourneys = true
                         })
                     }
@@ -83,13 +83,13 @@ struct ListWithJourneys: View {
         .onAppear {
             //List is updated every time the screen appears.
             self.clearInvalidJourneys()
-            self.updateJourneys(completionHandler: {
+            self.updateJourneys(completion: {
                 self.loadedJourneys = true
             })
         }
         .refreshable {
             self.clearInvalidJourneys()
-            self.updateJourneys(completionHandler: {
+            self.updateJourneys(completion: {
                 self.loadedJourneys = true
             })
         }
@@ -159,12 +159,12 @@ struct ListWithJourneys: View {
     /**
      Function is responsible for adding journeys to array, and refreshing it if needed.
      */
-    func updateJourneys(completionHandler: @escaping () -> Void) {
+    func updateJourneys(completion: @escaping () -> Void) {
         let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
         let path = "\(FirestorePaths.getFriends(email: email))/\(email)/journeys"
         
         FirebaseSetup.firebaseInstance.db.collection(path).getDocuments() { (querySnapshot, error) in
-            completionHandler()
+            completion()
             if error != nil {
                 print(error!.localizedDescription)
             } else {

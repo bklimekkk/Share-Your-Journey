@@ -18,7 +18,7 @@ struct FriendJourneysList: View {
     var sentByFriendFiltered: [SingleJourney]
     
     var sentByFriendFilteredSorted: [SingleJourney] {
-        return sentByFriendFiltered.sorted(by: {$0.date > $1.date})
+        return sentByFriendFiltered.sorted(by: {$0.operationDate > $1.operationDate})
     }
     
     //Friend's e-mail address.
@@ -32,7 +32,7 @@ struct FriendJourneysList: View {
                 NoDataView(text: UIStrings.noJourneysToShowTapToRefresh)
                     .onTapGesture {
                         self.loadedFriendsJourneys = false
-                        self.populateFriendsJourneys(completionHandler: {
+                        self.populateFriendsJourneys(completion: {
                             self.loadedFriendsJourneys = true
                         })
                     }
@@ -59,14 +59,15 @@ struct FriendJourneysList: View {
                 .scrollDismissesKeyboard(.interactively)
                 .listStyle(.inset)
                 .refreshable {
-                    self.populateFriendsJourneys(completionHandler: {
+                    self.populateFriendsJourneys(completion: {
                         self.loadedFriendsJourneys = true
                     })
                 }
             }
         }
         .onAppear {
-            self.populateFriendsJourneys(completionHandler: {
+            self.sentByFriend = []
+            self.populateFriendsJourneys(completion: {
                 self.loadedFriendsJourneys = true
             })
         }
@@ -75,10 +76,10 @@ struct FriendJourneysList: View {
     /**
      Function is responsible for populating the array with journeys sent by friend.
      */
-    func populateFriendsJourneys(completionHandler: @escaping () -> Void) {
+    func populateFriendsJourneys(completion: @escaping () -> Void) {
         let path = "\(FirestorePaths.getFriends(email: self.email))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)/journeys"
         FirebaseSetup.firebaseInstance.db.collection(path).getDocuments() { (querySnapshot, error) in
-            completionHandler()
+            completion()
             if error != nil {
                 print(error!.localizedDescription)
             } else {
@@ -88,7 +89,8 @@ struct FriendJourneysList: View {
                         self.sentByFriend.append(SingleJourney(email: email,
                                                                name: i.documentID,
                                                                place: i.get("place") as? String ?? UIStrings.emptyString,
-                                                               date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(),
+                                                               date: (i.get("date") as? Timestamp)?.dateValue() ?? Date.now,
+                                                               operationDate: (i.get("operationDate") as? Timestamp)?.dateValue() ?? Date.now,
                                                                numberOfPhotos: i.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                     }
                 }

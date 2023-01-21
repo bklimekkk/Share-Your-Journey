@@ -20,7 +20,8 @@ struct SendJourneyManager {
             "place": journey.place,
             "email" : journey.email,
             "photosNumber" : journey.numberOfPhotos,
-            "date" : Date(),
+            "date" : journey.date,
+            "operationDate": Date.now,
             "deletedJourney" : false
         ])
         let path = "\(FirestorePaths.getFriends(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)/journeys/\(journey.name)/photos"
