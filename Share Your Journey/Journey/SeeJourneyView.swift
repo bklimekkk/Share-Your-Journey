@@ -195,7 +195,7 @@ struct SeeJourneyView: View {
                                                 ProgressView()
                                                     .padding(.vertical)
                                             } else {
-                                                Button{
+                                                Button {
                                                     if self.subscription.subscriber {
                                                         if self.journeys.map({$0.name}).contains(self.journey.name) {
                                                             self.alreadyDownloaded = true
@@ -212,25 +212,6 @@ struct SeeJourneyView: View {
                                                     MapButton(imageName: Icons.squareAndArrowDown)
                                                         .foregroundColor(self.subscription.subscriber ? self.buttonColor : self.gold)
                                                 }
-                                            }
-                                        } else if self.downloadMode && self.journey.networkProblem {
-                                            Button{
-                                                if self.network.connected {
-                                                    self.createJourney()
-                                                    for i in self.journeys {
-                                                        if i.name == self.journey.name {
-                                                            self.moc.delete(i)
-                                                            try? self.moc.save()
-                                                            break
-                                                        }
-                                                    }
-                                                    withAnimation {
-                                                        self.journey.networkProblem = false
-                                                    }
-                                                }
-                                            } label: {
-                                                MapButton(imageName: Icons.plus)
-                                                    .foregroundColor(self.colorScheme == .light ? Color.blue : .white)
                                             }
                                         } else {
                                             MapButton(imageName: Icons.checkmark)

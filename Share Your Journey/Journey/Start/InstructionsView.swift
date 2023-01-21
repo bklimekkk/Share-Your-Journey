@@ -122,13 +122,6 @@ struct InstructionsView: View {
                             .padding(.horizontal, 3)
                         Text(UIStrings.downloadingToDevice)
                     }
-                    HStack {
-                        Image(systemName: Icons.plus)
-                            .font(.system(size: 30))
-                            .foregroundColor(self.buttonColor)
-                            .padding(.horizontal, 4)
-                        Text(UIStrings.allowsToMoveDownloaded)
-                    }
                 }
             }
             .toolbar {

@@ -126,7 +126,6 @@ struct UIStrings {
     static let takingAPicture = "Taking a picture during the journey."
     static let allowsToPause = "Allows to pause the journey."
     static let downloadingToDevice = "Downloading the journey to device."
-    static let allowsToMoveDownloaded = "Allows users to move downloaded journey to the list of saved journeys."
     static let album = "Album"
     static let map = "Map"
     static let downloadAllImages = "Download all images"
