@@ -117,7 +117,7 @@ struct SumUpFunctionalityButtonsView: View {
         let newJourney = Journey(context: self.moc)
         newJourney.name = journey.name
         newJourney.place = journey.place
-        newJourney.email = FirebaseSetup.firebaseInstance.auth.currentUser?.email
+        newJourney.uid = FirebaseSetup.firebaseInstance.auth.currentUser?.uid
         newJourney.date = journey.date
         newJourney.operationDate = Date.now
         newJourney.photosNumber = (journey.numberOfPhotos) as NSNumber
@@ -152,10 +152,10 @@ struct SumUpFunctionalityButtonsView: View {
      */
     func createJourney(journey: SingleJourney) {
         let instanceReference = FirebaseSetup.firebaseInstance
-        instanceReference.db.collection(FirestorePaths.myJourneys(email: instanceReference.auth.currentUser?.email ?? UIStrings.emptyString)).document(journey.name).setData([
+        instanceReference.db.collection(FirestorePaths.myJourneys(uid: instanceReference.auth.currentUser?.uid ?? UIStrings.emptyString)).document(journey.name).setData([
             "name" : journey.name,
             "place" : journey.place,
-            "email" : FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
+            "uid" : FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString,
             "photosNumber" : journey.numberOfPhotos,
             "date" : Date(),
             "deletedJourney" : false
@@ -174,7 +174,7 @@ struct SumUpFunctionalityButtonsView: View {
         }
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpeg"
-        let photoReference = "\(instanceReference.auth.currentUser?.email ?? UIStrings.emptyString)/\(name)/\(index)"
+        let photoReference = "\(instanceReference.auth.currentUser?.uid ?? UIStrings.emptyString)/\(name)/\(index)"
         let storageReference = instanceReference.storage.reference(withPath: photoReference)
 
         //Storage is populated with the image.
@@ -184,7 +184,7 @@ struct SumUpFunctionalityButtonsView: View {
             }
 
             //Image's details are added to appropriate collection in firetore's database.
-            instanceReference.db.document("\(FirestorePaths.myJourneys(email: instanceReference.auth.currentUser?.email ?? UIStrings.emptyString))/\(name)/photos/\(index)").setData([
+            instanceReference.db.document("\(FirestorePaths.myJourneys(uid: instanceReference.auth.currentUser?.uid ?? UIStrings.emptyString))/\(name)/photos/\(index)").setData([
                 "latitude": journey.photosLocations[index].latitude,
                 "longitude": journey.photosLocations[index].longitude,
                 "photoUrl": photoReference,

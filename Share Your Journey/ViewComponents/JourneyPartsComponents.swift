@@ -95,7 +95,7 @@ struct SinglePhoto: Hashable {
 
 //Struct represents a single journey.
 struct SingleJourney: Hashable {
-    var email: String
+    var uid: String
     var name: String
     var place: String
     var date: Date
@@ -107,7 +107,7 @@ struct SingleJourney: Hashable {
     init(numberOfPhotos: Int,
          photos: [SinglePhoto],
          photosLocations: [CLLocationCoordinate2D]) {
-        self.email = UIStrings.emptyString
+        self.uid = UIStrings.emptyString
         self.name = UIStrings.emptyString
         self.place = UIStrings.emptyString
         self.date = Date.now
@@ -117,12 +117,12 @@ struct SingleJourney: Hashable {
         self.photosLocations = photosLocations
     }
 
-    init(email: String,
+    init(uid: String,
          name: String,
          place: String,
          date: Date,
          numberOfPhotos: Int) {
-        self.email = email
+        self.uid = uid
         self.name = name
         self.place = place
         self.date = date
@@ -132,13 +132,13 @@ struct SingleJourney: Hashable {
         self.photosLocations = []
     }
 
-    init(email: String,
+    init(uid: String,
          name: String,
          place: String,
          date: Date,
          operationDate: Date,
          numberOfPhotos: Int) {
-        self.email = email
+        self.uid = uid
         self.name = name
         self.place = place
         self.date = date
@@ -148,14 +148,14 @@ struct SingleJourney: Hashable {
         self.photosLocations = []
     }
 
-    init(email: String,
+    init(uid: String,
          name: String,
          place: String,
          date: Date,
          numberOfPhotos: Int,
          photos: [SinglePhoto],
          photosLocations: [CLLocationCoordinate2D]) {
-        self.email = email
+        self.uid = uid
         self.name = name
         self.place = place
         self.date = date
@@ -165,7 +165,7 @@ struct SingleJourney: Hashable {
         self.photosLocations = photosLocations
     }
 
-    init(email: String,
+    init(uid: String,
          name: String,
          place: String,
          date: Date,
@@ -173,7 +173,7 @@ struct SingleJourney: Hashable {
          numberOfPhotos: Int,
          photos: [SinglePhoto],
          photosLocations: [CLLocationCoordinate2D]) {
-        self.email = email
+        self.uid = uid
         self.name = name
         self.place = place
         self.date = date

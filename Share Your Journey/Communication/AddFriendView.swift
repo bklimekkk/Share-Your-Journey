@@ -23,8 +23,8 @@ struct AddFriendView: View {
     
     //Variable described in ChatView struct.
     @Binding var sheetIsPresented: Bool
-    //Friend's email address.
-    @State private var email = UIStrings.emptyString
+    //Friend's uid address.
+    @State private var uid = UIStrings.emptyString
     //Variable's value justifies if application should present users with any message.
     @State private var showMessage: Bool = false
     //Variable is set to one of enum values from InvitationError.
@@ -33,13 +33,14 @@ struct AddFriendView: View {
     var body: some View {
         VStack {
             Text(UIStrings.addAFriend)
-            TextField(UIStrings.enterFriendsEmail, text: self.$email)
+            TextField(UIStrings.enterFriendsEmail, text: self.$uid)
                 .font(.system(size: 20))
             Spacer()
             Button{
-                //Given email address isn't key sensitive.
-                let lowerCasedEmail = self.email.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-                
+                //Given uid address isn't key sensitive.
+//                let lowerCasedEmail = self.uid.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+                let lowerCasedEmail = self.uid.trimmingCharacters(in: .whitespacesAndNewlines)
+
                 //Each possibility of error connected with inviting friend is checked and prevented with use of if statements below. Statement's aren't contained in separate functions, because each of them contains return key word, which is supposed to stop action performed by button.
                 
                 //If Statement is responsible for checking if users haven't omit entering data.
@@ -49,15 +50,15 @@ struct AddFriendView: View {
                     return
                 }
                 
-                //If statement is responsible for checking if users haven't entered their own email while inviting a friend.
-                if lowerCasedEmail == FirebaseSetup.firebaseInstance.auth.currentUser?.email {
+                //If statement is responsible for checking if users haven't entered their own uid while inviting a friend.
+                if lowerCasedEmail == FirebaseSetup.firebaseInstance.auth.currentUser?.uid {
                     self.responseType = .yourEmail
                     self.showMessage = true
                     return
                 }
                 
                 //If statement is responsible for checking if user's friend haven't sent them invitation.
-                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)).getDocuments { snapshot, error in
+                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)).getDocuments { snapshot, error in
                     if error != nil {
                         print("Error while retrieving the list of requests")
                     } else {
@@ -72,12 +73,12 @@ struct AddFriendView: View {
                 }
                 
                 //If statement is responsible for checking if user haven't sent invitation to friend.
-                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(email: lowerCasedEmail)).getDocuments { snapshot, error in
+                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(uid: lowerCasedEmail)).getDocuments { snapshot, error in
                     if error != nil {
                         print("Error while retrieving the list of requests")
                     } else {
                         for i in snapshot!.documents {
-                            if i.documentID == FirebaseSetup.firebaseInstance.auth.currentUser?.email {
+                            if i.documentID == FirebaseSetup.firebaseInstance.auth.currentUser?.uid {
                                 self.responseType = .alreadyInvited
                                 self.showMessage = true
                                 return
@@ -87,7 +88,7 @@ struct AddFriendView: View {
                 }
                 
                 //If statement is responsible for checking if invited friend is user's friend already.
-                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)).getDocuments { snapshot, error in
+                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)).getDocuments { snapshot, error in
                     if error != nil {
                         print("Error while retrieving the list of current friends")
                     } else {
@@ -101,19 +102,19 @@ struct AddFriendView: View {
                     }
                 }
                 
-                //If statement is responsible for checking if email adress given by user exists in the database.
+                //If statement is responsible for checking if uid adress given by user exists in the database.
                 FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getUsers()).getDocuments { snapshot, error in
                     if error != nil {
                         print("Error while retrieving the list of users")
                     } else {
-                        var emailExists = false
+                        var uidExists = false
                         for i in snapshot!.documents {
                             if i.documentID == lowerCasedEmail {
-                                emailExists = true
+                                uidExists = true
                                 break
                             }
                         }
-                        if !emailExists {
+                        if !uidExists {
                             self.responseType = .noAccount
                             self.showMessage = true
                             return
@@ -134,7 +135,7 @@ struct AddFriendView: View {
             
             //Depending on which error occurs, users are presented to relevant message.
             Alert (title: Text(self.responseType == .valid ? UIStrings.inviteFriend : UIStrings.invitationError),
-                   message: Text(self.responseType == .emptyField ? UIStrings.mustProvideEmailAddress : self.responseType == .yourEmail ? UIStrings.yourEmailAddress : self.responseType == .requestFromFriend ? UIStrings.alreadySentYouRequest : responseType == .alreadyInvited ? UIStrings.alreadyInvitedThisPerson : responseType ==  .friendsAlready ? UIStrings.alreadyFriends : self.responseType == .noAccount ? UIStrings.accountDoesntExist : self.email),
+                   message: Text(self.responseType == .emptyField ? UIStrings.mustProvideEmailAddress : self.responseType == .yourEmail ? UIStrings.yourEmailAddress : self.responseType == .requestFromFriend ? UIStrings.alreadySentYouRequest : responseType == .alreadyInvited ? UIStrings.alreadyInvitedThisPerson : responseType ==  .friendsAlready ? UIStrings.alreadyFriends : self.responseType == .noAccount ? UIStrings.accountDoesntExist : self.uid),
                    primaryButton: .cancel(Text(responseType == .valid ? UIStrings.cancel : UIStrings.quit)) {
                 if self.responseType == .valid {
                     self.showMessage = false
@@ -150,7 +151,7 @@ struct AddFriendView: View {
                 } else {
                     self.showMessage = false
                     self.responseType = .valid
-                    self.email = UIStrings.emptyString
+                    self.uid = UIStrings.emptyString
                 }
             }
             )
@@ -162,7 +163,7 @@ struct AddFriendView: View {
      */
     func sendRequest() {
         
-        FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getRequests(email: email.lowercased()))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)").setData([
+        FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getRequests(uid: uid))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)").setData([
             "email": FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
             "deletedAccount": false
         ])

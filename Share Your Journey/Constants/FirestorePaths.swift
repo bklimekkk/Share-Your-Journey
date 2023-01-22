@@ -13,15 +13,15 @@ struct FirestorePaths {
         return "users"
     }
 
-    static func myJourneys(email: String) -> String {
-        return "users/\(email)/friends/\(email)/journeys"
+    static func myJourneys(uid: String) -> String {
+        return "users/\(uid)/friends/\(uid)/journeys"
     }
 
-    static func getFriends(email: String) -> String {
-        return "users/\(email)/friends"
+    static func getFriends(uid: String) -> String {
+        return "users/\(uid)/friends"
     }
 
-    static func getRequests(email: String) -> String {
-        return "users/\(email)/requests"
+    static func getRequests(uid: String) -> String {
+        return "users/\(uid)/requests"
     }
 }

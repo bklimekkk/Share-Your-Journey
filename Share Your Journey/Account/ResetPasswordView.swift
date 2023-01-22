@@ -29,7 +29,7 @@ struct ResetPasswordView: View {
                     self.errorManager.showErrorMessage = true
                     return
                 }
-                //Sending a password-reset message to a given email address.
+                //Sending a password-reset message to a given uid address.
                 FirebaseSetup.firebaseInstance.auth.sendPasswordReset(withEmail: self.email) { error in
                     if error != nil {
                         print(UIStrings.resetPasswordEmailError)
@@ -40,7 +40,7 @@ struct ResetPasswordView: View {
             } label: {
                 ButtonView(buttonTitle: UIStrings.resetPassword)
             }
-            .alert(UIStrings.emailFieldIsEmpty,
+            .alert(UIStrings.uidFieldIsEmpty,
                    isPresented: self.$errorManager.showErrorMessage,
                    actions: {},
                    message: {

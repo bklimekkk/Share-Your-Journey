@@ -14,8 +14,8 @@ struct SendViewedJourneyView: View {
     @State private var listOfFriends: [String] = []
     @State private var showDuplicationAlert = false
     @State private var sendDuplicate = false
-    var email: String {
-        FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
+    var uid: String {
+        FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString
     }
     var body: some View {
         NavigationView {
@@ -24,7 +24,7 @@ struct SendViewedJourneyView: View {
                     Text(friend)
                         .padding(.vertical, 15)
                         .onTapGesture {
-                            FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(email: self.email))/\(friend)/journeys").getDocuments { querySnapshot, error in
+                            FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(uid: self.uid))/\(friend)/journeys").getDocuments { querySnapshot, error in
                                 if let error = error {
                                     print(error.localizedDescription)
                                 } else {
@@ -71,13 +71,13 @@ struct SendViewedJourneyView: View {
                 Text(UIStrings.journeyAlreadyExists)
             })
             .task {
-                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(email: self.email)).getDocuments { querySnapshot, error in
+                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(uid: self.uid)).getDocuments { querySnapshot, error in
                     if let error = error {
                         print(error.localizedDescription)
                     } else {
                         for i in querySnapshot!.documents {
-                            if i.documentID != self.email {
-                                FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(email: self.email))/\(i)/journeys").getDocuments() { querySnapshot, error in
+                            if i.documentID != self.uid {
+                                FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(uid: self.uid))/\(i)/journeys").getDocuments() { querySnapshot, error in
                                     if let error = error {
                                         print(error.localizedDescription)
                                     } else {

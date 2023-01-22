@@ -43,7 +43,7 @@ struct ListWithDownloadedJourneys: View {
                                     .foregroundColor(.gray)
                             }
                             NavigationLink (destination: SeeJourneyView(journey: journey,
-                                                                        email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
+                                                                        uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString,
                                                                         downloadMode: true,
                                                                         path: UIStrings.emptyString)) {
                                 EmptyView()
@@ -84,13 +84,13 @@ struct ListWithDownloadedJourneys: View {
     func populateWithDownloadedJourneys() {
         
         //Function checks which user is currently logged in. If new user has logged into the application, program clears the array.
-        if self.downloadedJourneysList.count > 0 && self.downloadedJourneysList[0].email != FirebaseSetup.firebaseInstance.auth.currentUser?.email {
+        if self.downloadedJourneysList.count > 0 && self.downloadedJourneysList[0].uid != FirebaseSetup.firebaseInstance.auth.currentUser?.uid {
             self.downloadedJourneysList = []
         }
 
-        for i in self.journeys.filter({return $0.email == FirebaseSetup.firebaseInstance.auth.currentUser?.email}) {
+        for i in self.journeys.filter({return $0.uid == FirebaseSetup.firebaseInstance.auth.currentUser?.uid}) {
             if !self.downloadedJourneysList.map({return $0.name}).contains(i.name) {
-                self.downloadedJourneysList.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
+                self.downloadedJourneysList.append(SingleJourney(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString,
                                                                  name: i.name ?? UIStrings.emptyString,
                                                                  place: i.place ?? UIStrings.emptyString,
                                                                  date: i.date ?? Date(),

@@ -94,15 +94,15 @@ struct SettingsView: View {
             })
             .alert(UIStrings.accountDeletion, isPresented: self.$askAboutAccountDeletion) {
                 Button(UIStrings.deleteAccount, role: .destructive) {
-                    let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
-                    FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.myJourneys(email: email)).getDocuments { querySnapshot, error in
+                    let uid = FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString
+                    FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.myJourneys(uid: uid)).getDocuments { querySnapshot, error in
                         if let error = error {
                             print(error.localizedDescription)
                         } else {
                             for i in querySnapshot!.documents {
                                 let photosNumber = i.get("photosNumber") as? Int ?? IntConstants.defaultValue
                                 for j in 0...photosNumber - 1 {
-                                    let deleteReference = FirebaseSetup.firebaseInstance.storage.reference().child("\(email)/\(i.documentID)/\(j)")
+                                    let deleteReference = FirebaseSetup.firebaseInstance.storage.reference().child("\(uid)/\(i.documentID)/\(j)")
                                     deleteReference.delete { error in
                                         if let error = error {
                                             print(error.localizedDescription)
@@ -113,29 +113,29 @@ struct SettingsView: View {
                         }
                     }
                     FirebaseSetup.firebaseInstance.auth.currentUser?.delete()
-                    FirebaseSetup.firebaseInstance.db.collection("users").document(email).updateData(["deletedAccount" : true]) { error in
+                    FirebaseSetup.firebaseInstance.db.collection("users").document(uid).updateData(["deletedAccount" : true]) { error in
                         if let error = error {
                             print(error.localizedDescription)
                         }
                     }
                     
-                    FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(email: email)).getDocuments { querySnapshot, error in
+                    FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(uid: uid)).getDocuments { querySnapshot, error in
                         if let error = error {
                             print(error.localizedDescription)
                         } else {
                             for i in querySnapshot!.documents {
-                                if i.documentID != email {
-                                    let accountReference = FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(email: i.documentID)).document(email)
+                                if i.documentID != uid {
+                                    let accountReference = FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(uid: i.documentID)).document(uid)
                                     accountReference.updateData(["deletedAccount" : true])
-                                    FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(email: email))/\(i.documentID)/journeys").getDocuments { querySnapshot, error in
+                                    FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(uid: uid))/\(i.documentID)/journeys").getDocuments { querySnapshot, error in
                                         if let error = error {
                                             print(error.localizedDescription)
                                         } else {
                                             for j in querySnapshot!.documents {
                                                 if j.documentID != "-" {
-                                                    FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(email: email))/\(i.documentID)/journeys").document(j.documentID).updateData(["deletedJourney" : true])
-                                                    //                                                    deleteAllPhotos(path: "users/\(email)/friends/\(i.documentID)/journeys", journeyToDelete: j.documentID)
-                                                    //                                                    deleteJourneyFromServer(path: "users/\(email)/friends/\(i.documentID)/journeys", journeyToDelete: j.documentID)
+                                                    FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(uid: uid))/\(i.documentID)/journeys").document(j.documentID).updateData(["deletedJourney" : true])
+                                                    //                                                    deleteAllPhotos(path: "users/\(uid)/friends/\(i.documentID)/journeys", journeyToDelete: j.documentID)
+                                                    //                                                    deleteJourneyFromServer(path: "users/\(uid)/friends/\(i.documentID)/journeys", journeyToDelete: j.documentID)
                                                 }
                                             }
                                         }
@@ -144,15 +144,15 @@ struct SettingsView: View {
                                     
                                 }
                                 
-                                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.myJourneys(email: email)).getDocuments { querySnapshot, error in
+                                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.myJourneys(uid: uid)).getDocuments { querySnapshot, error in
                                     if let error = error {
                                         print(error.localizedDescription)
                                     } else {
                                         for i in querySnapshot!.documents {
                                             if i.documentID != "-" {
-                                                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.myJourneys(email: email)).document(i.documentID).updateData(["deletedJourney" : true])
-                                                //                                                deleteAllPhotos(path: "users/\(email)/friends/\(email)/journeys", journeyToDelete: i.documentID)
-                                                //                                                deleteJourneyFromServer(path: "users/\(email)/friends/\(email)/journeys", journeyToDelete: i.documentID)
+                                                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.myJourneys(uid: uid)).document(i.documentID).updateData(["deletedJourney" : true])
+                                                //                                                deleteAllPhotos(path: "users/\(uid)/friends/\(uid)/journeys", journeyToDelete: i.documentID)
+                                                //                                                deleteJourneyFromServer(path: "users/\(uid)/friends/\(uid)/journeys", journeyToDelete: i.documentID)
                                             }
                                         }
                                     }

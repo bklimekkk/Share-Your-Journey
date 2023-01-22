@@ -36,7 +36,7 @@ struct ListWithFriends: View {
                                     .padding(.vertical, 15)
                                 Spacer()
                             }
-                            NavigationLink(destination: ChatView(email: friend)) {
+                            NavigationLink(destination: ChatView(uid: friend)) {
                                 EmptyView()
                             }
                             .opacity(0)
@@ -66,14 +66,14 @@ struct ListWithFriends: View {
     func populateFriends(completion: @escaping() -> Void) {
         
         //This block of code ensures that users that are currently logged in, will see their own friends list (even after logging out).
-        let currentEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
+        let currentEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString
         if self.friendsSet.ownEmail != currentEmail {
             self.friendsSet.friendsList = []
             self.friendsSet.ownEmail = currentEmail
         }
         
         //Data is pulled out of the appropriate collection in firestore database and array is populated with it.
-        FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(email: currentEmail)).getDocuments { (querySnapshot, error) in
+        FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(uid: currentEmail)).getDocuments { (querySnapshot, error) in
             completion()
             if error != nil {
                 print(error!.localizedDescription)

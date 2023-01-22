@@ -101,14 +101,14 @@ struct SendJourneyView: View {
      */
     func prepareJourneysToSend(completion: @escaping () -> Void) {
         //First of all, the program fetches all user's journeys that were sent to particular friend from firebase database and stores them in first array.
-        let ownEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.email
-        FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(email: ownEmail ?? UIStrings.emptyString))/\(self.targetEmail)/journeys").getDocuments { (snapshot, error) in
+        let ownEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.uid
+        FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(uid: ownEmail ?? UIStrings.emptyString))/\(self.targetEmail)/journeys").getDocuments { (snapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
                 for i in snapshot!.documents {
                     if(i.documentID != "-") {
-                        self.sentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
+                        self.sentJourneys.append(SingleJourney(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString,
                                                                name: i.documentID,
                                                                place: i.get("place") as? String ?? UIStrings.emptyString,
                                                                date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(),
@@ -118,14 +118,14 @@ struct SendJourneyView: View {
             }
             
             //Then program fetches all user's journeys and populates another array with journeys that can't be found in the previous array (containing journeys already send). In this way program knows which journeys haven't been sent yet and presents them to user.
-            FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(email: ownEmail ?? UIStrings.emptyString))/\(ownEmail ?? UIStrings.emptyString)/journeys").getDocuments { (snapshot, error) in
+            FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(uid: ownEmail ?? UIStrings.emptyString))/\(ownEmail ?? UIStrings.emptyString)/journeys").getDocuments { (snapshot, error) in
                 completion()
                 if error != nil {
                     print(error!.localizedDescription)
                 } else {
                     for i in snapshot!.documents {
                         if !self.sentJourneys.map({$0.name}).contains(i.documentID) {
-                            self.unsentJourneys.append(SingleJourney(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
+                            self.unsentJourneys.append(SingleJourney(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString,
                                                                      name: i.documentID,
                                                                      place: i.get("place") as? String ?? UIStrings.emptyString,
                                                                      date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(),

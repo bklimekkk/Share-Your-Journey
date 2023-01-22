@@ -26,9 +26,9 @@ struct FriendsView: View {
     //Variable responsible for justifying if users want to add new friend at the particular moment.
     @State private var addNewFriend = false
     //Variable contains detalis about user's requests.
-    @State private var requestsSet = RequestsSet(ownEmail: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)
+    @State private var requestsSet = RequestsSet(ownEmail: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)
     //Variable will contain data necessary to populate array with user's friends.
-    @State private var friendsSet = FriendsSet(ownEmail: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)
+    @State private var friendsSet = FriendsSet(ownEmail: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)
     //Variable contains data entered by user while searching both arrays (requests and friends).
     @State private var searchPeople = UIStrings.emptyString
     

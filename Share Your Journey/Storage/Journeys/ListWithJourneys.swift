@@ -48,7 +48,7 @@ struct ListWithJourneys: View {
                                     .foregroundColor(.gray)
                             }
 
-                            NavigationLink (destination: SeeJourneyView(journey: journey, email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString, downloadMode: false, path: "\(FirestorePaths.getFriends(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)/journeys")) {
+                            NavigationLink (destination: SeeJourneyView(journey: journey, uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString, downloadMode: false, path: "\(FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)/journeys")) {
                                 EmptyView()
                             }
                             .opacity(0)
@@ -66,8 +66,8 @@ struct ListWithJourneys: View {
                         self.journeyToDelete = UIStrings.emptyString
                     },
                            secondaryButton: .destructive(Text(UIStrings.delete)) {
-                        let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
-                        let path = "\(FirestorePaths.getFriends(email: email))/\(email)/journeys"
+                        let uid = FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString
+                        let path = "\(FirestorePaths.getFriends(uid: uid))/\(uid)/journeys"
                         //Photos need to be leted from both database and storage, if needed.
                         self.deleteAllPhotos(path: path)
                         self.deleteJourneyFromServer(path: path)
@@ -131,7 +131,7 @@ struct ListWithJourneys: View {
             if self.journeysList[i].name == self.journeyToDelete {
                 if self.deleteFromStorage {
                     for j in 0...self.journeysList[i].numberOfPhotos - 1 {
-                        let deleteReference = FirebaseSetup.firebaseInstance.storage.reference().child("\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)/\(self.journeyToDelete)/\(j)")
+                        let deleteReference = FirebaseSetup.firebaseInstance.storage.reference().child("\(FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)/\(self.journeyToDelete)/\(j)")
                         deleteReference.delete { error in
                             if error != nil {
                                 print("Error while deleting journey from storage")
@@ -151,7 +151,7 @@ struct ListWithJourneys: View {
      Function is responsible for clearing array containing journeys, if user has changed.
      */
     func clearInvalidJourneys() {
-        if self.journeysList.count != 0 && self.journeysList[0].email != FirebaseSetup.firebaseInstance.auth.currentUser?.email {
+        if self.journeysList.count != 0 && self.journeysList[0].uid != FirebaseSetup.firebaseInstance.auth.currentUser?.uid {
             self.journeysList = []
         }
     }
@@ -160,8 +160,8 @@ struct ListWithJourneys: View {
      Function is responsible for adding journeys to array, and refreshing it if needed.
      */
     func updateJourneys(completion: @escaping () -> Void) {
-        let email = FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString
-        let path = "\(FirestorePaths.getFriends(email: email))/\(email)/journeys"
+        let uid = FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString
+        let path = "\(FirestorePaths.getFriends(uid: uid))/\(uid)/journeys"
         
         FirebaseSetup.firebaseInstance.db.collection(path).getDocuments() { (querySnapshot, error) in
             completion()
@@ -170,7 +170,7 @@ struct ListWithJourneys: View {
             } else {
                 for i in querySnapshot!.documents {
                     if !self.journeysList.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as? Bool ?? false) {
-                        self.journeysList.append(SingleJourney(email: i.get("email") as? String ?? UIStrings.emptyString, name: i.documentID, place: i.get("place") as? String ?? UIStrings.emptyString, date: (i.get("date") as? Timestamp)?
+                        self.journeysList.append(SingleJourney(uid: i.get("uid") as? String ?? UIStrings.emptyString, name: i.documentID, place: i.get("place") as? String ?? UIStrings.emptyString, date: (i.get("date") as? Timestamp)?
                             .dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                     }
                 }
@@ -182,14 +182,14 @@ struct ListWithJourneys: View {
      Function is responsible for checking if journey occurs anywhere else in the database. If it doesn't, journey is ready to be deleted from storage as well.
      */
     func checkBeforeDeletion(journey: SingleJourney) {
-        let friendsPath = FirestorePaths.getFriends(email: FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)
+        let friendsPath = FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)
         
         FirebaseSetup.firebaseInstance.db.collection(friendsPath).getDocuments { snapshot, error in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
                 for i in snapshot!.documents {
-                    if i.documentID != FirebaseSetup.firebaseInstance.auth.currentUser?.email {
+                    if i.documentID != FirebaseSetup.firebaseInstance.auth.currentUser?.uid {
                         FirebaseSetup.firebaseInstance.db.collection("\(friendsPath)/\(i.documentID)/journeys").getDocuments {
                             journeySnapshot, error in
                             if error != nil {

@@ -22,7 +22,7 @@ struct FriendJourneysList: View {
     }
     
     //Friend's e-mail address.
-    var email: String
+    var uid: String
     
     var body: some View {
         VStack {
@@ -49,7 +49,7 @@ struct FriendJourneysList: View {
                                     .foregroundColor(.gray)
                             }
                             //NavigationLink's destination property is set to struct responsible for showing the relevant journey.
-                            NavigationLink(destination: SeeJourneyView(journey: journey, email: self.email, downloadMode: false, path: "\(FirestorePaths.getFriends(email: self.email))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)/journeys")){
+                            NavigationLink(destination: SeeJourneyView(journey: journey, uid: self.uid, downloadMode: false, path: "\(FirestorePaths.getFriends(uid: self.uid))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)/journeys")){
                                 EmptyView()
                             }
                             .opacity(0)
@@ -77,7 +77,7 @@ struct FriendJourneysList: View {
      Function is responsible for populating the array with journeys sent by friend.
      */
     func populateFriendsJourneys(completion: @escaping () -> Void) {
-        let path = "\(FirestorePaths.getFriends(email: self.email))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString)/journeys"
+        let path = "\(FirestorePaths.getFriends(uid: self.uid))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)/journeys"
         FirebaseSetup.firebaseInstance.db.collection(path).getDocuments() { (querySnapshot, error) in
             completion()
             if error != nil {
@@ -86,7 +86,7 @@ struct FriendJourneysList: View {
                 let receivedJourneys = querySnapshot!.documents
                 for i in receivedJourneys {
                     if !self.sentByFriend.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as? Bool ?? false) {
-                        self.sentByFriend.append(SingleJourney(email: email,
+                        self.sentByFriend.append(SingleJourney(uid: uid,
                                                                name: i.documentID,
                                                                place: i.get("place") as? String ?? UIStrings.emptyString,
                                                                date: (i.get("date") as? Timestamp)?.dateValue() ?? Date.now,

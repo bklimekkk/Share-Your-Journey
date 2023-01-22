@@ -18,7 +18,7 @@ extension Journey {
 
     @NSManaged public var name: String?
     @NSManaged public var place: String?
-    @NSManaged public var email: String?
+    @NSManaged public var uid: String?
     @NSManaged public var date: Date?
     @NSManaged public var operationDate: Date?
     @NSManaged public var photosNumber: NSNumber?

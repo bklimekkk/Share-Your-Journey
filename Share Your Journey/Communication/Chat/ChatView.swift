@@ -41,8 +41,8 @@ struct ChatView: View {
         }
     }
     
-    //Friend's email adress.
-    var email: String
+    //Friend's uid adress.
+    var uid: String
     
     var body: some View {
         VStack (spacing: 0) {
@@ -59,7 +59,7 @@ struct ChatView: View {
                 YourJourneysList(searchJourney: self.$searchJourney,
                                  sendJourneyScreen: self.$sendJourneyScreen,
                                  askAboutDeletion: self.$askAboutDeletion,
-                                 sentByYou: self.$sentByYou, email: self.email,
+                                 sentByYou: self.$sentByYou, uid: self.uid,
                                  sentByYouFiltered: self.sentByYouFiltered)
                 Divider()
                 Spacer()
@@ -76,10 +76,10 @@ struct ChatView: View {
                 FriendJourneysList(searchJourney: self.$searchJourney,
                                    sentByFriend: self.$sentByFriend,
                                    sentByFriendFiltered: self.sentByFriendFiltered,
-                                   email: self.email)
+                                   uid: self.uid)
             }
         }
-        .navigationTitle(self.email)
+        .navigationTitle(self.uid)
         .navigationBarTitleDisplayMode(.inline)
     }
 }

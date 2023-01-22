@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-//Struct used for generating keyboard of email type.
+//Struct used for generating keyboard of uid type.
 struct EmailTextField: View {
     var label: String
     var email: Binding<String>

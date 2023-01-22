@@ -36,7 +36,7 @@ class AccountAccessManager: ObservableObject {
     @Published var resetPassword = false
     //Variable justifies if screen should present users with reset password message.
     @Published var passwordResetAlert = false
-    //Email that users are supposed to enter in order for the application to send reset email.
+    //Email that users are supposed to enter in order for the application to send reset uid.
     @Published var resetEmail = UIStrings.emptyString
 }
 
@@ -52,7 +52,7 @@ struct LoginView: View {
     let defaults = UserDefaults.standard
     //Variable checks if user uses the application for the first time. If yes, it will show the initial instructions.
     @AppStorage("showInstructions") var showInstructions: Bool = true
-    //Variables represent user's email, password and name, which are used for registration and logging in processes.
+    //Variables represent user's uid, password and name, which are used for registration and logging in processes.
     @State private var email = UIStrings.emptyString
     @State private var password = UIStrings.emptyString
     @State private var repeatedPassword = UIStrings.emptyString
@@ -137,7 +137,7 @@ struct LoginView: View {
             } message: {
                 Text(self.errorManager.errorBody)
             }
-            //Alert is shown to inform users that their password reset email was sent.
+            //Alert is shown to inform users that their password reset uid was sent.
             .alert(UIStrings.passwordResetEmail, isPresented: self.$accountAccessManager.passwordResetAlert, actions: {
                 Button(UIStrings.ok, role: .cancel) {
                     self.accountAccessManager.resetEmail = UIStrings.emptyString
@@ -164,7 +164,7 @@ struct LoginView: View {
      Function is responsible for sending users a verification e-mail after they complete a registration.
      */
     func sendVerificationEmail() {
-        //If users haven't receied verification email, they can click button to re-send it.
+        //If users haven't receied verification uid, they can click button to re-send it.
         FirebaseSetup.firebaseInstance.auth.currentUser?.sendEmailVerification { error in
             if error != nil {
                 print(UIStrings.sendingVerificationError)
@@ -200,7 +200,7 @@ struct LoginView: View {
      Function is responsible for authenticating the user.
      */
     func performLogin(completion: @escaping() -> Void) {
-        //Using firebase as a way to authenticate users by email and passord.
+        //Using firebase as a way to authenticate users by uid and passord.
         FirebaseSetup.firebaseInstance.auth.signIn(withEmail: self.email, password: self.password) { result, error in
             if(error != nil) {
                 self.errorManager.showErrorMessage = true
@@ -215,7 +215,7 @@ struct LoginView: View {
             }
             //As this variable is set to false, logging in screen disappears and users can access the application.
             self.loggedOut = false
-            //As user logs in, default email address and password are set to data they provided.
+            //As user logs in, default uid address and password are set to data they provided.
             self.defaults.set(FirebaseSetup.firebaseInstance.auth.currentUser?.email, forKey: UIStrings.emailKey)
             self.defaults.set(self.password, forKey: UIStrings.passwordKey)
             Purchases.shared.logIn(result!.user.uid) { (customerInfo, created, error) in
@@ -245,7 +245,7 @@ struct LoginView: View {
                 return
             }
             //User is added to the firestore database.
-            self.addUser(email: self.email)
+            self.addUser(email: self.email, uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)
             FirebaseSetup.firebaseInstance.auth.currentUser?.sendEmailVerification { error in
                 if error != nil {
                     print(UIStrings.sendingVerificationError)
@@ -258,34 +258,34 @@ struct LoginView: View {
     /**
      Function is responsible for adding new user to the Firebase server.
      */
-    func addUser(email: String) {
+    func addUser(email: String, uid: String) {
         //Firebase is used to add user's data to the database.
         let instanceReference = FirebaseSetup.firebaseInstance.db
         //Each of three collections in Firebase server needs to be populated with new user's date.
-        instanceReference.document("\(FirestorePaths.getUsers())/\(email)").setData([
+        instanceReference.document("\(FirestorePaths.getUsers())/\(uid)").setData([
             "email": email,
             "deletedAccount": false
         ])
-        instanceReference.document("\(FirestorePaths.getFriends(email: email))/\(email)").setData([
+        instanceReference.document("\(FirestorePaths.getFriends(uid: uid))/\(uid)").setData([
             "email": email,
             "deletedAccount": false
         ])
-        instanceReference.document("\(FirestorePaths.getRequests(email: email))/\(email)").setData([
+        instanceReference.document("\(FirestorePaths.getRequests(uid: uid))/\(uid)").setData([
             "email": email,
             "deletedAccount": false
         ])
-        instanceReference.collection(FirestorePaths.getFriends(email: email)).getDocuments { querySnapshot, error in
+        instanceReference.collection(FirestorePaths.getFriends(uid: uid)).getDocuments { querySnapshot, error in
             if let error = error {
                 print(error.localizedDescription)
             } else {
                 for i in querySnapshot!.documents {
-                    instanceReference.collection(FirestorePaths.getFriends(email: i.documentID)).getDocuments { querySnapshot, error in
+                    instanceReference.collection(FirestorePaths.getFriends(uid: i.documentID)).getDocuments { querySnapshot, error in
                         if let error = error {
                             print(error.localizedDescription)
                         } else {
                             for j in querySnapshot!.documents {
-                                if j.documentID == email {
-                                    instanceReference.collection(FirestorePaths.getFriends(email: i.documentID)).document(email).updateData(["deletedAccount" : false])
+                                if j.documentID == uid {
+                                    instanceReference.collection(FirestorePaths.getFriends(uid: i.documentID)).document(uid).updateData(["deletedAccount" : false])
                                 }
                             }
                         }
