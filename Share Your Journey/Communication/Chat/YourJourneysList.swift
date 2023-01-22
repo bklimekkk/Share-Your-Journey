@@ -108,7 +108,7 @@ struct YourJourneysList: View {
                 self.loadedYourJourneys = true
             })
         }) {
-            SendJourneyView(targetEmail: self.uid)
+            SendJourneyView(targetUID: self.uid)
         }
         .onAppear {
             self.sentByYou = []
@@ -179,8 +179,8 @@ struct YourJourneysList: View {
      Function is responsible for deleting journey from list of journeys sent by user to particular friend.
      */
     func deleteJourneyFromDatabase() {
-        let yourEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString
-        let path = "\(FirestorePaths.getFriends(uid: yourEmail))/\(uid)/journeys"
+        let yourUID = FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString
+        let path = "\(FirestorePaths.getFriends(uid: yourUID))/\(uid)/journeys"
         
         //Before collection is deleted, program needs to delete its all photos references (Collection needs to be empty in order to be deleted eternally).
         FirebaseSetup.firebaseInstance.db.collection("\(path)/\(journeyToDelete)/photos").getDocuments() { (querySnapshot, error) in

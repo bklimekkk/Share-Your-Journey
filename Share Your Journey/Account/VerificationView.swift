@@ -9,7 +9,7 @@ import SwiftUI
 
 struct VerificationInformation: View {
     
-    //A verification message is sent to this e-mail.
+    //A verification message is sent to this email.
     var email: String
     var buttonColor: Color {
         self.colorScheme == .dark ? .white : .blue

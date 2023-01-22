@@ -76,22 +76,22 @@ struct ListWithRequests: View {
     func populateRequests(completion: @escaping() -> Void) {
         
         //Variable controls which user is currently logged in into the application.
-        let currentEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString
+        let currentUID = FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString
         
         //Users can change account while being on the same phone. This statement detects it and refreshes the array accordingly.
-        if self.requestsSet.ownEmail != currentEmail {
+        if self.requestsSet.ownUID != currentUID {
             self.requestsSet.requestsList = []
-            self.requestsSet.ownEmail = currentEmail
+            self.requestsSet.ownUID = currentUID
         }
         
         //Program searches through requests collection in Firebase in order to fetch user's requests.
-        FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(uid: currentEmail)).getDocuments { (querySnapshot, error) in
+        FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(uid: currentUID)).getDocuments { (querySnapshot, error) in
             completion()
             if error != nil {
                 print(error!.localizedDescription)
             } else {
                 for i in querySnapshot!.documents {
-                    if i.documentID != currentEmail && !self.requestsSet.requestsList.contains(i.documentID) {
+                    if i.documentID != currentUID && !self.requestsSet.requestsList.contains(i.documentID) {
                         self.requestsSet.requestsList.append(i.documentID)
                     }
                 }
@@ -125,7 +125,7 @@ struct ListWithRequests: View {
      */
     func acceptRequest(request: String) {
         
-        //Email from which the request was sent from, is added to friends collection in Firestore database.
+        //UID of account from which the request was sent from, is added to friends collection in Firestore database.
         FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString))/\(request)").setData([
             "uid" : request,
             "deletedAccount" : false

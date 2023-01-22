@@ -13,7 +13,7 @@ struct AddFriendView: View {
     //Enum contains all cases in which users can end up while inviting new friend.
     enum InvitationError {
         case valid
-        case yourEmail
+        case yourNickname
         case requestFromFriend
         case emptyField
         case alreadyInvited
@@ -33,26 +33,24 @@ struct AddFriendView: View {
     var body: some View {
         VStack {
             Text(UIStrings.addAFriend)
-            TextField(UIStrings.enterFriendsEmail, text: self.$uid)
+            TextField(UIStrings.enterFriendsNickname, text: self.$uid)
                 .font(.system(size: 20))
             Spacer()
             Button{
-                //Given uid address isn't key sensitive.
-//                let lowerCasedEmail = self.uid.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-                let lowerCasedEmail = self.uid.trimmingCharacters(in: .whitespacesAndNewlines)
+                let nickname = self.uid.trimmingCharacters(in: .whitespacesAndNewlines)
 
                 //Each possibility of error connected with inviting friend is checked and prevented with use of if statements below. Statement's aren't contained in separate functions, because each of them contains return key word, which is supposed to stop action performed by button.
                 
                 //If Statement is responsible for checking if users haven't omit entering data.
-                if lowerCasedEmail == UIStrings.emptyString {
+                if nickname == UIStrings.emptyString {
                     self.responseType = .emptyField
                     self.showMessage = true
                     return
                 }
                 
                 //If statement is responsible for checking if users haven't entered their own uid while inviting a friend.
-                if lowerCasedEmail == FirebaseSetup.firebaseInstance.auth.currentUser?.uid {
-                    self.responseType = .yourEmail
+                if nickname == FirebaseSetup.firebaseInstance.auth.currentUser?.uid {
+                    self.responseType = .yourNickname
                     self.showMessage = true
                     return
                 }
@@ -63,7 +61,7 @@ struct AddFriendView: View {
                         print("Error while retrieving the list of requests")
                     } else {
                         for i in snapshot!.documents {
-                            if i.documentID == lowerCasedEmail {
+                            if i.documentID == nickname {
                                 self.responseType = .requestFromFriend
                                 self.showMessage = true
                                 return
@@ -73,7 +71,7 @@ struct AddFriendView: View {
                 }
                 
                 //If statement is responsible for checking if user haven't sent invitation to friend.
-                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(uid: lowerCasedEmail)).getDocuments { snapshot, error in
+                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(uid: nickname)).getDocuments { snapshot, error in
                     if error != nil {
                         print("Error while retrieving the list of requests")
                     } else {
@@ -93,7 +91,7 @@ struct AddFriendView: View {
                         print("Error while retrieving the list of current friends")
                     } else {
                         for i in snapshot!.documents {
-                            if i.documentID == lowerCasedEmail {
+                            if i.documentID == nickname {
                                 self.responseType = .friendsAlready
                                 self.showMessage = true
                                 return
@@ -109,7 +107,7 @@ struct AddFriendView: View {
                     } else {
                         var uidExists = false
                         for i in snapshot!.documents {
-                            if i.documentID == lowerCasedEmail {
+                            if i.documentID == nickname {
                                 uidExists = true
                                 break
                             }
@@ -135,7 +133,7 @@ struct AddFriendView: View {
             
             //Depending on which error occurs, users are presented to relevant message.
             Alert (title: Text(self.responseType == .valid ? UIStrings.inviteFriend : UIStrings.invitationError),
-                   message: Text(self.responseType == .emptyField ? UIStrings.mustProvideEmailAddress : self.responseType == .yourEmail ? UIStrings.yourEmailAddress : self.responseType == .requestFromFriend ? UIStrings.alreadySentYouRequest : responseType == .alreadyInvited ? UIStrings.alreadyInvitedThisPerson : responseType ==  .friendsAlready ? UIStrings.alreadyFriends : self.responseType == .noAccount ? UIStrings.accountDoesntExist : self.uid),
+                   message: Text(self.responseType == .emptyField ? UIStrings.mustProvideNickname : self.responseType == .yourNickname ? UIStrings.yourNickname : self.responseType == .requestFromFriend ? UIStrings.alreadySentYouRequest : responseType == .alreadyInvited ? UIStrings.alreadyInvitedThisPerson : responseType ==  .friendsAlready ? UIStrings.alreadyFriends : self.responseType == .noAccount ? UIStrings.accountDoesntExist : self.uid),
                    primaryButton: .cancel(Text(responseType == .valid ? UIStrings.cancel : UIStrings.quit)) {
                 if self.responseType == .valid {
                     self.showMessage = false

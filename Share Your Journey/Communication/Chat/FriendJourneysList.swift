@@ -21,7 +21,7 @@ struct FriendJourneysList: View {
         return sentByFriendFiltered.sorted(by: {$0.operationDate > $1.operationDate})
     }
     
-    //Friend's e-mail address.
+    //Friend's uid
     var uid: String
     
     var body: some View {

@@ -9,13 +9,13 @@ import SwiftUI
 
 //Struct responsible for creating a blueprint for variable containing all user's requests data.
 struct RequestsSet {
-    var ownEmail: String
+    var ownUID: String
     var requestsList: [String] = []
 }
 
 //Struct responsible for creating a blueprint for variable containing all user's friends data.
 struct FriendsSet {
-    var ownEmail: String
+    var ownUID: String
     var friendsList: [String] = []
 }
 
@@ -26,9 +26,9 @@ struct FriendsView: View {
     //Variable responsible for justifying if users want to add new friend at the particular moment.
     @State private var addNewFriend = false
     //Variable contains detalis about user's requests.
-    @State private var requestsSet = RequestsSet(ownEmail: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)
+    @State private var requestsSet = RequestsSet(ownUID: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)
     //Variable will contain data necessary to populate array with user's friends.
-    @State private var friendsSet = FriendsSet(ownEmail: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)
+    @State private var friendsSet = FriendsSet(ownUID: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)
     //Variable contains data entered by user while searching both arrays (requests and friends).
     @State private var searchPeople = UIStrings.emptyString
     
@@ -60,7 +60,7 @@ struct FriendsView: View {
             .padding(.vertical)
             .padding(.horizontal, 5)
             
-            SearchField(text: UIStrings.searchEmailAddress, search: self.$searchPeople)
+            SearchField(text: UIStrings.searchNickname, search: self.$searchPeople)
             
             //Depending on what option user has chosen, different lists are persented.
             if self.requestMode {

@@ -5,8 +5,6 @@
 //  Created by Bartosz Klimek on 22/01/2023.
 //  This file is created with help from https://iosapptemplates.com/blog/ios-development/push-notifications-firebase-swift-5 url
 
-import Foundation
-
 import Firebase
 import FirebaseFirestore
 import FirebaseMessaging
@@ -18,6 +16,7 @@ class NotificationManager: NSObject, MessagingDelegate, UNUserNotificationCenter
         self.userID = userID
         super.init()
     }
+
     func registerForPushNotifications() {
         if #available(iOS 10.0, *) {
             // For iOS 10 display notification (sent via APNS)
@@ -36,15 +35,18 @@ class NotificationManager: NSObject, MessagingDelegate, UNUserNotificationCenter
         UIApplication.shared.registerForRemoteNotifications()
         self.updateFirestorePushTokenIfNeeded()
     }
+
     func updateFirestorePushTokenIfNeeded() {
         if let token = Messaging.messaging().fcmToken {
             let usersRef = Firestore.firestore().collection("users").document(userID)
             usersRef.setData(["fcmToken": token], merge: true)
         }
     }
-    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        self.updateFirestorePushTokenIfNeeded()
+
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+      Messaging.messaging().apnsToken = deviceToken
     }
+
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         print(response)
     }

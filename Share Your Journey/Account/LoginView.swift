@@ -118,7 +118,7 @@ struct LoginView: View {
                         self.accountAccessManager.passwordResetAlert = true
                     }
                 } content: {
-                    //In this screen, users are only asked to enter their e-mail address.
+                    //In this screen, users are only asked to enter their email address.
                     ResetPasswordView(resetEmail: self.$accountAccessManager.resetEmail, email: self.email)
                 }
             }
@@ -161,7 +161,7 @@ struct LoginView: View {
     }
     
     /**
-     Function is responsible for sending users a verification e-mail after they complete a registration.
+     Function is responsible for sending users a verification email after they complete a registration.
      */
     func sendVerificationEmail() {
         //If users haven't receied verification uid, they can click button to re-send it.
@@ -223,6 +223,8 @@ struct LoginView: View {
                     print(error.localizedDescription)
                 }
             }
+            let notificationManager = NotificationManager(userID: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? "")
+            notificationManager.registerForPushNotifications()
             completion()
         }
     }

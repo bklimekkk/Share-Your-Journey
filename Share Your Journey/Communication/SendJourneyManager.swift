@@ -12,10 +12,10 @@ struct SendJourneyManager {
     /**
      Function is responsible for sending entire journey to particular user.
      */
-    func sendJourney(journey: SingleJourney, targetEmail: String) {
+    func sendJourney(journey: SingleJourney, targetUID: String) {
         
         //Journey is added to relevant collection in the firestore database (without photos references).
-        FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString))/\(targetEmail)/journeys/\(journey.name)").setData([
+        FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString))/\(targetUID)/journeys/\(journey.name)").setData([
             "name" : journey.name,
             "place": journey.place,
             "uid" : journey.uid,
@@ -31,7 +31,7 @@ struct SendJourneyManager {
             } else {
                 //All photos details are stored inside document representing particular journey.
                 for i in querySnapshot!.documents.sorted(by: { $0["photoNumber"] as? Int ?? IntConstants.defaultValue > $1["photoNumber"] as? Int ?? IntConstants.defaultValue }) {
-                    FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString))/\(targetEmail)/journeys/\(journey.name)/photos/\(i.documentID)").setData([
+                    FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString))/\(targetUID)/journeys/\(journey.name)/photos/\(i.documentID)").setData([
                         "photoUrl": i.get("photoUrl") as? String ?? UIStrings.emptyString,
                         "photoNumber": i.get("photoNumber") as? Int ?? IntConstants.defaultValue,
                         "latitude": i.get("latitude") as? CLLocationDegrees ?? CLLocationDegrees(),

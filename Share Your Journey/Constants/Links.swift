@@ -20,4 +20,5 @@ struct Links {
     static let openWeatherEndpoint = "https://api.openweathermap.org/data/2.5/"
     static let openWeatherAPIKey = "de4cd596a3675b54b7984438a796ad56"
     static let openWeatherImageEndpoint = "https://openweathermap.org/img/wn/"
+    static let messagingServerKey = "AAAAWX5xD4U:APA91bFVEWlhtvoaHs32P6nvmhHvg2PdVIctgFssyaUmCix6fUBdZbnLIHP_CFi4NSfpEcq94_rltczWxmizrZrtaFxaSC5kLpdkigp0T_Ze-ddApvYHwBrKBBO75xa64UFT3yAXtvFz"
 }

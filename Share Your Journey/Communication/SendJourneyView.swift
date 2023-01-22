@@ -15,8 +15,8 @@ struct SendJourneyView: View {
     //Variable used for dismissing sheet that contains current struct.
     @Environment(\.presentationMode) var presentationMode
     
-    //Email address of a friend to which user sends the journey.
-    var targetEmail: String
+    //UID of a friend to which user sends the journey.
+    var targetUID: String
     
     //Arrays contains journeys already sent to particular friend an these that haven't been sent yet.
     @State private var sentJourneys: [SingleJourney] = []
@@ -45,7 +45,7 @@ struct SendJourneyView: View {
                     } else {
                         List(self.filteredUnsentJourneys.sorted(by: {$0.date > $1.date}), id: \.self) { journey in
                             Button {
-                                SendJourneyManager().sendJourney(journey: journey, targetEmail: self.targetEmail)
+                                SendJourneyManager().sendJourney(journey: journey, targetUID: self.targetUID)
 
                                 //After journey is sent, it needs to be deleted from list that gives user a choice of journeys to send.
                                 withAnimation {
@@ -101,8 +101,8 @@ struct SendJourneyView: View {
      */
     func prepareJourneysToSend(completion: @escaping () -> Void) {
         //First of all, the program fetches all user's journeys that were sent to particular friend from firebase database and stores them in first array.
-        let ownEmail = FirebaseSetup.firebaseInstance.auth.currentUser?.uid
-        FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(uid: ownEmail ?? UIStrings.emptyString))/\(self.targetEmail)/journeys").getDocuments { (snapshot, error) in
+        let ownUID = FirebaseSetup.firebaseInstance.auth.currentUser?.uid
+        FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(uid: ownUID ?? UIStrings.emptyString))/\(self.targetUID)/journeys").getDocuments { (snapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
@@ -118,7 +118,7 @@ struct SendJourneyView: View {
             }
             
             //Then program fetches all user's journeys and populates another array with journeys that can't be found in the previous array (containing journeys already send). In this way program knows which journeys haven't been sent yet and presents them to user.
-            FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(uid: ownEmail ?? UIStrings.emptyString))/\(ownEmail ?? UIStrings.emptyString)/journeys").getDocuments { (snapshot, error) in
+            FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(uid: ownUID ?? UIStrings.emptyString))/\(ownUID ?? UIStrings.emptyString)/journeys").getDocuments { (snapshot, error) in
                 completion()
                 if error != nil {
                     print(error!.localizedDescription)

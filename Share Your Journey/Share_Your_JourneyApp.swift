@@ -7,6 +7,7 @@
 
 import SwiftUI
 import RevenueCat
+import Firebase
 
 @main
 struct Share_Your_JourneyApp: App {
@@ -19,6 +20,14 @@ struct Share_Your_JourneyApp: App {
         WindowGroup {
             TabsView()
                 .environment(\.managedObjectContext, journeyDataManager.journeyContainer.viewContext)
+        }
+    }
+
+    class AppDelegate: NSObject, UIApplicationDelegate {
+        func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+            print("Babcia na zawsze")
+            FirebaseApp.configure()
+            return true
         }
     }
     

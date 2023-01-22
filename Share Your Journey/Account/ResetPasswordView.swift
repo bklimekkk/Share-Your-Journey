@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-//Struct contains code responsible for generating a button allowing users to reset their password with their e-mail address, if needed. 
+//Struct contains code responsible for generating a button allowing users to reset their password with their email address, if needed. 
 struct ResetPasswordView: View {
-    //This variable is set to e-mail address given by user.
+    //This variable is set to email address given by user.
     @Binding var resetEmail: String
     //Variable responsible for dismissing reset sheet.
     @Environment(\.dismiss) var dismiss
@@ -40,7 +40,7 @@ struct ResetPasswordView: View {
             } label: {
                 ButtonView(buttonTitle: UIStrings.resetPassword)
             }
-            .alert(UIStrings.uidFieldIsEmpty,
+            .alert(UIStrings.emailFieldIsEmpty,
                    isPresented: self.$errorManager.showErrorMessage,
                    actions: {},
                    message: {

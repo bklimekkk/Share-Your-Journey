@@ -32,7 +32,7 @@ struct SendViewedJourneyView: View {
                                         self.showDuplicationAlert = true
                                         
                                     } else {
-                                        SendJourneyManager().sendJourney(journey: self.journey, targetEmail: friend)
+                                        SendJourneyManager().sendJourney(journey: self.journey, targetUID: friend)
                                         withAnimation {
                                             for i in 0...self.listOfFriends.count - 1 {
                                                 if self.listOfFriends[i] == friend {

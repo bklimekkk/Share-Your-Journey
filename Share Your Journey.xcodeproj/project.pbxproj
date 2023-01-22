@@ -42,6 +42,7 @@
 		8653A2D4280418EB00852374 /* JourneysView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8653A2D3280418EB00852374 /* JourneysView.swift */; };
 		86573E5C27F783D3003E5CF8 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86573E5B27F783D2003E5CF8 /* VerificationView.swift */; };
 		86573E5E27F8370B003E5CF8 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86573E5D27F8370B003E5CF8 /* ResetPasswordView.swift */; };
+		865889EE297EADDB00A0009E /* NotificationSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865889ED297EADDB00A0009E /* NotificationSender.swift */; };
 		8663C26027DE0170007EB1E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */; };
 		8663C26127DE0170007EB1E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */; };
 		8663C26227DE0170007EB1E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */; };
@@ -160,6 +161,7 @@
 		86573E5A27F333DA003E5CF8 /* Share-Your-JourneyUITests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Share-Your-JourneyUITests-Info.plist"; sourceTree = SOURCE_ROOT; };
 		86573E5B27F783D2003E5CF8 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
 		86573E5D27F8370B003E5CF8 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
+		865889ED297EADDB00A0009E /* NotificationSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSender.swift; sourceTree = "<group>"; };
 		8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8665C79029574075007D7354 /* PhotosCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCounterView.swift; sourceTree = "<group>"; };
 		8665C79229574592007D7354 /* SheetDismissButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetDismissButtonView.swift; sourceTree = "<group>"; };
@@ -424,6 +426,7 @@
 			isa = PBXGroup;
 			children = (
 				866ACC89297D7ACE009A333C /* NotificationManager.swift */,
+				865889ED297EADDB00A0009E /* NotificationSender.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -703,6 +706,7 @@
 				8671E6FE2876D24300E4A5AC /* InstructionsView.swift in Sources */,
 				8665C79E2961FF90007D7354 /* IntConstants.swift in Sources */,
 				864FEF4528A7E86C0060E94D /* CurrentLocation+CoreDataClass.swift in Sources */,
+				865889EE297EADDB00A0009E /* NotificationSender.swift in Sources */,
 				86FCCC652810272B005FD678 /* YourJourneysList.swift in Sources */,
 				86FCCC6C28102A75005FD678 /* PausedJourneyModeView.swift in Sources */,
 				86E3AA5629761DF400BD79F1 /* DirectionsView.swift in Sources */,
