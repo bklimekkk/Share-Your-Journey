@@ -63,6 +63,8 @@
 		866A7E1A293221C100CD3340 /* SpotDetailsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A7E19293221C100CD3340 /* SpotDetailsManager.swift */; };
 		866A7E1C29326BF500CD3340 /* PhotoDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */; };
 		866ACC84297C0106009A333C /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866ACC83297C0106009A333C /* HapticFeedback.swift */; };
+		866ACC8A297D7ACE009A333C /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866ACC89297D7ACE009A333C /* NotificationManager.swift */; };
+		866ACC8C297D7BE3009A333C /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 866ACC8B297D7BE3009A333C /* FirebaseMessaging */; };
 		8671E6FE2876D24300E4A5AC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8671E6FD2876D24300E4A5AC /* InstructionsView.swift */; };
 		867254DD27B47B7B00DC5001 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867254DC27B47B7B00DC5001 /* StartView.swift */; };
 		8672551C27B80A9000DC5001 /* TabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8672551B27B80A8F00DC5001 /* TabsView.swift */; };
@@ -172,6 +174,8 @@
 		866A7E19293221C100CD3340 /* SpotDetailsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotDetailsManager.swift; sourceTree = "<group>"; };
 		866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailsView.swift; sourceTree = "<group>"; };
 		866ACC83297C0106009A333C /* HapticFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedback.swift; sourceTree = "<group>"; };
+		866ACC87297D76D8009A333C /* Share Your Journey.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Share Your Journey.entitlements"; sourceTree = "<group>"; };
+		866ACC89297D7ACE009A333C /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		8671E6FD2876D24300E4A5AC /* InstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
 		867254DC27B47B7B00DC5001 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		8672551B27B80A8F00DC5001 /* TabsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsView.swift; sourceTree = "<group>"; };
@@ -215,6 +219,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				866ACC8C297D7BE3009A333C /* FirebaseMessaging in Frameworks */,
 				86640DB627D588DC00F5BE1A /* FirebaseDatabase in Frameworks */,
 				86640DB827D588DC00F5BE1A /* FirebaseFirestore in Frameworks */,
 				862411A62887F683007A86E2 /* RevenueCat in Frameworks */,
@@ -274,6 +279,8 @@
 		862AA45927B14D6C001B9312 /* Share Your Journey */ = {
 			isa = PBXGroup;
 			children = (
+				866ACC88297D7AB1009A333C /* Notifications */,
+				866ACC87297D76D8009A333C /* Share Your Journey.entitlements */,
 				86D02261296B2F66002889B2 /* Extensions */,
 				8665C796295F5A39007D7354 /* Constants */,
 				86D9F71728991DFE0092832E /* Weather */,
@@ -413,6 +420,14 @@
 			path = Constants;
 			sourceTree = "<group>";
 		};
+		866ACC88297D7AB1009A333C /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				866ACC89297D7ACE009A333C /* NotificationManager.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
 		8683852727E95DDB0005FEE2 /* ViewComponents */ = {
 			isa = PBXGroup;
 			children = (
@@ -544,6 +559,7 @@
 				86640DB727D588DC00F5BE1A /* FirebaseFirestore */,
 				86640DB927D588DC00F5BE1A /* FirebaseStorage */,
 				862411A52887F683007A86E2 /* RevenueCat */,
+				866ACC8B297D7BE3009A333C /* FirebaseMessaging */,
 			);
 			productName = "Share Your Journey";
 			productReference = 862AA45727B14D6C001B9312 /* Share Your Journey.app */;
@@ -672,6 +688,7 @@
 				8653A2D4280418EB00852374 /* JourneysView.swift in Sources */,
 				86C649F727D1B43A00891C24 /* Journey+CoreDataProperties.swift in Sources */,
 				8672551E27B80C8A00DC5001 /* FriendsView.swift in Sources */,
+				866ACC8A297D7ACE009A333C /* NotificationManager.swift in Sources */,
 				864FEF4228A7E4010060E94D /* CurrentImage+CoreDataProperties.swift in Sources */,
 				8665C7952958CA50007D7354 /* JourneyControlView.swift in Sources */,
 				864FEEF5289B092D0060E94D /* ForecastModel.swift in Sources */,
@@ -900,6 +917,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Share Your Journey/Share Your Journey.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Share Your Journey/Preview Content\"";
@@ -935,6 +953,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Share Your Journey/Share Your Journey.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Share Your Journey/Preview Content\"";
@@ -1135,6 +1154,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 86640DB027D588DC00F5BE1A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		866ACC8B297D7BE3009A333C /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86640DB027D588DC00F5BE1A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 
