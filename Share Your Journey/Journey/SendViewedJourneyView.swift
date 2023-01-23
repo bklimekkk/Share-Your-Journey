@@ -15,7 +15,7 @@ struct SendViewedJourneyView: View {
     @State private var showDuplicationAlert = false
     @State private var sendDuplicate = false
     var uid: String {
-        FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString
+        Auth.auth().currentUser?.uid ?? UIStrings.emptyString
     }
     var body: some View {
         NavigationView {
@@ -24,7 +24,7 @@ struct SendViewedJourneyView: View {
                     Text(friend)
                         .padding(.vertical, 15)
                         .onTapGesture {
-                            FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(uid: self.uid))/\(friend)/journeys").getDocuments { querySnapshot, error in
+                            Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: self.uid))/\(friend)/journeys").getDocuments { querySnapshot, error in
                                 if let error = error {
                                     print(error.localizedDescription)
                                 } else {
@@ -71,13 +71,13 @@ struct SendViewedJourneyView: View {
                 Text(UIStrings.journeyAlreadyExists)
             })
             .task {
-                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(uid: self.uid)).getDocuments { querySnapshot, error in
+                Firestore.firestore().collection(FirestorePaths.getFriends(uid: self.uid)).getDocuments { querySnapshot, error in
                     if let error = error {
                         print(error.localizedDescription)
                     } else {
                         for i in querySnapshot!.documents {
                             if i.documentID != self.uid {
-                                FirebaseSetup.firebaseInstance.db.collection("\(FirestorePaths.getFriends(uid: self.uid))/\(i)/journeys").getDocuments() { querySnapshot, error in
+                                Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: self.uid))/\(i)/journeys").getDocuments() { querySnapshot, error in
                                     if let error = error {
                                         print(error.localizedDescription)
                                     } else {

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 //Struct responsible for creating a blueprint for variable containing all user's requests data.
 struct RequestsSet {
@@ -26,9 +27,9 @@ struct FriendsView: View {
     //Variable responsible for justifying if users want to add new friend at the particular moment.
     @State private var addNewFriend = false
     //Variable contains detalis about user's requests.
-    @State private var requestsSet = RequestsSet(ownUID: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)
+    @State private var requestsSet = RequestsSet(ownUID: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
     //Variable will contain data necessary to populate array with user's friends.
-    @State private var friendsSet = FriendsSet(ownUID: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)
+    @State private var friendsSet = FriendsSet(ownUID: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
     //Variable contains data entered by user while searching both arrays (requests and friends).
     @State private var searchPeople = UIStrings.emptyString
     

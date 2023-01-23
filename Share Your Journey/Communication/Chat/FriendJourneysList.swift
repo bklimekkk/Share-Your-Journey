@@ -49,7 +49,7 @@ struct FriendJourneysList: View {
                                     .foregroundColor(.gray)
                             }
                             //NavigationLink's destination property is set to struct responsible for showing the relevant journey.
-                            NavigationLink(destination: SeeJourneyView(journey: journey, uid: self.uid, downloadMode: false, path: "\(FirestorePaths.getFriends(uid: self.uid))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)/journeys")){
+                            NavigationLink(destination: SeeJourneyView(journey: journey, uid: self.uid, downloadMode: false, path: "\(FirestorePaths.getFriends(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/journeys")){
                                 EmptyView()
                             }
                             .opacity(0)
@@ -77,8 +77,8 @@ struct FriendJourneysList: View {
      Function is responsible for populating the array with journeys sent by friend.
      */
     func populateFriendsJourneys(completion: @escaping () -> Void) {
-        let path = "\(FirestorePaths.getFriends(uid: self.uid))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)/journeys"
-        FirebaseSetup.firebaseInstance.db.collection(path).getDocuments() { (querySnapshot, error) in
+        let path = "\(FirestorePaths.getFriends(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/journeys"
+        Firestore.firestore().collection(path).getDocuments() { (querySnapshot, error) in
             completion()
             if error != nil {
                 print(error!.localizedDescription)

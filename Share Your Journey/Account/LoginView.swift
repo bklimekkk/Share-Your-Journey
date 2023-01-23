@@ -9,22 +9,6 @@ import Firebase
 import FirebaseStorage
 import RevenueCat
 
-class FirebaseSetup: NSObject {
-    //Objects defined for firebase authentication and database operations.
-    let auth: Auth
-    let db: Firestore
-    let storage: Storage
-    static let firebaseInstance = FirebaseSetup()
-    //Initializing Firebase instance.
-    override init() {
-        FirebaseApp.configure()
-        self.auth = Auth.auth()
-        self.db = Firestore.firestore()
-        self.storage = Storage.storage()
-        super.init()
-    }
-}
-
 class AccountAccessManager: ObservableObject {
     //Variable responsible for checking if first screen is in registration or in login mode.
     @Published var register = false
@@ -165,7 +149,7 @@ struct LoginView: View {
      */
     func sendVerificationEmail() {
         //If users haven't receied verification uid, they can click button to re-send it.
-        FirebaseSetup.firebaseInstance.auth.currentUser?.sendEmailVerification { error in
+        Auth.auth().currentUser?.sendEmailVerification { error in
             if error != nil {
                 print(UIStrings.sendingVerificationError)
             }
@@ -201,7 +185,7 @@ struct LoginView: View {
      */
     func performLogin(completion: @escaping() -> Void) {
         //Using firebase as a way to authenticate users by uid and passord.
-        FirebaseSetup.firebaseInstance.auth.signIn(withEmail: self.email, password: self.password) { result, error in
+        Auth.auth().signIn(withEmail: self.email, password: self.password) { result, error in
             if(error != nil) {
                 self.errorManager.showErrorMessage = true
                 self.errorManager.errorBody = error?.localizedDescription ?? UIStrings.emptyString
@@ -216,14 +200,14 @@ struct LoginView: View {
             //As this variable is set to false, logging in screen disappears and users can access the application.
             self.loggedOut = false
             //As user logs in, default uid address and password are set to data they provided.
-            self.defaults.set(FirebaseSetup.firebaseInstance.auth.currentUser?.email, forKey: UIStrings.emailKey)
+            self.defaults.set(Auth.auth().currentUser?.email, forKey: UIStrings.emailKey)
             self.defaults.set(self.password, forKey: UIStrings.passwordKey)
             Purchases.shared.logIn(result!.user.uid) { (customerInfo, created, error) in
                 if let error = error {
                     print(error.localizedDescription)
                 }
             }
-            let notificationManager = NotificationManager(userID: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? "")
+            let notificationManager = NotificationManager(userID: Auth.auth().currentUser?.uid ?? "")
             notificationManager.registerForPushNotifications()
             completion()
         }
@@ -240,15 +224,15 @@ struct LoginView: View {
             return
         }
         //Firebase is used for creating a new account.
-        FirebaseSetup.firebaseInstance.auth.createUser(withEmail: self.email, password: self.password) { result, error in
+        Auth.auth().createUser(withEmail: self.email, password: self.password) { result, error in
             if error != nil {
                 self.errorManager.showErrorMessage = true
                 self.errorManager.errorBody = error?.localizedDescription ?? UIStrings.emptyString
                 return
             }
             //User is added to the firestore database.
-            self.addUser(email: self.email, uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)
-            FirebaseSetup.firebaseInstance.auth.currentUser?.sendEmailVerification { error in
+            self.addUser(email: self.email, uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
+            Auth.auth().currentUser?.sendEmailVerification { error in
                 if error != nil {
                     print(UIStrings.sendingVerificationError)
                 }
@@ -262,7 +246,7 @@ struct LoginView: View {
      */
     func addUser(email: String, uid: String) {
         //Firebase is used to add user's data to the database.
-        let instanceReference = FirebaseSetup.firebaseInstance.db
+        let instanceReference = Firestore.firestore()
         //Each of three collections in Firebase server needs to be populated with new user's date.
         instanceReference.document("\(FirestorePaths.getUsers())/\(uid)").setData([
             "email": email,

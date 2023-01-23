@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import Firebase
 import RevenueCat
 
 //Struct responsible for presenting users with screen enabling users to start a journey.
@@ -434,7 +435,7 @@ struct StartView: View {
      */
     func logOut() {
         do {
-            try FirebaseSetup.firebaseInstance.auth.signOut()
+            try Auth.auth().signOut()
         } catch let signOutError as NSError {
             print("Error while logging out: \(signOutError)")
         }

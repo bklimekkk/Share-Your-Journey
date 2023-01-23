@@ -48,7 +48,7 @@ struct ListWithJourneys: View {
                                     .foregroundColor(.gray)
                             }
 
-                            NavigationLink (destination: SeeJourneyView(journey: journey, uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString, downloadMode: false, path: "\(FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)/journeys")) {
+                            NavigationLink (destination: SeeJourneyView(journey: journey, uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString, downloadMode: false, path: "\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/journeys")) {
                                 EmptyView()
                             }
                             .opacity(0)
@@ -66,7 +66,7 @@ struct ListWithJourneys: View {
                         self.journeyToDelete = UIStrings.emptyString
                     },
                            secondaryButton: .destructive(Text(UIStrings.delete)) {
-                        let uid = FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString
+                        let uid = Auth.auth().currentUser?.uid ?? UIStrings.emptyString
                         let path = "\(FirestorePaths.getFriends(uid: uid))/\(uid)/journeys"
                         //Photos need to be leted from both database and storage, if needed.
                         self.deleteAllPhotos(path: path)
@@ -99,7 +99,7 @@ struct ListWithJourneys: View {
      Function is responsible for deleting all images' references from firestore database.
      */
     func deleteAllPhotos(path: String) {
-        FirebaseSetup.firebaseInstance.db.collection("\(path)/\(journeyToDelete)/photos").getDocuments() { (querySnapshot, error) in
+        Firestore.firestore().collection("\(path)/\(journeyToDelete)/photos").getDocuments() { (querySnapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
@@ -114,7 +114,7 @@ struct ListWithJourneys: View {
      Function is responsible for deleting journey collection from firestore database.
      */
     func deleteJourneyFromServer(path: String) {
-        FirebaseSetup.firebaseInstance.db.collection(path).document(self.journeyToDelete).delete() { error in
+        Firestore.firestore().collection(path).document(self.journeyToDelete).delete() { error in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
@@ -131,7 +131,7 @@ struct ListWithJourneys: View {
             if self.journeysList[i].name == self.journeyToDelete {
                 if self.deleteFromStorage {
                     for j in 0...self.journeysList[i].numberOfPhotos - 1 {
-                        let deleteReference = FirebaseSetup.firebaseInstance.storage.reference().child("\(FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)/\(self.journeyToDelete)/\(j)")
+                        let deleteReference = Storage.storage().reference().child("\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/\(self.journeyToDelete)/\(j)")
                         deleteReference.delete { error in
                             if error != nil {
                                 print("Error while deleting journey from storage")
@@ -151,7 +151,7 @@ struct ListWithJourneys: View {
      Function is responsible for clearing array containing journeys, if user has changed.
      */
     func clearInvalidJourneys() {
-        if self.journeysList.count != 0 && self.journeysList[0].uid != FirebaseSetup.firebaseInstance.auth.currentUser?.uid {
+        if self.journeysList.count != 0 && self.journeysList[0].uid != Auth.auth().currentUser?.uid {
             self.journeysList = []
         }
     }
@@ -160,10 +160,10 @@ struct ListWithJourneys: View {
      Function is responsible for adding journeys to array, and refreshing it if needed.
      */
     func updateJourneys(completion: @escaping () -> Void) {
-        let uid = FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString
+        let uid = Auth.auth().currentUser?.uid ?? UIStrings.emptyString
         let path = "\(FirestorePaths.getFriends(uid: uid))/\(uid)/journeys"
         
-        FirebaseSetup.firebaseInstance.db.collection(path).getDocuments() { (querySnapshot, error) in
+        Firestore.firestore().collection(path).getDocuments() { (querySnapshot, error) in
             completion()
             if error != nil {
                 print(error!.localizedDescription)
@@ -182,15 +182,15 @@ struct ListWithJourneys: View {
      Function is responsible for checking if journey occurs anywhere else in the database. If it doesn't, journey is ready to be deleted from storage as well.
      */
     func checkBeforeDeletion(journey: SingleJourney) {
-        let friendsPath = FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)
+        let friendsPath = FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
         
-        FirebaseSetup.firebaseInstance.db.collection(friendsPath).getDocuments { snapshot, error in
+        Firestore.firestore().collection(friendsPath).getDocuments { snapshot, error in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
                 for i in snapshot!.documents {
-                    if i.documentID != FirebaseSetup.firebaseInstance.auth.currentUser?.uid {
-                        FirebaseSetup.firebaseInstance.db.collection("\(friendsPath)/\(i.documentID)/journeys").getDocuments {
+                    if i.documentID != Auth.auth().currentUser?.uid {
+                        Firestore.firestore().collection("\(friendsPath)/\(i.documentID)/journeys").getDocuments {
                             journeySnapshot, error in
                             if error != nil {
                                 print(error!.localizedDescription)

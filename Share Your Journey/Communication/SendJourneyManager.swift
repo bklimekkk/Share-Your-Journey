@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Firebase
 import MapKit
 
 struct SendJourneyManager {
@@ -15,7 +16,7 @@ struct SendJourneyManager {
     func sendJourney(journey: SingleJourney, targetUID: String) {
         
         //Journey is added to relevant collection in the firestore database (without photos references).
-        FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString))/\(targetUID)/journeys/\(journey.name)").setData([
+        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(targetUID)/journeys/\(journey.name)").setData([
             "name" : journey.name,
             "place": journey.place,
             "uid" : journey.uid,
@@ -24,14 +25,14 @@ struct SendJourneyManager {
             "operationDate": Date.now,
             "deletedJourney" : false
         ])
-        let path = "\(FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)/journeys/\(journey.name)/photos"
-        FirebaseSetup.firebaseInstance.db.collection(path).getDocuments { (querySnapshot, error) in
+        let path = "\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/journeys/\(journey.name)/photos"
+        Firestore.firestore().collection(path).getDocuments { (querySnapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
                 //All photos details are stored inside document representing particular journey.
                 for i in querySnapshot!.documents.sorted(by: { $0["photoNumber"] as? Int ?? IntConstants.defaultValue > $1["photoNumber"] as? Int ?? IntConstants.defaultValue }) {
-                    FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString))/\(targetUID)/journeys/\(journey.name)/photos/\(i.documentID)").setData([
+                    Firestore.firestore().document("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(targetUID)/journeys/\(journey.name)/photos/\(i.documentID)").setData([
                         "photoUrl": i.get("photoUrl") as? String ?? UIStrings.emptyString,
                         "photoNumber": i.get("photoNumber") as? Int ?? IntConstants.defaultValue,
                         "latitude": i.get("latitude") as? CLLocationDegrees ?? CLLocationDegrees(),

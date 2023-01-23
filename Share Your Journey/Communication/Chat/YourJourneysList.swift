@@ -56,9 +56,9 @@ struct YourJourneysList: View {
                                     .foregroundColor(.gray)
                             }
                             NavigationLink(destination: SeeJourneyView(journey: journey,
-                                                                       uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString,
+                                                                       uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
                                                                        downloadMode: false,
-                                                                       path: "\(FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString))/\(self.uid)/journeys")) {
+                                                                       path: "\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(self.uid)/journeys")) {
                                 EmptyView()
                             }
                             .opacity(0)
@@ -122,8 +122,8 @@ struct YourJourneysList: View {
      Function is responsible for populating array with users' journeys with data from the server.
      */
     func populateYourJourneys(completion: @escaping() -> Void) {
-        let path = "\(FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString))/\(uid)/journeys"
-        FirebaseSetup.firebaseInstance.db.collection(path).getDocuments() { (querySnapshot, error) in
+        let path = "\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(uid)/journeys"
+        Firestore.firestore().collection(path).getDocuments() { (querySnapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
@@ -131,7 +131,7 @@ struct YourJourneysList: View {
                     completion()
                     //If conditions are met, journey's data is appended to the array.
                     if !self.sentByYou.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as? Bool ?? false) {
-                        self.sentByYou.append(SingleJourney(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString,
+                        self.sentByYou.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
                                                             name: i.documentID,
                                                             place: i.get("place") as? String ?? UIStrings.emptyString,
                                                             date: (i.get("date") as? Timestamp)?.dateValue() ?? Date.now,
@@ -147,15 +147,15 @@ struct YourJourneysList: View {
      Function is responsible for searching entire database (appropriate collections) in order to find out if journey's data still exist somewhere in the server.
      */
     func searchJourneyInDatabase(journey: SingleJourney) {
-        let friendsPath = FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)
-        FirebaseSetup.firebaseInstance.db.collection(friendsPath).getDocuments { snapshot, error in
+        let friendsPath = FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
+        Firestore.firestore().collection(friendsPath).getDocuments { snapshot, error in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
                 //Firstly, algorithm searches for all user's friends, then it checks all journeys sent to them by this user.
                 for i in snapshot!.documents {
                     if i.documentID != self.uid {
-                        FirebaseSetup.firebaseInstance.db.collection("\(friendsPath)/\(i.documentID)/journeys").getDocuments { journeySnapshot, error in
+                        Firestore.firestore().collection("\(friendsPath)/\(i.documentID)/journeys").getDocuments { journeySnapshot, error in
                             if error != nil {
                                 print(error!.localizedDescription)
                             } else {
@@ -179,11 +179,11 @@ struct YourJourneysList: View {
      Function is responsible for deleting journey from list of journeys sent by user to particular friend.
      */
     func deleteJourneyFromDatabase() {
-        let yourUID = FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString
+        let yourUID = Auth.auth().currentUser?.uid ?? UIStrings.emptyString
         let path = "\(FirestorePaths.getFriends(uid: yourUID))/\(uid)/journeys"
         
         //Before collection is deleted, program needs to delete its all photos references (Collection needs to be empty in order to be deleted eternally).
-        FirebaseSetup.firebaseInstance.db.collection("\(path)/\(journeyToDelete)/photos").getDocuments() { (querySnapshot, error) in
+        Firestore.firestore().collection("\(path)/\(journeyToDelete)/photos").getDocuments() { (querySnapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
@@ -193,7 +193,7 @@ struct YourJourneysList: View {
             }
         }
         
-        FirebaseSetup.firebaseInstance.db.collection(path).document(journeyToDelete).delete() { error in
+        Firestore.firestore().collection(path).document(journeyToDelete).delete() { error in
             if error != nil {
                 print(error!.localizedDescription)
             }
@@ -207,7 +207,7 @@ struct YourJourneysList: View {
         
         //Each photo is deleted separately.
         for j in 0...numberOfPhotos {
-            let deleteReference = FirebaseSetup.firebaseInstance.storage.reference().child("\(FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)/\(journeyToDelete)/\(j)")
+            let deleteReference = Storage.storage().reference().child("\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/\(journeyToDelete)/\(j)")
             deleteReference.delete { error in
                 if error != nil {
                     print("Error while deleting journey from storage")

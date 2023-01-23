@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 //Struct contains code responsible for generating a button allowing users to reset their password with their email address, if needed. 
 struct ResetPasswordView: View {
@@ -30,7 +31,7 @@ struct ResetPasswordView: View {
                     return
                 }
                 //Sending a password-reset message to a given uid address.
-                FirebaseSetup.firebaseInstance.auth.sendPasswordReset(withEmail: self.email) { error in
+                Auth.auth().sendPasswordReset(withEmail: self.email) { error in
                     if error != nil {
                         print(UIStrings.resetPasswordEmailError)
                     }

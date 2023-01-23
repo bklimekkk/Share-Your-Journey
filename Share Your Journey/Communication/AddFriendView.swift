@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 //Struct is responsible for presenting user with functionality neccessary for inviting a new friend. 
 struct AddFriendView: View {
@@ -49,14 +50,14 @@ struct AddFriendView: View {
                 }
                 
                 //If statement is responsible for checking if users haven't entered their own uid while inviting a friend.
-                if nickname == FirebaseSetup.firebaseInstance.auth.currentUser?.uid {
+                if nickname == Auth.auth().currentUser?.uid {
                     self.responseType = .yourNickname
                     self.showMessage = true
                     return
                 }
                 
                 //If statement is responsible for checking if user's friend haven't sent them invitation.
-                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)).getDocuments { snapshot, error in
+                Firestore.firestore().collection(FirestorePaths.getRequests(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)).getDocuments { snapshot, error in
                     if error != nil {
                         print("Error while retrieving the list of requests")
                     } else {
@@ -71,12 +72,12 @@ struct AddFriendView: View {
                 }
                 
                 //If statement is responsible for checking if user haven't sent invitation to friend.
-                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getRequests(uid: nickname)).getDocuments { snapshot, error in
+                Firestore.firestore().collection(FirestorePaths.getRequests(uid: nickname)).getDocuments { snapshot, error in
                     if error != nil {
                         print("Error while retrieving the list of requests")
                     } else {
                         for i in snapshot!.documents {
-                            if i.documentID == FirebaseSetup.firebaseInstance.auth.currentUser?.uid {
+                            if i.documentID == Auth.auth().currentUser?.uid {
                                 self.responseType = .alreadyInvited
                                 self.showMessage = true
                                 return
@@ -86,7 +87,7 @@ struct AddFriendView: View {
                 }
                 
                 //If statement is responsible for checking if invited friend is user's friend already.
-                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getFriends(uid: FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)).getDocuments { snapshot, error in
+                Firestore.firestore().collection(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)).getDocuments { snapshot, error in
                     if error != nil {
                         print("Error while retrieving the list of current friends")
                     } else {
@@ -101,7 +102,7 @@ struct AddFriendView: View {
                 }
                 
                 //If statement is responsible for checking if uid adress given by user exists in the database.
-                FirebaseSetup.firebaseInstance.db.collection(FirestorePaths.getUsers()).getDocuments { snapshot, error in
+                Firestore.firestore().collection(FirestorePaths.getUsers()).getDocuments { snapshot, error in
                     if error != nil {
                         print("Error while retrieving the list of users")
                     } else {
@@ -161,8 +162,8 @@ struct AddFriendView: View {
      */
     func sendRequest() {
         
-        FirebaseSetup.firebaseInstance.db.document("\(FirestorePaths.getRequests(uid: uid))/\(FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString)").setData([
-            "email": FirebaseSetup.firebaseInstance.auth.currentUser?.email ?? UIStrings.emptyString,
+        Firestore.firestore().document("\(FirestorePaths.getRequests(uid: uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)").setData([
+            "email": Auth.auth().currentUser?.email ?? UIStrings.emptyString,
             "deletedAccount": false
         ])
         self.showMessage = false

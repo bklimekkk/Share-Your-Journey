@@ -317,7 +317,7 @@ struct SeeJourneyView: View {
      */
     func getJourneyDetails() {
         let fullPhotosPath = "\(self.path)/\(self.journey.name)/photos"
-        FirebaseSetup.firebaseInstance.db.collection(fullPhotosPath).getDocuments { (querySnapshot, error) in
+        Firestore.firestore().collection(fullPhotosPath).getDocuments { (querySnapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
@@ -335,7 +335,7 @@ struct SeeJourneyView: View {
     func getDownloadedJourneyDetails() {
         for i in self.journeys {
             if i.name == self.journey.name {
-                self.journey.uid = FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString
+                self.journey.uid = Auth.auth().currentUser?.uid ?? UIStrings.emptyString
                 self.journey.numberOfPhotos = i.photosArray.count
                 for index in 0...i.photosArray.count - 1 {
                     let singlePhoto = SinglePhoto(number: index, photo: i.photosArray[index].getImage)
@@ -383,7 +383,7 @@ struct SeeJourneyView: View {
                                                                    longitude: queryDocumentSnapshot.get("longitude") as? CLLocationDegrees ?? CLLocationDegrees()))
         
         //Image's reverence / url is used for downloading image from storage later on.
-        let photoReference = FirebaseSetup.firebaseInstance.storage.reference().child(queryDocumentSnapshot.get("photoUrl") as? String ?? UIStrings.emptyString)
+        let photoReference = Storage.storage().reference().child(queryDocumentSnapshot.get("photoUrl") as? String ?? UIStrings.emptyString)
         
         //Image is downloaded from the storage.
         photoReference.downloadURL { url, error in
@@ -428,7 +428,7 @@ struct SeeJourneyView: View {
         let newJourney = Journey(context: self.moc)
         newJourney.name = journey.name
         newJourney.place = journey.place
-        newJourney.uid = FirebaseSetup.firebaseInstance.auth.currentUser?.uid
+        newJourney.uid = Auth.auth().currentUser?.uid
         newJourney.date = journey.date
         newJourney.operationDate = Date.now
         newJourney.photosNumber = (journey.numberOfPhotos) as NSNumber
@@ -462,31 +462,30 @@ struct SeeJourneyView: View {
      Function is responsible for creating a new journey document in journeys collection in the firestore database. (Function also exists in SaveJourneyView).
      */
     func createJourney() {
-        let instanceReference = FirebaseSetup.firebaseInstance
-        instanceReference.db.collection("\(FirestorePaths.getFriends(uid: instanceReference.auth.currentUser?.uid ?? UIStrings.emptyString))/\(instanceReference.auth.currentUser?.uid ?? UIStrings.emptyString)/journeys").document(self.journey.name).setData([
+        Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/journeys").document(self.journey.name).setData([
             "name" : self.journey.name,
             "place" : self.journey.place,
-            "uid" : FirebaseSetup.firebaseInstance.auth.currentUser?.uid ?? UIStrings.emptyString,
+            "uid" : Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
             "photosNumber" : self.journey.numberOfPhotos,
             "date" : Date(),
             "deletedJourney" : false
         ])
         for index in 0...self.journey.photosLocations.count - 1 {
-            self.uploadPhoto(index: index, instanceReference: instanceReference)
+            self.uploadPhoto(index: index)
         }
     }
     
     /**
      Function is responsible for uploading an image to the firebase storage and adding its details to firestore database. (Function also exists in SaveJourneyView).
      */
-    func uploadPhoto(index: Int, instanceReference: FirebaseSetup) {
+    func uploadPhoto(index: Int) {
         guard let photo = self.journey.photos.sorted(by: {$1.number > $0.number}).map({$0.photo})[index].jpegData(compressionQuality: 0.2) else {
             return
         }
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpeg"
-        let photoReference = "\(instanceReference.auth.currentUser?.uid ?? "")/\(journey.name)/\(index)"
-        let storageReference = instanceReference.storage.reference(withPath: photoReference)
+        let photoReference = "\(Auth.auth().currentUser?.uid ?? "")/\(journey.name)/\(index)"
+        let storageReference = Storage.storage().reference(withPath: photoReference)
         
         //Storage is populated with the image.
         storageReference.putData(photo, metadata: metaData) { metaData, error in
@@ -495,7 +494,7 @@ struct SeeJourneyView: View {
             }
             
             //Image's details are added to appropriate collection in firetore's database.
-            instanceReference.db.document("users/\(instanceReference.auth.currentUser?.uid ?? "")/friends/\(instanceReference.auth.currentUser?.uid ?? "")/journeys/\(self.journey.name)/photos/\(index)").setData([
+            Firestore.firestore().document("users/\(Auth.auth().currentUser?.uid ?? "")/friends/\(Auth.auth().currentUser?.uid ?? "")/journeys/\(self.journey.name)/photos/\(index)").setData([
                 "latitude": self.journey.photosLocations[index].latitude,
                 "longitude": self.journey.photosLocations[index].longitude,
                 "photoUrl": photoReference,
