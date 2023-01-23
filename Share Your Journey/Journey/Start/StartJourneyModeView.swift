@@ -27,8 +27,5 @@ struct StartJourneyModeView: View {
     func startJourney() {
         self.currentLocationManager.recenterLocation()
             self.startedJourney = true
-        let sender = NotificationSender()
-        sender.sendPushNotification(to: "e5TFxN0lJ06pl32dYFzKlN:APA91bGKNylhMl1gb0Xk3kcSf1ak77ZDS1FldyOuX-cajph33LRYdy3x0tdrx3q4AtbS6S2zKxsKDm6EZ7-S4-bRUCdCexrbn94SddGcsEM-kFb-cg7lO4wvPwKTHmNlgdaLuNw8gnG5", title: "Notification title", body: "Notification body")
-
     }
 }

@@ -207,8 +207,6 @@ struct LoginView: View {
                     print(error.localizedDescription)
                 }
             }
-            let notificationManager = NotificationManager(userID: Auth.auth().currentUser?.uid ?? "")
-            notificationManager.registerForPushNotifications()
             completion()
         }
     }
