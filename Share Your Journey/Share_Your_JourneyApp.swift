@@ -76,7 +76,6 @@ extension AppDelegate: MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
 
         let dataDict: [String: String] = ["token": fcmToken ?? ""]
-        //Store token in Firestore For Sending Notifications From Server in Future
         print(dataDict)
     }
 }

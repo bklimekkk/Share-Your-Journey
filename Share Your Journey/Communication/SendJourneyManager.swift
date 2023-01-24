@@ -51,5 +51,6 @@ struct SendJourneyManager {
                 }
             }
         }
+        NotificationSender.sendNotification(uid: targetUID, title: "New Journey", body: "\(targetUID) just sent you a journey")
     }
 }

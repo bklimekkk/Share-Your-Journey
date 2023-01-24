@@ -162,12 +162,13 @@ struct AddFriendView: View {
      */
     func sendRequest() {
         
-        Firestore.firestore().document("\(FirestorePaths.getRequests(uid: uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)").setData([
+        Firestore.firestore().document("\(FirestorePaths.getRequests(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)").setData([
             "email": Auth.auth().currentUser?.email ?? UIStrings.emptyString,
             "deletedAccount": false
         ])
         self.showMessage = false
         self.sheetIsPresented = false
+        NotificationSender.sendNotification(uid: self.uid, title: "Friend invitation", body: "\(self.uid) just sent you a friend invitation")
     }
 }
 

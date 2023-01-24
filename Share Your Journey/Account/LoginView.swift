@@ -7,6 +7,7 @@
 import SwiftUI
 import Firebase
 import FirebaseStorage
+import FirebaseMessaging
 import RevenueCat
 
 class AccountAccessManager: ObservableObject {
@@ -207,6 +208,9 @@ struct LoginView: View {
                     print(error.localizedDescription)
                 }
             }
+            let token = Messaging.messaging().fcmToken
+            let usersRef = Firestore.firestore().collection("users").document(Auth.auth().currentUser?.uid ?? "")
+            usersRef.setData(["fcmToken": token ?? ""], merge: true)
             completion()
         }
     }

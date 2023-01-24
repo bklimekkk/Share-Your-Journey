@@ -64,7 +64,6 @@
 		866A7E1A293221C100CD3340 /* SpotDetailsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A7E19293221C100CD3340 /* SpotDetailsManager.swift */; };
 		866A7E1C29326BF500CD3340 /* PhotoDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */; };
 		866ACC84297C0106009A333C /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866ACC83297C0106009A333C /* HapticFeedback.swift */; };
-		866ACC8A297D7ACE009A333C /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866ACC89297D7ACE009A333C /* NotificationManager.swift */; };
 		866ACC8C297D7BE3009A333C /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 866ACC8B297D7BE3009A333C /* FirebaseMessaging */; };
 		8671E6FE2876D24300E4A5AC /* InstructionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8671E6FD2876D24300E4A5AC /* InstructionsView.swift */; };
 		867254DD27B47B7B00DC5001 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867254DC27B47B7B00DC5001 /* StartView.swift */; };
@@ -177,7 +176,6 @@
 		866A7E1B29326BF500CD3340 /* PhotoDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoDetailsView.swift; sourceTree = "<group>"; };
 		866ACC83297C0106009A333C /* HapticFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedback.swift; sourceTree = "<group>"; };
 		866ACC87297D76D8009A333C /* Share Your Journey.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Share Your Journey.entitlements"; sourceTree = "<group>"; };
-		866ACC89297D7ACE009A333C /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		8671E6FD2876D24300E4A5AC /* InstructionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionsView.swift; sourceTree = "<group>"; };
 		867254DC27B47B7B00DC5001 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		8672551B27B80A8F00DC5001 /* TabsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsView.swift; sourceTree = "<group>"; };
@@ -425,7 +423,6 @@
 		866ACC88297D7AB1009A333C /* Notifications */ = {
 			isa = PBXGroup;
 			children = (
-				866ACC89297D7ACE009A333C /* NotificationManager.swift */,
 				865889ED297EADDB00A0009E /* NotificationSender.swift */,
 			);
 			path = Notifications;
@@ -691,7 +688,6 @@
 				8653A2D4280418EB00852374 /* JourneysView.swift in Sources */,
 				86C649F727D1B43A00891C24 /* Journey+CoreDataProperties.swift in Sources */,
 				8672551E27B80C8A00DC5001 /* FriendsView.swift in Sources */,
-				866ACC8A297D7ACE009A333C /* NotificationManager.swift in Sources */,
 				864FEF4228A7E4010060E94D /* CurrentImage+CoreDataProperties.swift in Sources */,
 				8665C7952958CA50007D7354 /* JourneyControlView.swift in Sources */,
 				864FEEF5289B092D0060E94D /* ForecastModel.swift in Sources */,
