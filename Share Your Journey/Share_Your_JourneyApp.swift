@@ -9,6 +9,7 @@ import SwiftUI
 import RevenueCat
 import Firebase
 import FirebaseMessaging
+import NotificationCenter
 
 @main
 struct Share_Your_JourneyApp: App {
@@ -24,9 +25,9 @@ struct Share_Your_JourneyApp: App {
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     let gcmMessageIDKey = "gcm.messagge_id"
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         print("Babcia na zawsze")
+        UITabBar.appearance().backgroundColor = Colors.tabViewColor
         self.setupRevenueCat()
         FirebaseApp.configure()
 
@@ -44,9 +45,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         return true
     }
 
-    func application(_ application: UIApplication,
-                     didReceiveRemoteNotification userInfo: [AnyHashable: Any]) async
-    -> UIBackgroundFetchResult {
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) async -> UIBackgroundFetchResult {
         //Do something with message data here
         if let messageID = userInfo[gcmMessageIDKey] {
             print("Message ID: \(messageID)")
@@ -101,8 +100,11 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse) async {
-        let userInfo = response.notification.request.content.userInfo
-        print(userInfo)
+        let content = response.notification.request.content
+        let title = content.title
+        let body = content.body
+        NotificationSetup.shared.notificationType = title == UIStrings.friendInvitationNotificationTitle ? .invitation : .journey
+        NotificationSetup.shared.sender = body.components(separatedBy: " ").first ?? ""
+        print("sender: \(NotificationSetup.shared.sender ?? "")")
     }
 }
-

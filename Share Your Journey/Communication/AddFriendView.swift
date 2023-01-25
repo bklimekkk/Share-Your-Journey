@@ -11,17 +11,6 @@ import Firebase
 //Struct is responsible for presenting user with functionality neccessary for inviting a new friend. 
 struct AddFriendView: View {
     
-    //Enum contains all cases in which users can end up while inviting new friend.
-    enum InvitationError {
-        case valid
-        case yourNickname
-        case requestFromFriend
-        case emptyField
-        case alreadyInvited
-        case friendsAlready
-        case noAccount
-    }
-    
     //Variable described in ChatView struct.
     @Binding var sheetIsPresented: Bool
     //Friend's uid address.
@@ -168,7 +157,9 @@ struct AddFriendView: View {
         ])
         self.showMessage = false
         self.sheetIsPresented = false
-        NotificationSender.sendNotification(uid: self.uid, title: "Friend invitation", body: "\(self.uid) just sent you a friend invitation")
+        NotificationSender.sendNotification(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
+                                            title: UIStrings.friendInvitationNotificationTitle,
+                                            body: "\(self.uid) just sent you a friend invitation")
     }
 }
 

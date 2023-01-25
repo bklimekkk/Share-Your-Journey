@@ -13,6 +13,8 @@ struct ListWithFriends: View {
     @Binding var searchPeople: String
     @Binding var friendsSet: FriendsSet
     @State private var loadedFriends = false
+    @State private var showJourneyFromNotification = false
+    @EnvironmentObject var notificationSetup: NotificationSetup
     var filteredFriendsList: [String]
     
     var body: some View {
@@ -37,7 +39,7 @@ struct ListWithFriends: View {
                                     .padding(.vertical, 15)
                                 Spacer()
                             }
-                            NavigationLink(destination: ChatView(uid: friend)) {
+                            NavigationLink(destination: ChatView(uid: friend), tag: friend, selection: self.$notificationSetup.sender) {
                                 EmptyView()
                             }
                             .opacity(0)

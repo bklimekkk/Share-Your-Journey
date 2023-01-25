@@ -9,15 +9,13 @@ import SwiftUI
 import MapKit
 
 struct TabsView: View {
+
+    @ObservedObject var notificationSetup = NotificationSetup.shared
     @State private var selectedTab = 1
-    //Default view is always set to StartView (the one containing a map.
-    init() {
-        UITabBar.appearance().backgroundColor = Colors.tabViewColor
-    }
     var body: some View {
 
         //This view ensures that the application presents user with bottom navigation containing three elements.
-        TabView (selection: $selectedTab) {
+        TabView (selection: self.$selectedTab) {
             StartView()
                 .tabItem {
                     Label(UIStrings.yourJourneyTabTitle, systemImage: Icons.mapFill)
@@ -40,13 +38,22 @@ struct TabsView: View {
                 FriendsView()
                     .navigationTitle(UIStrings.emptyString)
                     .navigationBarHidden(true)
+                    .environmentObject(self.notificationSetup)
             }
             .tabItem {
                 Label(UIStrings.friendsTabTitle, systemImage: Icons.personFill)
             }
             .tag(3)
         }
-        .onChange(of: selectedTab) { newValue in
+        .onAppear {
+            if self.notificationSetup.notificationType != .none {
+                self.selectedTab = 3
+            }
+        }
+        .onChange(of: self.notificationSetup.notificationType, perform: { newValue in
+            self.selectedTab = 3
+        })
+        .onChange(of: self.selectedTab) { newValue in
             HapticFeedback.mediumHapticFeedback()
         }
     }

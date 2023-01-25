@@ -171,4 +171,6 @@ struct UIStrings {
     static let viewInTheMap = "View in the map"
     static let checkInfo = "Check photo's info"
     static let selectJourneysToSend = "Select journeys to send"
+    static let newJourneyNotificationTitle = "New Journey"
+    static let friendInvitationNotificationTitle = "Friend Invitation"
 }

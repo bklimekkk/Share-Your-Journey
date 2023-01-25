@@ -54,3 +54,9 @@ class NotificationSender {
         }
     }
 }
+
+class NotificationSetup: ObservableObject {
+    static let shared = NotificationSetup()
+    @Published var notificationType: NotificationType = .none
+    @Published var sender: String? = ""
+}
