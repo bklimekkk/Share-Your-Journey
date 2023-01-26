@@ -22,7 +22,7 @@ struct ChatView: View {
     @State private var sentByFriend: [SingleJourney] = []
     //Variable contains text entered by user in order to search items in the array.
     @State private var searchJourney = UIStrings.emptyString
-
+    @EnvironmentObject var notificationSetup: NotificationSetup
     //Variable contains all journeys send by users that they searched.
     private var sentByYouFiltered: [SingleJourney] {
         if self.searchJourney == UIStrings.emptyString {
@@ -77,6 +77,7 @@ struct ChatView: View {
                                    sentByFriend: self.$sentByFriend,
                                    sentByFriendFiltered: self.sentByFriendFiltered,
                                    uid: self.uid)
+                .environmentObject(self.notificationSetup)
             }
         }
         .navigationTitle(self.uid)

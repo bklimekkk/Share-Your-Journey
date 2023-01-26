@@ -15,6 +15,7 @@ struct FriendJourneysList: View {
     @Binding var searchJourney: String
     @Binding var sentByFriend: [SingleJourney]
     @State private var loadedFriendsJourneys = false
+    @EnvironmentObject var notificationSetup: NotificationSetup
     var sentByFriendFiltered: [SingleJourney]
     
     var sentByFriendFilteredSorted: [SingleJourney] {
@@ -49,10 +50,22 @@ struct FriendJourneysList: View {
                                     .foregroundColor(.gray)
                             }
                             //NavigationLink's destination property is set to struct responsible for showing the relevant journey.
-                            NavigationLink(destination: SeeJourneyView(journey: journey, uid: self.uid, downloadMode: false, path: "\(FirestorePaths.getFriends(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/journeys")){
-                                EmptyView()
+
+                            if self.notificationSetup.journeyId == UIStrings.emptyString {
+                                NavigationLink(destination: SeeJourneyView(journey: journey, uid: self.uid,
+                                                                           downloadMode: false, path: "\(FirestorePaths.getFriends(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/journeys")) {
+                                    EmptyView()
+                                }
+                                .opacity(0)
+                            } else {
+                                NavigationLink(destination: SeeJourneyView(journey: journey, uid: self.uid,
+                                                                           downloadMode: false, path: "\(FirestorePaths.getFriends(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/journeys"),
+                                               tag: journey.name,
+                                               selection: self.$notificationSetup.journeyId) {
+                                    EmptyView()
+                                }
+                                .opacity(0)
                             }
-                            .opacity(0)
                         }
                     }
                 }

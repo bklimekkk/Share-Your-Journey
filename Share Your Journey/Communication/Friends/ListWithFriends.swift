@@ -39,7 +39,9 @@ struct ListWithFriends: View {
                                     .padding(.vertical, 15)
                                 Spacer()
                             }
-                            NavigationLink(destination: ChatView(uid: friend), tag: friend, selection: self.$notificationSetup.sender) {
+                            NavigationLink(destination: ChatView(uid: friend).environmentObject(self.notificationSetup),
+                                           tag: friend,
+                                           selection: self.$notificationSetup.sender) {
                                 EmptyView()
                             }
                             .opacity(0)

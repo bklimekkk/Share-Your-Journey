@@ -10,7 +10,7 @@ import Firebase
 
 import UIKit
 class NotificationSender {
-    static func sendPushNotification(to token: String, title: String, body: String) {
+    static func sendPushNotification(to token: String, title: String, body: String, journeyId: String) {
         let urlString = "https://fcm.googleapis.com/fcm/send"
         let url = NSURL(string: urlString)!
         let paramString: [String : Any] = ["to" : token,
@@ -19,7 +19,7 @@ class NotificationSender {
                                                              "sound": "default"
                                                             ],
                                            "priority": "high",
-                                           "data" : ["user" : "test_id"]
+                                           "data" : ["journeyId" : journeyId]
         ]
         let request = NSMutableURLRequest(url: url as URL)
         request.httpMethod = "POST"
@@ -40,14 +40,14 @@ class NotificationSender {
         task.resume()
     }
 
-    static func sendNotification(uid: String, title: String, body: String) {
+    static func sendNotification(uid: String, title: String, body: String, journeyId: String) {
         let targetRef = Firestore.firestore()
             .collection(FirestorePaths.getUsers())
             .document(uid)
         targetRef.getDocument { document, error in
             if let document = document, document.exists {
                 let token = document.get("fcmToken") as? String ?? UIStrings.emptyString
-                self.sendPushNotification(to: token, title: title, body: body)
+                self.sendPushNotification(to: token, title: title, body: body, journeyId: journeyId)
             } else {
                 print(error?.localizedDescription)
             }
@@ -58,5 +58,6 @@ class NotificationSender {
 class NotificationSetup: ObservableObject {
     static let shared = NotificationSetup()
     @Published var notificationType: NotificationType = .none
-    @Published var sender: String? = ""
+    @Published var sender: String? = UIStrings.emptyString
+    @Published var journeyId: String? = UIStrings.emptyString
 }

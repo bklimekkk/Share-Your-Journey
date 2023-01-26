@@ -103,8 +103,10 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         let content = response.notification.request.content
         let title = content.title
         let body = content.body
+        let journeyId = content.userInfo["journeyId"] as? String ?? ""
         NotificationSetup.shared.notificationType = title == UIStrings.friendInvitationNotificationTitle ? .invitation : .journey
         NotificationSetup.shared.sender = body.components(separatedBy: " ").first ?? ""
-        print("sender: \(NotificationSetup.shared.sender ?? "")")
+        NotificationSetup.shared.journeyId = journeyId
+        print(journeyId)
     }
 }
