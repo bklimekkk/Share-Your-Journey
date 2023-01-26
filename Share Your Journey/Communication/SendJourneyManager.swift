@@ -51,8 +51,8 @@ struct SendJourneyManager {
                 }
             }
         }
-        NotificationSender.sendNotification(uid: targetUID,
+        NotificationSender.sendNotification(myuid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString, uid: targetUID,
                                             title: UIStrings.newJourneyNotificationTitle,
-                                            body: "\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString) just sent you a journey", journeyId: journey.name)
+                                            body: "\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString) just sent you a journey")
     }
 }

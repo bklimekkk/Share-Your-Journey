@@ -157,10 +157,9 @@ struct AddFriendView: View {
         ])
         self.showMessage = false
         self.sheetIsPresented = false
-        NotificationSender.sendNotification(uid: self.uid,
+        NotificationSender.sendNotification(myuid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString, uid: self.uid,
                                             title: UIStrings.friendInvitationNotificationTitle,
-                                            body: "\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString) just sent you a friend invitation",
-                                            journeyId: UIStrings.emptyString)
+                                            body: "\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString) just sent you a friend invitation")
     }
 }
 

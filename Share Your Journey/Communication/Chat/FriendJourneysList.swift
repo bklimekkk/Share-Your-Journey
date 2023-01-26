@@ -50,22 +50,13 @@ struct FriendJourneysList: View {
                                     .foregroundColor(.gray)
                             }
                             //NavigationLink's destination property is set to struct responsible for showing the relevant journey.
-
-                            if self.notificationSetup.journeyId == UIStrings.emptyString {
-                                NavigationLink(destination: SeeJourneyView(journey: journey, uid: self.uid,
-                                                                           downloadMode: false, path: "\(FirestorePaths.getFriends(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/journeys")) {
-                                    EmptyView()
-                                }
-                                .opacity(0)
-                            } else {
-                                NavigationLink(destination: SeeJourneyView(journey: journey, uid: self.uid,
-                                                                           downloadMode: false, path: "\(FirestorePaths.getFriends(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/journeys"),
-                                               tag: journey.name,
-                                               selection: self.$notificationSetup.journeyId) {
-                                    EmptyView()
-                                }
-                                .opacity(0)
+                            NavigationLink(destination: SeeJourneyView(journey: journey,
+                                                                       uid: self.uid,
+                                                                       downloadMode: false,
+                                                                       path: "\(FirestorePaths.getFriends(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/journeys")) {
+                                EmptyView()
                             }
+                                                                       .opacity(0)
                         }
                     }
                 }
@@ -83,6 +74,8 @@ struct FriendJourneysList: View {
             self.populateFriendsJourneys(completion: {
                 self.loadedFriendsJourneys = true
             })
+            self.notificationSetup.notificationType = .none
+            self.notificationSetup.sender = UIStrings.emptyString
         }
     }
     

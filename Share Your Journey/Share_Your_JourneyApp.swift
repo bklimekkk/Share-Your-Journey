@@ -102,11 +102,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse) async {
         let content = response.notification.request.content
         let title = content.title
-        let body = content.body
-        let journeyId = content.userInfo["journeyId"] as? String ?? ""
+        let uid = content.userInfo["uid"] as? String ?? UIStrings.emptyString
         NotificationSetup.shared.notificationType = title == UIStrings.friendInvitationNotificationTitle ? .invitation : .journey
-        NotificationSetup.shared.sender = body.components(separatedBy: " ").first ?? ""
-        NotificationSetup.shared.journeyId = journeyId
-        print(journeyId)
+        NotificationSetup.shared.sender = NotificationSetup.shared.notificationType == .journey ? uid : UIStrings.emptyString
+        print(uid)
     }
 }

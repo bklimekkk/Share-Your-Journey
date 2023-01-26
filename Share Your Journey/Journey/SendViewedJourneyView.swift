@@ -33,11 +33,14 @@ struct SendViewedJourneyView: View {
                                         
                                     } else {
                                         SendJourneyManager().sendJourney(journey: self.journey, targetUID: friend)
-                                        withAnimation {
-                                            for i in 0...self.listOfFriends.count - 1 {
-                                                if self.listOfFriends[i] == friend {
-                                                    self.listOfFriends.remove(at: i)
-                                                    break
+
+                                        if self.listOfFriends.count > 0 {
+                                            withAnimation {
+                                                for i in 0...self.listOfFriends.count - 1 {
+                                                    if self.listOfFriends[i] == friend {
+                                                        self.listOfFriends.remove(at: i)
+                                                        break
+                                                    }
                                                 }
                                             }
                                         }

@@ -14,6 +14,7 @@ struct ListWithRequests: View {
     @Binding var searchPeople: String
     @Binding var requestsSet: RequestsSet
     @State private var loadedRequests = false
+    @EnvironmentObject var notificationSetup: NotificationSetup
     var filteredRequestsList: [String]
     
     var body: some View {
@@ -150,5 +151,6 @@ struct ListWithRequests: View {
         
         //After request accepted, it needs to be deleted from requests array automatically.
         self.removeRequest(request: request)
+        self.notificationSetup.notificationType = .none
     }
 }

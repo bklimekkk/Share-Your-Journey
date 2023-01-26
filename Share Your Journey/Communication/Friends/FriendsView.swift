@@ -68,6 +68,7 @@ struct FriendsView: View {
                 ListWithRequests(searchPeople: self.$searchPeople,
                                  requestsSet: self.$requestsSet,
                                  filteredRequestsList: self.filteredRequestsList)
+                .environmentObject(notificationSetup)
             } else {
                 ListWithFriends(searchPeople: self.$searchPeople,
                                 friendsSet: self.$friendsSet,
@@ -86,13 +87,14 @@ struct FriendsView: View {
             .padding(.horizontal)
         }
         .onAppear {
-            print(self.notificationSetup.notificationType)
             if self.notificationSetup.notificationType == .invitation {
                 self.requestMode = true
             }
         }
         .onChange(of: self.notificationSetup.notificationType, perform: { newValue in
-            self.requestMode = true
+            if newValue == .invitation {
+                self.requestMode = true
+            }
         })
         .padding(.bottom)
         .sheet(isPresented: self.$addNewFriend, onDismiss: nil) {
