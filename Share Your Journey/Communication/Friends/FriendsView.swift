@@ -8,16 +8,20 @@
 import SwiftUI
 import Firebase
 
+struct Person: Hashable {
+    let nickname: String
+    let uid: String
+}
 //Struct responsible for creating a blueprint for variable containing all user's requests data.
 struct RequestsSet {
     var ownUID: String
-    var requestsList: [String] = []
+    var requestsList: [Person] = []
 }
 
 //Struct responsible for creating a blueprint for variable containing all user's friends data.
 struct FriendsSet {
     var ownUID: String
-    var friendsList: [String] = []
+    var friendsList: [Person] = []
 }
 
 struct FriendsView: View {
@@ -34,20 +38,20 @@ struct FriendsView: View {
     @State private var searchPeople = UIStrings.emptyString
     @EnvironmentObject var notificationSetup: NotificationSetup
     //Variable is calculated by filtering arrays due to date they entered to search window.
-    private var filteredRequestsList: [String] {
+    private var filteredRequestsList: [Person] {
         if self.searchPeople.isEmpty {
             return self.requestsSet.requestsList
         } else {
-            return self.requestsSet.requestsList.filter { $0.lowercased().contains(self.searchPeople.lowercased()) }
+            return self.requestsSet.requestsList.filter { $0.nickname.lowercased().contains(self.searchPeople.lowercased()) }
         }
     }
     
     //Variable will contain all user's friends filtered by text that user entered in search text field.
-    private var filteredFriendsList: [String] {
+    private var filteredFriendsList: [Person] {
         if self.searchPeople.isEmpty {
             return self.friendsSet.friendsList
         } else {
-            return self.friendsSet.friendsList.filter { $0.lowercased().contains(searchPeople.lowercased()) }
+            return self.friendsSet.friendsList.filter { $0.nickname.lowercased().contains(searchPeople.lowercased()) }
         }
     }
     

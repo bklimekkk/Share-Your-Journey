@@ -41,9 +41,10 @@ struct ChatView: View {
         }
     }
     
-    //Friend's uid adress.
+    //Friend's uid and nickname.
     var uid: String
-    
+    var nickname: String
+
     var body: some View {
         VStack (spacing: 0) {
             
@@ -80,7 +81,7 @@ struct ChatView: View {
                 .environmentObject(self.notificationSetup)
             }
         }
-        .navigationTitle(self.uid)
+        .navigationTitle(self.nickname)
         .navigationBarTitleDisplayMode(.inline)
     }
 }

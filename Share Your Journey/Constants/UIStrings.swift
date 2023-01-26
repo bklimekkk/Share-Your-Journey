@@ -173,4 +173,7 @@ struct UIStrings {
     static let selectJourneysToSend = "Select journeys to send"
     static let newJourneyNotificationTitle = "New Journey"
     static let friendInvitationNotificationTitle = "Friend Invitation"
+    static let nickname = "Nickname"
+    static let emptyNicknameField = "Nickname field can't be empty"
+    static let changeNickname = "Change your nickname"
 }

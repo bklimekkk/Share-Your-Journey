@@ -19,7 +19,7 @@ class NotificationSender {
                                                              "sound": "default"
                                                             ],
                                            "priority": "high",
-                                           "data" : ["uid" : from]
+                                           "data" : ["nickname" : from]
         ]
         let request = NSMutableURLRequest(url: url as URL)
         request.httpMethod = "POST"
@@ -40,14 +40,14 @@ class NotificationSender {
         task.resume()
     }
 
-    static func sendNotification(myuid: String, uid: String, title: String, body: String) {
+    static func sendNotification(myNickname: String, uid: String, title: String, body: String) {
         let targetRef = Firestore.firestore()
             .collection(FirestorePaths.getUsers())
             .document(uid)
         targetRef.getDocument { document, error in
             if let document = document, document.exists {
                 let token = document.get("fcmToken") as? String ?? UIStrings.emptyString
-                self.sendPushNotification(from: myuid, to: token, title: title, body: body)
+                self.sendPushNotification(from: myNickname, to: token, title: title, body: body)
             } else {
                 print(error?.localizedDescription)
             }

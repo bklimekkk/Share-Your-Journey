@@ -176,13 +176,11 @@ struct SumUpFunctionalityButtonsView: View {
         metaData.contentType = "image/jpeg"
         let photoReference = "\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/\(name)/\(index)"
         let storageReference = Storage.storage().reference(withPath: photoReference)
-
         //Storage is populated with the image.
         storageReference.putData(photo, metadata: metaData) { metaData, error in
             if let error = error {
                 print(error.localizedDescription)
             }
-
             //Image's details are added to appropriate collection in firetore's database.
             Firestore.firestore().document("\(FirestorePaths.myJourneys(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(name)/photos/\(index)").setData([
                 "latitude": journey.photosLocations[index].latitude,

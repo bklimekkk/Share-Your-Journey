@@ -15,7 +15,7 @@ struct ListWithRequests: View {
     @Binding var requestsSet: RequestsSet
     @State private var loadedRequests = false
     @EnvironmentObject var notificationSetup: NotificationSetup
-    var filteredRequestsList: [String]
+    var filteredRequestsList: [Person]
     
     var body: some View {
         
@@ -32,7 +32,7 @@ struct ListWithRequests: View {
                     }
             } else {
                 //List contains all requests searched by user.
-                List (self.filteredRequestsList.sorted(by: {$0 < $1}), id: \.self) { request in
+                List (self.filteredRequestsList.sorted(by: {$0.nickname < $1.nickname}), id: \.self) { request in
                     HStack {
                         Button{
                             self.removeRequest(request: request)
@@ -42,7 +42,7 @@ struct ListWithRequests: View {
                                 .foregroundColor(.gray)
                         }
                         .buttonStyle(PlainButtonStyle())
-                        Text(request)
+                        Text(request.nickname)
                             .padding(.vertical, 15)
                         Spacer()
                         Button{
@@ -93,8 +93,8 @@ struct ListWithRequests: View {
                 print(error!.localizedDescription)
             } else {
                 for i in querySnapshot!.documents {
-                    if i.documentID != currentUID && !self.requestsSet.requestsList.contains(i.documentID) {
-                        self.requestsSet.requestsList.append(i.documentID)
+                    if i.documentID != currentUID && !self.requestsSet.requestsList.map({$0.uid}).contains(i.documentID) {
+                        self.requestsSet.requestsList.append(Person(nickname: i.get("nickname") as? String ?? UIStrings.emptyString, uid: i.documentID))
                     }
                 }
             }
@@ -104,10 +104,10 @@ struct ListWithRequests: View {
     /**
      Function is responsible for removing requests picked by user.
      */
-    func removeRequest(request: String) {
+    func removeRequest(request: Person) {
         
         //Chosen request is deleted from Firestore database.
-        Firestore.firestore().collection(FirestorePaths.getRequests(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)).document(request).delete() { error in
+        Firestore.firestore().collection(FirestorePaths.getRequests(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)).document(request.uid).delete() { error in
             if error != nil {
                 print(error!.localizedDescription)
             }
@@ -115,7 +115,7 @@ struct ListWithRequests: View {
         
         //Request is deleted from the appropriate array.
         for i in 0...self.requestsSet.requestsList.count - 1 {
-            if self.requestsSet.requestsList[i] == request {
+            if self.requestsSet.requestsList[i].uid == request.uid {
                 self.requestsSet.requestsList.remove(at: i)
                 break
             }
@@ -125,27 +125,29 @@ struct ListWithRequests: View {
     /**
      Function responsible for accepting request sent to the user.
      */
-    func acceptRequest(request: String) {
+    func acceptRequest(request: Person) {
         
         //UID of account from which the request was sent from, is added to friends collection in Firestore database.
-        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(request)").setData([
-            "uid" : request,
+        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(request.uid)").setData([
+            "uid" : request.uid,
+            "nickname" : request.nickname,
             "deletedAccount" : false
         ])
         
         //Collection needs to contain at least one document in order to exist, so It's populated with one. This collection is going to contain qll journeys sent from user.
-        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(request)/journeys/-").setData([
+        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(request.uid)/journeys/-").setData([
             "name" : "-"
         ])
         
         //Program also needs to take care about adding user to their friend's "friends" collection.
-        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: request))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)").setData([
+        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: request.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)").setData([
             "uid" : Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
+            "nickname" : UserSettings.shared.nickname,
             "deletedAccount" : false
         ])
         
         //This collection is going to contain all journeys sent to user.
-        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: request))/\(Auth.auth().currentUser?.uid ?? "")/journeys/-").setData([
+        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: request.uid))/\(Auth.auth().currentUser?.uid ?? "")/journeys/-").setData([
             "name" : "-"
         ])
         

@@ -15,7 +15,7 @@ struct ListWithFriends: View {
     @State private var loadedFriends = false
     @State private var showJourneyFromNotification = false
     @EnvironmentObject var notificationSetup: NotificationSetup
-    var filteredFriendsList: [String]
+    var filteredFriendsList: [Person]
     
     var body: some View {
         VStack {
@@ -31,21 +31,19 @@ struct ListWithFriends: View {
                     }
             } else {
                 //List is sorted alphabetically.
-                List {
-                    ForEach (self.filteredFriendsList.sorted(by: {$0 < $1}), id: \.self) { friend in
-                        ZStack {
-                            HStack {
-                                Text(friend)
-                                    .padding(.vertical, 15)
-                                Spacer()
-                            }
-                            NavigationLink(destination: ChatView(uid: friend).environmentObject(self.notificationSetup),
-                                           tag: friend,
-                                           selection: self.$notificationSetup.sender) {
-                                EmptyView()
-                            }
-                            .opacity(0)
+                List (self.filteredFriendsList.sorted(by: {$0.nickname < $1.nickname}), id: \.self) { friend in
+                    ZStack {
+                        HStack {
+                            Text(friend.nickname)
+                                .padding(.vertical, 15)
+                            Spacer()
                         }
+                        NavigationLink(destination: ChatView(uid: friend.uid, nickname: friend.nickname).environmentObject(self.notificationSetup),
+                                       tag: friend.nickname,
+                                       selection: self.$notificationSetup.sender) {
+                            EmptyView()
+                        }
+                                       .opacity(0)
                     }
                 }
                 .scrollDismissesKeyboard(.interactively)
@@ -84,8 +82,8 @@ struct ListWithFriends: View {
                 print(error!.localizedDescription)
             } else {
                 for i in querySnapshot!.documents {
-                    if i.documentID != currentUID && !self.friendsSet.friendsList.contains(i.documentID) && i.get("deletedAccount") as? Bool ?? false == false {
-                        self.friendsSet.friendsList.append(i.documentID)
+                    if i.documentID != currentUID && !self.friendsSet.friendsList.map({$0.uid}).contains(i.documentID) && i.get("deletedAccount") as? Bool ?? false == false {
+                        self.friendsSet.friendsList.append(Person(nickname: i.get("nickname") as? String ?? UIStrings.emptyString, uid: i.documentID))
                     }
                 }
             }

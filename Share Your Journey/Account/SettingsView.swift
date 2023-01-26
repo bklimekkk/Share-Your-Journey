@@ -17,11 +17,13 @@ struct SettingsView: View {
     @State private var showPrivacyPolicy = false
     @State private var showInstructions = false
     @State private var deletedAccount = false
+    @State private var nickname = UIStrings.emptyString
     
     var body: some View {
         NavigationView {
             Form {
-                Section {
+                Section(header: Text("Hello \(self.nickname)!")) {
+                    Button(UIStrings.changeNickname) {}
                     Button("shareyourjourneyhelp@gmail.com") {}
                         .buttonStyle(.plain)
                         .foregroundColor(.blue)
@@ -71,6 +73,9 @@ struct SettingsView: View {
                         self.subscription.subscriber = true
                     }
                 }
+                AccountManager.getNickname(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString, completion: { nickname in
+                    self.nickname = nickname
+                })
             }
             .fullScreenCover(isPresented: $showInstructions, content: {
                 InstructionsView()

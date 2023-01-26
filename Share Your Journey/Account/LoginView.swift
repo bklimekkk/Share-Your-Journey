@@ -40,6 +40,7 @@ struct LoginView: View {
     //Variables represent user's uid, password and name, which are used for registration and logging in processes.
     @State private var email = UIStrings.emptyString
     @State private var password = UIStrings.emptyString
+    @State private var nickname = UIStrings.emptyString
     @State private var repeatedPassword = UIStrings.emptyString
     //Variable controls if user is logged in or logged out.
     @Binding var loggedOut: Bool
@@ -59,6 +60,10 @@ struct LoginView: View {
                                firstChoice: UIStrings.login,
                                secondChoice: UIStrings.createAccount)
                     EmailTextField(label: UIStrings.emailAddress, email: $email)
+                    if self.accountAccessManager.register {
+                        TextField(UIStrings.nickname, text: self.$nickname)
+                            .font(.system(size: 20))
+                    }
                     SecureField(UIStrings.password, text: self.$password)
                         .padding(.vertical, 10)
                         .font(.system(size: 20))
@@ -209,8 +214,11 @@ struct LoginView: View {
                 }
             }
             let token = Messaging.messaging().fcmToken
-            let usersRef = Firestore.firestore().collection("users").document(Auth.auth().currentUser?.uid ?? "")
+            let usersRef = Firestore.firestore().collection("users").document(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
             usersRef.setData(["fcmToken": token ?? ""], merge: true)
+            AccountManager.getNickname(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString) { nickname in
+                self.defaults.set(nickname, forKey: "nickname")
+            }
             completion()
         }
     }
@@ -225,6 +233,13 @@ struct LoginView: View {
             self.errorManager.errorBody = UIStrings.passwordFieldsNotMatching
             return
         }
+
+        if self.nickname.isEmpty {
+            self.errorManager.showErrorMessage = true
+            self.errorManager.errorBody = UIStrings.emptyNicknameField
+            return
+        }
+
         //Firebase is used for creating a new account.
         Auth.auth().createUser(withEmail: self.email, password: self.password) { result, error in
             if error != nil {
@@ -233,7 +248,7 @@ struct LoginView: View {
                 return
             }
             //User is added to the firestore database.
-            self.addUser(email: self.email, uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
+            self.addUser(email: self.email, nickname: self.nickname, uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
             Auth.auth().currentUser?.sendEmailVerification { error in
                 if error != nil {
                     print(UIStrings.sendingVerificationError)
@@ -246,12 +261,13 @@ struct LoginView: View {
     /**
      Function is responsible for adding new user to the Firebase server.
      */
-    func addUser(email: String, uid: String) {
+    func addUser(email: String, nickname: String, uid: String) {
         //Firebase is used to add user's data to the database.
         let instanceReference = Firestore.firestore()
         //Each of three collections in Firebase server needs to be populated with new user's date.
         instanceReference.document("\(FirestorePaths.getUsers())/\(uid)").setData([
             "email": email,
+            "nickname": nickname,
             "deletedAccount": false
         ])
         instanceReference.document("\(FirestorePaths.getFriends(uid: uid))/\(uid)").setData([
