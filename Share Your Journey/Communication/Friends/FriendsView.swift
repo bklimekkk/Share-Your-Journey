@@ -58,8 +58,7 @@ struct FriendsView: View {
             PickerView(choice: self.$requestMode,
                        firstChoice: UIStrings.friends,
                        secondChoice: UIStrings.requests)
-            .padding(.vertical)
-            .padding(.horizontal, 5)
+            .padding(EdgeInsets(top: 15, leading: 5, bottom: 15, trailing: 5))
             
             SearchField(text: UIStrings.searchNickname, search: self.$searchPeople)
             
@@ -84,7 +83,7 @@ struct FriendsView: View {
             }
             .background(Color.blue)
             .clipShape(RoundedRectangle(cornerRadius: 10))
-            .padding(.horizontal)
+            .padding(.horizontal, 5)
         }
         .onAppear {
             if self.notificationSetup.notificationType == .invitation {
@@ -96,7 +95,7 @@ struct FriendsView: View {
                 self.requestMode = true
             }
         })
-        .padding(.bottom)
+        .padding(.bottom, 5)
         .sheet(isPresented: self.$addNewFriend, onDismiss: nil) {
             AddFriendView(sheetIsPresented: self.$addNewFriend)
         }

@@ -71,7 +71,7 @@ struct ChatView: View {
                 }
                 .background(Color.blue)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
-                .padding(EdgeInsets(top: 0, leading: 10, bottom: 10, trailing: 10))
+                .padding(EdgeInsets(top: 0, leading: 5, bottom: 5, trailing: 5))
             } else {
                 FriendJourneysList(searchJourney: self.$searchJourney,
                                    sentByFriend: self.$sentByFriend,

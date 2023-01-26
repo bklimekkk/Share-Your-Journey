@@ -229,24 +229,31 @@ struct SumUpView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if self.showPicture {
+                    if !self.done {
                         Menu {
                             Button(UIStrings.checkInfo) {
                                 self.showInfo = true
                             }
-
-                            if !self.done {
-                                Button(UIStrings.continueJourney) {
-                                    self.goBack = true
-                                    self.dismiss()
-                                }
+                            Button(UIStrings.continueJourney) {
+                                self.goBack = true
+                                self.dismiss()
                             }
                         } label: {
                             Image(systemName: Icons.ellipsisCircle)
                         }
                     } else {
-                        Button(UIStrings.continueJourney) {
-                            self.goBack = true
-                            self.dismiss()
+                        Button {
+                            self.showInfo = true
+                        } label: {
+                            Image(systemName: Icons.infoCircle)
+                        }
+                    }
+                    } else {
+                        if !self.done {
+                            Button(UIStrings.continueJourney) {
+                                self.goBack = true
+                                self.dismiss()
+                            }
                         }
                     }
                 }
