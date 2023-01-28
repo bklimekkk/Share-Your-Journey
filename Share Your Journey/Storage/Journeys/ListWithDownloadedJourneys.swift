@@ -37,6 +37,7 @@ struct ListWithDownloadedJourneys: View {
                         ZStack {
                             HStack {
                                 Text(journey.place)
+                                    .bold()
                                     .foregroundColor(.primary)
                                     .padding(.vertical, 15)
                                 Spacer()

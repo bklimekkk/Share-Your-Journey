@@ -10,7 +10,7 @@ import Foundation
 struct DateManager {
     static func getDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = Links.regularDateFormat
+        dateFormatter.dateFormat = Links.regularDateOnlyFormat
         return dateFormatter.string(from: date)
     }
 }

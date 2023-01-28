@@ -35,6 +35,7 @@ struct ListWithFriends: View {
                     ZStack {
                         HStack {
                             Text(friend.nickname)
+                                .bold()
                                 .padding(.vertical, 15)
                             Spacer()
                         }

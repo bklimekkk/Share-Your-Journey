@@ -50,6 +50,7 @@ struct YourJourneysList: View {
                         ZStack {
                             HStack {
                                 Text(journey.place)
+                                    .bold()
                                     .padding(.vertical, 15)
                                 Spacer()
                                 Text(DateManager.getDate(date: journey.date))

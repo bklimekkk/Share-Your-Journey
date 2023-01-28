@@ -43,6 +43,7 @@ struct ListWithRequests: View {
                         }
                         .buttonStyle(PlainButtonStyle())
                         Text(request.nickname)
+                            .bold()
                             .padding(.vertical, 15)
                         Spacer()
                         Button{

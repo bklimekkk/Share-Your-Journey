@@ -453,6 +453,7 @@ struct StartView: View {
      */
     func finishJourney() {
         self.journeyStateController.showSumUp = true
+        HapticFeedback.heavyHapticFeedback ()
     }
     
     /**

@@ -54,8 +54,10 @@ struct SendJourneyView: View {
                             } label:{
                                 HStack {
                                     Text(journey.place)
+                                        .bold()
                                     Spacer()
                                     Text(DateManager.getDate(date: journey.date))
+                                        .foregroundColor(Color.gray)
                                 }
                                 .padding(.vertical, 15)
                             }

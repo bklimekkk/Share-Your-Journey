@@ -26,6 +26,7 @@ struct StartJourneyModeView: View {
      */
     func startJourney() {
         self.currentLocationManager.recenterLocation()
-            self.startedJourney = true
+        self.startedJourney = true
+        HapticFeedback.heavyHapticFeedback()
     }
 }

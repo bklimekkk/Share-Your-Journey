@@ -15,6 +15,7 @@ struct ButtonView: View {
         HStack{
             Spacer()
             Text(self.buttonTitle)
+                .bold()
                 .padding(.vertical, 10)
             Spacer()
         }
