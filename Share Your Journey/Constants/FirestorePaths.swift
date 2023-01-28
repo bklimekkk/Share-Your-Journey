@@ -8,10 +8,7 @@
 import Foundation
 
 struct FirestorePaths {
-
-    static func getUsers() -> String {
-        return "users"
-    }
+    static let users = "users"
 
     static func myJourneys(uid: String) -> String {
         return "users/\(uid)/friends/\(uid)/journeys"

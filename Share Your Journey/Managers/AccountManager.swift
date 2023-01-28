@@ -11,7 +11,7 @@ import Firebase
 struct AccountManager {
     static func getNickname(uid: String, completion: @escaping(String) -> Void) {
         let nicknameRef = Firestore.firestore()
-            .collection(FirestorePaths.getUsers())
+            .collection(FirestorePaths.users)
             .document(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
         nicknameRef.getDocument { document, error in
             if let document = document, document.exists {

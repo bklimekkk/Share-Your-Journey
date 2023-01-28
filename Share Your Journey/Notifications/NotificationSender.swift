@@ -42,7 +42,7 @@ class NotificationSender {
 
     static func sendNotification(myNickname: String, uid: String, title: String, body: String) {
         let targetRef = Firestore.firestore()
-            .collection(FirestorePaths.getUsers())
+            .collection(FirestorePaths.users)
             .document(uid)
         targetRef.getDocument { document, error in
             if let document = document, document.exists {

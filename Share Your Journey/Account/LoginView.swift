@@ -62,6 +62,7 @@ struct LoginView: View {
                     EmailTextField(label: UIStrings.emailAddress, email: $email)
                     if self.accountAccessManager.register {
                         TextField(UIStrings.nickname, text: self.$nickname)
+                            .padding(.vertical, 10)
                             .font(.system(size: 20))
                     }
                     SecureField(UIStrings.password, text: self.$password)
@@ -266,7 +267,7 @@ struct LoginView: View {
     }
 
     func checkNicknameUniqueness(nickname: String, completion: @escaping(Bool) -> Void) {
-        Firestore.firestore().collection(FirestorePaths.getUsers()).getDocuments { querySnapshot, error in
+        Firestore.firestore().collection(FirestorePaths.users).getDocuments { querySnapshot, error in
             if error != nil {
                 self.errorManager.showErrorMessage = true
                 self.errorManager.errorBody =  error?.localizedDescription ?? UIStrings.emptyString
@@ -286,7 +287,7 @@ struct LoginView: View {
         //Firebase is used to add user's data to the database.
         let instanceReference = Firestore.firestore()
         //Each of three collections in Firebase server needs to be populated with new user's date.
-        instanceReference.document("\(FirestorePaths.getUsers())/\(uid)").setData([
+        instanceReference.document("\(FirestorePaths.users)/\(uid)").setData([
             "email": email,
             "nickname": nickname,
             "deletedAccount": false
