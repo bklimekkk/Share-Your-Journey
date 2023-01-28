@@ -176,4 +176,5 @@ struct UIStrings {
     static let nickname = "Nickname"
     static let emptyNicknameField = "Nickname field can't be empty"
     static let changeNickname = "Change your nickname"
+    static let nicknameIsTaken = "This nickname is already taken"
 }
