@@ -236,7 +236,7 @@ struct LoginView: View {
         }
 
         if !self.nickname.isEmpty {
-            self.checkNicknameUniqueness(nickname: self.nickname) { nicknameAvailable in
+            AccountManager.checkNicknameUniqueness(nickname: self.nickname) { nicknameAvailable in
                 if nicknameAvailable {
                     //Firebase is used for creating a new account.
                     Auth.auth().createUser(withEmail: self.email, password: self.password) { result, error in
@@ -264,20 +264,6 @@ struct LoginView: View {
             self.errorManager.showErrorMessage = true
             self.errorManager.errorBody = UIStrings.emptyNicknameField
         }
-    }
-
-    func checkNicknameUniqueness(nickname: String, completion: @escaping(Bool) -> Void) {
-        Firestore.firestore().collection(FirestorePaths.users).getDocuments { querySnapshot, error in
-            if error != nil {
-                self.errorManager.showErrorMessage = true
-                self.errorManager.errorBody =  error?.localizedDescription ?? UIStrings.emptyString
-            } else {
-                var uniqueNicknames = Set(querySnapshot!.documents.map({$0.get("nickname") as? String ?? UIStrings.emptyString}))
-                uniqueNicknames.insert(nickname)
-                completion(uniqueNicknames.count == querySnapshot!.documents.count + 1)
-            }
-        }
-
     }
 
     /**

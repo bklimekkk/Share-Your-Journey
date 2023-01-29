@@ -58,7 +58,7 @@ struct UIStrings {
     static let privacyPolicy = "Privacy Policy"
     static let premiumAccess = "Premium Access"
     static let restorePremiumAccess = "Restore Your Premium Access"
-    static let accountDeletion = "Account Deletion"
+    static let accountSettings = "Account Settings"
     static let deleteYourAccount = "Delete Your Account"
     static let premiumAccount = "Premium Account"
     static let regularAccount = "Regular Account"
@@ -168,5 +168,8 @@ struct UIStrings {
     static let nickname = "Nickname"
     static let emptyNicknameField = "Nickname field can't be empty"
     static let changeNickname = "Change your nickname"
+    static let changeNicknameButtonTitle = "Change Nickname"
     static let nicknameIsTaken = "This nickname is already taken"
+    static let newNickname = "New Nickname"
+    static let currentNickname = "This is your current nickname"
 }

@@ -17,13 +17,13 @@ struct SettingsView: View {
     @State private var showPrivacyPolicy = false
     @State private var showInstructions = false
     @State private var deletedAccount = false
+    @State private var changeNickname = false
     @State private var nickname = UIStrings.emptyString
     
     var body: some View {
         NavigationView {
             Form {
                 Section(header: Text("Hello \(self.nickname)!")) {
-                    Button(UIStrings.changeNickname) {}
                     Button("shareyourjourneyhelp@gmail.com") {}
                         .buttonStyle(.plain)
                         .foregroundColor(.blue)
@@ -59,7 +59,10 @@ struct SettingsView: View {
                         .foregroundColor(self.subscription.subscriber ? .red : .blue)
                     }
                 }
-                Section(header: Text(UIStrings.accountDeletion)) {
+                Section(header: Text(UIStrings.accountSettings)) {
+                    Button(UIStrings.changeNickname) {
+                        self.changeNickname = true
+                    }
                     Button(UIStrings.deleteYourAccount){
                         self.askAboutAccountDeletion = true
                     }
@@ -84,6 +87,11 @@ struct SettingsView: View {
                              content: {
                 SubscriptionView(subscriber: self.$subscription.subscriber)
             })
+            .sheet(isPresented: self.$changeNickname, onDismiss: {
+                self.nickname = UserDefaults.standard.value(forKey: "nickname") as? String ?? UIStrings.emptyString
+            }, content: {
+                ChangeNicknameView(oldNickname: self.nickname)
+            })
             .sheet(isPresented: self.$showPrivacyPolicy,
                    content: {
                 WebView(url: URL(string: Links.privacyPolicyPage)!)
@@ -98,7 +106,7 @@ struct SettingsView: View {
             }, message: {
                 Text(UIStrings.accountDeletedInformation)
             })
-            .alert(UIStrings.accountDeletion, isPresented: self.$askAboutAccountDeletion) {
+            .alert(UIStrings.accountSettings, isPresented: self.$askAboutAccountDeletion) {
                 Button(UIStrings.deleteAccount, role: .destructive) {
                     let uid = Auth.auth().currentUser?.uid ?? UIStrings.emptyString
                     Firestore.firestore().collection(FirestorePaths.myJourneys(uid: uid)).getDocuments { querySnapshot, error in
