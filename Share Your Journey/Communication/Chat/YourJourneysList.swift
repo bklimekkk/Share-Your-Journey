@@ -125,13 +125,13 @@ struct YourJourneysList: View {
     func populateYourJourneys(completion: @escaping() -> Void) {
         let path = "\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(uid)/journeys"
         Firestore.firestore().collection(path).getDocuments() { (querySnapshot, error) in
+            completion()
             if error != nil {
                 print(error!.localizedDescription)
             } else {
                 for i in querySnapshot!.documents {
-                    completion()
                     //If conditions are met, journey's data is appended to the array.
-                    if !self.sentByYou.map({return $0.name}).contains(i.documentID) && i.documentID != "-" && !(i.get("deletedJourney") as? Bool ?? false) {
+                    if !self.sentByYou.map({return $0.name}).contains(i.documentID) && !(i.get("deletedJourney") as? Bool ?? false) {
                         self.sentByYou.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
                                                             name: i.documentID,
                                                             place: i.get("place") as? String ?? UIStrings.emptyString,

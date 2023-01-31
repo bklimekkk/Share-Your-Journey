@@ -274,16 +274,7 @@ struct LoginView: View {
         let instanceReference = Firestore.firestore()
         //Each of three collections in Firebase server needs to be populated with new user's date.
         instanceReference.document("\(FirestorePaths.users)/\(uid)").setData([
-            "email": email,
             "nickname": nickname,
-            "deletedAccount": false
-        ])
-        instanceReference.document("\(FirestorePaths.getFriends(uid: uid))/\(uid)").setData([
-            "email": email,
-            "deletedAccount": false
-        ])
-        instanceReference.document("\(FirestorePaths.getRequests(uid: uid))/\(uid)").setData([
-            "email": email,
             "deletedAccount": false
         ])
         instanceReference.collection(FirestorePaths.getFriends(uid: uid)).getDocuments { querySnapshot, error in

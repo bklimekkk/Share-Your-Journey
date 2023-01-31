@@ -90,7 +90,6 @@ struct AddFriendView: View {
      */
     func sendRequest() {
         Firestore.firestore().document("\(FirestorePaths.getRequests(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)").setData([
-            "email": Auth.auth().currentUser?.email ?? UIStrings.emptyString,
             "nickname": UserSettings.shared.nickname,
             "deletedAccount": false
         ])

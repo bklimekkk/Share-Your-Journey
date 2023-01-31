@@ -135,21 +135,11 @@ struct ListWithRequests: View {
             "deletedAccount" : false
         ])
         
-        //Collection needs to contain at least one document in order to exist, so It's populated with one. This collection is going to contain qll journeys sent from user.
-        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(request.uid)/journeys/-").setData([
-            "name" : "-"
-        ])
-        
         //Program also needs to take care about adding user to their friend's "friends" collection.
         Firestore.firestore().document("\(FirestorePaths.getFriends(uid: request.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)").setData([
             "uid" : Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
             "nickname" : UserSettings.shared.nickname,
             "deletedAccount" : false
-        ])
-        
-        //This collection is going to contain all journeys sent to user.
-        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: request.uid))/\(Auth.auth().currentUser?.uid ?? "")/journeys/-").setData([
-            "name" : "-"
         ])
         
         //After request accepted, it needs to be deleted from requests array automatically.

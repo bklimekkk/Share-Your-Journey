@@ -146,11 +146,9 @@ struct SettingsView: View {
                                             print(error.localizedDescription)
                                         } else {
                                             for j in querySnapshot!.documents {
-                                                if j.documentID != "-" {
                                                     Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: uid))/\(i.documentID)/journeys").document(j.documentID).updateData(["deletedJourney" : true])
                                                     //                                                    deleteAllPhotos(path: "users/\(uid)/friends/\(i.documentID)/journeys", journeyToDelete: j.documentID)
                                                     //                                                    deleteJourneyFromServer(path: "users/\(uid)/friends/\(i.documentID)/journeys", journeyToDelete: j.documentID)
-                                                }
                                             }
                                         }
                                     }
@@ -163,11 +161,9 @@ struct SettingsView: View {
                                         print(error.localizedDescription)
                                     } else {
                                         for i in querySnapshot!.documents {
-                                            if i.documentID != "-" {
                                                 Firestore.firestore().collection(FirestorePaths.myJourneys(uid: uid)).document(i.documentID).updateData(["deletedJourney" : true])
                                                 //                                                deleteAllPhotos(path: "users/\(uid)/friends/\(uid)/journeys", journeyToDelete: i.documentID)
                                                 //                                                deleteJourneyFromServer(path: "users/\(uid)/friends/\(uid)/journeys", journeyToDelete: i.documentID)
-                                            }
                                         }
                                     }
                                 }
