@@ -23,24 +23,7 @@ struct ChatView: View {
     //Variable contains text entered by user in order to search items in the array.
     @State private var searchJourney = UIStrings.emptyString
     @EnvironmentObject var notificationSetup: NotificationSetup
-    //Variable contains all journeys send by users that they searched.
-    private var sentByYouFiltered: [SingleJourney] {
-        if self.searchJourney == UIStrings.emptyString {
-            return self.sentByYou
-        } else {
-            return self.sentByYou.filter({return $0.place.lowercased().contains(self.searchJourney.lowercased())})
-        }
-    }
-    
-    //Variable contais all journeys searched by users.
-    private var sentByFriendFiltered: [SingleJourney] {
-        if self.searchJourney == UIStrings.emptyString {
-            return self.sentByFriend
-        } else {
-            return self.sentByFriend.filter({return $0.place.lowercased().contains(self.searchJourney.lowercased())})
-        }
-    }
-    
+
     //Friend's uid and nickname.
     var uid: String
     var nickname: String
@@ -60,8 +43,8 @@ struct ChatView: View {
                 YourJourneysList(searchJourney: self.$searchJourney,
                                  sendJourneyScreen: self.$sendJourneyScreen,
                                  askAboutDeletion: self.$askAboutDeletion,
-                                 sentByYou: self.$sentByYou, uid: self.uid,
-                                 sentByYouFiltered: self.sentByYouFiltered)
+                                 sentByYou: self.$sentByYou,
+                                 uid: self.uid)
                 Divider()
                 Spacer()
                 //Clicking this button opens screen enabling users to send selected journey.
@@ -76,7 +59,6 @@ struct ChatView: View {
             } else {
                 FriendJourneysList(searchJourney: self.$searchJourney,
                                    sentByFriend: self.$sentByFriend,
-                                   sentByFriendFiltered: self.sentByFriendFiltered,
                                    uid: self.uid)
                 .environmentObject(self.notificationSetup)
             }

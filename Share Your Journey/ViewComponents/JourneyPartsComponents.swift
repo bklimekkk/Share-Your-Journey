@@ -104,6 +104,17 @@ struct SingleJourney: Hashable {
     var photos: [SinglePhoto]
     var photosLocations: [CLLocationCoordinate2D]
 
+    init() {
+        self.uid = UIStrings.emptyString
+        self.name = UIStrings.emptyString
+        self.place = UIStrings.emptyString
+        self.date = Date.now
+        self.operationDate = Date.now
+        self.numberOfPhotos = 0
+        self.photos = []
+        self.photosLocations = []
+    }
+
     init(numberOfPhotos: Int,
          photos: [SinglePhoto],
          photosLocations: [CLLocationCoordinate2D]) {

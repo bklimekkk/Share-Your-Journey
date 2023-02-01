@@ -18,16 +18,19 @@ struct YourJourneysList: View {
     @Binding var sentByYou: [SingleJourney]
     
     //Variable is supposed to contain name of the journey that currently is supposed to be deleted.
-    @State private var journeyToDelete = UIStrings.emptyString
-    //Variable's value controls if program should delete journey from storage or not.
-    @State private var deleteFromStorage = true
+    @State private var journeyToDelete = SingleJourney()
     @State private var loadedYourJourneys = false
-    //Friend's uid address.
+    //Friend's uid.
     var uid: String
-    var sentByYouFiltered: [SingleJourney]
 
     var sentByYouFilteredSorted: [SingleJourney] {
-        return self.sentByYouFiltered.sorted(by: {$0.operationDate > $1.operationDate})
+        if self.searchJourney == UIStrings.emptyString {
+            return self.sentByYou
+        } else {
+            return self.sentByYou
+                .filter({return $0.place.lowercased().contains(self.searchJourney.lowercased())})
+                .sorted(by: {$0.operationDate > $1.operationDate})
+        }
     }
 
     var body: some View {
@@ -35,7 +38,7 @@ struct YourJourneysList: View {
         VStack {
             if !self.loadedYourJourneys {
                 LoadingView()
-            } else if self.sentByYouFiltered.isEmpty {
+            } else if self.sentByYouFilteredSorted.isEmpty {
                 NoDataView(text: UIStrings.noJourneysToShowTapToRefresh)
                     .onTapGesture {
                         self.loadedYourJourneys = false
@@ -62,7 +65,7 @@ struct YourJourneysList: View {
                                                                        path: "\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(self.uid)/journeys")) {
                                 EmptyView()
                             }
-                            .opacity(0)
+                                                                       .opacity(0)
                         }
                     }
                     .onDelete(perform: self.delete)
@@ -80,25 +83,18 @@ struct YourJourneysList: View {
                            message: Text(UIStrings.sureToDelete),
                            primaryButton: .cancel(Text(UIStrings.cancel)) {
                         self.askAboutDeletion = false
-                        self.journeyToDelete = UIStrings.emptyString
+                        self.journeyToDelete = SingleJourney()
                     },
                            secondaryButton: .destructive(Text(UIStrings.delete)) {
-                        
-                        self.deleteJourneyFromDatabase()
-                        
-                        //If journey doesn't exist in any other place in the server, it is completely deleted from storage.
-                        for i in 0...sentByYou.count - 1 {
-                            if self.sentByYou[i].name == self.journeyToDelete {
-                                if self.deleteFromStorage {
-                                    self.deleteJourneyFromStorage(numberOfPhotos: sentByYou[i].numberOfPhotos - 1)
-                                }
-                                self.sentByYou.remove(at: i)
-                                break
+                        self.deleteJourneyFromDatabase(name: self.journeyToDelete.name)
+                        // TODO: - check for a completion
+                        self.checkForDuplicate(name: self.journeyToDelete.name) { lastCopy in
+                            if lastCopy {
+                                self.deleteJourneyFromStorage(journey: self.journeyToDelete)
                             }
+                            self.sentByYou.removeAll(where: {$0.name == self.journeyToDelete.name})
+                            self.journeyToDelete = SingleJourney()
                         }
-                        self.deleteFromStorage = true
-                        self.askAboutDeletion = false
-                        self.journeyToDelete = UIStrings.emptyString
                     }
                     )
                 }
@@ -123,7 +119,7 @@ struct YourJourneysList: View {
      Function is responsible for populating array with users' journeys with data from the server.
      */
     func populateYourJourneys(completion: @escaping() -> Void) {
-        let path = "\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(uid)/journeys"
+        let path = "\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(self.uid)/journeys"
         Firestore.firestore().collection(path).getDocuments() { (querySnapshot, error) in
             completion()
             if error != nil {
@@ -147,24 +143,25 @@ struct YourJourneysList: View {
     /**
      Function is responsible for searching entire database (appropriate collections) in order to find out if journey's data still exist somewhere in the server.
      */
-    func searchJourneyInDatabase(journey: SingleJourney) {
+    func checkForDuplicate(name: String, completion: @escaping(Bool) -> Void) {
         let friendsPath = FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
         Firestore.firestore().collection(friendsPath).getDocuments { snapshot, error in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
-                //Firstly, algorithm searches for all user's friends, then it checks all journeys sent to them by this user.
-                for i in snapshot!.documents {
-                    if i.documentID != self.uid {
-                        Firestore.firestore().collection("\(friendsPath)/\(i.documentID)/journeys").getDocuments { journeySnapshot, error in
+                let documents = snapshot!.documents.filter({$0.documentID != self.uid})
+                if documents.isEmpty {
+                    completion(true)
+                } else {
+                    for friend in documents {
+                        Firestore.firestore().collection("\(friendsPath)/\(friend.documentID)/journeys").getDocuments { journeysSnapshot, error in
                             if error != nil {
                                 print(error!.localizedDescription)
                             } else {
-                                for j in journeySnapshot!.documents {
-                                    if j.documentID == journey.name {
-                                        self.deleteFromStorage = false
-                                        break
-                                    }
+                                if journeysSnapshot!.documents.first(where: {$0.documentID == name}) != nil {
+                                    completion(false)
+                                } else {
+                                    completion(true)
                                 }
                             }
                         }
@@ -172,19 +169,17 @@ struct YourJourneysList: View {
                 }
             }
         }
-        self.askAboutDeletion = true
-        self.journeyToDelete = journey.name
     }
     
     /**
      Function is responsible for deleting journey from list of journeys sent by user to particular friend.
      */
-    func deleteJourneyFromDatabase() {
+    func deleteJourneyFromDatabase(name: String) {
         let yourUID = Auth.auth().currentUser?.uid ?? UIStrings.emptyString
-        let path = "\(FirestorePaths.getFriends(uid: yourUID))/\(uid)/journeys"
+        let path = "\(FirestorePaths.getFriends(uid: yourUID))/\(self.uid)/journeys"
         
         //Before collection is deleted, program needs to delete its all photos references (Collection needs to be empty in order to be deleted eternally).
-        Firestore.firestore().collection("\(path)/\(journeyToDelete)/photos").getDocuments() { (querySnapshot, error) in
+        Firestore.firestore().collection("\(path)/\(name)/photos").getDocuments() { (querySnapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
@@ -193,8 +188,7 @@ struct YourJourneysList: View {
                 }
             }
         }
-        
-        Firestore.firestore().collection(path).document(journeyToDelete).delete() { error in
+        Firestore.firestore().collection(path).document(name).delete() { error in
             if error != nil {
                 print(error!.localizedDescription)
             }
@@ -204,11 +198,11 @@ struct YourJourneysList: View {
     /**
      Function is responsible for deleting journey's photos from storage.
      */
-    func deleteJourneyFromStorage(numberOfPhotos: Int) {
+    func deleteJourneyFromStorage(journey: SingleJourney) {
         
         //Each photo is deleted separately.
-        for j in 0...numberOfPhotos {
-            let deleteReference = Storage.storage().reference().child("\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/\(journeyToDelete)/\(j)")
+        for i in 0...journey.numberOfPhotos {
+            let deleteReference = Storage.storage().reference().child("\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/\(journey.name)/\(i)")
             deleteReference.delete { error in
                 if error != nil {
                     print("Error while deleting journey from storage")
@@ -220,6 +214,7 @@ struct YourJourneysList: View {
     }
 
     func delete(at offsets: IndexSet) {
-        self.searchJourneyInDatabase(journey: self.sentByYouFilteredSorted[offsets[offsets.startIndex]])
+        self.journeyToDelete = self.sentByYouFilteredSorted[offsets[offsets.startIndex]]
+        self.askAboutDeletion = true
     }
 }

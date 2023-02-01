@@ -90,12 +90,7 @@ struct SendJourneyView: View {
     
     //Function is responsible for deleting particular journey from the list of unsent journeys.
     func deleteFromSendingList(journeyName: String) {
-        for i in 0...self.unsentJourneys.count - 1 {
-            if self.unsentJourneys[i].name == journeyName {
-                self.unsentJourneys.remove(at: i)
-                break
-            }
-        }
+        self.unsentJourneys.removeAll(where: {$0.name == journeyName})
     }
     
     /**
@@ -109,11 +104,11 @@ struct SendJourneyView: View {
                 print(error!.localizedDescription)
             } else {
                 for i in snapshot!.documents {
-                        self.sentJourneys.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
-                                                               name: i.documentID,
-                                                               place: i.get("place") as? String ?? UIStrings.emptyString,
-                                                               date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(),
-                                                               numberOfPhotos: i.get("photosNumber") as? Int ?? IntConstants.defaultValue))
+                    self.sentJourneys.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
+                                                           name: i.documentID,
+                                                           place: i.get("place") as? String ?? UIStrings.emptyString,
+                                                           date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(),
+                                                           numberOfPhotos: i.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                 }
             }
             

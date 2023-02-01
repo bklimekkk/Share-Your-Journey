@@ -16,10 +16,15 @@ struct FriendJourneysList: View {
     @Binding var sentByFriend: [SingleJourney]
     @State private var loadedFriendsJourneys = false
     @EnvironmentObject var notificationSetup: NotificationSetup
-    var sentByFriendFiltered: [SingleJourney]
-    
-    var sentByFriendFilteredSorted: [SingleJourney] {
-        return sentByFriendFiltered.sorted(by: {$0.operationDate > $1.operationDate})
+
+    private var sentByFriendFilteredSorted: [SingleJourney] {
+        if self.searchJourney == UIStrings.emptyString {
+            return self.sentByFriend
+        } else {
+            return self.sentByFriend
+                .filter({return $0.place.lowercased().contains(self.searchJourney.lowercased())})
+                .sorted(by: {$0.operationDate > $1.operationDate})
+        }
     }
     
     //Friend's uid
@@ -29,7 +34,7 @@ struct FriendJourneysList: View {
         VStack {
             if !self.loadedFriendsJourneys {
                 LoadingView()
-            } else if self.sentByFriendFiltered.isEmpty {
+            } else if self.sentByFriendFilteredSorted.isEmpty {
                 NoDataView(text: UIStrings.noJourneysToShowTapToRefresh)
                     .onTapGesture {
                         self.loadedFriendsJourneys = false

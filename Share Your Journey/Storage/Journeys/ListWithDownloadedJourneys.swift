@@ -21,7 +21,7 @@ struct ListWithDownloadedJourneys: View {
     var sortedDownloadedJourneysFilteredList: [SingleJourney] {
         return self.downloadedJourneysFilteredList.sorted(by: {$0.operationDate > $1.operationDate})
     }
-    @Binding var journeyToDelete: String
+    @Binding var journeyToDelete: SingleJourney
     @Binding var askAboutDeletion: Bool
     
     var body: some View {
@@ -63,7 +63,7 @@ struct ListWithDownloadedJourneys: View {
                            message: Text(UIStrings.sureToDelete),
                            primaryButton: .cancel(Text(UIStrings.cancel)) {
                         self.askAboutDeletion = false
-                        self.journeyToDelete = UIStrings.emptyString
+                        self.journeyToDelete = SingleJourney()
                     },
                            secondaryButton: .destructive(Text(UIStrings.delete)) {
                         self.deleteDownloadedJourney()
@@ -107,30 +107,17 @@ struct ListWithDownloadedJourneys: View {
      Function is responsible for deleting journey that user downloaded previously.
      */
     func deleteDownloadedJourney() {
-        for i in 0...self.journeys.count - 1 {
-            if self.journeys[i].name == self.journeyToDelete {
-                self.moc.delete(self.journeys[i])
-                break
-            }
-        }
+        self.moc.delete(self.journeys.first(where: {$0.name == self.journeyToDelete.name}) ?? Journey())
         do {
             try moc.save()
         } catch {}
-        
-        //Journey has to be deleted from the array right away.
-        for i in 0...self.downloadedJourneysList.count - 1 {
-            if self.downloadedJourneysList[i].name == journeyToDelete {
-                self.downloadedJourneysList.remove(at: i)
-                break
-            }
-        }
-        
+        self.downloadedJourneysList.removeAll(where: {$0.name == self.journeyToDelete.name})
         self.askAboutDeletion = false
-        self.journeyToDelete = UIStrings.emptyString
+        self.journeyToDelete = SingleJourney()
     }
 
     func delete(at offsets: IndexSet) {
+        self.journeyToDelete = self.sortedDownloadedJourneysFilteredList[offsets[offsets.startIndex]]
         self.askAboutDeletion = true
-        self.journeyToDelete = self.sortedDownloadedJourneysFilteredList[offsets[offsets.startIndex]].name
     }
 }

@@ -17,14 +17,11 @@ struct JourneysView: View {
     //Variable is supposed to contain all journeys that user has downloaded before.
     @State private var downloadedJourneysList: [SingleJourney] = []
     //Variable is supposed to contain name of journey that needs to be deleted.
-    @State private var journeyToDelete = UIStrings.emptyString
+    @State private var journeyToDelete = SingleJourney()
     //Variable's value justifies if program should as user about deleting journey with alert.
     @State private var askAboutDeletion = false
     //Variable contains data entered by user to search through list of existing journeys.
     @State private var searchedJourney = UIStrings.emptyString
-    //Variable's value justifies if deleted journey should be deleted from storage as well (if it doesn't exist anywhere else in the system.
-    @State private var deleteFromStorage = true
-    
     //Variable is calculated by filtering list with user's journeys.
     private var journeysFilteredList: [SingleJourney]  {
         if self.searchedJourney == UIStrings.emptyString {
@@ -53,7 +50,7 @@ struct JourneysView: View {
             if self.downloaded {
                 ListWithDownloadedJourneys(downloadedJourneysFilteredList: self.downloadedJourneysFilteredList, downloadedJourneysList: self.$downloadedJourneysList, journeyToDelete: self.$journeyToDelete, askAboutDeletion: self.$askAboutDeletion)
             } else {
-                ListWithJourneys(journeysFilteredList: self.journeysFilteredList, journeysList: self.$journeysList, journeyToDelete: self.$journeyToDelete, deleteFromStorage: self.$deleteFromStorage, askAboutDeletion: self.$askAboutDeletion)
+                ListWithJourneys(journeysFilteredList: self.journeysFilteredList, journeysList: self.$journeysList, journeyToDelete: self.$journeyToDelete, askAboutDeletion: self.$askAboutDeletion)
             }
         }
         

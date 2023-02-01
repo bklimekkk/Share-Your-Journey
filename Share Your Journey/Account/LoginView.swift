@@ -277,6 +277,7 @@ struct LoginView: View {
             "nickname": nickname,
             "deletedAccount": false
         ])
+        instanceReference.document("\(FirestorePaths.getFriends(uid: uid))/\(uid)").setData(["deletedAccount": false])
         instanceReference.collection(FirestorePaths.getFriends(uid: uid)).getDocuments { querySnapshot, error in
             if let error = error {
                 print(error.localizedDescription)
