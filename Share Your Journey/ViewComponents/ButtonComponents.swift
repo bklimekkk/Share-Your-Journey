@@ -77,7 +77,7 @@ struct DownloadGalleryButton: View {
             ButtonView(buttonTitle: UIStrings.saveAllImagesToCameraRoll)
         }
         .background(Color.blue)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .clipShape(RoundedRectangle(cornerRadius: 7))
         .padding(.horizontal, 5)
         .padding(.top, 5)
         .disabled(self.journey.photos.map ({return $0.photo}).contains(UIImage()) ? true : false)
@@ -98,7 +98,7 @@ struct MapButton: View {
     }
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: 7)
                 .fill(.ultraThickMaterial)
                 .frame(width: 40, height: 40)
             if self.load {
@@ -111,7 +111,7 @@ struct MapButton: View {
             }
         }
         .overlay(
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: 7)
                 .stroke(.gray, lineWidth: 1)
         )
     }
@@ -122,7 +122,7 @@ struct MapTextButton: View {
     let text: String
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: 7)
                 .fill(.ultraThickMaterial)
                 .frame(width: 120, height: 40)
             HStack {
@@ -132,7 +132,7 @@ struct MapTextButton: View {
             }
         }
         .overlay(
-            RoundedRectangle(cornerRadius: 10)
+            RoundedRectangle(cornerRadius: 7)
                 .stroke(.gray, lineWidth: 1)
         )
     }

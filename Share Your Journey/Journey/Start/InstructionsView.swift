@@ -31,7 +31,7 @@ struct InstructionsView: View {
                         }
                         .disabled(true)
                         .background(Color.blue)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .clipShape(RoundedRectangle(cornerRadius: 7))
                         .frame(width: 50)
                         Text(UIStrings.resumingTheJourney)
                     }
@@ -41,7 +41,7 @@ struct InstructionsView: View {
                         }
                         .disabled(true)
                         .background(Color.green)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .clipShape(RoundedRectangle(cornerRadius: 7))
                         .frame(width: 50)
                         Text(UIStrings.finishingTheJourney)
                     }
@@ -52,7 +52,7 @@ struct InstructionsView: View {
                         }
                         .disabled(true)
                         .background(Color.red)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .clipShape(RoundedRectangle(cornerRadius: 7))
                         .frame(width: 50)
                         Text(UIStrings.deletingTheJourney)
                     }
@@ -111,7 +111,7 @@ struct InstructionsView: View {
                     HStack {
                         SymbolButtonView(buttonImage: Icons.pauseFill)
                             .background(Color.blue)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .clipShape(RoundedRectangle(cornerRadius: 7))
                             .frame(width: 40)
                         Text(UIStrings.allowsToPause)
                     }

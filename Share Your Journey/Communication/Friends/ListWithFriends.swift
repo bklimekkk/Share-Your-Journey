@@ -82,9 +82,9 @@ struct ListWithFriends: View {
             if error != nil {
                 print(error!.localizedDescription)
             } else {
-                for i in querySnapshot!.documents {
-                    if i.documentID != currentUID && !self.friendsSet.friendsList.map({$0.uid}).contains(i.documentID) && i.get("deletedAccount") as? Bool ?? false == false {
-                        self.friendsSet.friendsList.append(Person(nickname: i.get("nickname") as? String ?? UIStrings.emptyString, uid: i.documentID))
+                for friend in querySnapshot!.documents {
+                    if friend.documentID != currentUID && !self.friendsSet.friendsList.map({$0.uid}).contains(friend.documentID) && friend.get("deletedAccount") as? Bool ?? false == false {
+                        self.friendsSet.friendsList.append(Person(nickname: friend.get("nickname") as? String ?? UIStrings.emptyString, uid: friend.documentID))
                     }
                 }
             }

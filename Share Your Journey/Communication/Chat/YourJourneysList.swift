@@ -26,6 +26,7 @@ struct YourJourneysList: View {
     var sentByYouFilteredSorted: [SingleJourney] {
         if self.searchJourney == UIStrings.emptyString {
             return self.sentByYou
+                .sorted(by: {$0.operationDate > $1.operationDate})
         } else {
             return self.sentByYou
                 .filter({return $0.place.lowercased().contains(self.searchJourney.lowercased())})
@@ -125,15 +126,15 @@ struct YourJourneysList: View {
             if error != nil {
                 print(error!.localizedDescription)
             } else {
-                for i in querySnapshot!.documents {
+                for journey in querySnapshot!.documents {
                     //If conditions are met, journey's data is appended to the array.
-                    if !self.sentByYou.map({return $0.name}).contains(i.documentID) && !(i.get("deletedJourney") as? Bool ?? false) {
+                    if !self.sentByYou.map({return $0.name}).contains(journey.documentID) && !(journey.get("deletedJourney") as? Bool ?? false) {
                         self.sentByYou.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
-                                                            name: i.documentID,
-                                                            place: i.get("place") as? String ?? UIStrings.emptyString,
-                                                            date: (i.get("date") as? Timestamp)?.dateValue() ?? Date.now,
-                                                            operationDate: (i.get("operationDate") as? Timestamp)?.dateValue() ?? Date.now,
-                                                            numberOfPhotos: i.get("photosNumber") as? Int ?? IntConstants.defaultValue))
+                                                            name: journey.documentID,
+                                                            place: journey.get("place") as? String ?? UIStrings.emptyString,
+                                                            date: (journey.get("date") as? Timestamp)?.dateValue() ?? Date.now,
+                                                            operationDate: (journey.get("operationDate") as? Timestamp)?.dateValue() ?? Date.now,
+                                                            numberOfPhotos: journey.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                     }
                 }
             }
@@ -183,8 +184,8 @@ struct YourJourneysList: View {
             if error != nil {
                 print(error!.localizedDescription)
             } else {
-                for i in querySnapshot!.documents {
-                    i.reference.delete()
+                querySnapshot!.documents.forEach { document in
+                    document.reference.delete()
                 }
             }
         }
@@ -201,8 +202,8 @@ struct YourJourneysList: View {
     func deleteJourneyFromStorage(journey: SingleJourney) {
         
         //Each photo is deleted separately.
-        for i in 0...journey.numberOfPhotos {
-            let deleteReference = Storage.storage().reference().child("\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/\(journey.name)/\(i)")
+        for photoNumber in 0...journey.numberOfPhotos {
+            let deleteReference = Storage.storage().reference().child("\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/\(journey.name)/\(photoNumber)")
             deleteReference.delete { error in
                 if error != nil {
                     print("Error while deleting journey from storage")

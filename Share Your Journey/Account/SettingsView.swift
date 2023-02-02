@@ -113,10 +113,10 @@ struct SettingsView: View {
                         if let error = error {
                             print(error.localizedDescription)
                         } else {
-                            for i in querySnapshot!.documents {
-                                let photosNumber = i.get("photosNumber") as? Int ?? IntConstants.defaultValue
-                                for j in 0...photosNumber - 1 {
-                                    let deleteReference = Storage.storage().reference().child("\(uid)/\(i.documentID)/\(j)")
+                            for journey in querySnapshot!.documents {
+                                let photosNumber = journey.get("photosNumber") as? Int ?? IntConstants.defaultValue
+                                for photoNumber in 0...photosNumber - 1 {
+                                    let deleteReference = Storage.storage().reference().child("\(uid)/\(journey.documentID)/\(photoNumber)")
                                     deleteReference.delete { error in
                                         if let error = error {
                                             print(error.localizedDescription)
@@ -137,33 +137,30 @@ struct SettingsView: View {
                         if let error = error {
                             print(error.localizedDescription)
                         } else {
-                            for i in querySnapshot!.documents {
-                                if i.documentID != uid {
-                                    let accountReference = Firestore.firestore().collection(FirestorePaths.getFriends(uid: i.documentID)).document(uid)
+                            let documents = querySnapshot!.documents.filter({$0.documentID != uid})
+                            for friend in documents {
+                                    let accountReference = Firestore.firestore().collection(FirestorePaths.getFriends(uid: friend.documentID)).document(uid)
                                     accountReference.updateData(["deletedAccount" : true])
-                                    Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: uid))/\(i.documentID)/journeys").getDocuments { querySnapshot, error in
+                                    Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: uid))/\(friend.documentID)/journeys").getDocuments { querySnapshot, error in
                                         if let error = error {
                                             print(error.localizedDescription)
                                         } else {
-                                            for j in querySnapshot!.documents {
-                                                    Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: uid))/\(i.documentID)/journeys").document(j.documentID).updateData(["deletedJourney" : true])
-                                                    //                                                    deleteAllPhotos(path: "users/\(uid)/friends/\(i.documentID)/journeys", journeyToDelete: j.documentID)
-                                                    //                                                    deleteJourneyFromServer(path: "users/\(uid)/friends/\(i.documentID)/journeys", journeyToDelete: j.documentID)
+                                            for journey in querySnapshot!.documents {
+                                                    Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: uid))/\(friend.documentID)/journeys").document(journey.documentID).updateData(["deletedJourney" : true])
+                                                    //                                                    deleteAllPhotos(path: "users/\(uid)/friends/\(friend.documentID)/journeys", journeyToDelete: journey.documentID)
+                                                    //                                                    deleteJourneyFromServer(path: "users/\(uid)/friends/\(friend.documentID)/journeys", journeyToDelete: journey.documentID)
                                             }
                                         }
                                     }
-                                    
-                                    
-                                }
                                 
                                 Firestore.firestore().collection(FirestorePaths.myJourneys(uid: uid)).getDocuments { querySnapshot, error in
                                     if let error = error {
                                         print(error.localizedDescription)
                                     } else {
-                                        for i in querySnapshot!.documents {
-                                                Firestore.firestore().collection(FirestorePaths.myJourneys(uid: uid)).document(i.documentID).updateData(["deletedJourney" : true])
-                                                //                                                deleteAllPhotos(path: "users/\(uid)/friends/\(uid)/journeys", journeyToDelete: i.documentID)
-                                                //                                                deleteJourneyFromServer(path: "users/\(uid)/friends/\(uid)/journeys", journeyToDelete: i.documentID)
+                                        for journey in querySnapshot!.documents {
+                                                Firestore.firestore().collection(FirestorePaths.myJourneys(uid: uid)).document(journey.documentID).updateData(["deletedJourney" : true])
+                                                //                                                deleteAllPhotos(path: "users/\(uid)/friends/\(uid)/journeys", journeyToDelete: friend.documentID)
+                                                //                                                deleteJourneyFromServer(path: "users/\(uid)/friends/\(uid)/journeys", journeyToDelete: friend.documentID)
                                         }
                                     }
                                 }
@@ -195,8 +192,8 @@ struct SettingsView: View {
             if error != nil {
                 print(error!.localizedDescription)
             } else {
-                for i in querySnapshot!.documents {
-                    i.reference.delete()
+                for photo in querySnapshot!.documents {
+                    photo.reference.delete()
                 }
             }
         }

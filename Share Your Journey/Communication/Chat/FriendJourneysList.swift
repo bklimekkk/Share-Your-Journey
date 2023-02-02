@@ -20,6 +20,7 @@ struct FriendJourneysList: View {
     private var sentByFriendFilteredSorted: [SingleJourney] {
         if self.searchJourney == UIStrings.emptyString {
             return self.sentByFriend
+                .sorted(by: {$0.operationDate > $1.operationDate})
         } else {
             return self.sentByFriend
                 .filter({return $0.place.lowercased().contains(self.searchJourney.lowercased())})
@@ -96,24 +97,17 @@ struct FriendJourneysList: View {
                 print(error!.localizedDescription)
             } else {
                 let receivedJourneys = querySnapshot!.documents
-                for i in receivedJourneys {
-                    if !self.sentByFriend.map({return $0.name}).contains(i.documentID) && !(i.get("deletedJourney") as? Bool ?? false) {
+                for journey in receivedJourneys {
+                    if !self.sentByFriend.map({return $0.name}).contains(journey.documentID) && !(journey.get("deletedJourney") as? Bool ?? false) {
                         self.sentByFriend.append(SingleJourney(uid: uid,
-                                                               name: i.documentID,
-                                                               place: i.get("place") as? String ?? UIStrings.emptyString,
-                                                               date: (i.get("date") as? Timestamp)?.dateValue() ?? Date.now,
-                                                               operationDate: (i.get("operationDate") as? Timestamp)?.dateValue() ?? Date.now,
-                                                               numberOfPhotos: i.get("photosNumber") as? Int ?? IntConstants.defaultValue))
+                                                               name: journey.documentID,
+                                                               place: journey.get("place") as? String ?? UIStrings.emptyString,
+                                                               date: (journey.get("date") as? Timestamp)?.dateValue() ?? Date.now,
+                                                               operationDate: (journey.get("operationDate") as? Timestamp)?.dateValue() ?? Date.now,
+                                                               numberOfPhotos: journey.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                     }
                 }
-                if self.sentByFriend.count > 0 {
-                    for i in 0...self.sentByFriend.count - 1 {
-                        if !receivedJourneys.map({return $0.documentID}).contains(self.sentByFriend[i].name) {
-                            self.sentByFriend.remove(at: i)
-                            break
-                        }
-                    }
-                }
+                self.sentByFriend.removeAll(where: {!receivedJourneys.map({return $0.documentID}).contains($0.name)})
             }
         }
     }

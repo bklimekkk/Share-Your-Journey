@@ -33,7 +33,7 @@ struct PausedJourneyModeView: View {
                 SymbolButtonView(buttonImage: Icons.playFill)
             }
             .background(Color.blue)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: 7))
             Spacer()
             Button {
                 self.alert = .finish
@@ -48,7 +48,7 @@ struct PausedJourneyModeView: View {
                 SymbolButtonView(buttonImage: Icons.checkmark)
             }
             .background(Color.green)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: 7))
             
             Spacer()
             
@@ -59,7 +59,7 @@ struct PausedJourneyModeView: View {
                 SymbolButtonView(buttonImage: Icons.xmark)
             }
             .background(Color.red)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: 7))
         }
     }
     

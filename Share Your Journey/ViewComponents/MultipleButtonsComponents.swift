@@ -74,7 +74,7 @@ struct SumUpFunctionalityButtonsView: View {
                     .background(.red)
             }
             .background(Color.gray)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: 7))
             
             Spacer()
             
@@ -91,7 +91,7 @@ struct SumUpFunctionalityButtonsView: View {
                 ButtonView(buttonTitle: UIStrings.saveJourneyButtonTitle)
             }
             .background(Color.blue)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: 7))
         }
         .padding(.horizontal, 5)
         .padding(.bottom, 5)

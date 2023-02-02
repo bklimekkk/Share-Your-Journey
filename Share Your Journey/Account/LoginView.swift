@@ -82,7 +82,7 @@ struct LoginView: View {
                         ButtonView(buttonTitle: self.accountAccessManager.register ? UIStrings.createAccount : UIStrings.login)
                     }
                     .background(Color.blue)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .clipShape(RoundedRectangle(cornerRadius: 7))
                     //Reset password option shows up only when screen presents logging in functionality.
                     if !self.accountAccessManager.register {
                         Button{
@@ -282,16 +282,12 @@ struct LoginView: View {
             if let error = error {
                 print(error.localizedDescription)
             } else {
-                for i in querySnapshot!.documents {
-                    instanceReference.collection(FirestorePaths.getFriends(uid: i.documentID)).getDocuments { querySnapshot, error in
+                for friend in querySnapshot!.documents {
+                    instanceReference.collection(FirestorePaths.getFriends(uid: friend.documentID)).getDocuments { querySnapshot, error in
                         if let error = error {
                             print(error.localizedDescription)
                         } else {
-                            for j in querySnapshot!.documents {
-                                if j.documentID == uid {
-                                    instanceReference.collection(FirestorePaths.getFriends(uid: i.documentID)).document(uid).updateData(["deletedAccount" : false])
-                                }
-                            }
+                            instanceReference.collection(FirestorePaths.getFriends(uid: friend.documentID)).document(uid).updateData(["deletedAccount" : false])
                         }
                     }
                 }

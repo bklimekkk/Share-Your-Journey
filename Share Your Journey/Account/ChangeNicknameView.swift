@@ -39,7 +39,7 @@ struct ChangeNicknameView: View {
                 ButtonView(buttonTitle: UIStrings.changeNicknameButtonTitle)
             }
             .background(Color.blue)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: 7))
         }
         .padding()
         .alert(isPresented: self.$showNicknameExistsAlert) {

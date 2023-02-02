@@ -105,8 +105,8 @@ struct ListWithJourneys: View {
             if error != nil {
                 print(error!.localizedDescription)
             } else {
-                for i in querySnapshot!.documents {
-                    i.reference.delete()
+                querySnapshot!.documents.forEach { journey in
+                    journey.reference.delete()
                 }
             }
         }
@@ -122,8 +122,8 @@ struct ListWithJourneys: View {
      Function is responsible for deleting entire journey directory from storage, if needed.
      */
     func deleteJourneyFromStorage(journey: SingleJourney) {
-        for i in 0...journey.numberOfPhotos {
-            let deleteReference = Storage.storage().reference().child("\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/\(journey.name)/\(i)")
+        for photoNumber in 0...journey.numberOfPhotos {
+            let deleteReference = Storage.storage().reference().child("\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/\(journey.name)/\(photoNumber)")
             deleteReference.delete { error in
                 if error != nil {
                     print("Error while deleting journey from storage")
@@ -155,12 +155,12 @@ struct ListWithJourneys: View {
             if error != nil {
                 print(error!.localizedDescription)
             } else {
-                for i in querySnapshot!.documents {
-                    if !self.journeysList.map({return $0.name}).contains(i.documentID) && !(i.get("deletedJourney") as? Bool ?? false) {
-                        self.journeysList.append(SingleJourney(uid: i.get("uid") as? String ?? UIStrings.emptyString,
-                                                               name: i.documentID, place: i.get("place") as? String ?? UIStrings.emptyString,
-                                                               date: (i.get("date") as? Timestamp)?
-                            .dateValue() ?? Date(), numberOfPhotos: i.get("photosNumber") as? Int ?? IntConstants.defaultValue))
+                for journey in querySnapshot!.documents {
+                    if !self.journeysList.map({return $0.name}).contains(journey.documentID) && !(journey.get("deletedJourney") as? Bool ?? false) {
+                        self.journeysList.append(SingleJourney(uid: journey.get("uid") as? String ?? UIStrings.emptyString,
+                                                               name: journey.documentID, place: journey.get("place") as? String ?? UIStrings.emptyString,
+                                                               date: (journey.get("date") as? Timestamp)?
+                            .dateValue() ?? Date(), numberOfPhotos: journey.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                     }
                 }
             }

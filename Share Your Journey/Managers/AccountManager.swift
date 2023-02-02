@@ -41,10 +41,9 @@ struct AccountManager {
             if error != nil {
                 print(error?.localizedDescription ?? UIStrings.emptyString)
             } else {
-                for i in snapshot!.documents {
-                    if i.documentID != uid {
-                        Firestore.firestore().collection(FirestorePaths.getFriends(uid: i.documentID)).document(uid).updateData(["nickname": newNickname])
-                    }
+                let documents = snapshot!.documents.filter({$0.documentID != uid})
+                for friend in documents {
+                        Firestore.firestore().collection(FirestorePaths.getFriends(uid: friend.documentID)).document(uid).updateData(["nickname": newNickname])
                 }
             }
 

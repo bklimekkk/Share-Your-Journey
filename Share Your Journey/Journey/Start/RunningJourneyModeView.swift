@@ -45,7 +45,7 @@ struct RunningJourneyModeView: View {
                 SymbolButtonView(buttonImage: Icons.pauseFill)
             }
             .background(Color.blue)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: 7))
         }
     }
     

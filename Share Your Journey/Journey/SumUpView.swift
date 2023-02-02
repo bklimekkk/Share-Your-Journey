@@ -191,7 +191,7 @@ struct SumUpView: View {
                                     ButtonView(buttonTitle: UIStrings.sendToFriend)
                                         .background(Color.blue)
                                 }
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .clipShape(RoundedRectangle(cornerRadius: 7))
                                 Button {
                                     self.showSumUp = false
                                     self.dismiss()
@@ -200,7 +200,7 @@ struct SumUpView: View {
                                     ButtonView(buttonTitle: UIStrings.done)
                                         .background(Color.green)
                                 }
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                                .clipShape(RoundedRectangle(cornerRadius: 7))
                             }
                             .padding(.horizontal, 5)
                             .padding(.bottom, 5)

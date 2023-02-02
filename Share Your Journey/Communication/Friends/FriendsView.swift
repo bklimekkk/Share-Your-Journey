@@ -86,7 +86,7 @@ struct FriendsView: View {
                 ButtonView(buttonTitle: UIStrings.addANewFriend)
             }
             .background(Color.blue)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: 7))
             .padding(.horizontal, 5)
         }
         .onAppear {

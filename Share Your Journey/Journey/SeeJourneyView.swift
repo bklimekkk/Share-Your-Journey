@@ -323,8 +323,8 @@ struct SeeJourneyView: View {
                 print(error!.localizedDescription)
             } else {
                 self.preparePhotosArray()
-                for i in querySnapshot!.documents.sorted(by: { $1["photoNumber"] as? Int ?? IntConstants.defaultValue > $0["photoNumber"] as? Int ?? IntConstants.defaultValue }) {
-                    self.downloadPhotoDetails(queryDocumentSnapshot: i)
+                querySnapshot!.documents.sorted(by: { $1["photoNumber"] as? Int ?? IntConstants.defaultValue > $0["photoNumber"] as? Int ?? IntConstants.defaultValue }).forEach { photo in
+                    self.downloadPhotoDetails(queryDocumentSnapshot: photo)
                 }
             }
         }
@@ -334,15 +334,15 @@ struct SeeJourneyView: View {
      Function is responsible for pulling journey's data from the Core Data.
      */
     func getDownloadedJourneyDetails() {
-        for i in self.journeys {
-            if i.name == self.journey.name {
+        for journey in self.journeys {
+            if journey.name == self.journey.name {
                 self.journey.uid = Auth.auth().currentUser?.uid ?? UIStrings.emptyString
-                self.journey.numberOfPhotos = i.photosArray.count
-                for index in 0...i.photosArray.count - 1 {
-                    let singlePhoto = SinglePhoto(number: index, photo: i.photosArray[index].getImage)
+                self.journey.numberOfPhotos = journey.photosArray.count
+                for index in 0...journey.photosArray.count - 1 {
+                    let singlePhoto = SinglePhoto(number: index, photo: journey.photosArray[index].getImage)
                     self.journey.photos.append(singlePhoto)
-                    self.journey.photosLocations.append(CLLocationCoordinate2D(latitude: i.photosArray[index].latitude,
-                                                                               longitude: i.photosArray[index].longitude))
+                    self.journey.photosLocations.append(CLLocationCoordinate2D(latitude: journey.photosArray[index].latitude,
+                                                                               longitude: journey.photosArray[index].longitude))
                 }
                 break
             }
@@ -370,8 +370,8 @@ struct SeeJourneyView: View {
             arrayOfImages.append(SinglePhoto(number: 0, photo: UIImage()))
         }
         
-        for i in dictionaryOfPhotos {
-            arrayOfImages[i.key] = SinglePhoto(number: i.key, photo: i.value)
+        dictionaryOfPhotos.forEach { photo in
+            arrayOfImages[photo.key] = SinglePhoto(number: photo.key, photo: photo.value)
         }
         return arrayOfImages
     }

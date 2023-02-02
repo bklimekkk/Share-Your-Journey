@@ -31,22 +31,22 @@ struct SendJourneyManager {
                 print(error!.localizedDescription)
             } else {
                 //All photos details are stored inside document representing particular journey.
-                for i in querySnapshot!.documents.sorted(by: { $0["photoNumber"] as? Int ?? IntConstants.defaultValue > $1["photoNumber"] as? Int ?? IntConstants.defaultValue }) {
-                    Firestore.firestore().document("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(targetUID)/journeys/\(journey.name)/photos/\(i.documentID)").setData([
-                        "photoUrl": i.get("photoUrl") as? String ?? UIStrings.emptyString,
-                        "photoNumber": i.get("photoNumber") as? Int ?? IntConstants.defaultValue,
-                        "latitude": i.get("latitude") as? CLLocationDegrees ?? CLLocationDegrees(),
-                        "longitude": i.get("longitude") as? CLLocationDegrees ?? CLLocationDegrees(),
-                        "location": i.get("location") as? String ?? UIStrings.emptyString,
-                        "subLocation": i.get("subLocation") as? String ?? UIStrings.emptyString,
-                        "administrativeArea": i.get("administrativeArea") as? String ?? UIStrings.emptyString,
-                        "country": i.get("country") as? String ?? UIStrings.emptyString,
-                        "isoCountryCode": i.get("isoCountryCode") as? String ?? UIStrings.emptyString,
-                        "name": i.get("name") as? String ?? UIStrings.emptyString,
-                        "postalCode": i.get("postalCode") as? String ?? UIStrings.emptyString,
-                        "ocean": i.get("ocean") as? String ?? UIStrings.emptyString,
-                        "inlandWater": i.get("inlandWater") as? String ?? UIStrings.emptyString,
-                        "areasOfInterest": i.get("areasOfInterest") as? String ?? UIStrings.emptyString
+                for photo in querySnapshot!.documents.sorted(by: { $0["photoNumber"] as? Int ?? IntConstants.defaultValue > $1["photoNumber"] as? Int ?? IntConstants.defaultValue }) {
+                    Firestore.firestore().document("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(targetUID)/journeys/\(journey.name)/photos/\(photo.documentID)").setData([
+                        "photoUrl": photo.get("photoUrl") as? String ?? UIStrings.emptyString,
+                        "photoNumber": photo.get("photoNumber") as? Int ?? IntConstants.defaultValue,
+                        "latitude": photo.get("latitude") as? CLLocationDegrees ?? CLLocationDegrees(),
+                        "longitude": photo.get("longitude") as? CLLocationDegrees ?? CLLocationDegrees(),
+                        "location": photo.get("location") as? String ?? UIStrings.emptyString,
+                        "subLocation": photo.get("subLocation") as? String ?? UIStrings.emptyString,
+                        "administrativeArea": photo.get("administrativeArea") as? String ?? UIStrings.emptyString,
+                        "country": photo.get("country") as? String ?? UIStrings.emptyString,
+                        "isoCountryCode": photo.get("isoCountryCode") as? String ?? UIStrings.emptyString,
+                        "name": photo.get("name") as? String ?? UIStrings.emptyString,
+                        "postalCode": photo.get("postalCode") as? String ?? UIStrings.emptyString,
+                        "ocean": photo.get("ocean") as? String ?? UIStrings.emptyString,
+                        "inlandWater": photo.get("inlandWater") as? String ?? UIStrings.emptyString,
+                        "areasOfInterest": photo.get("areasOfInterest") as? String ?? UIStrings.emptyString
                     ])
                 }
             }

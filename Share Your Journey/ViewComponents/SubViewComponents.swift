@@ -102,7 +102,7 @@ struct PhotosAlbumView: View {
                     Image(uiImage: photo.photo)
                         .resizable()
                         .scaledToFit()
-                        .cornerRadius(10)
+                        .cornerRadius(7)
                         .padding(.vertical, 5)
                         .onTapGesture {
                             withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {

@@ -79,7 +79,7 @@ struct SendJourneyView: View {
                 } label: {
                     ButtonView(buttonTitle: UIStrings.done)
                         .background(Color.blue)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .clipShape(RoundedRectangle(cornerRadius: 7))
                         .padding()
                 }
             }
@@ -103,12 +103,12 @@ struct SendJourneyView: View {
             if error != nil {
                 print(error!.localizedDescription)
             } else {
-                for i in snapshot!.documents {
+                for journey in snapshot!.documents {
                     self.sentJourneys.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
-                                                           name: i.documentID,
-                                                           place: i.get("place") as? String ?? UIStrings.emptyString,
-                                                           date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(),
-                                                           numberOfPhotos: i.get("photosNumber") as? Int ?? IntConstants.defaultValue))
+                                                           name: journey.documentID,
+                                                           place: journey.get("place") as? String ?? UIStrings.emptyString,
+                                                           date: (journey.get("date") as? Timestamp)?.dateValue() ?? Date(),
+                                                           numberOfPhotos: journey.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                 }
             }
             
@@ -118,13 +118,13 @@ struct SendJourneyView: View {
                 if error != nil {
                     print(error!.localizedDescription)
                 } else {
-                    for i in snapshot!.documents {
-                        if !self.sentJourneys.map({$0.name}).contains(i.documentID) {
+                    for journey in snapshot!.documents {
+                        if !self.sentJourneys.map({$0.name}).contains(journey.documentID) {
                             self.unsentJourneys.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
-                                                                     name: i.documentID,
-                                                                     place: i.get("place") as? String ?? UIStrings.emptyString,
-                                                                     date: (i.get("date") as? Timestamp)?.dateValue() ?? Date(),
-                                                                     numberOfPhotos: i.get("photosNumber") as? Int ?? IntConstants.defaultValue))
+                                                                     name: journey.documentID,
+                                                                     place: journey.get("place") as? String ?? UIStrings.emptyString,
+                                                                     date: (journey.get("date") as? Timestamp)?.dateValue() ?? Date(),
+                                                                     numberOfPhotos: journey.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                         }
                     }
                 }

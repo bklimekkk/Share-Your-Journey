@@ -54,7 +54,7 @@ struct ChatView: View {
                     ButtonView(buttonTitle: UIStrings.sendJourney)
                 }
                 .background(Color.blue)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .clipShape(RoundedRectangle(cornerRadius: 7))
                 .padding(EdgeInsets(top: 0, leading: 5, bottom: 5, trailing: 5))
             } else {
                 FriendJourneysList(searchJourney: self.$searchJourney,

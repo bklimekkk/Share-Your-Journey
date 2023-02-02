@@ -56,7 +56,7 @@ struct AddFriendView: View {
                 ButtonView(buttonTitle: UIStrings.sendRequest)
             }
             .background(Color.blue)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: 7))
         }
         .padding()
         .alert(isPresented: self.$showMessage) {

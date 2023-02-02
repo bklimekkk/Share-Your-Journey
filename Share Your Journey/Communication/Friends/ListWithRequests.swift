@@ -93,9 +93,9 @@ struct ListWithRequests: View {
             if error != nil {
                 print(error!.localizedDescription)
             } else {
-                for i in querySnapshot!.documents {
-                    if i.documentID != currentUID && !self.requestsSet.requestsList.map({$0.uid}).contains(i.documentID) {
-                        self.requestsSet.requestsList.append(Person(nickname: i.get("nickname") as? String ?? UIStrings.emptyString, uid: i.documentID))
+                for request in querySnapshot!.documents {
+                    if request.documentID != currentUID && !self.requestsSet.requestsList.map({$0.uid}).contains(request.documentID) {
+                        self.requestsSet.requestsList.append(Person(nickname: request.get("nickname") as? String ?? UIStrings.emptyString, uid: request.documentID))
                     }
                 }
             }
@@ -106,21 +106,13 @@ struct ListWithRequests: View {
      Function is responsible for removing requests picked by user.
      */
     func removeRequest(request: Person) {
-        
         //Chosen request is deleted from Firestore database.
         Firestore.firestore().collection(FirestorePaths.getRequests(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)).document(request.uid).delete() { error in
             if error != nil {
                 print(error!.localizedDescription)
             }
         }
-        
-        //Request is deleted from the appropriate array.
-        for i in 0...self.requestsSet.requestsList.count - 1 {
-            if self.requestsSet.requestsList[i].uid == request.uid {
-                self.requestsSet.requestsList.remove(at: i)
-                break
-            }
-        }
+        self.requestsSet.requestsList.removeAll(where: {$0.uid == request.uid})
     }
     
     /**

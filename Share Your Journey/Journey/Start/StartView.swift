@@ -224,26 +224,26 @@ struct StartView: View {
         }
         .task {
             if !self.currentImages.isEmpty && self.arrayOfPhotos.isEmpty {
-                for i in self.currentImages {
-                    self.arrayOfPhotos.append(SinglePhoto(date: i.getDate,
-                                                          number: i.getId,
-                                                          photo: i.getImage,
-                                                          location: i.getLocation,
-                                                          subLocation: i.getSubLocation,
-                                                          administrativeArea: i.getAdministrativeArea,
-                                                          country: i.getCountry,
-                                                          isoCountryCode: i.getIsoCountryCode,
-                                                          name: i.getName,
-                                                          postalCode: i.getPostalCode,
-                                                          ocean: i.getOcean,
-                                                          inlandWater: i.getInlandWater,
-                                                          areasOfInterest: i.getAreasOfInterst.components(separatedBy: ",")))
+                self.currentImages.forEach { image in
+                    self.arrayOfPhotos.append(SinglePhoto(date: image.getDate,
+                                                          number: image.getId,
+                                                          photo: image.getImage,
+                                                          location: image.getLocation,
+                                                          subLocation: image.getSubLocation,
+                                                          administrativeArea: image.getAdministrativeArea,
+                                                          country: image.getCountry,
+                                                          isoCountryCode: image.getIsoCountryCode,
+                                                          name: image.getName,
+                                                          postalCode: image.getPostalCode,
+                                                          ocean: image.getOcean,
+                                                          inlandWater: image.getInlandWater,
+                                                          areasOfInterest: image.getAreasOfInterst.components(separatedBy: ",")))
                 }
             }
             
             if !self.currentLocations.isEmpty && self.arrayOfPhotosLocations.isEmpty {
-                for i in self.currentLocations {
-                    self.arrayOfPhotosLocations.append(CLLocationCoordinate2D(latitude: i.latitude, longitude: i.longitude))
+                self.currentLocations.forEach { location in
+                    self.arrayOfPhotosLocations.append(CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude))
                 }
             }
 
@@ -306,11 +306,11 @@ struct StartView: View {
                 self.journeyStateController.paused = false
                 self.arrayOfPhotos = []
                 self.arrayOfPhotosLocations = []
-                for i in self.currentImages {
-                    self.moc.delete(i)
+                self.currentImages.forEach { image in
+                    self.moc.delete(image)
                 }
-                for i in self.currentLocations {
-                    self.moc.delete(i)
+                self.currentLocations.forEach { location in
+                    self.moc.delete(location)
                 }
                 if self.moc.hasChanges {
                     try? self.moc.save()
@@ -346,11 +346,11 @@ struct StartView: View {
                     self.finishJourney()
                 } else {
                     self.alert = .finish
-                    for i in self.currentImages {
-                        self.moc.delete(i)
+                    self.currentImages.forEach { image in
+                        self.moc.delete(image)
                     }
-                    for i in self.currentLocations {
-                        self.moc.delete(i)
+                    self.currentLocations.forEach { location in
+                        self.moc.delete(location)
                     }
                     self.quitJourney()
                 }

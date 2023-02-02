@@ -36,12 +36,7 @@ struct SendViewedJourneyView: View {
 
                                         if self.listOfFriends.count > 0 {
                                             withAnimation {
-                                                for i in 0...self.listOfFriends.count - 1 {
-                                                    if self.listOfFriends[i] == friend {
-                                                        self.listOfFriends.remove(at: i)
-                                                        break
-                                                    }
-                                                }
+                                                self.listOfFriends.removeAll(where: {$0 == friend})
                                             }
                                         }
                                     }
@@ -78,14 +73,14 @@ struct SendViewedJourneyView: View {
                     if let error = error {
                         print(error.localizedDescription)
                     } else {
-                        for i in querySnapshot!.documents {
-                            if i.documentID != self.uid {
-                                Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: self.uid))/\(i)/journeys").getDocuments() { querySnapshot, error in
+                        for friend in querySnapshot!.documents {
+                            if friend.documentID != self.uid {
+                                Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: self.uid))/\(friend)/journeys").getDocuments() { querySnapshot, error in
                                     if let error = error {
                                         print(error.localizedDescription)
                                     } else {
                                         if !querySnapshot!.documents.map({$0.documentID}).contains(self.journey.name) {
-                                            self.listOfFriends.append(i.documentID)
+                                            self.listOfFriends.append(friend.documentID)
                                         }
                                     }
                                 }

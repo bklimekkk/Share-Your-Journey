@@ -90,13 +90,13 @@ struct ListWithDownloadedJourneys: View {
             self.downloadedJourneysList = []
         }
 
-        for i in self.journeys.filter({return $0.uid == Auth.auth().currentUser?.uid}) {
-            if !self.downloadedJourneysList.map({return $0.name}).contains(i.name) {
+        self.journeys.filter({return $0.uid == Auth.auth().currentUser?.uid}).forEach { journey in
+            if !self.downloadedJourneysList.map({return $0.name}).contains(journey.name) {
                 self.downloadedJourneysList.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
-                                                                 name: i.name ?? UIStrings.emptyString,
-                                                                 place: i.place ?? UIStrings.emptyString,
-                                                                 date: i.date ?? Date(),
-                                                                 numberOfPhotos: i.photosNumber as? Int ?? IntConstants.defaultValue,
+                                                                 name: journey.name ?? UIStrings.emptyString,
+                                                                 place: journey.place ?? UIStrings.emptyString,
+                                                                 date: journey.date ?? Date(),
+                                                                 numberOfPhotos: journey.photosNumber as? Int ?? IntConstants.defaultValue,
                                                                  photos: [],
                                                                  photosLocations: []))
             }
