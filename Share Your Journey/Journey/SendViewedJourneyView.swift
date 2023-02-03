@@ -73,15 +73,14 @@ struct SendViewedJourneyView: View {
                     if let error = error {
                         print(error.localizedDescription)
                     } else {
-                        for friend in querySnapshot!.documents {
-                            if friend.documentID != self.uid {
-                                Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: self.uid))/\(friend)/journeys").getDocuments() { querySnapshot, error in
-                                    if let error = error {
-                                        print(error.localizedDescription)
-                                    } else {
-                                        if !querySnapshot!.documents.map({$0.documentID}).contains(self.journey.name) {
-                                            self.listOfFriends.append(friend.documentID)
-                                        }
+                        let documents = querySnapshot!.documents.filter({$0.documentID != self.uid})
+                        for friend in documents {
+                            Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: self.uid))/\(friend)/journeys").getDocuments() { querySnapshot, error in
+                                if let error = error {
+                                    print(error.localizedDescription)
+                                } else {
+                                    if !querySnapshot!.documents.map({$0.documentID}).contains(self.journey.name) {
+                                        self.listOfFriends.append(friend.get("nickname") as? String ?? UIStrings.emptyString)
                                     }
                                 }
                             }

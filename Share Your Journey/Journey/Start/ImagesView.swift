@@ -69,21 +69,48 @@ struct ImagesView: View {
                             }
                         }
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            Menu {
-                                Button(UIStrings.viewInTheMap) {
-                                    self.showPicture = false
-                                    self.currentLocationManager.mapView.deselectAnnotation(self.currentLocationManager.mapView.selectedAnnotations.first,
-                                                                                           animated: true)
-                                    let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String(self.photoIndex + 1)}) ??
-                                    self.currentLocationManager.mapView.userLocation
-                                    self.currentLocationManager.mapView.selectAnnotation(annotationToSelect, animated: true)
-                                    self.dismiss()
+                            if self.showPicture {
+                                Menu {
+                                    Button {
+                                        self.showPicture = false
+                                        self.currentLocationManager.mapView.deselectAnnotation(self.currentLocationManager.mapView.selectedAnnotations.first,
+                                                                                               animated: true)
+                                        let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String(self.photoIndex + 1)}) ??
+                                        self.currentLocationManager.mapView.userLocation
+                                        self.currentLocationManager.mapView.selectAnnotation(annotationToSelect, animated: true)
+                                        self.dismiss()
+                                    } label: {
+                                        HStack {
+                                            Text(UIStrings.viewInTheMap)
+                                            Image(systemName: Icons.map)
+                                        }
+
+                                    }
+                                    Button {
+                                        self.showPhotoDetails = true
+                                    } label: {
+                                        HStack {
+                                            Text(UIStrings.checkInfo)
+                                            Image(systemName: Icons.infoCircle)
+                                        }
+                                    }
+                                    Button {
+                                        CommunicationManager.sendPhotoViaSocialMedia(image: self.singleJourney.photos[self.photoIndex].photo)
+                                    } label: {
+                                        HStack {
+                                            Text(UIStrings.sendViaSocialMedia)
+                                            Image(systemName: Icons.squareAndArrowUp)
+                                        }
+                                    }
+                                } label: {
+                                    Image(systemName: Icons.ellipsisCircle)
                                 }
-                                Button(UIStrings.checkInfo) {
-                                    self.showPhotoDetails = true
+                            } else {
+                                Button {
+                                    CommunicationManager.sendPhotosViaSocialMedia(images: self.singleJourney.photos.map({$0.photo}))
+                                } label: {
+                                    Image(systemName: Icons.squareAndArrowUp)
                                 }
-                            } label: {
-                                Image(systemName: Icons.ellipsisCircle)
                             }
                         }
                     }

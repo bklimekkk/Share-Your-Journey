@@ -206,8 +206,11 @@ struct StartView: View {
             VStack {
                 HStack {
                     Spacer()
-                    Button(UIStrings.checkInfo) {
+                    Button {
                         self.showInfo = true
+                    } label: {
+                        Image(systemName: Icons.infoCircle)
+                            .font(.system(size: 22.5))
                     }
                     .padding(.top, 5)
                     .padding(.trailing, 10)

@@ -139,7 +139,6 @@ struct AddFriendView: View {
                 }
                 completion(true)
             }
-
         }
     }
 

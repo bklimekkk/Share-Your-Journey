@@ -231,12 +231,22 @@ struct SumUpView: View {
                     if self.showPicture {
                     if !self.done {
                         Menu {
-                            Button(UIStrings.checkInfo) {
+                            Button {
                                 self.showInfo = true
+                            } label: {
+                                HStack {
+                                    Text(UIStrings.checkInfo)
+                                    Image(systemName: Icons.infoCircle)
+                                }
                             }
-                            Button(UIStrings.continueJourney) {
+                            Button {
                                 self.goBack = true
                                 self.dismiss()
+                            } label: {
+                                HStack {
+                                    Text(UIStrings.continueJourney)
+                                    Image(systemName: Icons.arrowLeftCircle)
+                                }
                             }
                         } label: {
                             Image(systemName: Icons.ellipsisCircle)

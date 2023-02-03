@@ -59,26 +59,19 @@ struct HighlightedPhoto: View {
                         .font(.system(size: 40))
                     Spacer()
                     Button {
-                        self.sendPhotoViaSocialMedia()
+                        CommunicationManager.sendPhotoViaSocialMedia(image: self.journey.photos[self.highlightedPhotoIndex].photo)
                     } label:{
                         Image(systemName: Icons.squareAndArrowUp)
                             .font(.system(size: 30))
                             .foregroundColor(Color(Colors.systemImageColor ?? .gray))
                             .offset(y: -5)
                     }
-
                 }
                 .padding(.horizontal)
             }
             .transition(.scale)
             .zIndex(1)
         }
-    }
-    
-    func sendPhotoViaSocialMedia() {
-        let activityViewController = UIActivityViewController(activityItems: [self.journey.photos[self.highlightedPhotoIndex].photo],
-                                                              applicationActivities: nil)
-        UIApplication.shared.windows.first?.rootViewController!.present(activityViewController, animated: true, completion: nil)
     }
 }
 

@@ -172,4 +172,5 @@ struct UIStrings {
     static let nicknameIsTaken = "This nickname is already taken"
     static let newNickname = "New Nickname"
     static let currentNickname = "This is your current nickname"
+    static let sendViaSocialMedia = "Send via social media"
 }

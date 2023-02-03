@@ -46,6 +46,7 @@
 		86573E5E27F8370B003E5CF8 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86573E5D27F8370B003E5CF8 /* ResetPasswordView.swift */; };
 		865889EE297EADDB00A0009E /* NotificationSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865889ED297EADDB00A0009E /* NotificationSender.swift */; };
 		8661CC34298723230092E036 /* ChangeNicknameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8661CC33298723230092E036 /* ChangeNicknameView.swift */; };
+		8661CC52298D23A20092E036 /* CommunicationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8661CC51298D23A20092E036 /* CommunicationManager.swift */; };
 		8663C26027DE0170007EB1E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */; };
 		8663C26127DE0170007EB1E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */; };
 		8663C26227DE0170007EB1E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */; };
@@ -167,6 +168,7 @@
 		86573E5D27F8370B003E5CF8 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		865889ED297EADDB00A0009E /* NotificationSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSender.swift; sourceTree = "<group>"; };
 		8661CC33298723230092E036 /* ChangeNicknameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNicknameView.swift; sourceTree = "<group>"; };
+		8661CC51298D23A20092E036 /* CommunicationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunicationManager.swift; sourceTree = "<group>"; };
 		8663C25F27DE0170007EB1E8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8665C79029574075007D7354 /* PhotosCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosCounterView.swift; sourceTree = "<group>"; };
 		8665C79229574592007D7354 /* SheetDismissButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetDismissButtonView.swift; sourceTree = "<group>"; };
@@ -352,6 +354,7 @@
 				8683852527E94AD30005FEE2 /* NetworkManager.swift */,
 				866A7E19293221C100CD3340 /* SpotDetailsManager.swift */,
 				861F6CE62983051F0022911C /* AccountManager.swift */,
+				8661CC51298D23A20092E036 /* CommunicationManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -711,6 +714,7 @@
 				86FCCC6028102449005FD678 /* ListWithRequests.swift in Sources */,
 				8639E00F289694D100D7A3F5 /* SendViewedJourneyView.swift in Sources */,
 				86D02263296B2F73002889B2 /* Extensions.swift in Sources */,
+				8661CC52298D23A20092E036 /* CommunicationManager.swift in Sources */,
 				86FCCC7B28107A2F005FD678 /* FieldComponents.swift in Sources */,
 				861F6CEA298332F60022911C /* UserSettings.swift in Sources */,
 				8665C7A029620014007D7354 /* FloatConstants.swift in Sources */,

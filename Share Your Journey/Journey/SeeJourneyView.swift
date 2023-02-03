@@ -257,26 +257,52 @@ struct SeeJourneyView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 if self.showPicture {
-                    Menu {
-                        if self.viewMode == .photoAlbum {
-                            Button(UIStrings.viewInTheMap) {
+                    if self.viewMode == .photoAlbum {
+                        Menu {
+                            Button {
                                 self.showPicture = false
                                 self.viewMode = .threeDimensional
+                            } label: {
+                                HStack {
+                                    Text(UIStrings.viewInTheMap)
+                                    Image(systemName: Icons.map)
+                                }
                             }
+                            Button {
+                                self.showPhotoDetails = true
+                            } label: {
+                                HStack {
+                                    Text(UIStrings.checkInfo)
+                                    Image(systemName: Icons.infoCircle)
+                                }
+                            }
+                        } label: {
+                            Image(systemName: Icons.ellipsisCircle)
                         }
-                        Button(UIStrings.checkInfo) {
+                    } else {
+                        Button {
                             self.showPhotoDetails = true
+                        } label: {
+                            Image(systemName: Icons.infoCircle)
                         }
-                    } label: {
-                        Image(systemName: Icons.ellipsisCircle)
                     }
                 } else {
                     Menu {
-                        Button(UIStrings.sendJourneyInTheApp) {
+                        Button {
                             self.showSendingView = true
+                        } label: {
+                            HStack {
+                                Text(UIStrings.sendJourneyInTheApp)
+                                Image(systemName: Icons.iphone)
+                            }
                         }
-                        Button(UIStrings.sendPhotosViaSocialMedia) {
-                            self.sendPhotosViaSocialMedia()
+                        Button {
+                            CommunicationManager.sendPhotosViaSocialMedia(images: self.journey.photos.map{$0.photo})
+                        } label: {
+                            HStack {
+                                Text(UIStrings.sendPhotosViaSocialMedia)
+                                Image(systemName: Icons.squareAndArrowUp)
+                            }
                         }
                     } label: {
                         Image(systemName: Icons.squareAndArrowUp)
@@ -512,10 +538,5 @@ struct SeeJourneyView: View {
                 "areasOfInterest": self.journey.photos[index].areasOfInterest.joined(separator: ",")
             ])
         }
-    }
-
-    func sendPhotosViaSocialMedia() {
-        let activityViewController = UIActivityViewController(activityItems: self.journey.photos.map{$0.photo}, applicationActivities: nil)
-        UIApplication.shared.windows.first?.rootViewController!.present(activityViewController, animated: true, completion: nil)
     }
 }
