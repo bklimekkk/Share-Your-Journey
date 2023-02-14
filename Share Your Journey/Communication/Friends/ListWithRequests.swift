@@ -15,14 +15,14 @@ struct ListWithRequests: View {
     @Binding var requestsSet: RequestsSet
     @State private var loadedRequests = false
     @EnvironmentObject var notificationSetup: NotificationSetup
-    var filteredRequestsList: [Person]
+    var filteredSortedRequestsList: [Person]
     
     var body: some View {
         
         VStack {
             if !self.loadedRequests {
                 LoadingView()
-            } else if self.filteredRequestsList.isEmpty {
+            } else if self.filteredSortedRequestsList.isEmpty {
                 NoDataView(text: UIStrings.noRequestsToShow)
                     .onTapGesture {
                         self.loadedRequests = false
@@ -32,21 +32,14 @@ struct ListWithRequests: View {
                     }
             } else {
                 //List contains all requests searched by user.
-                List (self.filteredRequestsList.sorted(by: {$0.nickname < $1.nickname}), id: \.self) { request in
+                List {
+                    ForEach(self.filteredSortedRequestsList, id: \.self) { request in
                     HStack {
-                        Button{
-                            self.removeRequest(request: request)
-                        } label: {
-                            Image(systemName: Icons.xmark)
-                                .padding(5)
-                                .foregroundColor(.gray)
-                        }
-                        .buttonStyle(PlainButtonStyle())
                         Text(request.nickname)
                             .bold()
                             .padding(.vertical, 15)
                         Spacer()
-                        Button{
+                        Button {
                             self.acceptRequest(request: request)
                         } label: {
                             Image(systemName: Icons.checkmark)
@@ -54,6 +47,8 @@ struct ListWithRequests: View {
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
+                }
+                    .onDelete(perform: self.delete)
                 }
                 .scrollDismissesKeyboard(.interactively)
                 .listStyle(.inset)
@@ -137,5 +132,9 @@ struct ListWithRequests: View {
         //After request accepted, it needs to be deleted from requests array automatically.
         self.removeRequest(request: request)
         self.notificationSetup.notificationType = .none
+    }
+
+    func delete(at offsets: IndexSet) {
+        self.removeRequest(request: self.filteredSortedRequestsList[offsets[offsets.startIndex]])
     }
 }

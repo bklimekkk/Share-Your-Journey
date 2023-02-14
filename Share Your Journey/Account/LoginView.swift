@@ -101,6 +101,7 @@ struct LoginView: View {
                 .padding()
                 .fullScreenCover(isPresented: self.$accountAccessManager.showVerificationMessage) {
                     self.accountAccessManager.register = false
+                    HapticFeedback.heavyHapticFeedback()
                 } content: {
                     VerificationInformation(email: email)
                 }

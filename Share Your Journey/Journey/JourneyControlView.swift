@@ -12,11 +12,12 @@ struct JourneyControlView: View {
     var numberOfPhotos: Int
     var currentLocationManager: CurrentLocationManager
     @Binding var currentPhotoIndex: Int
+    @Binding var mapType: MKMapType
     var body: some View {
         VStack {
             Spacer()
             HStack {
-                PhotosCounterView(currentNumber: self.currentPhotoIndex + 1, overallNumber: self.numberOfPhotos)
+                PhotosCounterView(currentNumber: self.currentPhotoIndex + 1, overallNumber: self.numberOfPhotos, mapType: self.$mapType)
                 Button {
                     self.currentLocationManager.mapView.deselectAnnotation(self.currentLocationManager.mapView.selectedAnnotations.first,
                                                                            animated: true)

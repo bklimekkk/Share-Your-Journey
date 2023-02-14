@@ -99,7 +99,7 @@ struct MapButton: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 7)
-                .fill(.ultraThickMaterial)
+                .fill(.regularMaterial)
                 .frame(width: 40, height: 40)
             if self.load {
                 ProgressView()
@@ -123,7 +123,7 @@ struct MapTextButton: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 7)
-                .fill(.ultraThickMaterial)
+                .fill(.regularMaterial)
                 .frame(width: 120, height: 40)
             HStack {
                 Image(systemName: self.imageName)

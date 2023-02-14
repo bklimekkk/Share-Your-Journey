@@ -23,19 +23,21 @@ struct RunningJourneyModeView: View {
     }
     var body: some View {
         HStack {
-            Button{
+            Button {
                 self.pickAPhoto = true
                 self.takeAPhoto = true
             } label: {
                 MapButton(imageName: Icons.plus)
+                    .foregroundColor(buttonColor)
             }
             
-            Button{
+            Button {
                 self.loadCamera = true
                 self.pickAPhoto = false
                 self.takeAPhoto = true
             } label: {
                 MapButton(imageName: Icons.cameraFill, load: self.loadCamera)
+                    .foregroundColor(buttonColor)
                     .padding(.trailing, 10)
             }
             

@@ -38,20 +38,22 @@ struct FriendsView: View {
     @State private var searchPeople = UIStrings.emptyString
     @EnvironmentObject var notificationSetup: NotificationSetup
     //Variable is calculated by filtering arrays due to date they entered to search window.
-    private var filteredRequestsList: [Person] {
+    private var filteredSortedRequestsList: [Person] {
         if self.searchPeople.isEmpty {
             return self.requestsSet.requestsList
         } else {
             return self.requestsSet.requestsList.filter { $0.nickname.lowercased().contains(self.searchPeople.lowercased()) }
+                .sorted(by: {$0.nickname < $1.nickname})
         }
     }
     
     //Variable will contain all user's friends filtered by text that user entered in search text field.
-    private var filteredFriendsList: [Person] {
+    private var filteredSortedFriendsList: [Person] {
         if self.searchPeople.isEmpty {
             return self.friendsSet.friendsList
         } else {
             return self.friendsSet.friendsList.filter { $0.nickname.lowercased().contains(searchPeople.lowercased()) }
+                .sorted(by: {$0.nickname < $1.nickname})
         }
     }
     
@@ -70,12 +72,12 @@ struct FriendsView: View {
             if self.requestMode {
                 ListWithRequests(searchPeople: self.$searchPeople,
                                  requestsSet: self.$requestsSet,
-                                 filteredRequestsList: self.filteredRequestsList)
+                                 filteredSortedRequestsList: self.filteredSortedRequestsList)
                 .environmentObject(notificationSetup)
             } else {
                 ListWithFriends(searchPeople: self.$searchPeople,
                                 friendsSet: self.$friendsSet,
-                                filteredFriendsList: self.filteredFriendsList)
+                                filteredSortedFriendsList: self.filteredSortedFriendsList)
                 .environmentObject(notificationSetup)
             }
             Divider()

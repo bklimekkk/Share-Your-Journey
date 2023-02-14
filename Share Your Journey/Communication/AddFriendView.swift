@@ -61,7 +61,7 @@ struct AddFriendView: View {
         .padding()
         .alert(isPresented: self.$showMessage) {
             //Depending on which error occurs, users are presented to relevant message.
-            Alert (title: Text(self.responseType == .valid ? self.responseType.rawValue : UIStrings.invitationError),
+            Alert (title: Text(self.responseType == .valid ? self.nickname : UIStrings.invitationError),
                    message: Text(self.responseType.rawValue),
                    primaryButton: .cancel(Text(responseType == .valid ? UIStrings.cancel : UIStrings.quit)) {
                 if self.responseType == .valid {
@@ -95,6 +95,7 @@ struct AddFriendView: View {
         ])
         self.showMessage = false
         self.sheetIsPresented = false
+        HapticFeedback.heavyHapticFeedback()
         NotificationSender.sendNotification(myNickname: UserSettings.shared.nickname,
                                             uid: self.uid,
                                             title: UIStrings.friendInvitationNotificationTitle,

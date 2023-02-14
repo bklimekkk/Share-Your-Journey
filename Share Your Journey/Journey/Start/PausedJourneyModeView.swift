@@ -22,9 +22,11 @@ struct PausedJourneyModeView: View {
     
     var body: some View {
         HStack {
-            MapButton(imageName: Icons.plusAppFill)
+            MapButton(imageName: Icons.plus)
+                .foregroundColor(.gray)
                 .disabled(true)
             MapButton(imageName: Icons.cameraFill)
+                .foregroundColor(.gray)
                 .disabled(true)
                 .padding(.trailing, 10)
             Button {

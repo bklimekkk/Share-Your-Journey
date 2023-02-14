@@ -15,13 +15,13 @@ struct ListWithFriends: View {
     @State private var loadedFriends = false
     @State private var showJourneyFromNotification = false
     @EnvironmentObject var notificationSetup: NotificationSetup
-    var filteredFriendsList: [Person]
+    var filteredSortedFriendsList: [Person]
     
     var body: some View {
         VStack {
             if !self.loadedFriends {
                 LoadingView()
-            } else if self.filteredFriendsList.isEmpty {
+            } else if self.filteredSortedFriendsList.isEmpty {
                 NoDataView(text: UIStrings.noFriendsToShow)
                     .onTapGesture {
                         self.loadedFriends = false
@@ -31,7 +31,7 @@ struct ListWithFriends: View {
                     }
             } else {
                 //List is sorted alphabetically.
-                List (self.filteredFriendsList.sorted(by: {$0.nickname < $1.nickname}), id: \.self) { friend in
+                List (self.filteredSortedFriendsList, id: \.self) { friend in
                     ZStack {
                         HStack {
                             Text(friend.nickname)

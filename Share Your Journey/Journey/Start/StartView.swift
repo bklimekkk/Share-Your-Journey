@@ -174,7 +174,8 @@ struct StartView: View {
                         if self.arrayOfPhotosLocations.count > 1 {
                             JourneyControlView(numberOfPhotos: self.arrayOfPhotosLocations.count,
                                                currentLocationManager: self.currentLocationManager,
-                                               currentPhotoIndex: self.$photoIndex)
+                                               currentPhotoIndex: self.$photoIndex,
+                                               mapType: self.$currentLocationManager.mapView.mapType)
                         }
                     }
                     .padding(.bottom, 10)

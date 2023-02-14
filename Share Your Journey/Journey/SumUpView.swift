@@ -173,7 +173,8 @@ struct SumUpView: View {
                                             if self.journey.numberOfPhotos > 1 {
                                                 JourneyControlView(numberOfPhotos: self.journey.photosLocations.count,
                                                                    currentLocationManager: self.currentLocationManager,
-                                                                   currentPhotoIndex: self.$photoIndex)
+                                                                   currentPhotoIndex: self.$photoIndex,
+                                                                   mapType: self.$currentLocationManager.mapView.mapType)
                                             }
                                         }
                                     }

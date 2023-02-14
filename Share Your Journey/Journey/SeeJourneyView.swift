@@ -238,7 +238,8 @@ struct SeeJourneyView: View {
                                     if self.journey.numberOfPhotos > 1 {
                                         JourneyControlView(numberOfPhotos: self.journey.photosLocations.count,
                                                            currentLocationManager: self.currentLocationManager,
-                                                           currentPhotoIndex: self.$currentPhotoIndex)
+                                                           currentPhotoIndex: self.$currentPhotoIndex,
+                                                           mapType: self.$currentLocationManager.mapView.mapType)
                                     }
                                 }
                                 .padding(.horizontal, 5)
