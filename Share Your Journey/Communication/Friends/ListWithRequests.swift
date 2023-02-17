@@ -125,7 +125,7 @@ struct ListWithRequests: View {
         //Program also needs to take care about adding user to their friend's "friends" collection.
         Firestore.firestore().document("\(FirestorePaths.getFriends(uid: request.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)").setData([
             "uid" : Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
-            "nickname" : UserSettings.shared.nickname,
+            "nickname" : UserDefaults.standard.string(forKey: "nickname") ?? UIStrings.emptyString,
             "deletedAccount" : false
         ])
         

@@ -51,9 +51,9 @@ struct SendJourneyManager {
                 }
             }
         }
-        NotificationSender.sendNotification(myNickname: UserSettings.shared.nickname,
+        NotificationSender.sendNotification(myNickname: UserDefaults.standard.string(forKey: "nickname") ?? UIStrings.emptyString,
                                             uid: targetUID,
                                             title: UIStrings.newJourneyNotificationTitle,
-                                            body: "\(UserSettings.shared.nickname) just sent you a journey")
+                                            body: "\(UserDefaults.standard.string(forKey: "nickname") ?? UIStrings.emptyString) just sent you a journey")
     }
 }

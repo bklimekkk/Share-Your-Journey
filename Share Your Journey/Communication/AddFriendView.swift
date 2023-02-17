@@ -90,16 +90,16 @@ struct AddFriendView: View {
      */
     func sendRequest() {
         Firestore.firestore().document("\(FirestorePaths.getRequests(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)").setData([
-            "nickname": UserSettings.shared.nickname,
+            "nickname": UserDefaults.standard.string(forKey: "nickname") ?? UIStrings.emptyString,
             "deletedAccount": false
         ])
         self.showMessage = false
         self.sheetIsPresented = false
         HapticFeedback.heavyHapticFeedback()
-        NotificationSender.sendNotification(myNickname: UserSettings.shared.nickname,
+        NotificationSender.sendNotification(myNickname: UserDefaults.standard.string(forKey: "nickname") ?? UIStrings.emptyString,
                                             uid: self.uid,
                                             title: UIStrings.friendInvitationNotificationTitle,
-                                            body: "\(UserSettings.shared.nickname) just sent you a friend invitation")
+                                            body: "\(UserDefaults.standard.string(forKey: "nickname") ?? UIStrings.emptyString) just sent you a friend invitation")
     }
 
     func getUIDFromNickname(nickname: String, completion: @escaping(String) -> Void) {

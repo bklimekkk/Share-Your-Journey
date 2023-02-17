@@ -41,6 +41,7 @@ struct FriendsView: View {
     private var filteredSortedRequestsList: [Person] {
         if self.searchPeople.isEmpty {
             return self.requestsSet.requestsList
+                .sorted(by: {$0.nickname < $1.nickname})
         } else {
             return self.requestsSet.requestsList.filter { $0.nickname.lowercased().contains(self.searchPeople.lowercased()) }
                 .sorted(by: {$0.nickname < $1.nickname})
@@ -51,6 +52,7 @@ struct FriendsView: View {
     private var filteredSortedFriendsList: [Person] {
         if self.searchPeople.isEmpty {
             return self.friendsSet.friendsList
+                .sorted(by: {$0.nickname < $1.nickname})
         } else {
             return self.friendsSet.friendsList.filter { $0.nickname.lowercased().contains(searchPeople.lowercased()) }
                 .sorted(by: {$0.nickname < $1.nickname})

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		86197618288D3D1C0034FF2C /* NoDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86197617288D3D1B0034FF2C /* NoDataView.swift */; };
 		861F6CE72983051F0022911C /* AccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F6CE62983051F0022911C /* AccountManager.swift */; };
-		861F6CEA298332F60022911C /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861F6CE9298332F60022911C /* UserSettings.swift */; };
 		8624119A2884D108007A86E2 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 862411992884D108007A86E2 /* StoreKit.framework */; };
 		862411A62887F683007A86E2 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 862411A52887F683007A86E2 /* RevenueCat */; };
 		862411A82888AE9F007A86E2 /* SubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862411A72888AE9E007A86E2 /* SubscriptionView.swift */; };
@@ -127,7 +126,6 @@
 /* Begin PBXFileReference section */
 		86197617288D3D1B0034FF2C /* NoDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoDataView.swift; sourceTree = "<group>"; };
 		861F6CE62983051F0022911C /* AccountManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountManager.swift; sourceTree = "<group>"; };
-		861F6CE9298332F60022911C /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		862411992884D108007A86E2 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		862411A72888AE9E007A86E2 /* SubscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionView.swift; sourceTree = "<group>"; };
 		862AA45727B14D6C001B9312 /* Share Your Journey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Share Your Journey.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -255,14 +253,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		861F6CE8298332E60022911C /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				861F6CE9298332F60022911C /* UserSettings.swift */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
 		862411982884D108007A86E2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -295,7 +285,6 @@
 		862AA45927B14D6C001B9312 /* Share Your Journey */ = {
 			isa = PBXGroup;
 			children = (
-				861F6CE8298332E60022911C /* Settings */,
 				866ACC88297D7AB1009A333C /* Notifications */,
 				866ACC87297D76D8009A333C /* Share Your Journey.entitlements */,
 				86D02261296B2F66002889B2 /* Extensions */,
@@ -716,7 +705,6 @@
 				86D02263296B2F73002889B2 /* Extensions.swift in Sources */,
 				8661CC52298D23A20092E036 /* CommunicationManager.swift in Sources */,
 				86FCCC7B28107A2F005FD678 /* FieldComponents.swift in Sources */,
-				861F6CEA298332F60022911C /* UserSettings.swift in Sources */,
 				8665C7A029620014007D7354 /* FloatConstants.swift in Sources */,
 				867254DD27B47B7B00DC5001 /* StartView.swift in Sources */,
 				86C6494C27CFAFD500891C24 /* JourneyDataManager.swift in Sources */,
