@@ -12,7 +12,7 @@ struct AccountManager {
     static func getNickname(uid: String, completion: @escaping(String) -> Void) {
         let nicknameRef = Firestore.firestore()
             .collection(FirestorePaths.users)
-            .document(Auth.auth().currentUser?.uid ?? "")
+            .document(uid)
         nicknameRef.getDocument { document, error in
             if let document = document, document.exists {
                 completion(document.get("nickname") as? String ?? "")
@@ -47,12 +47,18 @@ struct AccountManager {
                 }
             }
 
-
-
-
-
-
-
+            Firestore.firestore().collection("users/\(Auth.auth().currentUser?.uid ?? "")/sentRequests").getDocuments { snapshot, error in
+                if error != nil {
+                    print(error?.localizedDescription)
+                } else {
+                    let documents = snapshot?.documents
+                    documents?.forEach { document in
+                        Firestore.firestore().collection("users/\(document.documentID)/requests").document(Auth.auth().currentUser?.uid ?? "").updateData([
+                            "nickname": newNickname
+                        ])
+                    }
+                }
+            }
             // TODO: -   get requests
             UserDefaults.standard.set(newNickname, forKey: "nickname")
             completion()

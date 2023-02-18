@@ -107,6 +107,11 @@ struct ListWithRequests: View {
                 print(error!.localizedDescription)
             }
         }
+        Firestore.firestore().collection("users/\(request.uid)/sentRequests").document(Auth.auth().currentUser?.uid ?? "").delete() { error in
+            if error != nil {
+                print(error!.localizedDescription)
+            }
+        }
         self.requestsSet.requestsList.removeAll(where: {$0.uid == request.uid})
     }
     
@@ -114,13 +119,14 @@ struct ListWithRequests: View {
      Function responsible for accepting request sent to the user.
      */
     func acceptRequest(request: Person) {
-        
-        //UID of account from which the request was sent from, is added to friends collection in Firestore database.
-        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? ""))/\(request.uid)").setData([
-            "uid" : request.uid,
-            "nickname" : request.nickname,
-            "deletedAccount" : false
-        ])
+        AccountManager.getNickname(uid: request.uid) { nickname in
+            //UID of account from which the request was sent from, is added to friends collection in Firestore database.
+            Firestore.firestore().document("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? ""))/\(request.uid)").setData([
+                "uid" : request.uid,
+                "nickname" : nickname,
+                "deletedAccount" : false
+            ])
+        }
         
         //Program also needs to take care about adding user to their friend's "friends" collection.
         Firestore.firestore().document("\(FirestorePaths.getFriends(uid: request.uid))/\(Auth.auth().currentUser?.uid ?? "")").setData([
@@ -128,7 +134,7 @@ struct ListWithRequests: View {
             "nickname" : UserDefaults.standard.string(forKey: "nickname") ?? "",
             "deletedAccount" : false
         ])
-        
+
         //After request accepted, it needs to be deleted from requests array automatically.
         self.removeRequest(request: request)
         self.notificationSetup.notificationType = .none

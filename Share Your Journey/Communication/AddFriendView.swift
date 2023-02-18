@@ -93,7 +93,9 @@ struct AddFriendView: View {
             "nickname": UserDefaults.standard.string(forKey: "nickname") ?? "",
             "deletedAccount": false
         ])
-        Firestore.firestore().document("")
+        Firestore.firestore().document("users/\(Auth.auth().currentUser?.uid ?? "")/sentRequests/\(self.uid)").setData([
+            "uid": self.uid
+        ])
         self.showMessage = false
         self.sheetIsPresented = false
         HapticFeedback.heavyHapticFeedback()
