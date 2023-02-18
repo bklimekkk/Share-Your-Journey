@@ -14,11 +14,11 @@ struct AddFriendView: View {
     //Variable described in ChatView struct.
     @Binding var sheetIsPresented: Bool
     //Friend's details
-    @State private var nickname = UIStrings.emptyString
-    @State private var uid = UIStrings.emptyString
+    @State private var nickname = ""
+    @State private var uid = ""
     //Variable's value justifies if application should present users with any message.
     @State private var showMessage: Bool = false
-    @State private var errorMessage = UIStrings.emptyString
+    @State private var errorMessage = ""
     //Variable is set to one of enum values from InvitationError.
     @State private var responseType = InvitationError.valid
     
@@ -78,7 +78,7 @@ struct AddFriendView: View {
                 } else {
                     self.showMessage = false
                     self.responseType = .valid
-                    self.nickname = UIStrings.emptyString
+                    self.nickname = ""
                 }
             }
             )
@@ -89,22 +89,23 @@ struct AddFriendView: View {
      Function responsible for sending the request to user (pulating relevant 'requests' collection with relevant request data.
      */
     func sendRequest() {
-        Firestore.firestore().document("\(FirestorePaths.getRequests(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)").setData([
-            "nickname": UserDefaults.standard.string(forKey: "nickname") ?? UIStrings.emptyString,
+        Firestore.firestore().document("\(FirestorePaths.getRequests(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? "")").setData([
+            "nickname": UserDefaults.standard.string(forKey: "nickname") ?? "",
             "deletedAccount": false
         ])
+        Firestore.firestore().document("")
         self.showMessage = false
         self.sheetIsPresented = false
         HapticFeedback.heavyHapticFeedback()
-        NotificationSender.sendNotification(myNickname: UserDefaults.standard.string(forKey: "nickname") ?? UIStrings.emptyString,
+        NotificationSender.sendNotification(myNickname: UserDefaults.standard.string(forKey: "nickname") ?? "",
                                             uid: self.uid,
                                             title: UIStrings.friendInvitationNotificationTitle,
-                                            body: "\(UserDefaults.standard.string(forKey: "nickname") ?? UIStrings.emptyString) just sent you a friend invitation")
+                                            body: "\(UserDefaults.standard.string(forKey: "nickname") ?? "") just sent you a friend invitation")
     }
 
     func getUIDFromNickname(nickname: String, completion: @escaping(String) -> Void) {
         //If Statement is responsible for checking if users haven't omit entering data.
-        if nickname == UIStrings.emptyString {
+        if nickname == "" {
             self.responseType = .emptyField
             self.showMessage = true
             return
@@ -112,9 +113,9 @@ struct AddFriendView: View {
         Firestore.firestore().collection(FirestorePaths.users).getDocuments() { snapshot, error in
             if error != nil {
                 self.showMessage = true
-                self.errorMessage = error?.localizedDescription ?? UIStrings.emptyString
+                self.errorMessage = error?.localizedDescription ?? ""
             } else {
-                if let uid = snapshot!.documents.first(where: {$0.get("nickname") as? String ?? UIStrings.emptyString == nickname}) {
+                if let uid = snapshot!.documents.first(where: {$0.get("nickname") as? String ?? "" == nickname}) {
                     completion(uid.documentID)
                 } else {
                     self.responseType = .noAccount
@@ -127,7 +128,7 @@ struct AddFriendView: View {
 
     func checkIfFriendSentRequest(completion: @escaping(Bool) -> Void) {
         //If statement is responsible for checking if user's friend haven't sent them invitation.
-        Firestore.firestore().collection(FirestorePaths.getRequests(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)).getDocuments { snapshot, error in
+        Firestore.firestore().collection(FirestorePaths.getRequests(uid: Auth.auth().currentUser?.uid ?? "")).getDocuments { snapshot, error in
             if error != nil {
                 self.errorMessage = "Error while retrieving the list of requests"
                 self.showMessage = true
@@ -163,7 +164,7 @@ struct AddFriendView: View {
 
     func checkIfNotFriends(completion: @escaping(Bool) -> Void) {
         //If statement is responsible for checking if invited friend is user's friend already.
-        Firestore.firestore().collection(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)).getDocuments { snapshot, error in
+        Firestore.firestore().collection(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? "")).getDocuments { snapshot, error in
             if error != nil {
                 self.errorMessage = "Error while retrieving the list of requests"
                 self.showMessage = true

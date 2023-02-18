@@ -45,9 +45,9 @@ struct ListWithDownloadedJourneys: View {
                                     .foregroundColor(.gray)
                             }
                             NavigationLink (destination: SeeJourneyView(journey: journey,
-                                                                        uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
+                                                                        uid: Auth.auth().currentUser?.uid ?? "",
                                                                         downloadMode: true,
-                                                                        path: UIStrings.emptyString)) {
+                                                                        path: "")) {
                                 EmptyView()
                             }
                                                                         .opacity(0)
@@ -92,9 +92,9 @@ struct ListWithDownloadedJourneys: View {
 
         self.journeys.filter({return $0.uid == Auth.auth().currentUser?.uid}).forEach { journey in
             if !self.downloadedJourneysList.map({return $0.name}).contains(journey.name) {
-                self.downloadedJourneysList.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
-                                                                 name: journey.name ?? UIStrings.emptyString,
-                                                                 place: journey.place ?? UIStrings.emptyString,
+                self.downloadedJourneysList.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? "",
+                                                                 name: journey.name ?? "",
+                                                                 place: journey.place ?? "",
                                                                  date: journey.date ?? Date(),
                                                                  numberOfPhotos: journey.photosNumber as? Int ?? IntConstants.defaultValue,
                                                                  photos: [],

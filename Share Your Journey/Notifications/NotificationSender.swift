@@ -46,7 +46,7 @@ class NotificationSender {
             .document(uid)
         targetRef.getDocument { document, error in
             if let document = document, document.exists {
-                let token = document.get("fcmToken") as? String ?? UIStrings.emptyString
+                let token = document.get("fcmToken") as? String ?? ""
                 self.sendPushNotification(from: myNickname, to: token, title: title, body: body)
             } else {
                 print(error?.localizedDescription)
@@ -58,5 +58,5 @@ class NotificationSender {
 class NotificationSetup: ObservableObject {
     static let shared = NotificationSetup()
     @Published var notificationType: NotificationType = .none
-    @Published var sender: String? = UIStrings.emptyString
+    @Published var sender: String? = ""
 }

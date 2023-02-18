@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import Firebase
 import RevenueCat
 
 //Struct contains code that generates screen that users see after finishing the journey.

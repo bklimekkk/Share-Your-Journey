@@ -39,7 +39,7 @@ class JourneyStateController: ObservableObject {
     @Published var alertError = false
     @Published var alertMessage = false
     @Published var loadCamera = false
-    @Published var alertBody = UIStrings.emptyString
+    @Published var alertBody = ""
 }
 
 class CurrentImagesCollection: ObservableObject {
@@ -391,16 +391,16 @@ struct StartView: View {
 
             let locationCoordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
             SpotDetailsManager().calculatePlace(locationCoordinate: locationCoordinate) { placemark in
-                let locality = placemark?.locality ?? UIStrings.emptyString
-                let subLocality = placemark?.subLocality ?? UIStrings.emptyString
-                let administrativeArea = placemark?.administrativeArea ?? UIStrings.emptyString
-                let country = placemark?.country ?? UIStrings.emptyString
-                let isoCountryCode = placemark?.isoCountryCode ?? UIStrings.emptyString
-                let name = placemark?.name ?? UIStrings.emptyString
-                let postalCode = placemark?.postalCode ?? UIStrings.emptyString
-                let ocean = placemark?.ocean ?? UIStrings.emptyString
-                let inlandWater = placemark?.inlandWater ?? UIStrings.emptyString
-                let areasOfInterest = placemark?.areasOfInterest?.joined(separator: ",") ?? UIStrings.emptyString
+                let locality = placemark?.locality ?? ""
+                let subLocality = placemark?.subLocality ?? ""
+                let administrativeArea = placemark?.administrativeArea ?? ""
+                let country = placemark?.country ?? ""
+                let isoCountryCode = placemark?.isoCountryCode ?? ""
+                let name = placemark?.name ?? ""
+                let postalCode = placemark?.postalCode ?? ""
+                let ocean = placemark?.ocean ?? ""
+                let inlandWater = placemark?.inlandWater ?? ""
+                let areasOfInterest = placemark?.areasOfInterest?.joined(separator: ",") ?? ""
                 let date = Date()
                 let currentPhotoIndex = self.arrayOfPhotos.count - 1
                 self.arrayOfPhotos[currentPhotoIndex].date = date

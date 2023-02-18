@@ -35,15 +35,15 @@ struct SinglePhoto: Hashable {
         self.date = Date()
         self.number = 0
         self.photo = UIImage()
-        self.location = UIStrings.emptyString
-        self.subLocation = UIStrings.emptyString
-        self.administrativeArea = UIStrings.emptyString
-        self.country = UIStrings.emptyString
-        self.isoCountryCode = UIStrings.emptyString
-        self.name = UIStrings.emptyString
-        self.postalCode = UIStrings.emptyString
-        self.ocean = UIStrings.emptyString
-        self.inlandWater = UIStrings.emptyString
+        self.location = ""
+        self.subLocation = ""
+        self.administrativeArea = ""
+        self.country = ""
+        self.isoCountryCode = ""
+        self.name = ""
+        self.postalCode = ""
+        self.ocean = ""
+        self.inlandWater = ""
         self.areasOfInterest = []
     }
 
@@ -51,15 +51,15 @@ struct SinglePhoto: Hashable {
         self.date = Date()
         self.number = number
         self.photo = photo
-        self.location = UIStrings.emptyString
-        self.subLocation = UIStrings.emptyString
-        self.administrativeArea = UIStrings.emptyString
-        self.country = UIStrings.emptyString
-        self.isoCountryCode = UIStrings.emptyString
-        self.name = UIStrings.emptyString
-        self.postalCode = UIStrings.emptyString
-        self.ocean = UIStrings.emptyString
-        self.inlandWater = UIStrings.emptyString
+        self.location = ""
+        self.subLocation = ""
+        self.administrativeArea = ""
+        self.country = ""
+        self.isoCountryCode = ""
+        self.name = ""
+        self.postalCode = ""
+        self.ocean = ""
+        self.inlandWater = ""
         self.areasOfInterest = []
     }
 
@@ -105,9 +105,9 @@ struct SingleJourney: Hashable {
     var photosLocations: [CLLocationCoordinate2D]
 
     init() {
-        self.uid = UIStrings.emptyString
-        self.name = UIStrings.emptyString
-        self.place = UIStrings.emptyString
+        self.uid = ""
+        self.name = ""
+        self.place = ""
         self.date = Date.now
         self.operationDate = Date.now
         self.numberOfPhotos = 0
@@ -118,9 +118,9 @@ struct SingleJourney: Hashable {
     init(numberOfPhotos: Int,
          photos: [SinglePhoto],
          photosLocations: [CLLocationCoordinate2D]) {
-        self.uid = UIStrings.emptyString
-        self.name = UIStrings.emptyString
-        self.place = UIStrings.emptyString
+        self.uid = ""
+        self.name = ""
+        self.place = ""
         self.date = Date.now
         self.operationDate = Date.now
         self.numberOfPhotos = numberOfPhotos

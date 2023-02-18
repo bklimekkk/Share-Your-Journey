@@ -22,14 +22,14 @@ class AccountAccessManager: ObservableObject {
     //Variable justifies if screen should present users with reset password message.
     @Published var passwordResetAlert = false
     //Email that users are supposed to enter in order for the application to send reset uid.
-    @Published var resetEmail = UIStrings.emptyString
+    @Published var resetEmail = ""
 }
 
 class ErrorManager: ObservableObject {
     //This variable is set to true if an error message should be shown.
     @Published var showErrorMessage = false
     //This variable is set to relevant error message when needed.
-    @Published var errorBody = UIStrings.emptyString
+    @Published var errorBody = ""
 }
 
 //Struct responsible for presenting login and register screens of the application.
@@ -38,10 +38,10 @@ struct LoginView: View {
     //Variable checks if user uses the application for the first time. If yes, it will show the initial instructions.
     @AppStorage("showInstructions") var showInstructions: Bool = true
     //Variables represent user's uid, password and name, which are used for registration and logging in processes.
-    @State private var email = UIStrings.emptyString
-    @State private var password = UIStrings.emptyString
-    @State private var nickname = UIStrings.emptyString
-    @State private var repeatedPassword = UIStrings.emptyString
+    @State private var email = ""
+    @State private var password = ""
+    @State private var nickname = ""
+    @State private var repeatedPassword = ""
     //Variable controls if user is logged in or logged out.
     @Binding var loggedOut: Bool
     @StateObject private var accountAccessManager = AccountAccessManager()
@@ -95,8 +95,8 @@ struct LoginView: View {
                     }
                 }
                 .onAppear {
-                    self.email = self.defaults.string(forKey: UIStrings.emailKey) ?? UIStrings.emptyString
-                    self.password = self.defaults.string(forKey: UIStrings.passwordKey) ?? UIStrings.emptyString
+                    self.email = self.defaults.string(forKey: UIStrings.emailKey) ?? ""
+                    self.password = self.defaults.string(forKey: UIStrings.passwordKey) ?? ""
                 }
                 .padding()
                 .fullScreenCover(isPresented: self.$accountAccessManager.showVerificationMessage) {
@@ -106,7 +106,7 @@ struct LoginView: View {
                     VerificationInformation(email: email)
                 }
                 .sheet(isPresented: self.$accountAccessManager.resetPassword) {
-                    if self.accountAccessManager.resetEmail != UIStrings.emptyString {
+                    if self.accountAccessManager.resetEmail != "" {
                         self.accountAccessManager.passwordResetAlert = true
                     }
                 } content: {
@@ -132,7 +132,7 @@ struct LoginView: View {
             //Alert is shown to inform users that their password reset uid was sent.
             .alert(UIStrings.passwordResetEmail, isPresented: self.$accountAccessManager.passwordResetAlert, actions: {
                 Button(UIStrings.ok, role: .cancel) {
-                    self.accountAccessManager.resetEmail = UIStrings.emptyString
+                    self.accountAccessManager.resetEmail = ""
                     self.accountAccessManager.passwordResetAlert = false
                 }
             }, message: {
@@ -170,8 +170,8 @@ struct LoginView: View {
      */
     func clearPasswordField() {
         if !self.accountAccessManager.register {
-            self.password = UIStrings.emptyString
-            self.errorManager.errorBody = UIStrings.emptyString
+            self.password = ""
+            self.errorManager.errorBody = ""
         }
     }
     
@@ -196,7 +196,7 @@ struct LoginView: View {
         Auth.auth().signIn(withEmail: self.email, password: self.password) { result, error in
             if(error != nil) {
                 self.errorManager.showErrorMessage = true
-                self.errorManager.errorBody = error?.localizedDescription ?? UIStrings.emptyString
+                self.errorManager.errorBody = error?.localizedDescription ?? ""
                 return
             }
             //Program checks if users verified themselves already.
@@ -216,9 +216,9 @@ struct LoginView: View {
                 }
             }
             let token = Messaging.messaging().fcmToken
-            let usersRef = Firestore.firestore().collection("users").document(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
+            let usersRef = Firestore.firestore().collection("users").document(Auth.auth().currentUser?.uid ?? "")
             usersRef.setData(["fcmToken": token ?? ""], merge: true)
-            AccountManager.getNickname(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString) { nickname in
+            AccountManager.getNickname(uid: Auth.auth().currentUser?.uid ?? "") { nickname in
                 self.defaults.set(nickname, forKey: "nickname")
             }
             completion()
@@ -243,11 +243,11 @@ struct LoginView: View {
                     Auth.auth().createUser(withEmail: self.email, password: self.password) { result, error in
                         if error != nil {
                             self.errorManager.showErrorMessage = true
-                            self.errorManager.errorBody = error?.localizedDescription ?? UIStrings.emptyString
+                            self.errorManager.errorBody = error?.localizedDescription ?? ""
                             return
                         }
                         //User is added to the firestore database.
-                        self.addUser(email: self.email, nickname: self.nickname, uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
+                        self.addUser(email: self.email, nickname: self.nickname, uid: Auth.auth().currentUser?.uid ?? "")
                         Auth.auth().currentUser?.sendEmailVerification { error in
                             if error != nil {
                                 print(UIStrings.sendingVerificationError)
@@ -258,7 +258,7 @@ struct LoginView: View {
                 } else {
                     self.errorManager.showErrorMessage = true
                     self.errorManager.errorBody = UIStrings.nicknameIsTaken
-                    self.nickname = UIStrings.emptyString
+                    self.nickname = ""
                 }
             }
         } else {

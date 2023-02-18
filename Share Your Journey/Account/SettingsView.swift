@@ -18,7 +18,7 @@ struct SettingsView: View {
     @State private var showInstructions = false
     @State private var deletedAccount = false
     @State private var changeNickname = false
-    @State private var nickname = UIStrings.emptyString
+    @State private var nickname = ""
     
     var body: some View {
         NavigationView {
@@ -77,7 +77,7 @@ struct SettingsView: View {
                     }
                 }
 
-                self.nickname = UserDefaults.standard.string(forKey: "nickname") ?? UIStrings.emptyString
+                self.nickname = UserDefaults.standard.string(forKey: "nickname") ?? ""
 
             }
             .fullScreenCover(isPresented: $showInstructions, content: {
@@ -88,7 +88,7 @@ struct SettingsView: View {
                 SubscriptionView(subscriber: self.$subscription.subscriber)
             })
             .sheet(isPresented: self.$changeNickname, onDismiss: {
-                self.nickname = UserDefaults.standard.value(forKey: "nickname") as? String ?? UIStrings.emptyString
+                self.nickname = UserDefaults.standard.value(forKey: "nickname") as? String ?? ""
             }, content: {
                 ChangeNicknameView(oldNickname: self.nickname)
             })
@@ -108,7 +108,7 @@ struct SettingsView: View {
             })
             .alert(UIStrings.accountSettings, isPresented: self.$askAboutAccountDeletion) {
                 Button(UIStrings.deleteAccount, role: .destructive) {
-                    let uid = Auth.auth().currentUser?.uid ?? UIStrings.emptyString
+                    let uid = Auth.auth().currentUser?.uid ?? ""
                     Firestore.firestore().collection(FirestorePaths.myJourneys(uid: uid)).getDocuments { querySnapshot, error in
                         if let error = error {
                             print(error.localizedDescription)

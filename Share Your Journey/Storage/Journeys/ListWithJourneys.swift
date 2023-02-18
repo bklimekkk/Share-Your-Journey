@@ -48,7 +48,7 @@ struct ListWithJourneys: View {
                                     .foregroundColor(.gray)
                             }
 
-                            NavigationLink (destination: SeeJourneyView(journey: journey, uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString, downloadMode: false, path: "\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/journeys")) {
+                            NavigationLink (destination: SeeJourneyView(journey: journey, uid: Auth.auth().currentUser?.uid ?? "", downloadMode: false, path: "\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? ""))/\(Auth.auth().currentUser?.uid ?? "")/journeys")) {
                                 EmptyView()
                             }
                             .opacity(0)
@@ -99,7 +99,7 @@ struct ListWithJourneys: View {
      Function is responsible for deleting journey collection from firestore database.
      */
     func deleteJourneyFromServer(name: String) {
-        let yourUID = Auth.auth().currentUser?.uid ?? UIStrings.emptyString
+        let yourUID = Auth.auth().currentUser?.uid ?? ""
         let path = "\(FirestorePaths.getFriends(uid: yourUID))/\(yourUID)/journeys"
         Firestore.firestore().collection("\(path)/\(name)/photos").getDocuments() { (querySnapshot, error) in
             if error != nil {
@@ -123,7 +123,7 @@ struct ListWithJourneys: View {
      */
     func deleteJourneyFromStorage(journey: SingleJourney) {
         for photoNumber in 0...journey.numberOfPhotos {
-            let deleteReference = Storage.storage().reference().child("\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/\(journey.name)/\(photoNumber)")
+            let deleteReference = Storage.storage().reference().child("\(Auth.auth().currentUser?.uid ?? "")/\(journey.name)/\(photoNumber)")
             deleteReference.delete { error in
                 if error != nil {
                     print("Error while deleting journey from storage")
@@ -147,7 +147,7 @@ struct ListWithJourneys: View {
      Function is responsible for adding journeys to array, and refreshing it if needed.
      */
     func updateJourneys(completion: @escaping () -> Void) {
-        let uid = Auth.auth().currentUser?.uid ?? UIStrings.emptyString
+        let uid = Auth.auth().currentUser?.uid ?? ""
         let path = "\(FirestorePaths.getFriends(uid: uid))/\(uid)/journeys"
         
         Firestore.firestore().collection(path).getDocuments() { (querySnapshot, error) in
@@ -157,8 +157,8 @@ struct ListWithJourneys: View {
             } else {
                 for journey in querySnapshot!.documents {
                     if !self.journeysList.map({return $0.name}).contains(journey.documentID) && !(journey.get("deletedJourney") as? Bool ?? false) {
-                        self.journeysList.append(SingleJourney(uid: journey.get("uid") as? String ?? UIStrings.emptyString,
-                                                               name: journey.documentID, place: journey.get("place") as? String ?? UIStrings.emptyString,
+                        self.journeysList.append(SingleJourney(uid: journey.get("uid") as? String ?? "",
+                                                               name: journey.documentID, place: journey.get("place") as? String ?? "",
                                                                date: (journey.get("date") as? Timestamp)?
                             .dateValue() ?? Date(), numberOfPhotos: journey.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                     }
@@ -171,7 +171,7 @@ struct ListWithJourneys: View {
      Function is responsible for checking if journey occurs anywhere else in the database. If it doesn't, journey is ready to be deleted from storage as well.
      */
     func checkForDuplicate(name: String, completion: @escaping(Bool) -> Void) {
-        let friendsPath = FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
+        let friendsPath = FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? "")
         Firestore.firestore().collection(friendsPath).getDocuments { snapshot, error in
             if error != nil {
                 print(error!.localizedDescription)

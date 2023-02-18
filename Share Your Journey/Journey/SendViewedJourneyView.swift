@@ -11,43 +11,28 @@ import Firebase
 struct SendViewedJourneyView: View {
     var journey: SingleJourney
     @Environment(\.dismiss) var dismiss
-    @State private var listOfFriends: [String] = []
-    @State private var showDuplicationAlert = false
-    @State private var sendDuplicate = false
+    @State private var listOfFriends: [Person] = []
     var uid: String {
-        Auth.auth().currentUser?.uid ?? UIStrings.emptyString
+        Auth.auth().currentUser?.uid ?? ""
     }
     var body: some View {
         NavigationView {
-            List {
-                ForEach(self.listOfFriends.sorted(by: {$0 < $1}), id: \.self) { friend in
-                    Text(friend)
-                        .padding(.vertical, 15)
-                        .onTapGesture {
-                            Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: self.uid))/\(friend)/journeys").getDocuments { querySnapshot, error in
-                                if let error = error {
-                                    print(error.localizedDescription)
-                                } else {
-                                    if querySnapshot!.documents.map({$0.documentID}).contains(self.journey.name) {
-                                        self.showDuplicationAlert = true
-                                        
-                                    } else {
-                                        SendJourneyManager().sendJourney(journey: self.journey, targetUID: friend)
-
-                                        if self.listOfFriends.count > 0 {
-                                            withAnimation {
-                                                self.listOfFriends.removeAll(where: {$0 == friend})
-                                            }
-                                        }
-                                    }
+            VStack {
+                List {
+                    ForEach(self.listOfFriends.sorted(by: {$0.nickname < $1.nickname}), id: \.self) { friend in
+                        Text(friend.nickname)
+                            .padding(.vertical, 15)
+                            .onTapGesture {
+                                SendJourneyManager().sendJourney(journey: self.journey, targetUID: friend.uid)
+                                withAnimation {
+                                    self.listOfFriends.removeAll(where: {$0 == friend})
                                 }
                             }
-                        }
+                    }
                 }
-                
             }
             .listStyle(.plain)
-            .navigationTitle(UIStrings.chooseRecipients)
+            .navigationTitle(UIStrings.availableRecipients)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .bottomBar) {
@@ -63,26 +48,12 @@ struct SendViewedJourneyView: View {
                     }
                 }
             }
-            .alert(UIStrings.duplicateJourney, isPresented: self.$showDuplicationAlert, actions: {
-                Button(UIStrings.ok, role: .cancel){ }
-            },message: {
-                Text(UIStrings.journeyAlreadyExists)
-            })
             .task {
-                Firestore.firestore().collection(FirestorePaths.getFriends(uid: self.uid)).getDocuments { querySnapshot, error in
-                    if let error = error {
-                        print(error.localizedDescription)
-                    } else {
-                        let documents = querySnapshot!.documents.filter({$0.documentID != self.uid})
-                        for friend in documents {
-                            Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: self.uid))/\(friend)/journeys").getDocuments() { querySnapshot, error in
-                                if let error = error {
-                                    print(error.localizedDescription)
-                                } else {
-                                    if !querySnapshot!.documents.map({$0.documentID}).contains(self.journey.name) {
-                                        self.listOfFriends.append(friend.get("nickname") as? String ?? UIStrings.emptyString)
-                                    }
-                                }
+                self.getFriends { friends in
+                    friends.forEach { friend in
+                        getSentJourneys(friend: friend.uid) { alreadySent in
+                            if !alreadySent {
+                                self.listOfFriends.append(friend)
                             }
                         }
                     }
@@ -90,5 +61,31 @@ struct SendViewedJourneyView: View {
             }
         }
     }
+
+    func getFriends(completion: @escaping([Person]) -> Void) {
+        Firestore.firestore().collection(FirestorePaths.getFriends(uid: self.uid)).getDocuments { querySnapshot, error in
+            if let error = error {
+                print(error.localizedDescription)
+                completion([])
+            } else {
+                let documents = querySnapshot!.documents
+                    .filter({$0.documentID != self.uid})
+                    .map({Person(nickname: $0.get("nickname") as? String ?? "", uid: $0.documentID)})
+                completion(documents)
+            }
+        }
+    }
+
+    func getSentJourneys(friend: String, completion: @escaping(Bool) -> Void) {
+        Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: self.uid))/\(friend)/journeys").getDocuments() { querySnapshot, error in
+            if let error = error {
+                print(error.localizedDescription)
+                completion(true)
+            } else {
+                completion(querySnapshot!.documents.first(where: {$0.documentID == self.journey.name}) != nil)
+            }
+        }
+    }
 }
+
 

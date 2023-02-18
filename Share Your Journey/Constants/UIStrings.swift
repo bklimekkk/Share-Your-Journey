@@ -139,9 +139,8 @@ struct UIStrings {
     static let inlandWater = "Inland Water"
     static let areasOfInterest = "AreasOfInterest"
     static let details = "Details"
-    static let chooseRecipients = "Choose recipients"
+    static let availableRecipients = "Available recipients:"
     static let duplicateJourney = "Duplicate journey"
-    static let journeyAlreadyExists = "This journey already exists in your conversation with this person."
     static let repeatTheJourney = "Repeat The Journey"
     static let areYouSureToDownloadAllImages = "Are you sure that you want to download all images to your gallery?"
     static let unableToShowTheJourney = "Unable to show the journey"
@@ -173,4 +172,5 @@ struct UIStrings {
     static let newNickname = "New Nickname"
     static let currentNickname = "This is your current nickname"
     static let sendViaSocialMedia = "Send via social media"
+    static let noPeople = "No people to send journey to"
 }

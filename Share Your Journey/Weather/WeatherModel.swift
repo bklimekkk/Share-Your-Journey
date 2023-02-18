@@ -18,7 +18,7 @@ struct WeatherResponse: Codable {
         self.weather = weather
         self.main = main
         self.wind = wind
-        self.name = UIStrings.emptyString
+        self.name = ""
         self.sys = Sys()
     }
 }
@@ -43,7 +43,7 @@ struct Sys: Codable {
     let country: String
 
     init() {
-        self.country = UIStrings.emptyString
+        self.country = ""
     }
 }
 

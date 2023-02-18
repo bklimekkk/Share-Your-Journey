@@ -11,22 +11,18 @@ struct NoDataView: View {
     @Environment(\.colorScheme) var colorScheme
     var text: String
     init() {
-        self.text = UIStrings.emptyString
+        self.text = ""
     }
     init(text: String) {
         self.text = text
     }
     var body: some View {
-        HStack {
-            Spacer()
-            VStack {
+            VStack(alignment: .center) {
                 Spacer()
                 Text(self.text)
                     .foregroundColor(.gray)
                 Spacer()
             }
-            Spacer()
-        }
         .background {
             self.colorScheme == .light ? Color.white : Color.black
         }

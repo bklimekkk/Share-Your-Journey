@@ -24,7 +24,7 @@ struct YourJourneysList: View {
     var uid: String
 
     var sentByYouFilteredSorted: [SingleJourney] {
-        if self.searchJourney == UIStrings.emptyString {
+        if self.searchJourney == "" {
             return self.sentByYou
                 .sorted(by: {$0.operationDate > $1.operationDate})
         } else {
@@ -61,9 +61,9 @@ struct YourJourneysList: View {
                                     .foregroundColor(.gray)
                             }
                             NavigationLink(destination: SeeJourneyView(journey: journey,
-                                                                       uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
+                                                                       uid: Auth.auth().currentUser?.uid ?? "",
                                                                        downloadMode: false,
-                                                                       path: "\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(self.uid)/journeys")) {
+                                                                       path: "\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? ""))/\(self.uid)/journeys")) {
                                 EmptyView()
                             }
                                                                        .opacity(0)
@@ -120,7 +120,7 @@ struct YourJourneysList: View {
      Function is responsible for populating array with users' journeys with data from the server.
      */
     func populateYourJourneys(completion: @escaping() -> Void) {
-        let path = "\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(self.uid)/journeys"
+        let path = "\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? ""))/\(self.uid)/journeys"
         Firestore.firestore().collection(path).getDocuments() { (querySnapshot, error) in
             completion()
             if error != nil {
@@ -129,9 +129,9 @@ struct YourJourneysList: View {
                 for journey in querySnapshot!.documents {
                     //If conditions are met, journey's data is appended to the array.
                     if !self.sentByYou.map({return $0.name}).contains(journey.documentID) && !(journey.get("deletedJourney") as? Bool ?? false) {
-                        self.sentByYou.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
+                        self.sentByYou.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? "",
                                                             name: journey.documentID,
-                                                            place: journey.get("place") as? String ?? UIStrings.emptyString,
+                                                            place: journey.get("place") as? String ?? "",
                                                             date: (journey.get("date") as? Timestamp)?.dateValue() ?? Date.now,
                                                             operationDate: (journey.get("operationDate") as? Timestamp)?.dateValue() ?? Date.now,
                                                             numberOfPhotos: journey.get("photosNumber") as? Int ?? IntConstants.defaultValue))
@@ -145,7 +145,7 @@ struct YourJourneysList: View {
      Function is responsible for searching entire database (appropriate collections) in order to find out if journey's data still exist somewhere in the server.
      */
     func checkForDuplicate(name: String, completion: @escaping(Bool) -> Void) {
-        let friendsPath = FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
+        let friendsPath = FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? "")
         Firestore.firestore().collection(friendsPath).getDocuments { snapshot, error in
             if error != nil {
                 print(error!.localizedDescription)
@@ -176,7 +176,7 @@ struct YourJourneysList: View {
      Function is responsible for deleting journey from list of journeys sent by user to particular friend.
      */
     func deleteJourneyFromDatabase(name: String) {
-        let yourUID = Auth.auth().currentUser?.uid ?? UIStrings.emptyString
+        let yourUID = Auth.auth().currentUser?.uid ?? ""
         let path = "\(FirestorePaths.getFriends(uid: yourUID))/\(self.uid)/journeys"
         
         //Before collection is deleted, program needs to delete its all photos references (Collection needs to be empty in order to be deleted eternally).
@@ -203,7 +203,7 @@ struct YourJourneysList: View {
         
         //Each photo is deleted separately.
         for photoNumber in 0...journey.numberOfPhotos {
-            let deleteReference = Storage.storage().reference().child("\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/\(journey.name)/\(photoNumber)")
+            let deleteReference = Storage.storage().reference().child("\(Auth.auth().currentUser?.uid ?? "")/\(journey.name)/\(photoNumber)")
             deleteReference.delete { error in
                 if error != nil {
                     print("Error while deleting journey from storage")

@@ -14,7 +14,7 @@ struct SubscriptionView: View {
     @Binding var subscriber: Bool
     @State private var availablePackages: [Package] = []
     @State private var tappedBuyForButton = false
-    @State private var choice = UIStrings.emptyString
+    @State private var choice = ""
     var body: some View {
         NavigationView {
             Form {

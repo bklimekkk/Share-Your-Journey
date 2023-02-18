@@ -22,7 +22,7 @@ struct WeatherView: View {
     var body: some View {
         VStack {
             HStack {
-                Text("\(self.weatherResponse.name)\(self.weatherResponse.name.isEmpty ? UIStrings.emptyString : ",") \(self.weatherResponse.sys.country)")
+                Text("\(self.weatherResponse.name)\(self.weatherResponse.name.isEmpty ? "" : ",") \(self.weatherResponse.sys.country)")
                     .font(.headline).bold()
                 Spacer()
                 Picker(UIStrings.current, selection: self.$currentWeatherInformation) {
@@ -66,7 +66,7 @@ struct CurrentWeatherView: View {
     var body: some View {
         HStack (alignment: .top) {
             VStack(spacing: 0) {
-                AsyncImage(url: URL(string: "\(Links.openWeatherImageEndpoint)\(self.weatherResponse.weather.isEmpty ? UIStrings.emptyString : self.weatherResponse.weather[0].icon)@4x.png")) { image in
+                AsyncImage(url: URL(string: "\(Links.openWeatherImageEndpoint)\(self.weatherResponse.weather.isEmpty ? "" : self.weatherResponse.weather[0].icon)@4x.png")) { image in
                     image
                         .resizable()
                         .scaledToFit()

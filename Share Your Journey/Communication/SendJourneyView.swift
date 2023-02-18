@@ -21,7 +21,7 @@ struct SendJourneyView: View {
     //Arrays contains journeys already sent to particular friend an these that haven't been sent yet.
     @State private var sentJourneys: [SingleJourney] = []
     @State private var unsentJourneys: [SingleJourney] = []
-    @State private var searchText = UIStrings.emptyString
+    @State private var searchText = ""
     @State private var loadedJourneysToSend = false
 
     var filteredUnsentJourneys: [SingleJourney] {
@@ -99,30 +99,30 @@ struct SendJourneyView: View {
     func prepareJourneysToSend(completion: @escaping () -> Void) {
         //First of all, the program fetches all user's journeys that were sent to particular friend from firebase database and stores them in first array.
         let ownUID = Auth.auth().currentUser?.uid
-        Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: ownUID ?? UIStrings.emptyString))/\(self.targetUID)/journeys").getDocuments { (snapshot, error) in
+        Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: ownUID ?? ""))/\(self.targetUID)/journeys").getDocuments { (snapshot, error) in
             if error != nil {
                 print(error!.localizedDescription)
             } else {
                 for journey in snapshot!.documents {
-                    self.sentJourneys.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
+                    self.sentJourneys.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? "",
                                                            name: journey.documentID,
-                                                           place: journey.get("place") as? String ?? UIStrings.emptyString,
+                                                           place: journey.get("place") as? String ?? "",
                                                            date: (journey.get("date") as? Timestamp)?.dateValue() ?? Date(),
                                                            numberOfPhotos: journey.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                 }
             }
             
             //Then program fetches all user's journeys and populates another array with journeys that can't be found in the previous array (containing journeys already send). In this way program knows which journeys haven't been sent yet and presents them to user.
-            Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: ownUID ?? UIStrings.emptyString))/\(ownUID ?? UIStrings.emptyString)/journeys").getDocuments { (snapshot, error) in
+            Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: ownUID ?? ""))/\(ownUID ?? "")/journeys").getDocuments { (snapshot, error) in
                 completion()
                 if error != nil {
                     print(error!.localizedDescription)
                 } else {
                     for journey in snapshot!.documents {
                         if !self.sentJourneys.map({$0.name}).contains(journey.documentID) {
-                            self.unsentJourneys.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
+                            self.unsentJourneys.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? "",
                                                                      name: journey.documentID,
-                                                                     place: journey.get("place") as? String ?? UIStrings.emptyString,
+                                                                     place: journey.get("place") as? String ?? "",
                                                                      date: (journey.get("date") as? Timestamp)?.dateValue() ?? Date(),
                                                                      numberOfPhotos: journey.get("photosNumber") as? Int ?? IntConstants.defaultValue))
                         }

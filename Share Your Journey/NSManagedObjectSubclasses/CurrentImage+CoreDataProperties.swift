@@ -39,43 +39,43 @@ extension CurrentImage {
     }
 
     public var getLocation: String {
-        return self.location ?? UIStrings.emptyString
+        return self.location ?? ""
     }
 
     public var getSubLocation: String {
-        return self.subLocation ?? UIStrings.emptyString
+        return self.subLocation ?? ""
     }
 
     public var getAdministrativeArea: String {
-        return self.administrativeArea ?? UIStrings.emptyString
+        return self.administrativeArea ?? ""
     }
 
     public var getCountry: String {
-        return self.country ?? UIStrings.emptyString
+        return self.country ?? ""
     }
 
     public var getIsoCountryCode: String {
-        return self.isoCountryCode ?? UIStrings.emptyString
+        return self.isoCountryCode ?? ""
     }
 
     public var getName: String {
-        return self.name ?? UIStrings.emptyString
+        return self.name ?? ""
     }
 
     public var getPostalCode: String {
-        return self.postalCode ?? UIStrings.emptyString
+        return self.postalCode ?? ""
     }
 
     public var getOcean: String {
-        return self.ocean ?? UIStrings.emptyString
+        return self.ocean ?? ""
     }
 
     public var getInlandWater: String {
-        return self.inlandWater ?? UIStrings.emptyString
+        return self.inlandWater ?? ""
     }
 
     public var getAreasOfInterst: String {
-        return self.areasOfInterest ?? UIStrings.emptyString
+        return self.areasOfInterest ?? ""
     }
 
     public var getDate: Date {

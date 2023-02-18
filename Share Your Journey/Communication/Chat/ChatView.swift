@@ -21,7 +21,7 @@ struct ChatView: View {
     //Array containing journeys sent by friend.
     @State private var sentByFriend: [SingleJourney] = []
     //Variable contains text entered by user in order to search items in the array.
-    @State private var searchJourney = UIStrings.emptyString
+    @State private var searchJourney = ""
     @EnvironmentObject var notificationSetup: NotificationSetup
 
     //Friend's uid and nickname.

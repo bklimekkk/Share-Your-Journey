@@ -10,7 +10,7 @@ import SwiftUI
 struct ChangeNicknameView: View {
     @Environment(\.dismiss) var dismiss
     var oldNickname: String
-    @State private var newNickname = UIStrings.emptyString
+    @State private var newNickname = ""
     @State private var showNicknameExistsAlert = false
     @State private var emptyField = false
     @State private var yourNickname = false

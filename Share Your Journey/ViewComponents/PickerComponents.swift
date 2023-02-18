@@ -14,7 +14,7 @@ struct PickerView: View {
     var firstChoice: String
     var secondChoice: String
     var body: some View {
-        Picker(selection: self.choice, label: Text(UIStrings.emptyString)) {
+        Picker(selection: self.choice, label: Text("")) {
             Text(self.firstChoice)
                 .tag(false)
             Text(self.secondChoice)
@@ -34,7 +34,7 @@ struct JourneyPickerView: View {
     var secondChoice: String
     
     var body: some View {
-        Picker(selection: self.choice, label: Text(UIStrings.emptyString)) {
+        Picker(selection: self.choice, label: Text("")) {
             Text(self.firstChoice)
                 .tag(ViewType.photoAlbum)
             Text(self.secondChoice)

@@ -21,10 +21,10 @@ struct JourneysView: View {
     //Variable's value justifies if program should as user about deleting journey with alert.
     @State private var askAboutDeletion = false
     //Variable contains data entered by user to search through list of existing journeys.
-    @State private var searchedJourney = UIStrings.emptyString
+    @State private var searchedJourney = ""
     //Variable is calculated by filtering list with user's journeys.
     private var journeysFilteredList: [SingleJourney]  {
-        if self.searchedJourney == UIStrings.emptyString {
+        if self.searchedJourney == "" {
             return self.journeysList
         } else {
             return self.journeysList.filter({return $0.place.lowercased().contains(self.searchedJourney.lowercased())})
@@ -33,7 +33,7 @@ struct JourneysView: View {
     
     //Variable is calculated by filtering list with user's downloaded journeys.
     private var downloadedJourneysFilteredList: [SingleJourney]  {
-        if self.searchedJourney == UIStrings.emptyString {
+        if self.searchedJourney == "" {
             return self.downloadedJourneysList
         } else {
             return self.downloadedJourneysList.filter({return $0.place.lowercased().contains(self.searchedJourney.lowercased())})

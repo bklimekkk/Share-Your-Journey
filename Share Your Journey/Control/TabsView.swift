@@ -21,12 +21,12 @@ struct TabsView: View {
                     Label(UIStrings.yourJourneyTabTitle, systemImage: Icons.mapFill)
                 }
                 .tag(1)
-                .navigationTitle(UIStrings.emptyString)
+                .navigationTitle("")
                 .navigationBarHidden(true)
 
             NavigationView {
                 JourneysView()
-                    .navigationTitle(UIStrings.emptyString)
+                    .navigationTitle("")
                     .navigationBarHidden(true)
             }
             .tabItem {
@@ -36,7 +36,7 @@ struct TabsView: View {
             
             NavigationView {
                 FriendsView()
-                    .navigationTitle(UIStrings.emptyString)
+                    .navigationTitle("")
                     .navigationBarHidden(true)
                     .environmentObject(self.notificationSetup)
             }

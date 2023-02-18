@@ -18,7 +18,7 @@ struct FriendJourneysList: View {
     @EnvironmentObject var notificationSetup: NotificationSetup
 
     private var sentByFriendFilteredSorted: [SingleJourney] {
-        if self.searchJourney == UIStrings.emptyString {
+        if self.searchJourney == "" {
             return self.sentByFriend
                 .sorted(by: {$0.operationDate > $1.operationDate})
         } else {
@@ -60,7 +60,7 @@ struct FriendJourneysList: View {
                             NavigationLink(destination: SeeJourneyView(journey: journey,
                                                                        uid: self.uid,
                                                                        downloadMode: false,
-                                                                       path: "\(FirestorePaths.getFriends(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/journeys")) {
+                                                                       path: "\(FirestorePaths.getFriends(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? "")/journeys")) {
                                 EmptyView()
                             }
                                                                        .opacity(0)
@@ -82,7 +82,7 @@ struct FriendJourneysList: View {
                 self.loadedFriendsJourneys = true
             })
             self.notificationSetup.notificationType = .none
-            self.notificationSetup.sender = UIStrings.emptyString
+            self.notificationSetup.sender = ""
         }
     }
     
@@ -90,7 +90,7 @@ struct FriendJourneysList: View {
      Function is responsible for populating the array with journeys sent by friend.
      */
     func populateFriendsJourneys(completion: @escaping () -> Void) {
-        let path = "\(FirestorePaths.getFriends(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/journeys"
+        let path = "\(FirestorePaths.getFriends(uid: self.uid))/\(Auth.auth().currentUser?.uid ?? "")/journeys"
         Firestore.firestore().collection(path).getDocuments() { (querySnapshot, error) in
             completion()
             if error != nil {
@@ -101,7 +101,7 @@ struct FriendJourneysList: View {
                     if !self.sentByFriend.map({return $0.name}).contains(journey.documentID) && !(journey.get("deletedJourney") as? Bool ?? false) {
                         self.sentByFriend.append(SingleJourney(uid: uid,
                                                                name: journey.documentID,
-                                                               place: journey.get("place") as? String ?? UIStrings.emptyString,
+                                                               place: journey.get("place") as? String ?? "",
                                                                date: (journey.get("date") as? Timestamp)?.dateValue() ?? Date.now,
                                                                operationDate: (journey.get("operationDate") as? Timestamp)?.dateValue() ?? Date.now,
                                                                numberOfPhotos: journey.get("photosNumber") as? Int ?? IntConstants.defaultValue))

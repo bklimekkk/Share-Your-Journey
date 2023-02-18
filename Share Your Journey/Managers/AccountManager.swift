@@ -12,10 +12,10 @@ struct AccountManager {
     static func getNickname(uid: String, completion: @escaping(String) -> Void) {
         let nicknameRef = Firestore.firestore()
             .collection(FirestorePaths.users)
-            .document(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
+            .document(Auth.auth().currentUser?.uid ?? "")
         nicknameRef.getDocument { document, error in
             if let document = document, document.exists {
-                completion(document.get("nickname") as? String ?? UIStrings.emptyString)
+                completion(document.get("nickname") as? String ?? "")
             } else {
                 print(error?.localizedDescription)
             }
@@ -27,7 +27,7 @@ struct AccountManager {
             if error != nil {
                 completion(false)
             } else {
-                var uniqueNicknames = Set(querySnapshot!.documents.map({$0.get("nickname") as? String ?? UIStrings.emptyString}))
+                var uniqueNicknames = Set(querySnapshot!.documents.map({$0.get("nickname") as? String ?? ""}))
                 uniqueNicknames.insert(nickname)
                 completion(uniqueNicknames.count == querySnapshot!.documents.count + 1)
             }
@@ -35,17 +35,22 @@ struct AccountManager {
     }
 
     static func changeNickname(newNickname: String, completion: @escaping() -> Void) {
-        let uid = Auth.auth().currentUser?.uid ?? UIStrings.emptyString
+        let uid = Auth.auth().currentUser?.uid ?? ""
         Firestore.firestore().collection(FirestorePaths.users).document(uid).updateData(["nickname": newNickname])
         Firestore.firestore().collection(FirestorePaths.getFriends(uid: uid)).getDocuments { snapshot, error in
             if error != nil {
-                print(error?.localizedDescription ?? UIStrings.emptyString)
+                print(error?.localizedDescription ?? "")
             } else {
                 let documents = snapshot!.documents.filter({$0.documentID != uid})
                 for friend in documents {
                         Firestore.firestore().collection(FirestorePaths.getFriends(uid: friend.documentID)).document(uid).updateData(["nickname": newNickname])
                 }
             }
+
+
+
+
+
 
 
             // TODO: -   get requests

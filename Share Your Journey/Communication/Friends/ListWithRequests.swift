@@ -18,7 +18,7 @@ struct ListWithRequests: View {
     var filteredSortedRequestsList: [Person]
     
     var body: some View {
-        
+    
         VStack {
             if !self.loadedRequests {
                 LoadingView()
@@ -74,7 +74,7 @@ struct ListWithRequests: View {
     func populateRequests(completion: @escaping() -> Void) {
         
         //Variable controls which user is currently logged in into the application.
-        let currentUID = Auth.auth().currentUser?.uid ?? UIStrings.emptyString
+        let currentUID = Auth.auth().currentUser?.uid ?? ""
         
         //Users can change account while being on the same phone. This statement detects it and refreshes the array accordingly.
         if self.requestsSet.ownUID != currentUID {
@@ -90,7 +90,7 @@ struct ListWithRequests: View {
             } else {
                 for request in querySnapshot!.documents {
                     if request.documentID != currentUID && !self.requestsSet.requestsList.map({$0.uid}).contains(request.documentID) {
-                        self.requestsSet.requestsList.append(Person(nickname: request.get("nickname") as? String ?? UIStrings.emptyString, uid: request.documentID))
+                        self.requestsSet.requestsList.append(Person(nickname: request.get("nickname") as? String ?? "", uid: request.documentID))
                     }
                 }
             }
@@ -102,7 +102,7 @@ struct ListWithRequests: View {
      */
     func removeRequest(request: Person) {
         //Chosen request is deleted from Firestore database.
-        Firestore.firestore().collection(FirestorePaths.getRequests(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)).document(request.uid).delete() { error in
+        Firestore.firestore().collection(FirestorePaths.getRequests(uid: Auth.auth().currentUser?.uid ?? "")).document(request.uid).delete() { error in
             if error != nil {
                 print(error!.localizedDescription)
             }
@@ -116,16 +116,16 @@ struct ListWithRequests: View {
     func acceptRequest(request: Person) {
         
         //UID of account from which the request was sent from, is added to friends collection in Firestore database.
-        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(request.uid)").setData([
+        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? ""))/\(request.uid)").setData([
             "uid" : request.uid,
             "nickname" : request.nickname,
             "deletedAccount" : false
         ])
         
         //Program also needs to take care about adding user to their friend's "friends" collection.
-        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: request.uid))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)").setData([
-            "uid" : Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
-            "nickname" : UserDefaults.standard.string(forKey: "nickname") ?? UIStrings.emptyString,
+        Firestore.firestore().document("\(FirestorePaths.getFriends(uid: request.uid))/\(Auth.auth().currentUser?.uid ?? "")").setData([
+            "uid" : Auth.auth().currentUser?.uid ?? "",
+            "nickname" : UserDefaults.standard.string(forKey: "nickname") ?? "",
             "deletedAccount" : false
         ])
         

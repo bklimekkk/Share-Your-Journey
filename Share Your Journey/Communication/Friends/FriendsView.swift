@@ -31,11 +31,11 @@ struct FriendsView: View {
     //Variable responsible for justifying if users want to add new friend at the particular moment.
     @State private var addNewFriend = false
     //Variable contains detalis about user's requests.
-    @State private var requestsSet = RequestsSet(ownUID: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
+    @State private var requestsSet = RequestsSet(ownUID: Auth.auth().currentUser?.uid ?? "")
     //Variable will contain data necessary to populate array with user's friends.
-    @State private var friendsSet = FriendsSet(ownUID: Auth.auth().currentUser?.uid ?? UIStrings.emptyString)
+    @State private var friendsSet = FriendsSet(ownUID: Auth.auth().currentUser?.uid ?? "")
     //Variable conains data entered by user while searching both arrays (requests and friends).
-    @State private var searchPeople = UIStrings.emptyString
+    @State private var searchPeople = ""
     @EnvironmentObject var notificationSetup: NotificationSetup
     //Variable is calculated by filtering arrays due to date they entered to search window.
     private var filteredSortedRequestsList: [Person] {

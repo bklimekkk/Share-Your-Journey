@@ -70,7 +70,7 @@ struct ListWithFriends: View {
     func populateFriends(completion: @escaping() -> Void) {
         
         //This block of code ensures that users that are currently logged in, will see their own friends list (even after logging out).
-        let currentUID = Auth.auth().currentUser?.uid ?? UIStrings.emptyString
+        let currentUID = Auth.auth().currentUser?.uid ?? ""
         if self.friendsSet.ownUID != currentUID {
             self.friendsSet.friendsList = []
             self.friendsSet.ownUID = currentUID
@@ -84,7 +84,7 @@ struct ListWithFriends: View {
             } else {
                 for friend in querySnapshot!.documents {
                     if friend.documentID != currentUID && !self.friendsSet.friendsList.map({$0.uid}).contains(friend.documentID) && friend.get("deletedAccount") as? Bool ?? false == false {
-                        self.friendsSet.friendsList.append(Person(nickname: friend.get("nickname") as? String ?? UIStrings.emptyString, uid: friend.documentID))
+                        self.friendsSet.friendsList.append(Person(nickname: friend.get("nickname") as? String ?? "", uid: friend.documentID))
                     }
                 }
             }

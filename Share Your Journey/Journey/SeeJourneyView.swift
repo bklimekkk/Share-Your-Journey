@@ -45,7 +45,7 @@ struct SeeJourneyView: View {
     //Variable's value justifies if journey was downloading after changing its name (if duplication occured).
     @State private var downloadChangedJourney = false
     //Variable's value contains data about journey's new name (after changing it because of duplication).
-    @State private var journeyNewName = UIStrings.emptyString
+    @State private var journeyNewName = ""
     //Variable checks if presented journey was already downloaded (not to be mistaken with "areadyDownloaded which search for duplication in the Core Data).
     @State private var journeyIsDownloaded = false
     @State private var showSendingView = false
@@ -67,11 +67,15 @@ struct SeeJourneyView: View {
                   predicate: nil,
                   animation: nil) var journeys: FetchedResults<Journey>
     
-    //Journey owner's uid address.
+    //Journey owner's uid.
     var uid: String
     //Variable checks if program is showing downloaded (Core Data) journey or the journey from the server.
     var downloadMode: Bool
     var path: String
+
+    var myJourney: Bool {
+        self.uid == Auth.auth().currentUser?.uid
+    }
 
     var buttonColor: Color {
         self.colorScheme == .dark ? .white : .blue
@@ -288,25 +292,33 @@ struct SeeJourneyView: View {
                         }
                     }
                 } else {
-                    Menu {
-                        Button {
-                            self.showSendingView = true
-                        } label: {
-                            HStack {
-                                Text(UIStrings.sendJourneyInTheApp)
-                                Image(systemName: Icons.iphone)
+                    if self.myJourney {
+                        Menu {
+                            Button {
+                                self.showSendingView = true
+                            } label: {
+                                HStack {
+                                    Text(UIStrings.sendJourneyInTheApp)
+                                    Image(systemName: Icons.iphone)
+                                }
                             }
+                            Button {
+                                CommunicationManager.sendPhotosViaSocialMedia(images: self.journey.photos.map{$0.photo})
+                            } label: {
+                                HStack {
+                                    Text(UIStrings.sendPhotosViaSocialMedia)
+                                    Image(systemName: Icons.squareAndArrowUp)
+                                }
+                            }
+                        } label: {
+                            Image(systemName: Icons.squareAndArrowUp)
                         }
+                    } else {
                         Button {
                             CommunicationManager.sendPhotosViaSocialMedia(images: self.journey.photos.map{$0.photo})
                         } label: {
-                            HStack {
-                                Text(UIStrings.sendPhotosViaSocialMedia)
-                                Image(systemName: Icons.squareAndArrowUp)
-                            }
+                            Image(systemName: Icons.squareAndArrowUp)
                         }
-                    } label: {
-                        Image(systemName: Icons.squareAndArrowUp)
                     }
                 }
             }
@@ -363,7 +375,7 @@ struct SeeJourneyView: View {
     func getDownloadedJourneyDetails() {
         for journey in self.journeys {
             if journey.name == self.journey.name {
-                self.journey.uid = Auth.auth().currentUser?.uid ?? UIStrings.emptyString
+                self.journey.uid = Auth.auth().currentUser?.uid ?? ""
                 self.journey.numberOfPhotos = journey.photosArray.count
                 for index in 0...journey.photosArray.count - 1 {
                     let singlePhoto = SinglePhoto(number: index, photo: journey.photosArray[index].getImage)
@@ -411,7 +423,7 @@ struct SeeJourneyView: View {
                                                                    longitude: queryDocumentSnapshot.get("longitude") as? CLLocationDegrees ?? CLLocationDegrees()))
         
         //Image's reverence / url is used for downloading image from storage later on.
-        let photoReference = Storage.storage().reference().child(queryDocumentSnapshot.get("photoUrl") as? String ?? UIStrings.emptyString)
+        let photoReference = Storage.storage().reference().child(queryDocumentSnapshot.get("photoUrl") as? String ?? "")
         
         //Image is downloaded from the storage.
         photoReference.downloadURL { url, error in
@@ -432,16 +444,16 @@ struct SeeJourneyView: View {
                             date: (queryDocumentSnapshot.get("date") as? Timestamp)?.dateValue() ?? Date(),
                             number: queryDocumentSnapshot.get("photoNumber") as? Int ?? IntConstants.defaultValue,
                             photo: image,
-                            location: queryDocumentSnapshot.get("location") as? String ?? UIStrings.emptyString,
-                            subLocation: queryDocumentSnapshot.get("subLocation") as? String ?? UIStrings.emptyString,
-                            administrativeArea: queryDocumentSnapshot.get("administrativeArea") as? String ?? UIStrings.emptyString,
-                            country: queryDocumentSnapshot.get("country") as? String ?? UIStrings.emptyString,
-                            isoCountryCode: queryDocumentSnapshot.get("isoCountryCode") as? String ?? UIStrings.emptyString,
-                            name: queryDocumentSnapshot.get("name") as? String ?? UIStrings.emptyString,
-                            postalCode: queryDocumentSnapshot.get("postalCode") as? String ?? UIStrings.emptyString,
-                            ocean: queryDocumentSnapshot.get("ocean") as? String ?? UIStrings.emptyString,
-                            inlandWater: queryDocumentSnapshot.get("inlandWater") as? String ?? UIStrings.emptyString,
-                            areasOfInterest: (queryDocumentSnapshot.get("areasOfInterest") as? String ?? UIStrings.emptyString).components(separatedBy: ",")))
+                            location: queryDocumentSnapshot.get("location") as? String ?? "",
+                            subLocation: queryDocumentSnapshot.get("subLocation") as? String ?? "",
+                            administrativeArea: queryDocumentSnapshot.get("administrativeArea") as? String ?? "",
+                            country: queryDocumentSnapshot.get("country") as? String ?? "",
+                            isoCountryCode: queryDocumentSnapshot.get("isoCountryCode") as? String ?? "",
+                            name: queryDocumentSnapshot.get("name") as? String ?? "",
+                            postalCode: queryDocumentSnapshot.get("postalCode") as? String ?? "",
+                            ocean: queryDocumentSnapshot.get("ocean") as? String ?? "",
+                            inlandWater: queryDocumentSnapshot.get("inlandWater") as? String ?? "",
+                            areasOfInterest: (queryDocumentSnapshot.get("areasOfInterest") as? String ?? "").components(separatedBy: ",")))
                     }
                 }
                 .resume()
@@ -490,10 +502,10 @@ struct SeeJourneyView: View {
      Function is responsible for creating a new journey document in journeys collection in the firestore database. (Function also exists in SaveJourneyView).
      */
     func createJourney() {
-        Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? UIStrings.emptyString))/\(Auth.auth().currentUser?.uid ?? UIStrings.emptyString)/journeys").document(self.journey.name).setData([
+        Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? ""))/\(Auth.auth().currentUser?.uid ?? "")/journeys").document(self.journey.name).setData([
             "name" : self.journey.name,
             "place" : self.journey.place,
-            "uid" : Auth.auth().currentUser?.uid ?? UIStrings.emptyString,
+            "uid" : Auth.auth().currentUser?.uid ?? "",
             "photosNumber" : self.journey.numberOfPhotos,
             "date" : Date(),
             "deletedJourney" : false
