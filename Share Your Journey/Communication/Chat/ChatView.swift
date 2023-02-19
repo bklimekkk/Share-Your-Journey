@@ -10,6 +10,7 @@ import Firebase
 
 //Struct is responsoble for showing users entire chat with their friends.
 struct ChatView: View {
+    @EnvironmentObject var notificationSetup: NotificationSetup
     //Variable's value controls if users can see journeys they sent to their friends or reversibly.
     @State private var yourJourneys = false
     //Variable's value controls if screen with functionality neccessary for sending journey should be presented.
@@ -22,8 +23,8 @@ struct ChatView: View {
     @State private var sentByFriend: [SingleJourney] = []
     //Variable contains text entered by user in order to search items in the array.
     @State private var searchJourney = ""
-    @EnvironmentObject var notificationSetup: NotificationSetup
-
+    @State private var loadedYourJourneys = false
+    @State private var loadedFriendsJourneys = false
     //Friend's uid and nickname.
     var uid: String
     var nickname: String
@@ -44,6 +45,7 @@ struct ChatView: View {
                                  sendJourneyScreen: self.$sendJourneyScreen,
                                  askAboutDeletion: self.$askAboutDeletion,
                                  sentByYou: self.$sentByYou,
+                                 loadedYourJourneys: self.$loadedYourJourneys,
                                  uid: self.uid)
                 Divider()
                 Spacer()
@@ -59,9 +61,20 @@ struct ChatView: View {
             } else {
                 FriendJourneysList(searchJourney: self.$searchJourney,
                                    sentByFriend: self.$sentByFriend,
+                                   loadedFriendsJourneys: self.$loadedFriendsJourneys,
                                    uid: self.uid)
                 .environmentObject(self.notificationSetup)
             }
+        }
+        .onAppear {
+            SentByYouManager(list: self.$sentByYou).populateYourJourneys(uid: self.uid) {
+                self.loadedYourJourneys = true
+            }
+            SentByFriendManager(list: self.$sentByFriend).populateFriendsJourneys(uid: self.uid) {
+                self.loadedFriendsJourneys = true
+            }
+            self.notificationSetup.notificationType = .none
+            self.notificationSetup.sender = ""
         }
         .navigationTitle(self.nickname)
         .navigationBarTitleDisplayMode(.inline)

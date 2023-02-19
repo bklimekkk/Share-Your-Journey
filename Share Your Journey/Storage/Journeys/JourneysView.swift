@@ -24,6 +24,7 @@ struct JourneysView: View {
     @State private var searchedJourney = ""
     //Variable is calculated by filtering list with user's journeys.
     @State private var loadedJourneys = false
+
     private var journeysFilteredList: [SingleJourney]  {
         if self.searchedJourney == "" {
             return self.journeysList
