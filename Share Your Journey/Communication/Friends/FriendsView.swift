@@ -25,7 +25,9 @@ struct FriendsSet {
 }
 
 struct FriendsView: View {
-    
+
+    @EnvironmentObject var notificationSetup: NotificationSetup
+
     //Variable checks if screen presents list with requests or list with friends.
     @State private var requestMode = false
     //Variable responsible for justifying if users want to add new friend at the particular moment.
@@ -36,7 +38,9 @@ struct FriendsView: View {
     @State private var friendsSet = FriendsSet(ownUID: Auth.auth().currentUser?.uid ?? "")
     //Variable conains data entered by user while searching both arrays (requests and friends).
     @State private var searchPeople = ""
-    @EnvironmentObject var notificationSetup: NotificationSetup
+    @State private var loadedFriends = false
+    @State private var loadedRequests = false
+
     //Variable is calculated by filtering arrays due to date they entered to search window.
     private var filteredSortedRequestsList: [Person] {
         if self.searchPeople.isEmpty {
@@ -74,11 +78,13 @@ struct FriendsView: View {
             if self.requestMode {
                 ListWithRequests(searchPeople: self.$searchPeople,
                                  requestsSet: self.$requestsSet,
+                                 loadedRequests: self.$loadedRequests,
                                  filteredSortedRequestsList: self.filteredSortedRequestsList)
                 .environmentObject(notificationSetup)
             } else {
                 ListWithFriends(searchPeople: self.$searchPeople,
                                 friendsSet: self.$friendsSet,
+                                loadedFriends: self.$loadedFriends,
                                 filteredSortedFriendsList: self.filteredSortedFriendsList)
                 .environmentObject(notificationSetup)
             }
@@ -94,6 +100,12 @@ struct FriendsView: View {
             .padding(.horizontal, 5)
         }
         .onAppear {
+            FriendsManager(friendsSet: self.$friendsSet).populateFriends(completion: {
+                self.loadedFriends = true
+            })
+            RequestsManager(requestsSet: self.$requestsSet).populateRequests(completion: {
+                self.loadedRequests = true
+            })
             if self.notificationSetup.notificationType == .invitation {
                 self.requestMode = true
             }

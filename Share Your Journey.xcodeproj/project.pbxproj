@@ -74,6 +74,8 @@
 		8672551E27B80C8A00DC5001 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8672551D27B80C8A00DC5001 /* FriendsView.swift */; };
 		8683852627E94AD40005FEE2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8683852527E94AD30005FEE2 /* NetworkManager.swift */; };
 		86A131CB29A28A0C00B1AFE8 /* JourneysManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A131CA29A28A0C00B1AFE8 /* JourneysManager.swift */; };
+		86A131CE29A297F600B1AFE8 /* FriendsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A131CD29A297F600B1AFE8 /* FriendsManager.swift */; };
+		86A131D029A29CB800B1AFE8 /* RequestsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A131CF29A29CB800B1AFE8 /* RequestsManager.swift */; };
 		86C6493427CC4DCB00891C24 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6493327CC4DCB00891C24 /* PhotoPickerView.swift */; };
 		86C6494827CFAE4300891C24 /* Journey.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86C6494627CFAE4200891C24 /* Journey.xcdatamodeld */; };
 		86C6494C27CFAFD500891C24 /* JourneyDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6494B27CFAFD400891C24 /* JourneyDataManager.swift */; };
@@ -189,6 +191,8 @@
 		8672551D27B80C8A00DC5001 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
 		8683852527E94AD30005FEE2 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		86A131CA29A28A0C00B1AFE8 /* JourneysManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneysManager.swift; sourceTree = "<group>"; };
+		86A131CD29A297F600B1AFE8 /* FriendsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsManager.swift; sourceTree = "<group>"; };
+		86A131CF29A29CB800B1AFE8 /* RequestsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsManager.swift; sourceTree = "<group>"; };
 		86C6493327CC4DCB00891C24 /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
 		86C6494727CFAE4300891C24 /* Journey.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Journey.xcdatamodel; sourceTree = "<group>"; };
 		86C6494B27CFAFD400891C24 /* JourneyDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyDataManager.swift; sourceTree = "<group>"; };
@@ -458,6 +462,8 @@
 			isa = PBXGroup;
 			children = (
 				86A131CA29A28A0C00B1AFE8 /* JourneysManager.swift */,
+				86A131CD29A297F600B1AFE8 /* FriendsManager.swift */,
+				86A131CF29A29CB800B1AFE8 /* RequestsManager.swift */,
 			);
 			path = RequestManagers;
 			sourceTree = "<group>";
@@ -741,6 +747,7 @@
 				8665C79129574075007D7354 /* PhotosCounterView.swift in Sources */,
 				8665C7A429633A51007D7354 /* Links.swift in Sources */,
 				86C6494827CFAE4300891C24 /* Journey.xcdatamodeld in Sources */,
+				86A131D029A29CB800B1AFE8 /* RequestsManager.swift in Sources */,
 				86E9FEE0296ED05B005544B1 /* ImagesView.swift in Sources */,
 				86FCCC7F28107C00005FD678 /* SubViewComponents.swift in Sources */,
 				8652A17527C254C700ADBB25 /* MapView.swift in Sources */,
@@ -779,6 +786,7 @@
 				862411A82888AE9F007A86E2 /* SubscriptionView.swift in Sources */,
 				86C649FB27D1B43A00891C24 /* Photo+CoreDataProperties.swift in Sources */,
 				8639E00D28968E0800D7A3F5 /* SendJourneyManager.swift in Sources */,
+				86A131CE29A297F600B1AFE8 /* FriendsManager.swift in Sources */,
 				86573E5C27F783D3003E5CF8 /* VerificationView.swift in Sources */,
 				864FEEFB289B31200060E94D /* WeatherIconView.swift in Sources */,
 				8652A16F27BE3EE200ADBB25 /* SendJourneyView.swift in Sources */,
