@@ -23,6 +23,7 @@ struct JourneysView: View {
     //Variable contains data entered by user to search through list of existing journeys.
     @State private var searchedJourney = ""
     //Variable is calculated by filtering list with user's journeys.
+    @State private var loadedJourneys = false
     private var journeysFilteredList: [SingleJourney]  {
         if self.searchedJourney == "" {
             return self.journeysList
@@ -48,11 +49,23 @@ struct JourneysView: View {
             SearchField(text: UIStrings.searchJourney, search: self.$searchedJourney)
             
             if self.downloaded {
-                ListWithDownloadedJourneys(downloadedJourneysFilteredList: self.downloadedJourneysFilteredList, downloadedJourneysList: self.$downloadedJourneysList, journeyToDelete: self.$journeyToDelete, askAboutDeletion: self.$askAboutDeletion)
+                ListWithDownloadedJourneys(downloadedJourneysFilteredList: self.downloadedJourneysFilteredList,
+                                           downloadedJourneysList: self.$downloadedJourneysList,
+                                           journeyToDelete: self.$journeyToDelete,
+                                           askAboutDeletion: self.$askAboutDeletion)
             } else {
-                ListWithJourneys(journeysFilteredList: self.journeysFilteredList, journeysList: self.$journeysList, journeyToDelete: self.$journeyToDelete, askAboutDeletion: self.$askAboutDeletion)
+                ListWithJourneys(journeysFilteredList: self.journeysFilteredList,
+                                 journeysList: self.$journeysList,
+                                 journeyToDelete: self.$journeyToDelete,
+                                 askAboutDeletion: self.$askAboutDeletion,
+                                 loadedJourneys: self.$loadedJourneys)
             }
         }
-        
+        .onAppear {
+            JourneysManager(list: self.$journeysList).clearInvalidJourneys()
+            JourneysManager(list: self.$journeysList).updateJourneys(completion: {
+                self.loadedJourneys = true
+            })
+        }
     }
 }

@@ -17,7 +17,7 @@ struct ListWithJourneys: View {
     @Binding var journeysList: [SingleJourney]
     @Binding var journeyToDelete: SingleJourney
     @Binding var askAboutDeletion: Bool
-    @State private var loadedJourneys = false
+    @Binding var loadedJourneys: Bool
     var sortedJourneysFilteredList: [SingleJourney] {
         return self.journeysFilteredList.sorted(by: {$0.date > $1.date})
     }
@@ -28,9 +28,9 @@ struct ListWithJourneys: View {
             } else if self.journeysFilteredList.isEmpty {
                 NoDataView(text: UIStrings.noJourneysToShowTapToRefresh)
                     .onTapGesture {
-                        self.clearInvalidJourneys()
+                        JourneysManager(list: self.$journeysList).clearInvalidJourneys()
                         self.loadedJourneys = false
-                        self.updateJourneys(completion: {
+                        JourneysManager(list: self.$journeysList).updateJourneys(completion: {
                             self.loadedJourneys = true
                         })
                     }
@@ -80,16 +80,9 @@ struct ListWithJourneys: View {
                 }
             }
         }
-        .onAppear {
-            //List is updated every time the screen appears.
-            self.clearInvalidJourneys()
-            self.updateJourneys(completion: {
-                self.loadedJourneys = true
-            })
-        }
         .refreshable {
-            self.clearInvalidJourneys()
-            self.updateJourneys(completion: {
+            JourneysManager(list: self.$journeysList).clearInvalidJourneys()
+            JourneysManager(list: self.$journeysList).updateJourneys(completion: {
                 self.loadedJourneys = true
             })
         }
@@ -129,39 +122,6 @@ struct ListWithJourneys: View {
                     print("Error while deleting journey from storage")
                 } else {
                     print("Journey deleted from storage successfully")
-                }
-            }
-        }
-    }
-    
-    /**
-     Function is responsible for clearing array containing journeys, if user has changed.
-     */
-    func clearInvalidJourneys() {
-        if self.journeysList.count != 0 && self.journeysList[0].uid != Auth.auth().currentUser?.uid {
-            self.journeysList = []
-        }
-    }
-    
-    /**
-     Function is responsible for adding journeys to array, and refreshing it if needed.
-     */
-    func updateJourneys(completion: @escaping () -> Void) {
-        let uid = Auth.auth().currentUser?.uid ?? ""
-        let path = "\(FirestorePaths.getFriends(uid: uid))/\(uid)/journeys"
-        
-        Firestore.firestore().collection(path).getDocuments() { (querySnapshot, error) in
-            completion()
-            if error != nil {
-                print(error!.localizedDescription)
-            } else {
-                for journey in querySnapshot!.documents {
-                    if !self.journeysList.map({return $0.name}).contains(journey.documentID) && !(journey.get("deletedJourney") as? Bool ?? false) {
-                        self.journeysList.append(SingleJourney(uid: journey.get("uid") as? String ?? "",
-                                                               name: journey.documentID, place: journey.get("place") as? String ?? "",
-                                                               date: (journey.get("date") as? Timestamp)?
-                            .dateValue() ?? Date(), numberOfPhotos: journey.get("photosNumber") as? Int ?? IntConstants.defaultValue))
-                    }
                 }
             }
         }

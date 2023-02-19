@@ -73,6 +73,7 @@
 		8672551C27B80A9000DC5001 /* TabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8672551B27B80A8F00DC5001 /* TabsView.swift */; };
 		8672551E27B80C8A00DC5001 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8672551D27B80C8A00DC5001 /* FriendsView.swift */; };
 		8683852627E94AD40005FEE2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8683852527E94AD30005FEE2 /* NetworkManager.swift */; };
+		86A131CB29A28A0C00B1AFE8 /* JourneysManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A131CA29A28A0C00B1AFE8 /* JourneysManager.swift */; };
 		86C6493427CC4DCB00891C24 /* PhotoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6493327CC4DCB00891C24 /* PhotoPickerView.swift */; };
 		86C6494827CFAE4300891C24 /* Journey.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 86C6494627CFAE4200891C24 /* Journey.xcdatamodeld */; };
 		86C6494C27CFAFD500891C24 /* JourneyDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C6494B27CFAFD400891C24 /* JourneyDataManager.swift */; };
@@ -187,6 +188,7 @@
 		8672551B27B80A8F00DC5001 /* TabsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsView.swift; sourceTree = "<group>"; };
 		8672551D27B80C8A00DC5001 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
 		8683852527E94AD30005FEE2 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		86A131CA29A28A0C00B1AFE8 /* JourneysManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneysManager.swift; sourceTree = "<group>"; };
 		86C6493327CC4DCB00891C24 /* PhotoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPickerView.swift; sourceTree = "<group>"; };
 		86C6494727CFAE4300891C24 /* Journey.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Journey.xcdatamodel; sourceTree = "<group>"; };
 		86C6494B27CFAFD400891C24 /* JourneyDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyDataManager.swift; sourceTree = "<group>"; };
@@ -338,6 +340,7 @@
 		863CF50627BAF509007B82D4 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				86A131CC29A28E9A00B1AFE8 /* RequestManagers */,
 				863CF50727BAF558007B82D4 /* CurrentLocationManager.swift */,
 				86C6494B27CFAFD400891C24 /* JourneyDataManager.swift */,
 				8683852527E94AD30005FEE2 /* NetworkManager.swift */,
@@ -449,6 +452,14 @@
 				86197617288D3D1B0034FF2C /* NoDataView.swift */,
 			);
 			path = ViewComponents;
+			sourceTree = "<group>";
+		};
+		86A131CC29A28E9A00B1AFE8 /* RequestManagers */ = {
+			isa = PBXGroup;
+			children = (
+				86A131CA29A28A0C00B1AFE8 /* JourneysManager.swift */,
+			);
+			path = RequestManagers;
 			sourceTree = "<group>";
 		};
 		86C6493A27CEF10400891C24 /* DataModels */ = {
@@ -760,6 +771,7 @@
 				86FCCC8128107CBF005FD678 /* JourneyPartsComponents.swift in Sources */,
 				86FCCC7328102DD9005FD678 /* ListWithDownloadedJourneys.swift in Sources */,
 				86C6493427CC4DCB00891C24 /* PhotoPickerView.swift in Sources */,
+				86A131CB29A28A0C00B1AFE8 /* JourneysManager.swift in Sources */,
 				86FCCC6E28102A9A005FD678 /* StartJourneyModeView.swift in Sources */,
 				864FEEF7289B227E0060E94D /* ForecastView.swift in Sources */,
 				86C649FD27D1DF0800891C24 /* SeeJourneyView.swift in Sources */,

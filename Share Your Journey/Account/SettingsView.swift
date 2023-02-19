@@ -63,6 +63,8 @@ struct SettingsView: View {
                     Button(UIStrings.changeNickname) {
                         self.changeNickname = true
                     }
+                    .buttonStyle(.plain)
+                    .foregroundColor(.blue)
                     Button(UIStrings.deleteYourAccount){
                         self.askAboutAccountDeletion = true
                     }

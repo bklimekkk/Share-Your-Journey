@@ -208,7 +208,7 @@ struct SeeJourneyView: View {
                                                             self.subscription.showPanel = true
                                                         }
                                                     } label: {
-                                                        MapButton(imageName: Icons.squareAndArrowDown)
+                                                        MapButton(imageName: Icons.arrowDownCircle)
                                                             .foregroundColor(self.subscription.subscriber ? self.buttonColor : self.gold)
                                                     }
                                                 }

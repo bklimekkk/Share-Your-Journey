@@ -14,7 +14,12 @@ struct ChangeNicknameView: View {
     @State private var showNicknameExistsAlert = false
     @State private var emptyField = false
     @State private var yourNickname = false
+
+    var trimmedNewNickname: String {
+        self.newNickname.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
     var body: some View {
+        NavigationView {
         VStack {
             TextField(UIStrings.newNickname, text: self.$newNickname)
                 .padding(.vertical, 5)
@@ -25,9 +30,9 @@ struct ChangeNicknameView: View {
                 } else if self.newNickname == self.oldNickname {
                     self.yourNickname = true
                 } else {
-                    AccountManager.checkNicknameUniqueness(nickname: self.newNickname) { unique in
+                    AccountManager.checkNicknameUniqueness(nickname: self.trimmedNewNickname) { unique in
                         if unique {
-                            AccountManager.changeNickname(newNickname: self.newNickname) {
+                            AccountManager.changeNickname(newNickname: self.trimmedNewNickname) {
                                 self.dismiss()
                             }
                         } else {
@@ -42,14 +47,9 @@ struct ChangeNicknameView: View {
             .clipShape(RoundedRectangle(cornerRadius: 7))
         }
         .padding()
-        .alert(isPresented: self.$showNicknameExistsAlert) {
-            Alert(title: Text(UIStrings.nicknameIsTaken))
-        }
-        .alert(isPresented: self.$emptyField) {
-            Alert(title: Text(UIStrings.emptyField))
-        }
-        .alert(isPresented: self.$yourNickname) {
-            Alert(title: Text(UIStrings.currentNickname))
-        }
+        .alert(Text(UIStrings.nicknameIsTaken), isPresented: self.$showNicknameExistsAlert){}
+        .alert(Text(UIStrings.emptyField), isPresented: self.$emptyField) {}
+        .alert(Text(UIStrings.currentNickname), isPresented: self.$yourNickname) {}
+    }
     }
 }

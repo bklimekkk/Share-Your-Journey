@@ -47,10 +47,19 @@ struct LoginView: View {
     @StateObject private var accountAccessManager = AccountAccessManager()
     @StateObject private var errorManager = ErrorManager()
     @Environment(\.colorScheme) var colorScheme
+
     var forgotPasswordButtonColor: Color {
         self.colorScheme == .light ? .blue : .white
     }
-    
+
+    var formattedEmail: String {
+        self.email.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    var formattedNickname: String {
+        self.nickname.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     var body: some View {
         NavigationView {
             ScrollView {
@@ -111,7 +120,7 @@ struct LoginView: View {
                     }
                 } content: {
                     //In this screen, users are only asked to enter their email address.
-                    ResetPasswordView(resetEmail: self.$accountAccessManager.resetEmail, email: self.email)
+                    ResetPasswordView(resetEmail: self.$accountAccessManager.resetEmail, email: self.formattedEmail)
                 }
             }
             .sheet(isPresented: self.$showInstructions, content: {
@@ -193,7 +202,7 @@ struct LoginView: View {
      */
     func performLogin(completion: @escaping() -> Void) {
         //Using firebase as a way to authenticate users by uid and passord.
-        Auth.auth().signIn(withEmail: self.email, password: self.password) { result, error in
+        Auth.auth().signIn(withEmail: self.formattedEmail, password: self.password) { result, error in
             if(error != nil) {
                 self.errorManager.showErrorMessage = true
                 self.errorManager.errorBody = error?.localizedDescription ?? ""
@@ -237,17 +246,17 @@ struct LoginView: View {
         }
 
         if !self.nickname.isEmpty {
-            AccountManager.checkNicknameUniqueness(nickname: self.nickname) { nicknameAvailable in
+            AccountManager.checkNicknameUniqueness(nickname: self.formattedNickname) { nicknameAvailable in
                 if nicknameAvailable {
                     //Firebase is used for creating a new account.
-                    Auth.auth().createUser(withEmail: self.email, password: self.password) { result, error in
+                    Auth.auth().createUser(withEmail: self.formattedEmail, password: self.password) { result, error in
                         if error != nil {
                             self.errorManager.showErrorMessage = true
                             self.errorManager.errorBody = error?.localizedDescription ?? ""
                             return
                         }
                         //User is added to the firestore database.
-                        self.addUser(email: self.email, nickname: self.nickname, uid: Auth.auth().currentUser?.uid ?? "")
+                        self.addUser(email: self.formattedEmail, nickname: self.formattedNickname, uid: Auth.auth().currentUser?.uid ?? "")
                         Auth.auth().currentUser?.sendEmailVerification { error in
                             if error != nil {
                                 print(UIStrings.sendingVerificationError)

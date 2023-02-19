@@ -116,7 +116,7 @@ struct InstructionsView: View {
                         Text(UIStrings.allowsToPause)
                     }
                     HStack {
-                        Image(systemName: Icons.squareAndArrowDown)
+                        Image(systemName: Icons.arrowDownCircle)
                             .font(.system(size: 30))
                             .foregroundColor(self.buttonColor)
                             .padding(.horizontal, 3)
