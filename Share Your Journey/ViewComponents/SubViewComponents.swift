@@ -23,19 +23,27 @@ struct HighlightedPhoto: View {
     var body: some View {
         if self.showPicture {
             VStack {
+                Spacer()
                 Image(uiImage: self.journey.photos.sorted{$1.number > $0.number}.map{$0.photo}[self.highlightedPhotoIndex])
                     .resizable()
                     .scaledToFit()
-                //Gesture added to the image makes it possible to drag left or right to skip to the next or previous image.
                     .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
                         .onEnded({ value in
-                            if value.translation.width > 0 && self.highlightedPhotoIndex > 0 {
+                            if value.translation.width > 0
+                                && abs(value.translation.width) > abs(value.translation.height)
+                                && self.highlightedPhotoIndex > 0 {
                                 self.highlightedPhotoIndex -= 1
                                 self.highlightedPhoto = self.journey.photos[highlightedPhotoIndex].photo
-                            }
-                            if value.translation.width < 0 && self.highlightedPhotoIndex < self.journey.photos.count - 1 {
+                            } else if value.translation.width < 0
+                                        && abs(value.translation.width) > abs(value.translation.height)
+                                        && self.highlightedPhotoIndex < self.journey.photos.count - 1 {
                                 self.highlightedPhotoIndex += 1
                                 self.highlightedPhoto = self.journey.photos[highlightedPhotoIndex].photo
+                            } else if value.translation.height > 0
+                                        && abs(value.translation.height) > abs(value.translation.width) {
+                                withAnimation(.linear(duration: FloatConstants.shortAnimationDuration)) {
+                                    self.showPicture = false
+                                }
                             }
                         }))
 

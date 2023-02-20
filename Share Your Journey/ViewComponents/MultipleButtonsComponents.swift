@@ -13,6 +13,7 @@ import MapKit
 
 //Struct contains code responsible for generating icons allowing users to change the way how they receive directions to particular point (walking / driving).
 struct DirectionIcons: View {
+    @Environment(\.colorScheme) var colorScheme
     @Binding var mapType: MKMapType
     @Binding var subscriber: Bool
     @Binding var showPanel: Bool
@@ -22,7 +23,6 @@ struct DirectionIcons: View {
     var gold: Color {
         Color(uiColor: Colors.premiumColor)
     }
-    @Environment(\.colorScheme) var colorScheme
     @Binding var walking: Bool
     var body: some View {
         
@@ -82,7 +82,7 @@ struct SumUpFunctionalityButtonsView: View {
                 HapticFeedback.heavyHapticFeedback()
                 self.saveThePlace(index: self.journey.numberOfPhotos - 1)
                 self.journey.name = UUID().uuidString
-                self.downloadJourney(journey: self.journey)
+                DownloadManager(moc: self._moc, author: Auth.auth().currentUser?.uid ?? "").downloadJourney(journey: self.journey)
                 self.createJourney(journey: self.journey)
                 self.previousLocationManager.mapView.removeAnnotations(self.previousLocationManager.mapView.annotations)
                 self.previousLocationManager.mapView.removeOverlays(self.previousLocationManager.mapView.overlays)
@@ -112,40 +112,6 @@ struct SumUpFunctionalityButtonsView: View {
             self.journey.place = subLocation.isEmpty || location == subLocation ? location : "\(location), \(subLocation)"
             return
         }
-    }
-
-    func downloadJourney(journey: SingleJourney) {
-        let newJourney = Journey(context: self.moc)
-        newJourney.name = journey.name
-        newJourney.place = journey.place
-        newJourney.uid = Auth.auth().currentUser?.uid
-        newJourney.date = journey.date
-        newJourney.operationDate = Date.now
-        newJourney.photosNumber = (journey.numberOfPhotos) as NSNumber
-        var index = 0
-        while index < journey.photos.count {
-            let newImage = Photo(context: moc)
-            newImage.id = Double(index + 1)
-            newImage.journey = newJourney
-            newImage.image = journey.photos[index].photo.jpegData(compressionQuality: 0.5)
-            newImage.latitude = journey.photosLocations[index].latitude
-            newImage.longitude = journey.photosLocations[index].longitude
-            newImage.location = journey.photos[index].location
-            newImage.subLocation = journey.photos[index].subLocation
-            newImage.administrativeArea = journey.photos[index].administrativeArea
-            newImage.country = journey.photos[index].country
-            newImage.isoCountryCode = journey.photos[index].isoCountryCode
-            newImage.name = journey.photos[index].name
-            newImage.postalCode = journey.photos[index].postalCode
-            newImage.ocean = journey.photos[index].ocean
-            newImage.inlandWater = journey.photos[index].inlandWater
-            newImage.areasOfInterest = journey.photos[index].areasOfInterest.joined(separator: ",")
-            newJourney.addToPhotos(newImage)
-            index+=1
-        }
-
-        //After all journey properties are set, changes need to be saved with context variable's function: save().
-        try? self.moc.save()
     }
 
     /**

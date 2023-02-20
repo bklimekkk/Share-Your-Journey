@@ -45,7 +45,7 @@ struct ListWithDownloadedJourneys: View {
                                     .foregroundColor(.gray)
                             }
                             NavigationLink (destination: SeeJourneyView(journey: journey,
-                                                                        uid: Auth.auth().currentUser?.uid ?? "",
+                                                                        uid: journey.uid,
                                                                         downloadMode: true,
                                                                         path: "")) {
                                 EmptyView()
@@ -92,7 +92,7 @@ struct ListWithDownloadedJourneys: View {
 
         self.journeys.filter({return $0.uid == Auth.auth().currentUser?.uid}).forEach { journey in
             if !self.downloadedJourneysList.map({return $0.name}).contains(journey.name) {
-                self.downloadedJourneysList.append(SingleJourney(uid: Auth.auth().currentUser?.uid ?? "",
+                self.downloadedJourneysList.append(SingleJourney(uid: journey.author ?? "",
                                                                  name: journey.name ?? "",
                                                                  place: journey.place ?? "",
                                                                  date: journey.date ?? Date(),

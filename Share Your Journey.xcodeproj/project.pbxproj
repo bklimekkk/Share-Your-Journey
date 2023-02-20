@@ -72,6 +72,7 @@
 		867254DD27B47B7B00DC5001 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867254DC27B47B7B00DC5001 /* StartView.swift */; };
 		8672551C27B80A9000DC5001 /* TabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8672551B27B80A8F00DC5001 /* TabsView.swift */; };
 		8672551E27B80C8A00DC5001 /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8672551D27B80C8A00DC5001 /* FriendsView.swift */; };
+		867BC27929A427F300282758 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867BC27829A427F300282758 /* DownloadManager.swift */; };
 		8683852627E94AD40005FEE2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8683852527E94AD30005FEE2 /* NetworkManager.swift */; };
 		86A131CB29A28A0C00B1AFE8 /* JourneysManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A131CA29A28A0C00B1AFE8 /* JourneysManager.swift */; };
 		86A131CE29A297F600B1AFE8 /* FriendsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A131CD29A297F600B1AFE8 /* FriendsManager.swift */; };
@@ -191,6 +192,7 @@
 		867254DC27B47B7B00DC5001 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
 		8672551B27B80A8F00DC5001 /* TabsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsView.swift; sourceTree = "<group>"; };
 		8672551D27B80C8A00DC5001 /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
+		867BC27829A427F300282758 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		8683852527E94AD30005FEE2 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		86A131CA29A28A0C00B1AFE8 /* JourneysManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneysManager.swift; sourceTree = "<group>"; };
 		86A131CD29A297F600B1AFE8 /* FriendsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsManager.swift; sourceTree = "<group>"; };
@@ -355,6 +357,7 @@
 				866A7E19293221C100CD3340 /* SpotDetailsManager.swift */,
 				861F6CE62983051F0022911C /* AccountManager.swift */,
 				8661CC51298D23A20092E036 /* CommunicationManager.swift */,
+				867BC27829A427F300282758 /* DownloadManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -721,6 +724,7 @@
 				8653A2D4280418EB00852374 /* JourneysView.swift in Sources */,
 				86C649F727D1B43A00891C24 /* Journey+CoreDataProperties.swift in Sources */,
 				8672551E27B80C8A00DC5001 /* FriendsView.swift in Sources */,
+				867BC27929A427F300282758 /* DownloadManager.swift in Sources */,
 				864FEF4228A7E4010060E94D /* CurrentImage+CoreDataProperties.swift in Sources */,
 				8665C7952958CA50007D7354 /* JourneyControlView.swift in Sources */,
 				864FEEF5289B092D0060E94D /* ForecastModel.swift in Sources */,

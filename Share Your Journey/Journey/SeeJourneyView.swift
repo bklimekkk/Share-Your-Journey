@@ -17,7 +17,8 @@ class Subscription: ObservableObject {
 
 //Struct contains code responsible for generating screen showing users journey they want to view.
 struct SeeJourneyView: View {
-    
+    @Environment(\.managedObjectContext) var moc
+    @Environment(\.colorScheme) var colorScheme
     //Similar variable described in SumUpView struct.
     let layout = [
         GridItem(.flexible()),
@@ -55,9 +56,6 @@ struct SeeJourneyView: View {
     @State private var weatherLatitude = 0.0
     @State private var weatherLongitude = 0.0
     @State private var routeIsDisplayed = false
-    //Variable is responsible for saving data to Core Data.
-    @Environment(\.managedObjectContext) var moc
-    @Environment(\.colorScheme) var colorScheme
     @StateObject private var subscription = Subscription()
     @ObservedObject private var network = NetworkManager()
     @ObservedObject var notificationSetup = NotificationSetup()
@@ -161,7 +159,6 @@ struct SeeJourneyView: View {
                                     photosLocations: self.$journey.photosLocations)
                             .edgesIgnoringSafeArea(.all)
                             .environmentObject(self.currentLocationManager)
-                            .opacity(self.showPicture ? 0 : 1)
 
                             if self.showWeather {
                                 VStack {
@@ -184,7 +181,6 @@ struct SeeJourneyView: View {
                                     .padding(EdgeInsets(top: 5, leading: 5, bottom: 0, trailing: 0))
                                     Spacer()
                                 }
-                                .opacity(self.showPicture ? 0 : 1)
                             }
                             if !self.showPicture {
                                 HStack {
@@ -201,7 +197,8 @@ struct SeeJourneyView: View {
                                                 } else {
                                                     Button {
                                                         if self.subscription.subscriber {
-                                                            self.downloadJourney(journey: self.journey)
+                                                            DownloadManager(moc: self._moc, author: self.uid).downloadJourney(journey: self.journey)
+                                                            print("ID: \(self.uid)")
                                                             self.journeyIsDownloaded = true
                                                             HapticFeedback.heavyHapticFeedback()
                                                         } else {
@@ -254,6 +251,7 @@ struct SeeJourneyView: View {
                     }
                 }
             }
+            .opacity(self.showPicture ? 0 : 1)
             HighlightedPhoto(highlightedPhotoIndex: self.$currentPhotoIndex,
                              showPicture: self.$showPicture,
                              highlightedPhoto: self.$highlightedPhoto,
@@ -459,43 +457,6 @@ struct SeeJourneyView: View {
                 .resume()
             }
         }
-    }
-    
-    /**
-     Function is responsible for saving the journey in Core Data.
-     */
-    func downloadJourney(journey: SingleJourney) {
-        let newJourney = Journey(context: self.moc)
-        newJourney.name = journey.name
-        newJourney.place = journey.place
-        newJourney.uid = Auth.auth().currentUser?.uid
-        newJourney.date = journey.date
-        newJourney.operationDate = Date.now
-        newJourney.photosNumber = (journey.numberOfPhotos) as NSNumber
-        var index = 0
-        while index < journey.photos.count {
-            let newImage = Photo(context: moc)
-            newImage.id = Double(index + 1)
-            newImage.journey = newJourney
-            newImage.image = journey.photos[index].photo.jpegData(compressionQuality: 0.5)
-            newImage.latitude = journey.photosLocations[index].latitude
-            newImage.longitude = journey.photosLocations[index].longitude
-            newImage.location = journey.photos[index].location
-            newImage.subLocation = journey.photos[index].subLocation
-            newImage.administrativeArea = journey.photos[index].administrativeArea
-            newImage.country = journey.photos[index].country
-            newImage.isoCountryCode = journey.photos[index].isoCountryCode
-            newImage.name = journey.photos[index].name
-            newImage.postalCode = journey.photos[index].postalCode
-            newImage.ocean = journey.photos[index].ocean
-            newImage.inlandWater = journey.photos[index].inlandWater
-            newImage.areasOfInterest = journey.photos[index].areasOfInterest.joined(separator: ",")
-            newJourney.addToPhotos(newImage)
-            index+=1
-        }
-        
-        //After all journey properties are set, changes need to be saved with context variable's function: save().
-        try? self.moc.save()
     }
 
     /**
