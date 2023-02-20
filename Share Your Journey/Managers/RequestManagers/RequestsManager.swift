@@ -68,16 +68,14 @@ struct RequestsManager {
             //UID of account from which the request was sent from, is added to friends collection in Firestore database.
             Firestore.firestore().document("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? ""))/\(request.uid)").setData([
                 "uid" : request.uid,
-                "nickname" : nickname,
-                "deletedAccount" : false
+                "nickname" : nickname
             ])
         }
 
         //Program also needs to take care about adding user to their friend's "friends" collection.
         Firestore.firestore().document("\(FirestorePaths.getFriends(uid: request.uid))/\(Auth.auth().currentUser?.uid ?? "")").setData([
             "uid" : Auth.auth().currentUser?.uid ?? "",
-            "nickname" : UserDefaults.standard.string(forKey: "nickname") ?? "",
-            "deletedAccount" : false
+            "nickname" : UserDefaults.standard.string(forKey: "nickname") ?? ""
         ])
 
         //After request accepted, it needs to be deleted from requests array automatically.

@@ -30,7 +30,7 @@ struct FriendsManager {
                 print(error!.localizedDescription)
             } else {
                 for friend in querySnapshot!.documents {
-                    if friend.documentID != currentUID && !self.friendsSet.friendsList.map({$0.uid}).contains(friend.documentID) && friend.get("deletedAccount") as? Bool ?? false == false {
+                    if friend.documentID != currentUID && !self.friendsSet.friendsList.map({$0.uid}).contains(friend.documentID) {
                         self.friendsSet.friendsList.append(Person(nickname: friend.get("nickname") as? String ?? "", uid: friend.documentID))
                     }
                 }

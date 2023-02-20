@@ -19,7 +19,11 @@ struct SettingsView: View {
     @State private var deletedAccount = false
     @State private var changeNickname = false
     @State private var nickname = ""
-    
+
+    var uid: String {
+        Auth.auth().currentUser?.uid ?? ""
+    }
+
     var body: some View {
         NavigationView {
             Form {
@@ -110,66 +114,13 @@ struct SettingsView: View {
             })
             .alert(UIStrings.accountSettings, isPresented: self.$askAboutAccountDeletion) {
                 Button(UIStrings.deleteAccount, role: .destructive) {
-                    let uid = Auth.auth().currentUser?.uid ?? ""
-                    Firestore.firestore().collection(FirestorePaths.myJourneys(uid: uid)).getDocuments { querySnapshot, error in
-                        if let error = error {
-                            print(error.localizedDescription)
-                        } else {
-                            for journey in querySnapshot!.documents {
-                                let photosNumber = journey.get("photosNumber") as? Int ?? IntConstants.defaultValue
-                                for photoNumber in 0...photosNumber - 1 {
-                                    let deleteReference = Storage.storage().reference().child("\(uid)/\(journey.documentID)/\(photoNumber)")
-                                    deleteReference.delete { error in
-                                        if let error = error {
-                                            print(error.localizedDescription)
-                                        }
-                                    }
-                                }
+                    self.deleteAllPhotos {
+                        self.deleteAllJourneys {
+                            self.deleteAllFriends {
+                                self.deleteUser()
                             }
                         }
                     }
-                    Auth.auth().currentUser?.delete()
-                    Firestore.firestore().collection("users").document(uid).updateData(["deletedAccount" : true]) { error in
-                        if let error = error {
-                            print(error.localizedDescription)
-                        }
-                    }
-                    
-                    Firestore.firestore().collection(FirestorePaths.getFriends(uid: uid)).getDocuments { querySnapshot, error in
-                        if let error = error {
-                            print(error.localizedDescription)
-                        } else {
-                            let documents = querySnapshot!.documents.filter({$0.documentID != uid})
-                            for friend in documents {
-                                let accountReference = Firestore.firestore().collection(FirestorePaths.getFriends(uid: friend.documentID)).document(uid)
-                                accountReference.updateData(["deletedAccount" : true])
-                                Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: uid))/\(friend.documentID)/journeys").getDocuments { querySnapshot, error in
-                                    if let error = error {
-                                        print(error.localizedDescription)
-                                    } else {
-                                        for journey in querySnapshot!.documents {
-                                            Firestore.firestore().collection("\(FirestorePaths.getFriends(uid: uid))/\(friend.documentID)/journeys").document(journey.documentID).updateData(["deletedJourney" : true])
-                                            //                                                    deleteAllPhotos(path: "users/\(uid)/friends/\(friend.documentID)/journeys", journeyToDelete: journey.documentID)
-                                            //                                                    deleteJourneyFromServer(path: "users/\(uid)/friends/\(friend.documentID)/journeys", journeyToDelete: journey.documentID)
-                                        }
-                                    }
-                                }
-                                
-                                Firestore.firestore().collection(FirestorePaths.myJourneys(uid: uid)).getDocuments { querySnapshot, error in
-                                    if let error = error {
-                                        print(error.localizedDescription)
-                                    } else {
-                                        for journey in querySnapshot!.documents {
-                                            Firestore.firestore().collection(FirestorePaths.myJourneys(uid: uid)).document(journey.documentID).updateData(["deletedJourney" : true])
-                                            //                                                deleteAllPhotos(path: "users/\(uid)/friends/\(uid)/journeys", journeyToDelete: friend.documentID)
-                                            //                                                deleteJourneyFromServer(path: "users/\(uid)/friends/\(uid)/journeys", journeyToDelete: friend.documentID)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    self.deletedAccount = true
                 }
             } message: {
                 Text(UIStrings.accountDeletionChecker)
@@ -185,32 +136,110 @@ struct SettingsView: View {
             }
         }
     }
-    
-    /**
-     Function is responsible for deleting all images' references from firestore database.
-     */
-    func deleteAllPhotos(path: String, journeyToDelete: String) {
-        Firestore.firestore().collection("\(path)/\(journeyToDelete)/photos").getDocuments() { (querySnapshot, error) in
+
+    func deleteAllPhotos(completion: @escaping() -> Void) {
+        Firestore.firestore().collection("users/\(self.uid)/friends").getDocuments { snapshot, error in
             if error != nil {
-                print(error!.localizedDescription)
+                print(error?.localizedDescription)
             } else {
-                for photo in querySnapshot!.documents {
-                    photo.reference.delete()
+                let friends = snapshot?.documents
+                var referencesToDelete = 0
+                var referencesDeletion = 0
+                friends?.forEach { friend in
+                    Firestore.firestore().collection("users/\(self.uid)/friends/\(friend.documentID)/journeys").getDocuments { snapshot, error in
+                        if error != nil {
+                            print(error?.localizedDescription)
+                        } else {
+                            let journeys = snapshot?.documents
+                            journeys?.forEach { journey in
+                                Firestore.firestore().collection("users/\(self.uid)/friends/\(friend.documentID)/journeys/\(journey.documentID)/photos").getDocuments { snapshot, error in
+                                    if error != nil {
+                                        print(error?.localizedDescription)
+                                    } else {
+                                        let photos = snapshot?.documents
+                                        referencesToDelete += photos?.count ?? 0
+                                        photos?.forEach { photo in
+                                            photo.reference.delete { error in
+                                                if error != nil {
+                                                    print(error?.localizedDescription)
+                                                } else {
+                                                    referencesDeletion += 1
+                                                    if referencesDeletion == referencesToDelete {
+                                                        completion()
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
-    
-    /**
-     Function is responsible for deleting journey collection from firestore database.
-     */
-    func deleteJourneyFromServer(path: String, journeyToDelete: String) {
-        Firestore.firestore().collection(path).document(journeyToDelete).delete() { error in
+
+    func deleteAllJourneys(completion: @escaping() -> Void) {
+        Firestore.firestore().collection("users/\(self.uid)/friends").getDocuments { snapshot, error in
             if error != nil {
-                print(error!.localizedDescription)
+                print(error?.localizedDescription)
             } else {
-                print(UIStrings.journeyDeletedSuccesfully)
+                let friends = snapshot?.documents
+                var referencesToDelete = 0
+                var referencesDeletion = 0
+                friends?.forEach { friend in
+                    Firestore.firestore().collection("users/\(self.uid)/friends/\(friend.documentID)/journeys").getDocuments { snapshot, error in
+                        if error != nil {
+                            print(error?.localizedDescription)
+                        } else {
+                            let journeys = snapshot?.documents
+                            referencesToDelete += journeys?.count ?? 0
+                            journeys?.forEach { journey in
+                                journey.reference.delete { error in
+                                    if error != nil {
+                                        print(error?.localizedDescription)
+                                    } else {
+                                        referencesDeletion += 1
+                                        if referencesDeletion == referencesToDelete {
+                                            completion()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
+    }
+
+    func deleteAllFriends(completion: @escaping() -> Void) {
+        var referencesToDelete = 0
+        var referencesDeletion = 0
+        Firestore.firestore().collection("users/\(self.uid)/friends").getDocuments { snapshot, error in
+            if error != nil {
+                print(error?.localizedDescription)
+            } else {
+                let friends = snapshot?.documents
+                referencesToDelete += friends?.count ?? 0
+                friends?.forEach { friend in
+                    friend.reference.delete { error in
+                        if error != nil {
+                            print(error?.localizedDescription)
+                        } else {
+                            referencesDeletion += 1
+                            if referencesDeletion == referencesToDelete {
+                                completion()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    func deleteUser() {
+        Firestore.firestore().collection("users").document(self.uid).delete()
     }
 }
