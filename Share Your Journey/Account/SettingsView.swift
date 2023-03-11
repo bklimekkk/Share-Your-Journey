@@ -231,13 +231,20 @@ struct SettingsView: View {
                 var referencesToDelete = friends?.count ?? 0
                 var deletedReferences = 0
                 friends?.forEach { friend in
-                    friend.reference.delete { error in
+                    Firestore.firestore().collection("users/\(friend.documentID)/friends").getDocuments { snapshot, error in
                         if error != nil {
                             print(error?.localizedDescription)
                         } else {
-                            deletedReferences += 1
-                            if referencesToDelete == deletedReferences {
-                                completion()
+                            let myDocument = snapshot?.documents.first(where: ({$0.documentID == self.uid}))
+                            myDocument?.reference.delete { error in
+                                if error != nil {
+                                    print(error?.localizedDescription)
+                                } else {
+                                    deletedReferences += 1
+                                    if referencesToDelete == deletedReferences {
+                                        completion()
+                                    }
+                                }
                             }
                         }
                     }
