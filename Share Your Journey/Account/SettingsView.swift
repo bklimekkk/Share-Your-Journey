@@ -114,10 +114,17 @@ struct SettingsView: View {
             })
             .alert(UIStrings.accountSettings, isPresented: self.$askAboutAccountDeletion) {
                 Button(UIStrings.deleteAccount, role: .destructive) {
-                    self.deleteAllPhotos {
-                        self.deleteAllJourneys {
-                            self.deleteAllFriends {
-                                self.deleteUser()
+
+                    self.deleteAllReceivedPhotos {
+                        self.deleteAllReceivedJourneys {
+                            self.deleteFromAllFriendsLists {
+                                self.deleteAllPhotos {
+                                    self.deleteAllJourneys {
+                                        self.deleteAllFriends {
+                                            self.deleteUser()
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -137,6 +144,108 @@ struct SettingsView: View {
         }
     }
 
+    // TODO: - this should be first function called while deleting the account.
+    func deleteAllReceivedPhotos(completion: @escaping () -> Void) {
+        Firestore.firestore().collection("users/\(self.uid)/friends").getDocuments { snapshot, error in
+            if error != nil {
+                print(error?.localizedDescription)
+            } else {
+                let friends = snapshot?.documents
+                var referencesToDelete = 0
+                var deletedReferences = 0
+                friends?.forEach { friend in
+                    Firestore.firestore().collection("users/\(friend.documentID)/friends/\(self.uid)/journeys").getDocuments { snapshot, error in
+                        if error != nil {
+                            print(error?.localizedDescription)
+                        } else {
+                            let journeys = snapshot?.documents
+                            journeys?.forEach { journey in
+                                Firestore.firestore().collection("users/\(friend.documentID)/friends/\(self.uid)/journeys/\(journey.documentID)/photos").getDocuments { snapshot, error in
+                                    if error != nil {
+                                        print(error?.localizedDescription)
+                                    } else {
+                                        let photos = snapshot?.documents
+                                        referencesToDelete += photos?.count ?? 0
+                                        photos?.forEach { photo in
+                                            photo.reference.delete { error in
+                                                if error != nil {
+                                                    print(error?.localizedDescription)
+                                                } else {
+                                                    deletedReferences += 1
+                                                    if referencesToDelete == deletedReferences {
+                                                        completion()
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    func deleteAllReceivedJourneys(completion: @escaping () -> Void) {
+        Firestore.firestore().collection("users/\(self.uid)/friends").getDocuments { snapshot, error in
+            if error != nil {
+                print(error?.localizedDescription)
+            } else {
+                let friends = snapshot?.documents
+                var referencesToDelete = 0
+                var deletedReferences = 0
+                friends?.forEach { friend in
+                    Firestore.firestore().collection("users/\(friend.documentID)/friends/\(self.uid)/journeys").getDocuments { snapshot, error in
+                        if error != nil {
+                            print(error?.localizedDescription)
+                        } else {
+                            let journeys = snapshot?.documents
+                            referencesToDelete += journeys?.count ?? 0
+                            journeys?.forEach { journey in
+                                journey.reference.delete { error in
+                                    if error != nil {
+                                        print(error?.localizedDescription)
+                                    } else {
+                                        deletedReferences += 1
+                                        if referencesToDelete == deletedReferences {
+                                            completion()
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    func deleteFromAllFriendsLists(completion: @escaping () -> Void) {
+        Firestore.firestore().collection("users/\(self.uid)/friends").getDocuments { snapshot, error in
+            if error != nil {
+                print(error?.localizedDescription)
+            } else {
+                let friends = snapshot?.documents
+                var referencesToDelete = friends?.count ?? 0
+                var deletedReferences = 0
+                friends?.forEach { friend in
+                    friend.reference.delete { error in
+                        if error != nil {
+                            print(error?.localizedDescription)
+                        } else {
+                            deletedReferences += 1
+                            if referencesToDelete == deletedReferences {
+                                completion()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     func deleteAllPhotos(completion: @escaping() -> Void) {
         Firestore.firestore().collection("users/\(self.uid)/friends").getDocuments { snapshot, error in
             if error != nil {
@@ -144,7 +253,7 @@ struct SettingsView: View {
             } else {
                 let friends = snapshot?.documents
                 var referencesToDelete = 0
-                var referencesDeletion = 0
+                var deletedReferences = 0
                 friends?.forEach { friend in
                     Firestore.firestore().collection("users/\(self.uid)/friends/\(friend.documentID)/journeys").getDocuments { snapshot, error in
                         if error != nil {
@@ -163,8 +272,8 @@ struct SettingsView: View {
                                                 if error != nil {
                                                     print(error?.localizedDescription)
                                                 } else {
-                                                    referencesDeletion += 1
-                                                    if referencesDeletion == referencesToDelete {
+                                                    deletedReferences += 1
+                                                    if deletedReferences == referencesToDelete {
                                                         completion()
                                                     }
                                                 }
@@ -187,7 +296,7 @@ struct SettingsView: View {
             } else {
                 let friends = snapshot?.documents
                 var referencesToDelete = 0
-                var referencesDeletion = 0
+                var deletedReferences = 0
                 friends?.forEach { friend in
                     Firestore.firestore().collection("users/\(self.uid)/friends/\(friend.documentID)/journeys").getDocuments { snapshot, error in
                         if error != nil {
@@ -200,8 +309,8 @@ struct SettingsView: View {
                                     if error != nil {
                                         print(error?.localizedDescription)
                                     } else {
-                                        referencesDeletion += 1
-                                        if referencesDeletion == referencesToDelete {
+                                        deletedReferences += 1
+                                        if deletedReferences == referencesToDelete {
                                             completion()
                                         }
                                     }
@@ -215,21 +324,20 @@ struct SettingsView: View {
     }
 
     func deleteAllFriends(completion: @escaping() -> Void) {
-        var referencesToDelete = 0
-        var referencesDeletion = 0
         Firestore.firestore().collection("users/\(self.uid)/friends").getDocuments { snapshot, error in
             if error != nil {
                 print(error?.localizedDescription)
             } else {
                 let friends = snapshot?.documents
-                referencesToDelete += friends?.count ?? 0
+                var referencesToDelete = friends?.count ?? 0
+                var deletedReferences = 0
                 friends?.forEach { friend in
                     friend.reference.delete { error in
                         if error != nil {
                             print(error?.localizedDescription)
                         } else {
-                            referencesDeletion += 1
-                            if referencesDeletion == referencesToDelete {
+                            deletedReferences += 1
+                            if deletedReferences == referencesToDelete {
                                 completion()
                             }
                         }

@@ -8,5 +8,5 @@
 import Foundation
 
 struct FloatConstants {
-    static let shortAnimationDuration = 0.1
+    static let shortAnimationDuration = 0.125
 }
