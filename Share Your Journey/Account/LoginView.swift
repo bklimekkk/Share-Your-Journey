@@ -42,8 +42,10 @@ struct LoginView: View {
     @State private var password = ""
     @State private var nickname = ""
     @State private var repeatedPassword = ""
+    @State private var presentFarewellAlert = false
     //Variable controls if user is logged in or logged out.
     @Binding var loggedOut: Bool
+    @Binding var showLoginViewAfterAccountDeletion: Bool
     @StateObject private var accountAccessManager = AccountAccessManager()
     @StateObject private var errorManager = ErrorManager()
     @Environment(\.colorScheme) var colorScheme
@@ -104,8 +106,18 @@ struct LoginView: View {
                     }
                 }
                 .onAppear {
-                    self.email = self.defaults.string(forKey: UIStrings.emailKey) ?? ""
-                    self.password = self.defaults.string(forKey: UIStrings.passwordKey) ?? ""
+                    if self.showLoginViewAfterAccountDeletion {
+                        self.email = ""
+                        self.password = ""
+                        self.defaults.set("", forKey: UIStrings.emailKey)
+                        self.defaults.set("", forKey: UIStrings.passwordKey)
+                        self.deleteAuth {
+                            self.presentFarewellAlert = true
+                        }
+                    } else {
+                        self.email = self.defaults.string(forKey: UIStrings.emailKey) ?? ""
+                        self.password = self.defaults.string(forKey: UIStrings.passwordKey) ?? ""
+                    }
                 }
                 .padding()
                 .fullScreenCover(isPresented: self.$accountAccessManager.showVerificationMessage) {
@@ -157,6 +169,11 @@ struct LoginView: View {
             } message: {
                 Text(UIStrings.accountNotYetVerified)
             }
+            .alert("Goodbye!", isPresented: self.$presentFarewellAlert, actions: {
+                Button(UIStrings.ok, role: .cancel) {}
+            }, message: {
+                Text("Don't hesitate to rejoin us if you want to use the app again!")
+            })
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
@@ -289,5 +306,21 @@ struct LoginView: View {
         instanceReference.document("\(FirestorePaths.users)/\(uid)/friends/\(uid)").setData([
             "nickname": nickname
         ])
+    }
+
+    func deleteAuth(completion: @escaping () -> Void) {
+        guard let user = Auth.auth().currentUser else {
+            return
+        }
+
+        user.delete { error in
+            if let error = error {
+                print(error.localizedDescription)
+                completion()
+            } else {
+                print("User account deleted successfully.")
+                completion()
+            }
+        }
     }
 }

@@ -23,10 +23,9 @@ struct HighlightedPhoto: View {
     var body: some View {
         if self.showPicture {
             VStack {
-                Spacer()
                 Image(uiImage: self.journey.photos.sorted{$1.number > $0.number}.map{$0.photo}[self.highlightedPhotoIndex])
                     .resizable()
-                    .scaledToFit()
+                    .scaledToFill()
                     .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
                         .onEnded({ value in
                             if value.translation.width > 0

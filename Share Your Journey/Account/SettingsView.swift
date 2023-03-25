@@ -12,117 +12,118 @@ import RevenueCat
 struct SettingsView: View {
     @StateObject var subscription = Subscription()
     @Environment(\.dismiss) var dismiss
-    @Binding var loggedOut: Bool
     @State private var askAboutAccountDeletion = false
     @State private var showPrivacyPolicy = false
     @State private var showInstructions = false
-    @State private var deletedAccount = false
     @State private var changeNickname = false
     @State private var nickname = ""
-
+    @State private var accountDeletionInProgress = false
+    @Binding var deletedAccount: Bool
+    @Binding var showLoginViewAfterAccountDeletion: Bool
     var uid: String {
         Auth.auth().currentUser?.uid ?? ""
     }
 
     var body: some View {
         NavigationView {
-            Form {
-                Section(header: Text("Hello \(self.nickname)!")) {
-                    Button("shareyourjourneyhelp@gmail.com") {}
-                        .buttonStyle(.plain)
-                        .foregroundColor(.blue)
-                    Button(UIStrings.instructions) {
-                        self.showInstructions = true
-                    }
-                    .buttonStyle(.plain)
-                    .foregroundColor(.blue)
-                    Button(UIStrings.privacyPolicy) {
-                        self.showPrivacyPolicy = true
-                    }
-                    .buttonStyle(.plain)
-                    .foregroundColor(.blue)
-                }
-                
-                if !self.subscription.subscriber {
-                    Section(header: Text(UIStrings.premiumAccess)) {
-                        Button(UIStrings.premiumAccess) {
-                            self.subscription.showPanel = true
+            ZStack {
+                Form {
+                    Section(header: Text("Hello \(self.nickname)!")) {
+                        Button("shareyourjourneyhelp@gmail.com") {}
+                            .buttonStyle(.plain)
+                            .foregroundColor(.blue)
+                        Button(UIStrings.instructions) {
+                            self.showInstructions = true
                         }
                         .buttonStyle(.plain)
-                        .foregroundColor(self.subscription.subscriber ? .red : .blue)
-                        Button(UIStrings.restorePremiumAccess) {
-                            Purchases.shared.restorePurchases { customerInfo, error in
-                                if customerInfo?.entitlements[Links.allFeaturesEntitlement]?.isActive == true {
-                                    withAnimation {
-                                        self.subscription.subscriber = true
+                        .foregroundColor(.blue)
+                        Button(UIStrings.privacyPolicy) {
+                            self.showPrivacyPolicy = true
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundColor(.blue)
+                    }
+
+                    if !self.subscription.subscriber {
+                        Section(header: Text(UIStrings.premiumAccess)) {
+                            Button(UIStrings.premiumAccess) {
+                                self.subscription.showPanel = true
+                            }
+                            .buttonStyle(.plain)
+                            .foregroundColor(self.subscription.subscriber ? .red : .blue)
+                            Button(UIStrings.restorePremiumAccess) {
+                                Purchases.shared.restorePurchases { customerInfo, error in
+                                    if customerInfo?.entitlements[Links.allFeaturesEntitlement]?.isActive == true {
+                                        withAnimation {
+                                            self.subscription.subscriber = true
+                                        }
                                     }
                                 }
                             }
+                            .buttonStyle(.plain)
+                            .foregroundColor(self.subscription.subscriber ? .red : .blue)
+                        }
+                    }
+                    Section(header: Text(UIStrings.accountSettings)) {
+                        Button(UIStrings.changeNickname) {
+                            self.changeNickname = true
                         }
                         .buttonStyle(.plain)
-                        .foregroundColor(self.subscription.subscriber ? .red : .blue)
+                        .foregroundColor(.blue)
+                        Button(UIStrings.deleteYourAccount){
+                            self.askAboutAccountDeletion = true
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundColor(.red)
                     }
                 }
-                Section(header: Text(UIStrings.accountSettings)) {
-                    Button(UIStrings.changeNickname) {
-                        self.changeNickname = true
+                .task {
+                    Purchases.shared.getCustomerInfo { (customerInfo, error) in
+                        if customerInfo!.entitlements[Links.allFeaturesEntitlement]?.isActive == true {
+                            self.subscription.subscriber = true
+                        }
                     }
-                    .buttonStyle(.plain)
-                    .foregroundColor(.blue)
-                    Button(UIStrings.deleteYourAccount){
-                        self.askAboutAccountDeletion = true
+                    self.nickname = UserDefaults.standard.string(forKey: "nickname") ?? ""
+                }
+                .fullScreenCover(isPresented: $showInstructions, content: {
+                    InstructionsView()
+                })
+                .fullScreenCover(isPresented: self.$subscription.showPanel,
+                                 content: {
+                    SubscriptionView(subscriber: self.$subscription.subscriber)
+                })
+                .sheet(isPresented: self.$changeNickname, onDismiss: {
+                    self.nickname = UserDefaults.standard.value(forKey: "nickname") as? String ?? ""
+                }, content: {
+                    ChangeNicknameView(oldNickname: self.nickname)
+                })
+                .sheet(isPresented: self.$showPrivacyPolicy,
+                       content: {
+                    WebView(url: URL(string: Links.privacyPolicyPage)!)
+                })
+                .navigationTitle(self.subscription.subscriber ? UIStrings.premiumAccount : UIStrings.regularAccount)
+                .navigationBarTitleDisplayMode(.inline)
+                .alert(UIStrings.accountDeleted, isPresented: self.$deletedAccount, actions: {
+                    Button(UIStrings.ok, role: .cancel) {
+                        self.showLoginViewAfterAccountDeletion = true
+                        self.dismiss()
                     }
-                    .buttonStyle(.plain)
-                    .foregroundColor(.red)
-                }
-            }
-            .task {
-                Purchases.shared.getCustomerInfo { (customerInfo, error) in
-                    if customerInfo!.entitlements[Links.allFeaturesEntitlement]?.isActive == true {
-                        self.subscription.subscriber = true
-                    }
-                }
-                self.nickname = UserDefaults.standard.string(forKey: "nickname") ?? ""
-            }
-            .fullScreenCover(isPresented: $showInstructions, content: {
-                InstructionsView()
-            })
-            .fullScreenCover(isPresented: self.$subscription.showPanel,
-                             content: {
-                SubscriptionView(subscriber: self.$subscription.subscriber)
-            })
-            .sheet(isPresented: self.$changeNickname, onDismiss: {
-                self.nickname = UserDefaults.standard.value(forKey: "nickname") as? String ?? ""
-            }, content: {
-                ChangeNicknameView(oldNickname: self.nickname)
-            })
-            .sheet(isPresented: self.$showPrivacyPolicy,
-                   content: {
-                WebView(url: URL(string: Links.privacyPolicyPage)!)
-            })
-            .navigationTitle(self.subscription.subscriber ? UIStrings.premiumAccount : UIStrings.regularAccount)
-            .navigationBarTitleDisplayMode(.inline)
-            .alert(UIStrings.accountDeleted, isPresented: self.$deletedAccount, actions: {
-                Button(UIStrings.ok, role: .cancel){
-                    self.loggedOut = true
-                    self.dismiss()
-                }
-            }, message: {
-                Text(UIStrings.accountDeletedInformation)
-            })
-            .alert(UIStrings.accountSettings, isPresented: self.$askAboutAccountDeletion) {
-                Button(UIStrings.deleteAccount, role: .destructive) {
-                    self.clearStorage {
-                        self.deleteAllReceivedPhotos {
-                            self.deleteAllReceivedJourneys {
-                                self.deleteFromAllFriendsLists {
-                                    self.deleteAllPhotos {
-                                        self.deleteAllJourneys {
-                                            self.deleteAllFriends {
-                                                self.deleteUser {
-                                                    self.deleteAuth {
-                                                        self.loggedOut = true
-                                                        self.dismiss()
+                }, message: {
+                    Text(UIStrings.accountDeletedInformation)
+                })
+                .alert(UIStrings.accountSettings, isPresented: self.$askAboutAccountDeletion) {
+                    Button(UIStrings.deleteAccount, role: .destructive) {
+                        self.accountDeletionInProgress = true
+                        self.clearStorage {
+                            self.deleteAllReceivedPhotos {
+                                self.deleteAllReceivedJourneys {
+                                    self.deleteFromAllFriendsLists {
+                                        self.deleteAllPhotos {
+                                            self.deleteAllJourneys {
+                                                self.deleteAllFriends {
+                                                    self.deleteUser {
+                                                        self.accountDeletionInProgress = false
+                                                        self.deletedAccount = true
                                                     }
                                                 }
                                             }
@@ -132,19 +133,24 @@ struct SettingsView: View {
                             }
                         }
                     }
+                } message: {
+                    Text(UIStrings.accountDeletionChecker)
                 }
-            } message: {
-                Text(UIStrings.accountDeletionChecker)
-            }
-            .toolbar {
-                ToolbarItem(placement: .bottomBar) {
-                    Button {
-                        self.dismiss()
-                    } label: {
-                        SheetDismissButtonView()
+                .toolbar {
+                    ToolbarItem(placement: .bottomBar) {
+                        Button {
+                            self.dismiss()
+                        } label: {
+                            SheetDismissButtonView()
+                        }
                     }
                 }
+                if self.accountDeletionInProgress {
+                    LoadingView()
+                        .opacity(0.75)
+                }
             }
+            .disabled(self.accountDeletionInProgress)
         }
     }
 
@@ -178,20 +184,20 @@ struct SettingsView: View {
                     if journeys.isEmpty {
                         completion()
                     }
-                let journeysToDelete = journeys.count
-                var deletedJourneys = 0
-                journeys.forEach { journey in
-                    let journeyName = journey.documentID
-                    let numberOfPhotos = journey.get("photosNumber") as? Int
-                    if let numberOfPhotos = numberOfPhotos {
-                        self.deleteJourneyFromStorage(name: journeyName, numberOfPhotos: numberOfPhotos) {
-                            deletedJourneys += 1
-                            if deletedJourneys == journeysToDelete {
-                                completion()
+                    let journeysToDelete = journeys.count
+                    var deletedJourneys = 0
+                    journeys.forEach { journey in
+                        let journeyName = journey.documentID
+                        let numberOfPhotos = journey.get("photosNumber") as? Int
+                        if let numberOfPhotos = numberOfPhotos {
+                            self.deleteJourneyFromStorage(name: journeyName, numberOfPhotos: numberOfPhotos) {
+                                deletedJourneys += 1
+                                if deletedJourneys == journeysToDelete {
+                                    completion()
+                                }
                             }
                         }
                     }
-                }
                 } else {
                     completion()
                 }
@@ -509,22 +515,6 @@ struct SettingsView: View {
                 print(error?.localizedDescription)
                 completion()
             } else {
-                completion()
-            }
-        }
-    }
-
-    func deleteAuth(completion: @escaping () -> Void) {
-        guard let user = Auth.auth().currentUser else {
-            return
-        }
-
-        user.delete { error in
-            if let error = error {
-                print(error.localizedDescription)
-                completion()
-            } else {
-                print("User account deleted successfully.")
                 completion()
             }
         }
