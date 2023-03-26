@@ -34,8 +34,6 @@
 		864FEEFB289B31200060E94D /* WeatherIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864FEEFA289B31200060E94D /* WeatherIconView.swift */; };
 		864FEF4128A7E4010060E94D /* CurrentImage+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864FEF3F28A7E3FF0060E94D /* CurrentImage+CoreDataClass.swift */; };
 		864FEF4228A7E4010060E94D /* CurrentImage+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864FEF4028A7E4000060E94D /* CurrentImage+CoreDataProperties.swift */; };
-		864FEF4528A7E86C0060E94D /* CurrentLocation+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864FEF4328A7E86B0060E94D /* CurrentLocation+CoreDataClass.swift */; };
-		864FEF4628A7E86C0060E94D /* CurrentLocation+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864FEF4428A7E86C0060E94D /* CurrentLocation+CoreDataProperties.swift */; };
 		864FEF4828A952830060E94D /* DateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864FEF4728A952820060E94D /* DateManager.swift */; };
 		8652A16F27BE3EE200ADBB25 /* SendJourneyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652A16E27BE3EE100ADBB25 /* SendJourneyView.swift */; };
 		8652A17227BFEAE900ADBB25 /* SumUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652A17127BFEAE900ADBB25 /* SumUpView.swift */; };
@@ -159,8 +157,6 @@
 		864FEEFA289B31200060E94D /* WeatherIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherIconView.swift; sourceTree = "<group>"; };
 		864FEF3F28A7E3FF0060E94D /* CurrentImage+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CurrentImage+CoreDataClass.swift"; sourceTree = "<group>"; };
 		864FEF4028A7E4000060E94D /* CurrentImage+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CurrentImage+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		864FEF4328A7E86B0060E94D /* CurrentLocation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CurrentLocation+CoreDataClass.swift"; sourceTree = "<group>"; };
-		864FEF4428A7E86C0060E94D /* CurrentLocation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CurrentLocation+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		864FEF4728A952820060E94D /* DateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateManager.swift; sourceTree = "<group>"; };
 		8652A16E27BE3EE100ADBB25 /* SendJourneyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendJourneyView.swift; sourceTree = "<group>"; };
 		8652A17027BFC8EF00ADBB25 /* Share-Your-Journey-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Share-Your-Journey-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -490,8 +486,6 @@
 			children = (
 				864FEF3F28A7E3FF0060E94D /* CurrentImage+CoreDataClass.swift */,
 				864FEF4028A7E4000060E94D /* CurrentImage+CoreDataProperties.swift */,
-				864FEF4328A7E86B0060E94D /* CurrentLocation+CoreDataClass.swift */,
-				864FEF4428A7E86C0060E94D /* CurrentLocation+CoreDataProperties.swift */,
 				86C649F027D1B43800891C24 /* Journey+CoreDataClass.swift */,
 				86C649F127D1B43A00891C24 /* Journey+CoreDataProperties.swift */,
 				86C649F427D1B43A00891C24 /* Photo+CoreDataClass.swift */,
@@ -718,7 +712,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				86A131D229A2A5BA00B1AFE8 /* SentByYouManager.swift in Sources */,
-				864FEF4628A7E86C0060E94D /* CurrentLocation+CoreDataProperties.swift in Sources */,
 				8665C798295F5A59007D7354 /* Colors.swift in Sources */,
 				864FEF4128A7E4010060E94D /* CurrentImage+CoreDataClass.swift in Sources */,
 				8653A2D4280418EB00852374 /* JourneysView.swift in Sources */,
@@ -739,7 +732,6 @@
 				862AA45D27B14D6D001B9312 /* LoginView.swift in Sources */,
 				8671E6FE2876D24300E4A5AC /* InstructionsView.swift in Sources */,
 				8665C79E2961FF90007D7354 /* IntConstants.swift in Sources */,
-				864FEF4528A7E86C0060E94D /* CurrentLocation+CoreDataClass.swift in Sources */,
 				865889EE297EADDB00A0009E /* NotificationSender.swift in Sources */,
 				86FCCC652810272B005FD678 /* YourJourneysList.swift in Sources */,
 				86FCCC6C28102A75005FD678 /* PausedJourneyModeView.swift in Sources */,

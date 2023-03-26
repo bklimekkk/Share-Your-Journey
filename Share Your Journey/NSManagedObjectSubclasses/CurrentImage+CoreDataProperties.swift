@@ -19,7 +19,9 @@ extension CurrentImage {
     @NSManaged public var date: Date?
     @NSManaged public var image: Data?
     @NSManaged public var id: Int16
+    @NSManaged public var latitude: Double
     @NSManaged public var location: String?
+    @NSManaged public var longitude: Double
     @NSManaged public var subLocation: String?
     @NSManaged public var administrativeArea: String?
     @NSManaged public var country: String?

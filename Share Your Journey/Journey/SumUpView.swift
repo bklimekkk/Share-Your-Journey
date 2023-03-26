@@ -129,7 +129,7 @@ struct SumUpView: View {
                                         weatherLatitude: self.$weatherLatitude,
                                         weatherLongitude: self.$weatherLongitude,
                                         routeIsDisplayed: self.$routeIsDisplayed,
-                                        photosLocations: self.$journey.photosLocations)
+                                        photosLocations: self.journey.photosLocations)
                                 .edgesIgnoringSafeArea(.all)
                                 .environmentObject(self.currentLocationManager)
                                 .opacity(self.showPicture ? 0 : 1)

@@ -25,7 +25,7 @@ struct MapView: UIViewRepresentable {
     var tintColor: UIColor {
         self.colorScheme == .light ? Colors.darkTintColor : .white
     }
-    @Binding var photosLocations: [CLLocationCoordinate2D]
+    @State var photosLocations: [CLLocationCoordinate2D]
     
     //This object is annotated as environmental in order to be called from many views.
     @EnvironmentObject var clManager: CurrentLocationManager

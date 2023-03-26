@@ -9,15 +9,13 @@
         <attribute name="image" optional="YES" attributeType="Binary" valueTransformerName="UIImageTransformer" customClassName="UIImage"/>
         <attribute name="inlandWater" optional="YES" attributeType="String"/>
         <attribute name="isoCountryCode" optional="YES" attributeType="String"/>
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="location" optional="YES" attributeType="String"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="ocean" optional="YES" attributeType="String"/>
         <attribute name="postalCode" optional="YES" attributeType="String"/>
         <attribute name="subLocation" optional="YES" attributeType="String"/>
-    </entity>
-    <entity name="CurrentLocation" representedClassName="CurrentLocation" syncable="YES">
-        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
     </entity>
     <entity name="Journey" representedClassName="Journey" syncable="YES">
         <attribute name="author" optional="YES" attributeType="String"/>

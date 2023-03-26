@@ -55,7 +55,6 @@ class CurrentImagesCollection: ObservableObject {
 
 struct StartView: View {
     @FetchRequest(sortDescriptors: []) var currentImages: FetchedResults<CurrentImage>
-    @FetchRequest(sortDescriptors: []) var currentLocations: FetchedResults<CurrentLocation>
     
     @Environment(\.managedObjectContext) var moc
     @Environment(\.colorScheme) var colorScheme
@@ -76,8 +75,6 @@ struct StartView: View {
     
     //Array is prepared to contain all objects representing photos taken by user during the journey.
     @State private var arrayOfPhotos: [SinglePhoto] = []
-    //Array is prepared to contain all objects representing lcations where photos were taken during the journey.
-    @State private var arrayOfPhotosLocations: [CLLocationCoordinate2D] = []
     
     //Variable responsible for defining if journey has finished. If yes, application is responsible for showing sum up screen.
 
@@ -112,12 +109,12 @@ struct StartView: View {
 
 
 
-                    HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
-                                     showPicture: self.$showPhoto,
-                                     highlightedPhoto: self.$highlightedPhoto,
-                                     journey: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
-                                                            photos: self.arrayOfPhotos,
-                                                            photosLocations: self.arrayOfPhotosLocations))
+                HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
+                                 showPicture: self.$showPhoto,
+                                 highlightedPhoto: self.$highlightedPhoto,
+                                 journey: SingleJourney(numberOfPhotos: self.arrayOfPhotos.count,
+                                                        photos: self.arrayOfPhotos,
+                                                        photosLocations: self.arrayOfPhotos.map{$0.coordinateLocation}))
 
 
 
@@ -156,7 +153,7 @@ struct StartView: View {
                             weatherLatitude: self.$weatherController.weatherLatitude,
                             weatherLongitude: self.$weatherController.weatherLongitude,
                             routeIsDisplayed: self.$routeIsDisplayed,
-                            photosLocations: self.$arrayOfPhotosLocations)
+                            photosLocations: self.arrayOfPhotos.map{$0.coordinateLocation})
                     .environmentObject(self.currentLocationManager)
                     .edgesIgnoringSafeArea(.all)
 
@@ -168,7 +165,7 @@ struct StartView: View {
                                 MapButton(imageName: "arrow.backward")
                             }
                             if self.showDirections {
-                                DirectionsView(location: self.arrayOfPhotosLocations[self.photoIndex])
+                                DirectionsView(location: self.arrayOfPhotos[self.photoIndex].coordinateLocation)
                             }
                             Spacer()
                         }
@@ -180,7 +177,7 @@ struct StartView: View {
                                 if self.routeIsDisplayed {
                                     RemoveRouteView(routeIsDisplayed: self.$routeIsDisplayed, currentLocationManager: self.currentLocationManager)
                                 }
-                                if !self.arrayOfPhotosLocations.isEmpty && self.startedJourney {
+                                if !self.arrayOfPhotos.isEmpty && self.startedJourney {
                                     DirectionIcons(mapType: self.$currentLocationManager.mapView.mapType,
                                                    subscriber: self.$subscription.subscriber,
                                                    showPanel: self.$subscription.showPanel,
@@ -217,8 +214,8 @@ struct StartView: View {
                                 .foregroundColor(self.buttonColor)
                             }
                             Spacer()
-                            if self.arrayOfPhotosLocations.count > 1 {
-                                JourneyControlView(numberOfPhotos: self.arrayOfPhotosLocations.count,
+                            if self.arrayOfPhotos.count > 1 {
+                                JourneyControlView(numberOfPhotos: self.arrayOfPhotos.count,
                                                    currentLocationManager: self.currentLocationManager,
                                                    currentPhotoIndex: self.$photoIndex,
                                                    mapType: self.$currentLocationManager.mapView.mapType)
@@ -262,6 +259,7 @@ struct StartView: View {
                     self.arrayOfPhotos.append(SinglePhoto(date: image.getDate,
                                                           number: image.getId,
                                                           photo: image.getImage,
+                                                          coordinateLocation: CLLocationCoordinate2D(latitude: image.latitude, longitude: image.longitude),
                                                           location: image.getLocation,
                                                           subLocation: image.getSubLocation,
                                                           administrativeArea: image.getAdministrativeArea,
@@ -274,18 +272,12 @@ struct StartView: View {
                                                           areasOfInterest: image.getAreasOfInterst.components(separatedBy: ",")))
                 }
             }
-            
-            if !self.currentLocations.isEmpty && self.arrayOfPhotosLocations.isEmpty {
-                self.currentLocations.forEach { location in
-                    self.arrayOfPhotosLocations.append(CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude))
-                }
-            }
 
             var index = 0
-            while index < self.arrayOfPhotosLocations.count {
+            while index < self.arrayOfPhotos.count {
                 let photoPin = MKPointAnnotation()
                 photoPin.title = String(index + 1)
-                photoPin.coordinate = self.arrayOfPhotosLocations[index]
+                photoPin.coordinate = self.arrayOfPhotos.map{$0.coordinateLocation}[index]
                 self.currentLocationManager.mapView.addAnnotation(photoPin)
                 index += 1
             }
@@ -303,11 +295,11 @@ struct StartView: View {
                        highlightedPhoto: self.$currentImagesCollection.highlightedPhoto,
                        takeAPhoto: self.$journeyStateController.takeAPhoto,
                        currentLocationManager: self.currentLocationManager,
-                       numberOfPhotos: self.$arrayOfPhotosLocations.count,
+                       numberOfPhotos: self.$arrayOfPhotos.count,
                        layout: self.currentImagesCollection.layout,
-                       singleJourney: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
+                       singleJourney: SingleJourney(numberOfPhotos: self.arrayOfPhotos.count,
                                                     photos: self.arrayOfPhotos,
-                                                    photosLocations: self.arrayOfPhotosLocations))
+                                                    photosLocations: self.arrayOfPhotos.map{$0.coordinateLocation}))
         })
         .fullScreenCover(isPresented: self.$subscription.showPanel, content: {
             SubscriptionView(subscriber: self.$subscription.subscriber)
@@ -340,13 +332,10 @@ struct StartView: View {
                 self.startedJourney = false
                 self.journeyStateController.paused = false
                 self.arrayOfPhotos = []
-                self.arrayOfPhotosLocations = []
                 self.currentImages.forEach { image in
                     self.moc.delete(image)
                 }
-                self.currentLocations.forEach { location in
-                    self.moc.delete(location)
-                }
+
                 if self.moc.hasChanges {
                     try? self.moc.save()
                 }
@@ -357,7 +346,7 @@ struct StartView: View {
         }) {
             SumUpView(journey: SingleJourney(numberOfPhotos: self.arrayOfPhotos.count,
                                              photos: self.arrayOfPhotos,
-                                             photosLocations: self.arrayOfPhotosLocations),
+                                             photosLocations: self.arrayOfPhotos.map{$0.coordinateLocation}),
                       showSumUp: self.$journeyStateController.showSumUp,
                       goBack: self.$journeyStateController.goBack, previousLocationManager: self.currentLocationManager)
         }
@@ -384,9 +373,6 @@ struct StartView: View {
                     self.currentImages.forEach { image in
                         self.moc.delete(image)
                     }
-                    self.currentLocations.forEach { location in
-                        self.moc.delete(location)
-                    }
                     self.quitJourney()
                 }
                 if self.moc.hasChanges {
@@ -405,64 +391,61 @@ struct StartView: View {
      Function is responsible for populating array with location objects with object containing the right photo location.
      */
     func addPhotoLocation() {
-        if self.arrayOfPhotosLocations.count < self.arrayOfPhotos.count {
-            self.journeyStateController.currentLocation = self.currentLocationManager.currentRegion
-            self.arrayOfPhotosLocations.append(self.journeyStateController.currentLocation.center)
-            let location = CurrentLocation(context: self.moc)
-            location.latitude = self.journeyStateController.currentLocation.center.latitude
-            location.longitude = self.journeyStateController.currentLocation.center.longitude
+        let currentPhotoIndex = self.arrayOfPhotos.count - 1
+        self.journeyStateController.currentLocation = self.currentLocationManager.currentRegion
+        self.arrayOfPhotos[currentPhotoIndex].coordinateLocation = self.journeyStateController.currentLocation.center
 
-            guard let lastPhoto = self.arrayOfPhotos.last else {
-                return
-            }
-
-            let image = CurrentImage(context: self.moc)
-            image.id = Int16(lastPhoto.number)
-            image.image = lastPhoto.photo.jpegData(compressionQuality: 0.5)
-
-            let locationCoordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
-            SpotDetailsManager().calculatePlace(locationCoordinate: locationCoordinate) { placemark in
-                let locality = placemark?.locality ?? ""
-                let subLocality = placemark?.subLocality ?? ""
-                let administrativeArea = placemark?.administrativeArea ?? ""
-                let country = placemark?.country ?? ""
-                let isoCountryCode = placemark?.isoCountryCode ?? ""
-                let name = placemark?.name ?? ""
-                let postalCode = placemark?.postalCode ?? ""
-                let ocean = placemark?.ocean ?? ""
-                let inlandWater = placemark?.inlandWater ?? ""
-                let areasOfInterest = placemark?.areasOfInterest?.joined(separator: ",") ?? ""
-                let date = Date()
-                let currentPhotoIndex = self.arrayOfPhotos.count - 1
-                self.arrayOfPhotos[currentPhotoIndex].date = date
-                self.arrayOfPhotos[currentPhotoIndex].location = locality
-                self.arrayOfPhotos[currentPhotoIndex].subLocation = subLocality
-                self.arrayOfPhotos[currentPhotoIndex].administrativeArea = administrativeArea
-                self.arrayOfPhotos[currentPhotoIndex].country = country
-                self.arrayOfPhotos[currentPhotoIndex].isoCountryCode = isoCountryCode
-                self.arrayOfPhotos[currentPhotoIndex].name = name
-                self.arrayOfPhotos[currentPhotoIndex].postalCode = postalCode
-                self.arrayOfPhotos[currentPhotoIndex].ocean = ocean
-                self.arrayOfPhotos[currentPhotoIndex].inlandWater = inlandWater
-                self.arrayOfPhotos[currentPhotoIndex].areasOfInterest = areasOfInterest.components(separatedBy: ",")
-                image.date = date
-                image.location = locality
-                image.subLocation = subLocality
-                image.administrativeArea = administrativeArea
-                image.country = country
-                image.isoCountryCode = isoCountryCode
-                image.name = name
-                image.postalCode = postalCode
-                image.ocean = ocean
-                image.inlandWater = inlandWater
-                image.areasOfInterest = areasOfInterest
-            }
-            let photoPin = MKPointAnnotation()
-            photoPin.title = String(self.arrayOfPhotosLocations.count)
-            photoPin.coordinate = self.arrayOfPhotosLocations[self.arrayOfPhotosLocations.count - 1]
-            self.currentLocationManager.mapView.addAnnotation(photoPin)
-            self.currentLocationManager.mapView.selectAnnotation(photoPin, animated: true)
+        guard let lastPhoto = self.arrayOfPhotos.last else {
+            return
         }
+
+        let image = CurrentImage(context: self.moc)
+        image.id = Int16(lastPhoto.number)
+        image.image = lastPhoto.photo.jpegData(compressionQuality: 0.5)
+        image.latitude = self.journeyStateController.currentLocation.center.latitude
+        image.longitude = self.journeyStateController.currentLocation.center.longitude
+
+        let locationCoordinate = CLLocationCoordinate2D(latitude: image.latitude, longitude: image.longitude)
+        SpotDetailsManager().calculatePlace(locationCoordinate: locationCoordinate) { placemark in
+            let locality = placemark?.locality ?? ""
+            let subLocality = placemark?.subLocality ?? ""
+            let administrativeArea = placemark?.administrativeArea ?? ""
+            let country = placemark?.country ?? ""
+            let isoCountryCode = placemark?.isoCountryCode ?? ""
+            let name = placemark?.name ?? ""
+            let postalCode = placemark?.postalCode ?? ""
+            let ocean = placemark?.ocean ?? ""
+            let inlandWater = placemark?.inlandWater ?? ""
+            let areasOfInterest = placemark?.areasOfInterest?.joined(separator: ",") ?? ""
+            let date = Date()
+            self.arrayOfPhotos[currentPhotoIndex].date = date
+            self.arrayOfPhotos[currentPhotoIndex].location = locality
+            self.arrayOfPhotos[currentPhotoIndex].subLocation = subLocality
+            self.arrayOfPhotos[currentPhotoIndex].administrativeArea = administrativeArea
+            self.arrayOfPhotos[currentPhotoIndex].country = country
+            self.arrayOfPhotos[currentPhotoIndex].isoCountryCode = isoCountryCode
+            self.arrayOfPhotos[currentPhotoIndex].name = name
+            self.arrayOfPhotos[currentPhotoIndex].postalCode = postalCode
+            self.arrayOfPhotos[currentPhotoIndex].ocean = ocean
+            self.arrayOfPhotos[currentPhotoIndex].inlandWater = inlandWater
+            self.arrayOfPhotos[currentPhotoIndex].areasOfInterest = areasOfInterest.components(separatedBy: ",")
+            image.date = date
+            image.location = locality
+            image.subLocation = subLocality
+            image.administrativeArea = administrativeArea
+            image.country = country
+            image.isoCountryCode = isoCountryCode
+            image.name = name
+            image.postalCode = postalCode
+            image.ocean = ocean
+            image.inlandWater = inlandWater
+            image.areasOfInterest = areasOfInterest
+        }
+        let photoPin = MKPointAnnotation()
+        photoPin.title = String(self.arrayOfPhotos.count)
+        photoPin.coordinate = lastPhoto.coordinateLocation
+        self.currentLocationManager.mapView.addAnnotation(photoPin)
+        self.currentLocationManager.mapView.selectAnnotation(photoPin, animated: true)
     }
     
     /**
@@ -499,7 +482,6 @@ struct StartView: View {
         self.currentLocationManager.mapView.removeAnnotations(self.currentLocationManager.mapView.annotations)
         self.currentLocationManager.mapView.removeOverlays(self.currentLocationManager.mapView.overlays)
         self.arrayOfPhotos = []
-        self.arrayOfPhotosLocations = []
         self.startedJourney = false
         self.journeyStateController.paused = false
     }

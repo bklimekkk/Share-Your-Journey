@@ -167,7 +167,7 @@ struct SeeJourneyView: View {
                                         weatherLatitude: self.$weatherLatitude,
                                         weatherLongitude: self.$weatherLongitude,
                                         routeIsDisplayed: self.$routeIsDisplayed,
-                                        photosLocations: self.$journey.photosLocations)
+                                        photosLocations: self.journey.photosLocations)
                                 .edgesIgnoringSafeArea(.all)
                                 .environmentObject(self.currentLocationManager)
 
@@ -471,6 +471,8 @@ struct SeeJourneyView: View {
                             date: (queryDocumentSnapshot.get("date") as? Timestamp)?.dateValue() ?? Date(),
                             number: queryDocumentSnapshot.get("photoNumber") as? Int ?? IntConstants.defaultValue,
                             photo: image,
+                            coordinateLocation: CLLocationCoordinate2D(latitude: queryDocumentSnapshot.get("latitude") as? Double ?? 0,
+                                                                       longitude: queryDocumentSnapshot.get("longitude") as? Double ?? 0),
                             location: queryDocumentSnapshot.get("location") as? String ?? "",
                             subLocation: queryDocumentSnapshot.get("subLocation") as? String ?? "",
                             administrativeArea: queryDocumentSnapshot.get("administrativeArea") as? String ?? "",
