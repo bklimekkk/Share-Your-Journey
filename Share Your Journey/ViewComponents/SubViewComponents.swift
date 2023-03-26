@@ -21,7 +21,6 @@ struct HighlightedPhoto: View {
     }
     
     var body: some View {
-        if self.showPicture {
             VStack {
                 Image(uiImage: self.journey.photos.sorted{$1.number > $0.number}.map{$0.photo}[self.highlightedPhotoIndex])
                     .resizable()
@@ -78,7 +77,6 @@ struct HighlightedPhoto: View {
             }
             .transition(.scale)
             .zIndex(1)
-        }
     }
 }
 

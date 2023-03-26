@@ -92,7 +92,6 @@ struct StartView: View {
     @State private var highlightedPhoto: UIImage = UIImage()
     @State private var showDirections = false
     @State private var routeIsDisplayed = false
-    @State private var showInfo = false
     @State private var deletedAccount = false
     @State private var showLoginViewAfterAccountDeletion = false
     
@@ -101,133 +100,161 @@ struct StartView: View {
     }
     
     var body: some View {
-        ZStack {
-            ZStack {
-                //This struct contains MapView struct, which means that during they journey, users are able to use 3D map.
-                MapView(walking: self.$journeyStateController.walking,
-                        showPhoto: self.$showPhoto,
-                        photoIndex: self.$photoIndex,
-                        showWeather: self.$weatherController.showWeather,
-                        showDirections: self.$showDirections,
-                        expandWeather: self.$weatherController.expandWeather,
-                        weatherLatitude: self.$weatherController.weatherLatitude,
-                        weatherLongitude: self.$weatherController.weatherLongitude,
-                        routeIsDisplayed: self.$routeIsDisplayed,
-                        photosLocations: self.$arrayOfPhotosLocations)
-                .environmentObject(self.currentLocationManager)
-                .edgesIgnoringSafeArea(.all)
+        VStack {
 
-                VStack (spacing: 0) {
-                    HStack {
-                        Button {
-                            self.logOut()
-                        } label:{
-                            MapButton(imageName: "arrow.backward")
-                        }
-                        if self.showDirections {
-                            DirectionsView(location: self.arrayOfPhotosLocations[self.photoIndex])
-                        }
-                        Spacer()
-                    }
-                    .padding(.top, 5)
-                    Spacer()
-                    HStack {
-                        VStack (spacing: 10) {
+
+
+
+
+            if self.showPhoto {
+
+
+
+
+
+                    HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
+                                     showPicture: self.$showPhoto,
+                                     highlightedPhoto: self.$highlightedPhoto,
+                                     journey: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
+                                                            photos: self.arrayOfPhotos,
+                                                            photosLocations: self.arrayOfPhotosLocations))
+
+
+
+
+
+
+
+
+            } else {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                ZStack {
+                    //This struct contains MapView struct, which means that during they journey, users are able to use 3D map.
+                    MapView(walking: self.$journeyStateController.walking,
+                            showPhoto: self.$showPhoto,
+                            photoIndex: self.$photoIndex,
+                            showWeather: self.$weatherController.showWeather,
+                            showDirections: self.$showDirections,
+                            expandWeather: self.$weatherController.expandWeather,
+                            weatherLatitude: self.$weatherController.weatherLatitude,
+                            weatherLongitude: self.$weatherController.weatherLongitude,
+                            routeIsDisplayed: self.$routeIsDisplayed,
+                            photosLocations: self.$arrayOfPhotosLocations)
+                    .environmentObject(self.currentLocationManager)
+                    .edgesIgnoringSafeArea(.all)
+
+                    VStack (spacing: 0) {
+                        HStack {
+                            Button {
+                                self.logOut()
+                            } label:{
+                                MapButton(imageName: "arrow.backward")
+                            }
+                            if self.showDirections {
+                                DirectionsView(location: self.arrayOfPhotosLocations[self.photoIndex])
+                            }
                             Spacer()
-                            if self.routeIsDisplayed {
-                                RemoveRouteView(routeIsDisplayed: self.$routeIsDisplayed, currentLocationManager: self.currentLocationManager)
-                            }
-                            if !self.arrayOfPhotosLocations.isEmpty && self.startedJourney {
-                                DirectionIcons(mapType: self.$currentLocationManager.mapView.mapType,
-                                               subscriber: self.$subscription.subscriber,
-                                               showPanel: self.$subscription.showPanel,
-                                               walking: self.$journeyStateController.walking)
-                            }
-                            Button{
-                                self.journeyStateController.showSettings = true
-                            } label: {
-                                SettingsButton()
-                            }
-                            .foregroundColor(buttonColor)
+                        }
+                        .padding(.top, 5)
+                        Spacer()
+                        HStack {
+                            VStack (spacing: 10) {
+                                Spacer()
+                                if self.routeIsDisplayed {
+                                    RemoveRouteView(routeIsDisplayed: self.$routeIsDisplayed, currentLocationManager: self.currentLocationManager)
+                                }
+                                if !self.arrayOfPhotosLocations.isEmpty && self.startedJourney {
+                                    DirectionIcons(mapType: self.$currentLocationManager.mapView.mapType,
+                                                   subscriber: self.$subscription.subscriber,
+                                                   showPanel: self.$subscription.showPanel,
+                                                   walking: self.$journeyStateController.walking)
+                                }
+                                Button{
+                                    self.journeyStateController.showSettings = true
+                                } label: {
+                                    SettingsButton()
+                                }
+                                .foregroundColor(buttonColor)
 
-                            if self.startedJourney {
+                                if self.startedJourney {
+                                    Button {
+                                        self.journeyStateController.showImages = true
+                                    }label: {
+                                        ImageButton()
+                                    }
+                                    .foregroundColor(self.buttonColor)
+                                }
+
                                 Button {
-                                    self.journeyStateController.showImages = true
-                                }label: {
-                                    ImageButton()
+                                    self.currentLocationManager.changeTypeOfMap()
+                                } label: {
+                                    MapTypeButton()
+                                }
+                                .foregroundColor(self.buttonColor)
+
+                                Button {
+                                    self.currentLocationManager.recenterLocation()
+                                } label: {
+                                    LocationButton()
                                 }
                                 .foregroundColor(self.buttonColor)
                             }
-
-                            Button {
-                                self.currentLocationManager.changeTypeOfMap()
-                            } label: {
-                                MapTypeButton()
+                            Spacer()
+                            if self.arrayOfPhotosLocations.count > 1 {
+                                JourneyControlView(numberOfPhotos: self.arrayOfPhotosLocations.count,
+                                                   currentLocationManager: self.currentLocationManager,
+                                                   currentPhotoIndex: self.$photoIndex,
+                                                   mapType: self.$currentLocationManager.mapView.mapType)
                             }
-                            .foregroundColor(self.buttonColor)
+                        }
+                        .padding(.bottom, 10)
+                        //This else if statements block ensures that starting, pausing, resuming,
+                        //quitting and completing the journey works in the most intuitive way.
+                        if startedJourney && !journeyStateController.paused {
+                            RunningJourneyModeView(paused: $journeyStateController.paused,
+                                                   pickAPhoto: $journeyStateController.pickAPhoto,
+                                                   takeAPhoto: $journeyStateController.takeAPhoto,
+                                                   loadCamera: $journeyStateController.loadCamera,
+                                                   currentLocationManager: currentLocationManager)
+                        } else if startedJourney && journeyStateController.paused {
+                            PausedJourneyModeView(arrayOfPhotos: $arrayOfPhotos,
+                                                  alertMessage: $journeyStateController.alertMessage,
+                                                  alertError: $journeyStateController.alertError,
+                                                  paused: $journeyStateController.paused,
+                                                  startedJourney: $startedJourney, alert: $alert,
+                                                  alertBody: $journeyStateController.alertBody,
+                                                  currentLocationManager: currentLocationManager)
+                        } else {
+                            StartJourneyModeView(startedJourney: self.$startedJourney, currentLocationManager: self.currentLocationManager)
+                        }
+                    }
+                    .padding(.horizontal, 5)
+                    .padding(.bottom, 5)
+                }
 
-                            Button {
-                                self.currentLocationManager.recenterLocation()
-                            } label: {
-                                LocationButton()
-                            }
-                            .foregroundColor(self.buttonColor)
-                        }
-                        Spacer()
-                        if self.arrayOfPhotosLocations.count > 1 {
-                            JourneyControlView(numberOfPhotos: self.arrayOfPhotosLocations.count,
-                                               currentLocationManager: self.currentLocationManager,
-                                               currentPhotoIndex: self.$photoIndex,
-                                               mapType: self.$currentLocationManager.mapView.mapType)
-                        }
-                    }
-                    .padding(.bottom, 10)
-                    //This else if statements block ensures that starting, pausing, resuming,
-                    //quitting and completing the journey works in the most intuitive way.
-                    if startedJourney && !journeyStateController.paused {
-                        RunningJourneyModeView(paused: $journeyStateController.paused,
-                                               pickAPhoto: $journeyStateController.pickAPhoto,
-                                               takeAPhoto: $journeyStateController.takeAPhoto,
-                                               loadCamera: $journeyStateController.loadCamera,
-                                               currentLocationManager: currentLocationManager)
-                    } else if startedJourney && journeyStateController.paused {
-                        PausedJourneyModeView(arrayOfPhotos: $arrayOfPhotos,
-                                              alertMessage: $journeyStateController.alertMessage,
-                                              alertError: $journeyStateController.alertError,
-                                              paused: $journeyStateController.paused,
-                                              startedJourney: $startedJourney, alert: $alert,
-                                              alertBody: $journeyStateController.alertBody,
-                                              currentLocationManager: currentLocationManager)
-                    } else {
-                        StartJourneyModeView(startedJourney: self.$startedJourney, currentLocationManager: self.currentLocationManager)
-                    }
-                }
-                .padding(.horizontal, 5)
-                .padding(.bottom, 5)
             }
-            .opacity(self.showPhoto ? 0 : 1)
-            .disabled(self.showPhoto)
-            VStack {
-                HStack {
-                    Spacer()
-                    Button {
-                        self.showInfo = true
-                    } label: {
-                        Image(systemName: Icons.infoCircle)
-                            .font(.system(size: 22.5))
-                    }
-                    .padding(.top, 5)
-                    .padding(.trailing, 10)
-                    .disabled(!self.showPhoto)
-                }
-                HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
-                                 showPicture: self.$showPhoto,
-                                 highlightedPhoto: self.$highlightedPhoto,
-                                 journey: SingleJourney(numberOfPhotos: self.arrayOfPhotosLocations.count,
-                                                        photos: self.arrayOfPhotos,
-                                                        photosLocations: self.arrayOfPhotosLocations))
-            }
-            .opacity(self.showPhoto ? 1 : 0)
+
+
+
+
+
         }
         .task {
             if !self.currentImages.isEmpty && self.arrayOfPhotos.isEmpty {
@@ -263,9 +290,6 @@ struct StartView: View {
                 index += 1
             }
         }
-        .sheet(isPresented: self.$showInfo, content: {
-            PhotoDetailsView(photo: self.arrayOfPhotos[self.photoIndex])
-        })
         .fullScreenCover(isPresented: self.$journeyStateController.showSettings, onDismiss: {
             if self.showLoginViewAfterAccountDeletion {
                 self.loggedOut = true

@@ -55,10 +55,6 @@ struct ImagesView: View {
                                    highlightedPhoto: self.$highlightedPhoto,
                                    layout: self.layout,
                                    singleJourney: self.singleJourney)
-                        HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
-                                         showPicture: self.$showPicture,
-                                         highlightedPhoto: self.$highlightedPhoto,
-                                         journey: self.singleJourney)
                     }
                     .toolbar {
                         ToolbarItem(placement: .bottomBar) {

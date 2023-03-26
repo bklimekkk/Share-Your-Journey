@@ -63,8 +63,18 @@ struct SumUpView: View {
 
     var body: some View {
         NavigationView {
-            ZStack {
-                if !self.showPicture {
+            VStack {
+
+
+
+
+
+                if self.showPicture {
+                    HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
+                                     showPicture: self.$showPicture,
+                                     highlightedPhoto: self.$highlightedPhoto,
+                                     journey: self.journey)
+                } else {
                     VStack {
                         JourneyPickerView(choice: self.$viewType, firstChoice: UIStrings.album, secondChoice: UIStrings.map)
                             .onChange(of: self.viewType, perform: { newValue in
@@ -221,10 +231,13 @@ struct SumUpView: View {
                         Text(UIStrings.areYouSureToQuit)
                     }
                 }
-                HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
-                                 showPicture: self.$showPicture,
-                                 highlightedPhoto: self.$highlightedPhoto,
-                                 journey: self.journey)
+
+
+
+
+
+
+
             }
             .navigationTitle(UIStrings.sumUp)
             .navigationBarTitleDisplayMode(.inline)

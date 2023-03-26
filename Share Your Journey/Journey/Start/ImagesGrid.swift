@@ -17,11 +17,19 @@ struct ImagesGrid: View {
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
-        PhotosAlbumView(showPicture: self.$showPicture,
-                        photoIndex: self.$photoIndex,
-                        highlightedPhoto: self.$highlightedPhoto,
-                        layout: self.layout,
-                        singleJourney: self.singleJourney)
-        .padding(.horizontal, 5)
+        if self.showPicture {
+            HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
+                             showPicture: self.$showPicture,
+                             highlightedPhoto: self.$highlightedPhoto,
+                             journey: self.singleJourney)
+        } else {
+            PhotosAlbumView(showPicture: self.$showPicture,
+                            photoIndex: self.$photoIndex,
+                            highlightedPhoto: self.$highlightedPhoto,
+                            layout: self.layout,
+                            singleJourney: self.singleJourney)
+            .padding(.horizontal, 5)
+        }
+
     }
 }
