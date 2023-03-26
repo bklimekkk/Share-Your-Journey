@@ -126,7 +126,7 @@ struct SumUpFunctionalityButtonsView: View {
             "date" : Date(),
             "deletedJourney" : false
         ])
-        for index in 0...journey.photosLocations.count - 1 {
+        for index in 0...journey.photos.count - 1 {
             self.uploadPhoto(journey: journey, name: journey.name, index: index)
         }
     }
@@ -149,8 +149,8 @@ struct SumUpFunctionalityButtonsView: View {
             }
             //Image's details are added to appropriate collection in firetore's database.
             Firestore.firestore().document("\(FirestorePaths.myJourneys(uid: Auth.auth().currentUser?.uid ?? ""))/\(name)/photos/\(index)").setData([
-                "latitude": journey.photosLocations[index].latitude,
-                "longitude": journey.photosLocations[index].longitude,
+                "latitude": journey.photos[index].coordinateLocation.latitude,
+                "longitude": journey.photos[index].coordinateLocation.longitude,
                 "photoUrl": photoReference,
                 "photoNumber": index,
                 "date": journey.photos[index].date,

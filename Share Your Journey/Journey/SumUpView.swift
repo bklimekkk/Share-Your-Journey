@@ -129,7 +129,7 @@ struct SumUpView: View {
                                         weatherLatitude: self.$weatherLatitude,
                                         weatherLongitude: self.$weatherLongitude,
                                         routeIsDisplayed: self.$routeIsDisplayed,
-                                        photosLocations: self.journey.photosLocations)
+                                        photosLocations: self.journey.photos.map{$0.coordinateLocation})
                                 .edgesIgnoringSafeArea(.all)
                                 .environmentObject(self.currentLocationManager)
                                 .opacity(self.showPicture ? 0 : 1)
@@ -147,7 +147,7 @@ struct SumUpView: View {
                                                     MapButton(imageName: Icons.cloudSunFill)
                                                         .foregroundColor(self.colorScheme == .light ? .blue : .white)
                                                 }
-                                                DirectionsView(location: self.journey.photosLocations[self.photoIndex])
+                                                DirectionsView(location: self.journey.photos[self.photoIndex].coordinateLocation)
                                             }
                                             Spacer()
                                         }
@@ -182,7 +182,7 @@ struct SumUpView: View {
                                             }
                                             Spacer()
                                             if self.journey.numberOfPhotos > 1 {
-                                                JourneyControlView(numberOfPhotos: self.journey.photosLocations.count,
+                                                JourneyControlView(numberOfPhotos: self.journey.photos.count,
                                                                    currentLocationManager: self.currentLocationManager,
                                                                    currentPhotoIndex: self.$photoIndex,
                                                                    mapType: self.$currentLocationManager.mapView.mapType)

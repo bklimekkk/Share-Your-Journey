@@ -148,7 +148,7 @@ struct SeeJourneyView: View {
                             Text(UIStrings.areYouSureToDownloadAllImages)
                         }
                     } else {
-                        if self.journey.photosLocations.count < self.journey.numberOfPhotos {
+                        if self.journey.photos.count < self.journey.numberOfPhotos {
                             VStack {
                                 Spacer()
                                 Text(UIStrings.unableToShowTheJourney)
@@ -167,7 +167,7 @@ struct SeeJourneyView: View {
                                         weatherLatitude: self.$weatherLatitude,
                                         weatherLongitude: self.$weatherLongitude,
                                         routeIsDisplayed: self.$routeIsDisplayed,
-                                        photosLocations: self.journey.photosLocations)
+                                        photosLocations: self.journey.photos.map{$0.coordinateLocation})
                                 .edgesIgnoringSafeArea(.all)
                                 .environmentObject(self.currentLocationManager)
 
@@ -185,7 +185,7 @@ struct SeeJourneyView: View {
                                                     MapButton(imageName: Icons.cloudSunFill)
                                                         .foregroundColor(self.colorScheme == .light ? .blue : .white)
                                                 }
-                                                DirectionsView(location: self.journey.photosLocations[self.currentPhotoIndex])
+                                                DirectionsView(location: self.journey.photos[self.currentPhotoIndex].coordinateLocation)
                                             }
                                             Spacer()
                                         }
@@ -248,7 +248,7 @@ struct SeeJourneyView: View {
                                         }
                                         Spacer()
                                         if self.journey.numberOfPhotos > 1 {
-                                            JourneyControlView(numberOfPhotos: self.journey.photosLocations.count,
+                                            JourneyControlView(numberOfPhotos: self.journey.photos.count,
                                                                currentLocationManager: self.currentLocationManager,
                                                                currentPhotoIndex: self.$currentPhotoIndex,
                                                                mapType: self.$currentLocationManager.mapView.mapType)
@@ -358,7 +358,7 @@ struct SeeJourneyView: View {
             }
         }
         .onAppear {
-            if self.journey.photosLocations.count == 0 {
+            if self.journey.photos.count == 0 {
                 //Depending on journey mode, program will fetch data from different source.
                 if !self.downloadMode {
                     self.getJourneyDetails()
@@ -400,18 +400,19 @@ struct SeeJourneyView: View {
      Function is responsible for pulling journey's data from the Core Data.
      */
     func getDownloadedJourneyDetails() {
-        for journey in self.journeys {
-            if journey.name == self.journey.name {
-                self.journey.uid = Auth.auth().currentUser?.uid ?? ""
-                self.journey.numberOfPhotos = journey.photosArray.count
-                for index in 0...journey.photosArray.count - 1 {
-                    let singlePhoto = SinglePhoto(number: index, photo: journey.photosArray[index].getImage)
-                    self.journey.photos.append(singlePhoto)
-                    self.journey.photosLocations.append(CLLocationCoordinate2D(latitude: journey.photosArray[index].latitude,
-                                                                               longitude: journey.photosArray[index].longitude))
-                }
-                break
-            }
+        guard let journey = self.journeys.first(where: { $0.name == self.journey.name }) else {
+            return
+        }
+
+        self.journey.uid = Auth.auth().currentUser?.uid ?? ""
+        self.journey.numberOfPhotos = journey.photosArray.count
+        for index in 0...journey.photosArray.count - 1 {
+            let singlePhoto = SinglePhoto(number: index,
+                                          photo: journey.photosArray[index].getImage,
+                                          coordinateLocation: CLLocationCoordinate2D(latitude: journey.photosArray[index].latitude,
+                                                                                     longitude: journey.photosArray[index].longitude)
+            )
+            self.journey.photos.append(singlePhoto)
         }
     }
     
@@ -446,9 +447,6 @@ struct SeeJourneyView: View {
      Function is responsible for downloading for all photo's details from the database and storage.
      */
     func downloadPhotoDetails(queryDocumentSnapshot: QueryDocumentSnapshot) {
-        self.journey.photosLocations.append(CLLocationCoordinate2D(latitude: queryDocumentSnapshot.get("latitude") as? CLLocationDegrees ?? CLLocationDegrees(),
-                                                                   longitude: queryDocumentSnapshot.get("longitude") as? CLLocationDegrees ?? CLLocationDegrees()))
-        
         //Image's reverence / url is used for downloading image from storage later on.
         let photoReference = Storage.storage().reference().child(queryDocumentSnapshot.get("photoUrl") as? String ?? "")
         
@@ -502,7 +500,7 @@ struct SeeJourneyView: View {
             "date" : Date(),
             "deletedJourney" : false
         ])
-        for index in 0...self.journey.photosLocations.count - 1 {
+        for index in 0...self.journey.photos.count - 1 {
             self.uploadPhoto(index: index)
         }
     }
@@ -527,8 +525,8 @@ struct SeeJourneyView: View {
             
             //Image's details are added to appropriate collection in firetore's database.
             Firestore.firestore().document("users/\(Auth.auth().currentUser?.uid ?? "")/friends/\(Auth.auth().currentUser?.uid ?? "")/journeys/\(self.journey.name)/photos/\(index)").setData([
-                "latitude": self.journey.photosLocations[index].latitude,
-                "longitude": self.journey.photosLocations[index].longitude,
+                "latitude": self.journey.photos[index].coordinateLocation.latitude,
+                "longitude": self.journey.photos[index].coordinateLocation.longitude,
                 "photoUrl": photoReference,
                 "photoNumber": index,
                 "location": self.journey.photos[index].location,

@@ -30,8 +30,8 @@ struct DownloadManager {
             newImage.id = Double(index + 1)
             newImage.journey = newJourney
             newImage.image = journey.photos[index].photo.jpegData(compressionQuality: 0.5)
-            newImage.latitude = journey.photosLocations[index].latitude
-            newImage.longitude = journey.photosLocations[index].longitude
+            newImage.latitude = journey.photos[index].coordinateLocation.latitude
+            newImage.longitude = journey.photos[index].coordinateLocation.longitude
             newImage.location = journey.photos[index].location
             newImage.subLocation = journey.photos[index].subLocation
             newImage.administrativeArea = journey.photos[index].administrativeArea

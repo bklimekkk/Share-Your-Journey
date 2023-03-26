@@ -66,6 +66,23 @@ struct SinglePhoto: Hashable {
         self.areasOfInterest = []
     }
 
+    init(number: Int, photo: UIImage, coordinateLocation: CLLocationCoordinate2D) {
+        self.date = Date()
+        self.number = number
+        self.photo = photo
+        self.coordinateLocation = coordinateLocation
+        self.location = ""
+        self.subLocation = ""
+        self.administrativeArea = ""
+        self.country = ""
+        self.isoCountryCode = ""
+        self.name = ""
+        self.postalCode = ""
+        self.ocean = ""
+        self.inlandWater = ""
+        self.areasOfInterest = []
+    }
+
     init(
         date: Date,
         number: Int,
@@ -107,7 +124,6 @@ struct SingleJourney: Hashable {
     var operationDate: Date
     var numberOfPhotos: Int
     var photos: [SinglePhoto]
-    var photosLocations: [CLLocationCoordinate2D]
 
     init() {
         self.uid = ""
@@ -117,7 +133,6 @@ struct SingleJourney: Hashable {
         self.operationDate = Date.now
         self.numberOfPhotos = 0
         self.photos = []
-        self.photosLocations = []
     }
 
     init(numberOfPhotos: Int,
@@ -130,7 +145,6 @@ struct SingleJourney: Hashable {
         self.operationDate = Date.now
         self.numberOfPhotos = numberOfPhotos
         self.photos = photos
-        self.photosLocations = photosLocations
     }
 
     init(uid: String,
@@ -145,7 +159,6 @@ struct SingleJourney: Hashable {
         self.operationDate = Date.now
         self.numberOfPhotos = numberOfPhotos
         self.photos = []
-        self.photosLocations = []
     }
 
     init(uid: String,
@@ -161,7 +174,6 @@ struct SingleJourney: Hashable {
         self.operationDate = operationDate
         self.numberOfPhotos = numberOfPhotos
         self.photos = []
-        self.photosLocations = []
     }
 
     init(uid: String,
@@ -178,7 +190,6 @@ struct SingleJourney: Hashable {
         self.operationDate = Date.now
         self.numberOfPhotos = numberOfPhotos
         self.photos = photos
-        self.photosLocations = photosLocations
     }
 
     init(uid: String,
@@ -197,7 +208,6 @@ struct SingleJourney: Hashable {
         self.operationDate = Date.now
         self.numberOfPhotos = numberOfPhotos
         self.photos = photos
-        self.photosLocations = photosLocations
     }
 
 }
