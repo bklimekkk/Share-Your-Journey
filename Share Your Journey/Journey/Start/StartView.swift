@@ -112,9 +112,7 @@ struct StartView: View {
                 HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
                                  showPicture: self.$showPhoto,
                                  highlightedPhoto: self.$highlightedPhoto,
-                                 journey: SingleJourney(numberOfPhotos: self.arrayOfPhotos.count,
-                                                        photos: self.arrayOfPhotos,
-                                                        photosLocations: self.arrayOfPhotos.map{$0.coordinateLocation}))
+                                 photos: self.arrayOfPhotos)
 
 
 
@@ -297,9 +295,7 @@ struct StartView: View {
                        currentLocationManager: self.currentLocationManager,
                        numberOfPhotos: self.$arrayOfPhotos.count,
                        layout: self.currentImagesCollection.layout,
-                       singleJourney: SingleJourney(numberOfPhotos: self.arrayOfPhotos.count,
-                                                    photos: self.arrayOfPhotos,
-                                                    photosLocations: self.arrayOfPhotos.map{$0.coordinateLocation}))
+                       photos: self.arrayOfPhotos)
         })
         .fullScreenCover(isPresented: self.$subscription.showPanel, content: {
             SubscriptionView(subscriber: self.$subscription.subscriber)

@@ -92,7 +92,7 @@ struct SeeJourneyView: View {
                 HighlightedPhoto(highlightedPhotoIndex: self.$currentPhotoIndex,
                                  showPicture: self.$showPicture,
                                  highlightedPhoto: self.$highlightedPhoto,
-                                 journey: self.journey)
+                                 photos: self.journey.photos)
 
 
             } else {
@@ -128,7 +128,7 @@ struct SeeJourneyView: View {
                                                 photoIndex: self.$currentPhotoIndex,
                                                 highlightedPhoto: self.$highlightedPhoto,
                                                 layout: self.layout,
-                                                singleJourney: self.journey)
+                                                photos: self.journey.photos)
                                 .padding(.horizontal, 5)
                             }
                         }

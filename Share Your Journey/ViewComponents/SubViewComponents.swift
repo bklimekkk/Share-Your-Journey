@@ -15,14 +15,14 @@ struct HighlightedPhoto: View {
     @Binding var highlightedPhotoIndex: Int
     @Binding var showPicture: Bool
     @Binding var highlightedPhoto: UIImage
-    var journey: SingleJourney
+    var photos: [SinglePhoto]
     var gold: Color {
         Color(uiColor: Colors.premiumColor)
     }
     
     var body: some View {
             VStack {
-                Image(uiImage: self.journey.photos.sorted{$1.number > $0.number}.map{$0.photo}[self.highlightedPhotoIndex])
+                Image(uiImage: self.photos.sorted{$1.number > $0.number}.map{$0.photo}[self.highlightedPhotoIndex])
                     .resizable()
                     .scaledToFill()
                     .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
@@ -31,12 +31,12 @@ struct HighlightedPhoto: View {
                                 && abs(value.translation.width) > abs(value.translation.height)
                                 && self.highlightedPhotoIndex > 0 {
                                 self.highlightedPhotoIndex -= 1
-                                self.highlightedPhoto = self.journey.photos[highlightedPhotoIndex].photo
+                                self.highlightedPhoto = self.photos[highlightedPhotoIndex].photo
                             } else if value.translation.width < 0
                                         && abs(value.translation.width) > abs(value.translation.height)
-                                        && self.highlightedPhotoIndex < self.journey.photos.count - 1 {
+                                        && self.highlightedPhotoIndex < self.photos.count - 1 {
                                 self.highlightedPhotoIndex += 1
-                                self.highlightedPhoto = self.journey.photos[highlightedPhotoIndex].photo
+                                self.highlightedPhoto = self.photos[highlightedPhotoIndex].photo
                             } else if value.translation.height > 0
                                         && abs(value.translation.height) > abs(value.translation.width) {
                                 withAnimation(.linear(duration: FloatConstants.shortAnimationDuration)) {
@@ -65,7 +65,7 @@ struct HighlightedPhoto: View {
                         .font(.system(size: 40))
                     Spacer()
                     Button {
-                        CommunicationManager.sendPhotoViaSocialMedia(image: self.journey.photos[self.highlightedPhotoIndex].photo)
+                        CommunicationManager.sendPhotoViaSocialMedia(image: self.photos[self.highlightedPhotoIndex].photo)
                     } label:{
                         Image(systemName: Icons.squareAndArrowUp)
                             .font(.system(size: 30))
@@ -88,7 +88,7 @@ struct PhotosAlbumView: View {
     @Binding var photoIndex: Int
     @Binding var highlightedPhoto: UIImage
     var layout: [GridItem]
-    var singleJourney: SingleJourney
+    var photos: [SinglePhoto]
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -96,7 +96,7 @@ struct PhotosAlbumView: View {
             
             //This container generates a grid with two columns of journey's images.
             LazyVGrid(columns: self.layout, spacing: 0) {
-                ForEach(self.singleJourney.photos.sorted{$1.number > $0.number}, id: \.self.number) { photo in
+                ForEach(self.photos.sorted{$1.number > $0.number}, id: \.self.number) { photo in
                     Image(uiImage: photo.photo)
                         .resizable()
                         .scaledToFit()
@@ -105,7 +105,7 @@ struct PhotosAlbumView: View {
                         .onTapGesture {
                             withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
                                 self.photoIndex = photo.number
-                                self.highlightedPhoto = self.singleJourney.photos[photoIndex].photo
+                                self.highlightedPhoto = self.photos[photoIndex].photo
                                 self.showPicture = true
                             }
                         }

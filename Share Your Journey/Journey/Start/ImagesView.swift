@@ -18,7 +18,7 @@ struct ImagesView: View {
     var currentLocationManager: CurrentLocationManager
     var numberOfPhotos: Int
     var layout: [GridItem]
-    var singleJourney: SingleJourney
+    var photos: [SinglePhoto]
 
     var body: some View {
         NavigationView {
@@ -54,7 +54,7 @@ struct ImagesView: View {
                                    photoIndex: self.$photoIndex,
                                    highlightedPhoto: self.$highlightedPhoto,
                                    layout: self.layout,
-                                   singleJourney: self.singleJourney)
+                                   photos: self.photos)
                     }
                     .toolbar {
                         ToolbarItem(placement: .bottomBar) {
@@ -91,7 +91,7 @@ struct ImagesView: View {
                                         }
                                     }
                                     Button {
-                                        CommunicationManager.sendPhotoViaSocialMedia(image: self.singleJourney.photos[self.photoIndex].photo)
+                                        CommunicationManager.sendPhotoViaSocialMedia(image: self.photos[self.photoIndex].photo)
                                     } label: {
                                         HStack {
                                             Text(UIStrings.sendViaSocialMedia)
@@ -103,7 +103,7 @@ struct ImagesView: View {
                                 }
                             } else {
                                 Button {
-                                    CommunicationManager.sendPhotosViaSocialMedia(images: self.singleJourney.photos.map({$0.photo}))
+                                    CommunicationManager.sendPhotosViaSocialMedia(images: self.photos.map({$0.photo}))
                                 } label: {
                                     Image(systemName: Icons.squareAndArrowUp)
                                 }
@@ -111,7 +111,7 @@ struct ImagesView: View {
                         }
                     }
                     .sheet(isPresented: $showPhotoDetails) {
-                        PhotoDetailsView(photo: self.singleJourney.photos[self.photoIndex])
+                        PhotoDetailsView(photo: self.photos[self.photoIndex])
                     }
                 }
             }

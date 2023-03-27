@@ -73,7 +73,7 @@ struct SumUpView: View {
                     HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
                                      showPicture: self.$showPicture,
                                      highlightedPhoto: self.$highlightedPhoto,
-                                     journey: self.journey)
+                                     photos: self.journey.photos)
                 } else {
                     VStack {
                         JourneyPickerView(choice: self.$viewType, firstChoice: UIStrings.album, secondChoice: UIStrings.map)
@@ -99,7 +99,8 @@ struct SumUpView: View {
                                 PhotosAlbumView(showPicture: self.$showPicture,
                                                 photoIndex: self.$photoIndex,
                                                 highlightedPhoto: self.$highlightedPhoto,
-                                                layout: layout, singleJourney: self.journey)
+                                                layout: layout,
+                                                photos: self.journey.photos)
                                 .padding(.horizontal, 5)
                             }
                             .alert(UIStrings.downloadAllImages, isPresented: self.$showDownloadAlert) {

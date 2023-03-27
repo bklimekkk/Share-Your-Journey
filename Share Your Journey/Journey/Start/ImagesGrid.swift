@@ -13,7 +13,7 @@ struct ImagesGrid: View {
     @Binding var photoIndex: Int
     @Binding var highlightedPhoto: UIImage
     var layout: [GridItem]
-    var singleJourney: SingleJourney
+    var photos: [SinglePhoto]
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -21,13 +21,13 @@ struct ImagesGrid: View {
             HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
                              showPicture: self.$showPicture,
                              highlightedPhoto: self.$highlightedPhoto,
-                             journey: self.singleJourney)
+                             photos: self.photos)
         } else {
             PhotosAlbumView(showPicture: self.$showPicture,
                             photoIndex: self.$photoIndex,
                             highlightedPhoto: self.$highlightedPhoto,
                             layout: self.layout,
-                            singleJourney: self.singleJourney)
+                            photos: self.photos)
             .padding(.horizontal, 5)
         }
 
