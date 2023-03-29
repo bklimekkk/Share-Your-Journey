@@ -10,15 +10,16 @@ import SwiftUI
 
 struct ImagesView: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var currentLocationManager: CurrentLocationManager
     @Binding var showPicture: Bool
     @Binding var photoIndex: Int
     @Binding var highlightedPhoto: UIImage
     @Binding var takeAPhoto: Bool
+    @Binding var photos: [SinglePhoto]
+
     @State var showPhotoDetails = false
-    var currentLocationManager: CurrentLocationManager
     var numberOfPhotos: Int
     var layout: [GridItem]
-    var photos: [SinglePhoto]
 
     var body: some View {
         NavigationView {
@@ -41,9 +42,9 @@ struct ImagesView: View {
                     }
                     .toolbar {
                         ToolbarItem(placement: .bottomBar) {
-                            Button{
+                            Button {
                                 self.dismiss()
-                            }label:{
+                            } label:{
                                 SheetDismissButtonView()
                             }
                         }
@@ -53,8 +54,9 @@ struct ImagesView: View {
                         ImagesGrid(showPicture: self.$showPicture,
                                    photoIndex: self.$photoIndex,
                                    highlightedPhoto: self.$highlightedPhoto,
-                                   layout: self.layout,
-                                   photos: self.photos)
+                                   photos: self.$photos,
+                                   layout: self.layout)
+                        .environmentObject(currentLocationManager)
                     }
                     .toolbar {
                         ToolbarItem(placement: .bottomBar) {

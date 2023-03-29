@@ -9,11 +9,13 @@ import SwiftUI
 import MapKit
 
 struct ImagesGrid: View {
+    @EnvironmentObject var currentLocationManager: CurrentLocationManager
     @Binding var showPicture: Bool
     @Binding var photoIndex: Int
     @Binding var highlightedPhoto: UIImage
+    @Binding var photos: [SinglePhoto]
+
     var layout: [GridItem]
-    var photos: [SinglePhoto]
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -26,8 +28,9 @@ struct ImagesGrid: View {
             PhotosAlbumView(showPicture: self.$showPicture,
                             photoIndex: self.$photoIndex,
                             highlightedPhoto: self.$highlightedPhoto,
-                            layout: self.layout,
-                            photos: self.photos)
+                            photos: self.$photos,
+                            layout: self.layout)
+            .environmentObject(self.currentLocationManager)
             .padding(.horizontal, 5)
         }
 

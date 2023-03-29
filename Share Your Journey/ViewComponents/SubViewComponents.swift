@@ -6,11 +6,12 @@
 //
 
 import Foundation
+import MapKit
 import SwiftUI
 
 //Struct contains code that generates enlarged photo picked by user.
 struct HighlightedPhoto: View {
-    
+
     //Variables described in SeeJourneyView struct.
     @Binding var highlightedPhotoIndex: Int
     @Binding var showPicture: Bool
@@ -21,74 +22,78 @@ struct HighlightedPhoto: View {
     }
     
     var body: some View {
-            VStack {
-                Image(uiImage: self.photos.sorted{$1.number > $0.number}.map{$0.photo}[self.highlightedPhotoIndex])
-                    .resizable()
-                    .scaledToFill()
-                    .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
-                        .onEnded({ value in
-                            if value.translation.width > 0
-                                && abs(value.translation.width) > abs(value.translation.height)
-                                && self.highlightedPhotoIndex > 0 {
-                                self.highlightedPhotoIndex -= 1
-                                self.highlightedPhoto = self.photos[highlightedPhotoIndex].photo
-                            } else if value.translation.width < 0
-                                        && abs(value.translation.width) > abs(value.translation.height)
-                                        && self.highlightedPhotoIndex < self.photos.count - 1 {
-                                self.highlightedPhotoIndex += 1
-                                self.highlightedPhoto = self.photos[highlightedPhotoIndex].photo
-                            } else if value.translation.height > 0
-                                        && abs(value.translation.height) > abs(value.translation.width) {
-                                withAnimation(.linear(duration: FloatConstants.shortAnimationDuration)) {
-                                    self.showPicture = false
-                                }
+        VStack {
+            Image(uiImage: self.photos.sorted{$1.number > $0.number}.map{$0.photo}[self.highlightedPhotoIndex])
+                .resizable()
+                .scaledToFill()
+                .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
+                    .onEnded({ value in
+                        if value.translation.width > 0
+                            && abs(value.translation.width) > abs(value.translation.height)
+                            && self.highlightedPhotoIndex > 0 {
+                            self.highlightedPhotoIndex -= 1
+                            self.highlightedPhoto = self.photos[highlightedPhotoIndex].photo
+                        } else if value.translation.width < 0
+                                    && abs(value.translation.width) > abs(value.translation.height)
+                                    && self.highlightedPhotoIndex < self.photos.count - 1 {
+                            self.highlightedPhotoIndex += 1
+                            self.highlightedPhoto = self.photos[highlightedPhotoIndex].photo
+                        } else if value.translation.height > 0
+                                    && abs(value.translation.height) > abs(value.translation.width) {
+                            withAnimation(.linear(duration: FloatConstants.shortAnimationDuration)) {
+                                self.showPicture = false
                             }
-                        }))
+                        }
+                    }))
+
+            Spacer()
+            //This HStack contains code responsible for generating functionality provided along with highlighted image: Ability to go back to the map, number of image and ability to download the image.
+            HStack {
+                Button {
+                    withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
+                        self.showPicture = false
+                    }
+                } label:{
+                    Image(systemName: Icons.xmark)
+                        .font(.system(size: 30))
+                        .foregroundColor(Color(Colors.systemImageColor ?? .gray))
+                }
 
                 Spacer()
-                //This HStack contains code responsible for generating functionality provided along with highlighted image: Ability to go back to the map, number of image and ability to download the image.
-                HStack {
-                    Button {
-                        withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
-                            self.showPicture = false
-                        }
-                    } label:{
-                        Image(systemName: Icons.xmark)
-                            .font(.system(size: 30))
-                            .foregroundColor(Color(Colors.systemImageColor ?? .gray))
-                    }
-                    
-                    Spacer()
-                    
-                    Text(String(self.highlightedPhotoIndex + 1))
-                        .foregroundColor(Color(Colors.systemImageColor ?? .white))
-                        .font(.system(size: 40))
-                    Spacer()
-                    Button {
-                        CommunicationManager.sendPhotoViaSocialMedia(image: self.photos[self.highlightedPhotoIndex].photo)
-                    } label:{
-                        Image(systemName: Icons.squareAndArrowUp)
-                            .font(.system(size: 30))
-                            .foregroundColor(Color(Colors.systemImageColor ?? .gray))
-                            .offset(y: -5)
-                    }
+
+                Text(String(self.highlightedPhotoIndex + 1))
+                    .foregroundColor(Color(Colors.systemImageColor ?? .white))
+                    .font(.system(size: 40))
+                Spacer()
+                Button {
+                    CommunicationManager.sendPhotoViaSocialMedia(image: self.photos[self.highlightedPhotoIndex].photo)
+                } label:{
+                    Image(systemName: Icons.squareAndArrowUp)
+                        .font(.system(size: 30))
+                        .foregroundColor(Color(Colors.systemImageColor ?? .gray))
+                        .offset(y: -5)
                 }
-                .padding(.horizontal)
             }
-            .transition(.scale)
-            .zIndex(1)
+            .padding(.horizontal)
+        }
+        .transition(.scale)
+        .zIndex(1)
     }
 }
 
 //struct contains code that generates list of photos presented if the first option in triple picker is chosen.
 struct PhotosAlbumView: View {
-    
+    @EnvironmentObject var currentLocationManager: CurrentLocationManager
+    @FetchRequest(sortDescriptors: []) var currentImages: FetchedResults<CurrentImage>
+    @Environment(\.managedObjectContext) var moc
+
     //Variables are described in SumUpView struct.
     @Binding var showPicture: Bool
     @Binding var photoIndex: Int
     @Binding var highlightedPhoto: UIImage
+    @Binding var photos: [SinglePhoto]
+
     var layout: [GridItem]
-    var photos: [SinglePhoto]
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -97,22 +102,78 @@ struct PhotosAlbumView: View {
             //This container generates a grid with two columns of journey's images.
             LazyVGrid(columns: self.layout, spacing: 0) {
                 ForEach(self.photos.sorted{$1.number > $0.number}, id: \.self.number) { photo in
-                    Image(uiImage: photo.photo)
-                        .resizable()
-                        .scaledToFit()
-                        .cornerRadius(7)
-                        .padding(.vertical, 5)
-                        .onTapGesture {
-                            withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
-                                self.photoIndex = photo.number
-                                self.highlightedPhoto = self.photos[photoIndex].photo
-                                self.showPicture = true
+                    ZStack {
+                        Image(uiImage: photo.photo)
+                            .resizable()
+                            .scaledToFit()
+                            .cornerRadius(7)
+                            .padding(.vertical, 5)
+                            .onTapGesture {
+                                withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
+                                    self.photoIndex = photo.number
+                                    self.highlightedPhoto = self.photos[photoIndex].photo
+                                    self.showPicture = true
+                                }
                             }
+                        VStack {
+                            HStack {
+                                Button {
+                                    self.deletePhoto(photo: photo)
+                                } label: {
+                                    Image(systemName: "xmark.bin.fill")
+                                        .foregroundColor(.red)
+                                }
+                                .padding(5)
+
+                                Spacer()
+                            }
+                            Spacer()
                         }
+                    }
                 }
             }
         }
         .opacity(self.showPicture ? 0 : 1)
+    }
+
+    func deletePhoto(photo: SinglePhoto) {
+        withAnimation {
+            self.photoIndex = 0
+            guard let annotationToRemove = self.currentLocationManager.mapView.annotations.first(where: { $0.coordinate == photo.coordinateLocation }) else {
+                return
+            }
+
+            self.currentLocationManager.mapView.removeAnnotation(annotationToRemove)
+            self.photos.removeAll(where: { $0.number == photo.number })
+            if let image = self.currentImages.first(where: { $0.getId == photo.number }) {
+                self.moc.delete(image)
+            }
+            self.resetPhotosNumeration()
+            if self.moc.hasChanges {
+                try? self.moc.save()
+            }
+        }
+    }
+
+    func resetPhotosNumeration() {
+        var annotationIndex = 1
+
+        self.currentLocationManager.mapView.annotations.filter({ $0.title != "My Location" }).forEach { annotation in
+            let newAnnotation = MKPointAnnotation()
+            newAnnotation.title = String(annotationIndex)
+            newAnnotation.coordinate = annotation.coordinate
+              self.currentLocationManager.mapView.removeAnnotation(annotation)
+              self.currentLocationManager.mapView.addAnnotation(newAnnotation)
+            annotationIndex += 1
+        }
+
+        for number in 0...self.photos.count - 1 {
+            self.photos[number].number = number
+        }
+
+        for number in 0...self.currentImages.count - 1 {
+            self.currentImages[number].id = Int16(number)
+        }
     }
 }
 

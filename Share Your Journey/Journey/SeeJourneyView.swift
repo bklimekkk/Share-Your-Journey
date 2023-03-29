@@ -127,8 +127,8 @@ struct SeeJourneyView: View {
                                 PhotosAlbumView(showPicture: self.$showPicture,
                                                 photoIndex: self.$currentPhotoIndex,
                                                 highlightedPhoto: self.$highlightedPhoto,
-                                                layout: self.layout,
-                                                photos: self.journey.photos)
+                                                photos: self.$journey.photos,
+                                                layout: self.layout)
                                 .padding(.horizontal, 5)
                             }
                         }

@@ -99,8 +99,8 @@ struct SumUpView: View {
                                 PhotosAlbumView(showPicture: self.$showPicture,
                                                 photoIndex: self.$photoIndex,
                                                 highlightedPhoto: self.$highlightedPhoto,
-                                                layout: layout,
-                                                photos: self.journey.photos)
+                                                photos: self.$journey.photos,
+                                                layout: layout)
                                 .padding(.horizontal, 5)
                             }
                             .alert(UIStrings.downloadAllImages, isPresented: self.$showDownloadAlert) {

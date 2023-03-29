@@ -43,7 +43,6 @@ class JourneyStateController: ObservableObject {
 }
 
 class CurrentImagesCollection: ObservableObject {
-    @Published var photoIndex = 0
     @Published var highlightedPhoto: UIImage = UIImage()
     @Published var showPicture: Bool = false
     @Published var savedToCameraRoll: Bool = false
@@ -91,7 +90,7 @@ struct StartView: View {
     @State private var routeIsDisplayed = false
     @State private var deletedAccount = false
     @State private var showLoginViewAfterAccountDeletion = false
-    
+    @State private var takePhotoCancelled = false
     var buttonColor: Color {
         colorScheme == .dark ? .white : .blue
     }
@@ -162,7 +161,7 @@ struct StartView: View {
                             } label:{
                                 MapButton(imageName: "arrow.backward")
                             }
-                            if self.showDirections {
+                            if self.showDirections && !self.arrayOfPhotos.isEmpty {
                                 DirectionsView(location: self.arrayOfPhotos[self.photoIndex].coordinateLocation)
                             }
                             Spacer()
@@ -289,13 +288,13 @@ struct StartView: View {
         })
         .fullScreenCover(isPresented: self.$journeyStateController.showImages, content: {
             ImagesView(showPicture: self.$currentImagesCollection.showPicture,
-                       photoIndex: self.$currentImagesCollection.photoIndex,
+                       photoIndex: self.$photoIndex,
                        highlightedPhoto: self.$currentImagesCollection.highlightedPhoto,
                        takeAPhoto: self.$journeyStateController.takeAPhoto,
-                       currentLocationManager: self.currentLocationManager,
+                       photos: self.$arrayOfPhotos,
                        numberOfPhotos: self.$arrayOfPhotos.count,
-                       layout: self.currentImagesCollection.layout,
-                       photos: self.arrayOfPhotos)
+                       layout: self.currentImagesCollection.layout)
+            .environmentObject(self.currentLocationManager)
         })
         .fullScreenCover(isPresented: self.$subscription.showPanel, content: {
             SubscriptionView(subscriber: self.$subscription.subscriber)
@@ -307,14 +306,20 @@ struct StartView: View {
         .fullScreenCover(isPresented: self.$journeyStateController.takeAPhoto, onDismiss: {
             //Photo's location is added to the aproppriate array after view with camera is dismissed.
             withAnimation {
-                self.addPhotoLocation()
+                if !self.takePhotoCancelled {
+                    self.addPhotoLocation()
+                } else {
+                    self.takePhotoCancelled = false
+                }
             }
             if self.moc.hasChanges {
                 try? self.moc.save()
             }
         }, content: {
             //Struct represents view that user is supposed to see while taking a picture.
-            PhotoPickerView(pickPhoto: $journeyStateController.pickAPhoto, photosArray: $arrayOfPhotos)
+            PhotoPickerView(pickPhoto: $journeyStateController.pickAPhoto,
+                            takePhotoCancelled: self.$takePhotoCancelled,
+                            photosArray: $arrayOfPhotos)
                 .onAppear {
                     self.journeyStateController.loadCamera = false
                 }

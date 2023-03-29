@@ -11,6 +11,7 @@ import PhotosUI
 struct PhotoPickerView: UIViewControllerRepresentable {
     @Environment(\.managedObjectContext) var moc
     @Binding var pickPhoto: Bool
+    @Binding var takePhotoCancelled: Bool
     @Binding var photosArray: [SinglePhoto]
 
     final class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
@@ -26,6 +27,11 @@ struct PhotoPickerView: UIViewControllerRepresentable {
                 let photoArraySize = self.photoPickerView.photosArray.count
                 self.photoPickerView.photosArray.append(SinglePhoto(number: photoArraySize,photo: photo))
             }
+            picker.dismiss(animated:true)
+        }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            self.photoPickerView.takePhotoCancelled = true
             picker.dismiss(animated:true)
         }
     }
