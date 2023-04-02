@@ -388,7 +388,6 @@ struct SeeJourneyView: View {
             if error != nil {
                 print(error!.localizedDescription)
             } else {
-                self.preparePhotosArray()
                 querySnapshot!.documents.sorted(by: { $1["date"] as? Int ?? IntConstants.defaultValue > $0["date"] as? Int ?? IntConstants.defaultValue }).forEach { photo in
                     self.downloadPhotoDetails(queryDocumentSnapshot: photo)
                 }
@@ -412,17 +411,6 @@ struct SeeJourneyView: View {
                                                                                      longitude: journey.photosArray[index].longitude)
             )
             self.journey.photos.append(singlePhoto)
-        }
-    }
-    
-    /**
-     Function is responsible for filling photos array with null UIImage objects. Thanks to this users can view the journey before all images load. It usually takes less than a second but, this solution makes the application more intuitive and users can view locations before all photos load.
-     */
-    func preparePhotosArray() {
-        if self.journey.numberOfPhotos != 0 {
-            for _ in 0...self.journey.numberOfPhotos - 1 {
-                self.journey.photos.append(SinglePhoto(photo: UIImage()))
-            }
         }
     }
     
