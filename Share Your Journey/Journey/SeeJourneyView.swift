@@ -389,7 +389,7 @@ struct SeeJourneyView: View {
                 print(error!.localizedDescription)
             } else {
                 self.preparePhotosArray()
-                querySnapshot!.documents.sorted(by: { $1["photoNumber"] as? Int ?? IntConstants.defaultValue > $0["photoNumber"] as? Int ?? IntConstants.defaultValue }).forEach { photo in
+                querySnapshot!.documents.sorted(by: { $1["date"] as? Int ?? IntConstants.defaultValue > $0["date"] as? Int ?? IntConstants.defaultValue }).forEach { photo in
                     self.downloadPhotoDetails(queryDocumentSnapshot: photo)
                 }
             }
@@ -407,8 +407,7 @@ struct SeeJourneyView: View {
         self.journey.uid = Auth.auth().currentUser?.uid ?? ""
         self.journey.numberOfPhotos = journey.photosArray.count
         for index in 0...journey.photosArray.count - 1 {
-            let singlePhoto = SinglePhoto(number: index,
-                                          photo: journey.photosArray[index].getImage,
+            let singlePhoto = SinglePhoto(photo: journey.photosArray[index].getImage,
                                           coordinateLocation: CLLocationCoordinate2D(latitude: journey.photosArray[index].latitude,
                                                                                      longitude: journey.photosArray[index].longitude)
             )
@@ -422,25 +421,9 @@ struct SeeJourneyView: View {
     func preparePhotosArray() {
         if self.journey.numberOfPhotos != 0 {
             for _ in 0...self.journey.numberOfPhotos - 1 {
-                self.journey.photos.append(SinglePhoto(number: 0, photo: UIImage()))
+                self.journey.photos.append(SinglePhoto(photo: UIImage()))
             }
         }
-    }
-    
-    /**
-     Function is responsible for sorting all journey's images due to their id.
-     */
-    func sortImages(dictionaryOfPhotos: [Int:UIImage]) -> [SinglePhoto] {
-        var arrayOfImages: [SinglePhoto] = []
-        
-        for _ in 0...dictionaryOfPhotos.count - 1 {
-            arrayOfImages.append(SinglePhoto(number: 0, photo: UIImage()))
-        }
-        
-        dictionaryOfPhotos.forEach { photo in
-            arrayOfImages[photo.key] = SinglePhoto(number: photo.key, photo: photo.value)
-        }
-        return arrayOfImages
     }
     
     /**
@@ -464,10 +447,8 @@ struct SeeJourneyView: View {
                     
                     //Image is appended to photos array on main thread so running application isn't interrupted.
                     DispatchQueue.main.async {
-                        journey.photos[queryDocumentSnapshot.get("photoNumber") as? Int ?? IntConstants.defaultValue] =
-                        (SinglePhoto(
+                        journey.photos.append(SinglePhoto(
                             date: (queryDocumentSnapshot.get("date") as? Timestamp)?.dateValue() ?? Date(),
-                            number: queryDocumentSnapshot.get("photoNumber") as? Int ?? IntConstants.defaultValue,
                             photo: image,
                             coordinateLocation: CLLocationCoordinate2D(latitude: queryDocumentSnapshot.get("latitude") as? Double ?? 0,
                                                                        longitude: queryDocumentSnapshot.get("longitude") as? Double ?? 0),
@@ -500,45 +481,47 @@ struct SeeJourneyView: View {
             "date" : Date(),
             "deletedJourney" : false
         ])
-        for index in 0...self.journey.photos.count - 1 {
-            self.uploadPhoto(index: index)
+
+        self.journey.photos.forEach { photo in
+            self.uploadPhoto(photo: photo)
         }
     }
     
     /**
      Function is responsible for uploading an image to the firebase storage and adding its details to firestore database. (Function also exists in SaveJourneyView).
      */
-    func uploadPhoto(index: Int) {
-        guard let photo = self.journey.photos.sorted(by: {$1.number > $0.number}).map({$0.photo})[index].jpegData(compressionQuality: 0.2) else {
+    func uploadPhoto(photo: SinglePhoto) {
+        guard let photoData = photo.photo.jpegData(compressionQuality: 0.2) else {
             return
         }
+
+        let uuid = UUID()
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpeg"
-        let photoReference = "\(Auth.auth().currentUser?.uid ?? "")/\(journey.name)/\(index)"
+        let photoReference = "\(Auth.auth().currentUser?.uid ?? "")/\(journey.name)/\(uuid)"
         let storageReference = Storage.storage().reference(withPath: photoReference)
         
         //Storage is populated with the image.
-        storageReference.putData(photo, metadata: metaData) { metaData, error in
+        storageReference.putData(photoData, metadata: metaData) { metaData, error in
             if let error = error {
                 print(error.localizedDescription)
             }
             
             //Image's details are added to appropriate collection in firetore's database.
-            Firestore.firestore().document("users/\(Auth.auth().currentUser?.uid ?? "")/friends/\(Auth.auth().currentUser?.uid ?? "")/journeys/\(self.journey.name)/photos/\(index)").setData([
-                "latitude": self.journey.photos[index].coordinateLocation.latitude,
-                "longitude": self.journey.photos[index].coordinateLocation.longitude,
+            Firestore.firestore().document("users/\(Auth.auth().currentUser?.uid ?? "")/friends/\(Auth.auth().currentUser?.uid ?? "")/journeys/\(self.journey.name)/photos/\(uuid)").setData([
+                "latitude": photo.coordinateLocation.latitude,
+                "longitude": photo.coordinateLocation.longitude,
                 "photoUrl": photoReference,
-                "photoNumber": index,
-                "location": self.journey.photos[index].location,
-                "subLocation": self.journey.photos[index].subLocation,
-                "administrativeArea": self.journey.photos[index].administrativeArea,
-                "country": self.journey.photos[index].country,
-                "isoCountryCode": self.journey.photos[index].isoCountryCode,
-                "name": self.journey.photos[index].name,
-                "postalCode": self.journey.photos[index].postalCode,
-                "ocean": self.journey.photos[index].ocean,
-                "inlandWater": self.journey.photos[index].inlandWater,
-                "areasOfInterest": self.journey.photos[index].areasOfInterest.joined(separator: ",")
+                "location": photo.location,
+                "subLocation": photo.subLocation,
+                "administrativeArea": photo.administrativeArea,
+                "country": photo.country,
+                "isoCountryCode": photo.isoCountryCode,
+                "name": photo.name,
+                "postalCode": photo.postalCode,
+                "ocean": photo.ocean,
+                "inlandWater": photo.inlandWater,
+                "areasOfInterest": photo.areasOfInterest.joined(separator: ",")
             ])
         }
     }

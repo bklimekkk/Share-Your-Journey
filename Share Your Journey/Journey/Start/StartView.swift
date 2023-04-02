@@ -254,7 +254,6 @@ struct StartView: View {
             if !self.currentImages.isEmpty && self.arrayOfPhotos.isEmpty {
                 self.currentImages.forEach { image in
                     self.arrayOfPhotos.append(SinglePhoto(date: image.getDate,
-                                                          number: image.getId,
                                                           photo: image.getImage,
                                                           coordinateLocation: CLLocationCoordinate2D(latitude: image.latitude, longitude: image.longitude),
                                                           location: image.getLocation,
@@ -401,7 +400,6 @@ struct StartView: View {
         }
 
         let image = CurrentImage(context: self.moc)
-        image.id = Int16(lastPhoto.number)
         image.image = lastPhoto.photo.jpegData(compressionQuality: 0.5)
         image.latitude = self.journeyStateController.currentLocation.center.latitude
         image.longitude = self.journeyStateController.currentLocation.center.longitude

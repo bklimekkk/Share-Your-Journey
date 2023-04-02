@@ -27,7 +27,6 @@ struct DownloadManager {
         var index = 0
         while index < journey.photos.count {
             let newImage = Photo(context: moc)
-            newImage.id = Double(index + 1)
             newImage.journey = newJourney
             newImage.image = journey.photos[index].photo.jpegData(compressionQuality: 0.5)
             newImage.latitude = journey.photos[index].coordinateLocation.latitude

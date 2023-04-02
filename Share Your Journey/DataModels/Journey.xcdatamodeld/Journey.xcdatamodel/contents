@@ -5,7 +5,6 @@
         <attribute name="areasOfInterest" optional="YES" attributeType="String"/>
         <attribute name="country" optional="YES" attributeType="String"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" valueTransformerName="UIImageTransformer" customClassName="UIImage"/>
         <attribute name="inlandWater" optional="YES" attributeType="String"/>
         <attribute name="isoCountryCode" optional="YES" attributeType="String"/>
@@ -31,7 +30,6 @@
         <attribute name="administrativeArea" optional="YES" attributeType="String"/>
         <attribute name="areasOfInterest" optional="YES" attributeType="String" customClassName="[String]"/>
         <attribute name="country" optional="YES" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" valueTransformerName="UIImageTransformer" customClassName="UIImage"/>
         <attribute name="inlandWater" optional="YES" attributeType="String"/>
         <attribute name="isoCountryCode" optional="YES" attributeType="String"/>

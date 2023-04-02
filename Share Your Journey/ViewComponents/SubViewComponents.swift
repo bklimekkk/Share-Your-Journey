@@ -23,7 +23,7 @@ struct HighlightedPhoto: View {
     
     var body: some View {
         VStack {
-            Image(uiImage: self.photos.sorted{$1.number > $0.number}.map{$0.photo}[self.highlightedPhotoIndex])
+            Image(uiImage: self.photos.sorted{$1.date > $0.date}.map{$0.photo}[self.highlightedPhotoIndex])
                 .resizable()
                 .scaledToFill()
                 .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
@@ -101,7 +101,7 @@ struct PhotosAlbumView: View {
             
             //This container generates a grid with two columns of journey's images.
             LazyVGrid(columns: self.layout, spacing: 0) {
-                ForEach(self.photos.sorted{$1.number > $0.number}, id: \.self.number) { photo in
+                ForEach(self.photos.sorted{$1.date > $0.date}, id: \.self.date) { photo in
                     ZStack {
                         Image(uiImage: photo.photo)
                             .resizable()
@@ -110,7 +110,7 @@ struct PhotosAlbumView: View {
                             .padding(.vertical, 5)
                             .onTapGesture {
                                 withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
-                                    self.photoIndex = photo.number
+                                    self.photoIndex = self.photos.firstIndex(of: photo) ?? 0
                                     self.highlightedPhoto = self.photos[photoIndex].photo
                                     self.showPicture = true
                                 }
@@ -144,35 +144,13 @@ struct PhotosAlbumView: View {
             }
 
             self.currentLocationManager.mapView.removeAnnotation(annotationToRemove)
-            self.photos.removeAll(where: { $0.number == photo.number })
-            if let image = self.currentImages.first(where: { $0.getId == photo.number }) {
+            self.photos.removeAll(where: { $0.date == photo.date })
+            if let image = self.currentImages.first(where: { $0.getDate == photo.date }) {
                 self.moc.delete(image)
             }
-            self.resetPhotosNumeration()
             if self.moc.hasChanges {
                 try? self.moc.save()
             }
-        }
-    }
-
-    func resetPhotosNumeration() {
-        var annotationIndex = 1
-
-        self.currentLocationManager.mapView.annotations.filter({ $0.title != "My Location" }).forEach { annotation in
-            let newAnnotation = MKPointAnnotation()
-            newAnnotation.title = String(annotationIndex)
-            newAnnotation.coordinate = annotation.coordinate
-              self.currentLocationManager.mapView.removeAnnotation(annotation)
-              self.currentLocationManager.mapView.addAnnotation(newAnnotation)
-            annotationIndex += 1
-        }
-
-        for number in 0...self.photos.count - 1 {
-            self.photos[number].number = number
-        }
-
-        for number in 0...self.currentImages.count - 1 {
-            self.currentImages[number].id = Int16(number)
         }
     }
 }

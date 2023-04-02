@@ -135,7 +135,7 @@ struct SumUpFunctionalityButtonsView: View {
      Function is responsible for uploading an image to the firebase storage and adding its details to firestore database.
      */
     func uploadPhoto(journey: SingleJourney, name: String, index: Int) {
-        guard let photo = journey.photos.sorted(by: {$1.number > $0.number}).map({$0.photo})[index].jpegData(compressionQuality: 0.2) else {
+        guard let photo = journey.photos.sorted(by: {$1.date > $0.date}).map({$0.photo})[index].jpegData(compressionQuality: 0.2) else {
             return
         }
         let metaData = StorageMetadata()
@@ -152,7 +152,6 @@ struct SumUpFunctionalityButtonsView: View {
                 "latitude": journey.photos[index].coordinateLocation.latitude,
                 "longitude": journey.photos[index].coordinateLocation.longitude,
                 "photoUrl": photoReference,
-                "photoNumber": index,
                 "date": journey.photos[index].date,
                 "location": journey.photos[index].location,
                 "subLocation": journey.photos[index].subLocation,
