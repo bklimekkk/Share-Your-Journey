@@ -35,7 +35,7 @@ struct SumUpView: View {
     //Variable controls if users tapped any picture. If yes, it's set to true and the image is enlarged.
     @State private var showPicture = false
     //Variable contains data of image that should be enlarged at particular moment.
-    @State private var highlightedPhoto: UIImage = UIImage()
+    @State private var highlightedPhoto = SinglePhoto()
     //Variables checks if all photos were downloaded to phone's camera roll.
     @State private var downloadedPhotos = false
     @State private var showDownloadAlert = false
@@ -70,8 +70,7 @@ struct SumUpView: View {
 
 
                 if self.showPicture {
-                    HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
-                                     showPicture: self.$showPicture,
+                    HighlightedPhoto(showPicture: self.$showPicture,
                                      highlightedPhoto: self.$highlightedPhoto,
                                      photos: self.journey.photos)
                 } else {
@@ -97,7 +96,6 @@ struct SumUpView: View {
                                 }
                                 //List containing all photos.
                                 PhotosAlbumView(showPicture: self.$showPicture,
-                                                photoIndex: self.$photoIndex,
                                                 highlightedPhoto: self.$highlightedPhoto,
                                                 photos: self.$journey.photos,
                                                 layout: layout)
@@ -123,14 +121,14 @@ struct SumUpView: View {
                                 //Depending on option chosen by users, program will present them with different type of map (or photo album).
                                 MapView(walking: self.$walking,
                                         showPhoto: self.$showPicture,
-                                        photoIndex: self.$photoIndex,
                                         showWeather: self.$showWeather,
                                         showDirections: self.$showDirections,
                                         expandWeather: self.$expandWeather,
                                         weatherLatitude: self.$weatherLatitude,
                                         weatherLongitude: self.$weatherLongitude,
                                         routeIsDisplayed: self.$routeIsDisplayed,
-                                        photosLocations: self.journey.photos.map{$0.coordinateLocation})
+                                        selectedPhoto: self.$highlightedPhoto,
+                                        photos: self.journey.photos)
                                 .edgesIgnoringSafeArea(.all)
                                 .environmentObject(self.currentLocationManager)
                                 .opacity(self.showPicture ? 0 : 1)
@@ -185,8 +183,8 @@ struct SumUpView: View {
                                             if self.journey.numberOfPhotos > 1 {
                                                 JourneyControlView(numberOfPhotos: self.journey.photos.count,
                                                                    currentLocationManager: self.currentLocationManager,
-                                                                   currentPhotoIndex: self.$photoIndex,
-                                                                   mapType: self.$currentLocationManager.mapView.mapType)
+                                                                   currentPhoto: self.$highlightedPhoto,
+                                                                   mapType: self.$currentLocationManager.mapView.mapType, photos: self.journey.photos)
                                             }
                                         }
                                     }

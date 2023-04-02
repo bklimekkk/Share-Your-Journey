@@ -11,35 +11,37 @@ import MapKit
 struct JourneyControlView: View {
     var numberOfPhotos: Int
     var currentLocationManager: CurrentLocationManager
-    @Binding var currentPhotoIndex: Int
+    @Binding var currentPhoto: SinglePhoto
     @Binding var mapType: MKMapType
+    @State var photos: [SinglePhoto]
     var body: some View {
         VStack {
             Spacer()
             HStack {
-                PhotosCounterView(currentNumber: self.currentPhotoIndex + 1, overallNumber: self.numberOfPhotos, mapType: self.$mapType)
+                PhotosCounterView(currentNumber: (self.photos.firstIndex(of: self.currentPhoto) ?? 0) + 1, overallNumber: self.numberOfPhotos, mapType: self.$mapType)
                 Button {
                     self.currentLocationManager.mapView.deselectAnnotation(self.currentLocationManager.mapView.selectedAnnotations.first,
                                                                            animated: true)
-                    self.currentPhotoIndex -= 1
-                    let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String(self.currentPhotoIndex + 1)}) ??
+                    // selecting next photo
+                    let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String(self.photos.firstIndex(of: self.currentPhoto) ?? 0) }) ??
                     self.currentLocationManager.mapView.userLocation
                     self.currentLocationManager.mapView.selectAnnotation(annotationToSelect, animated: true)
                 } label: {
                     MapButton(imageName: Icons.arrowLeft)
                 }
-                .disabled(self.currentPhotoIndex == 0)
+                .disabled(self.photos.firstIndex(of: self.currentPhoto) == 0)
                 Button {
                     self.currentLocationManager.mapView.deselectAnnotation(self.currentLocationManager.mapView.selectedAnnotations.first,
                                                                            animated: true)
-                    self.currentPhotoIndex += 1
-                    let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String(self.currentPhotoIndex + 1)}) ??
+
+                    // selecting previous photo
+                    let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String((self.photos.firstIndex(of: self.currentPhoto) ?? 0) + 2) }) ??
                     self.currentLocationManager.mapView.userLocation
                     self.currentLocationManager.mapView.selectAnnotation(annotationToSelect, animated: true)
                 }label: {
                     MapButton(imageName: Icons.arrowRight)
                 }
-                .disabled(self.currentPhotoIndex == self.numberOfPhotos - 1)
+                .disabled(self.photos.firstIndex(of: self.currentPhoto) == self.numberOfPhotos - 1)
             }
         }
     }

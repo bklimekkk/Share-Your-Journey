@@ -14,8 +14,8 @@
             filePath = "Share Your Journey/ViewComponents/SubViewComponents.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "Share Your Journey/Journey/Start/StartView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "165"
-            endingLineNumber = "165"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>

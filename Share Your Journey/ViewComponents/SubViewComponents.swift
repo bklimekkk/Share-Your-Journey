@@ -13,9 +13,8 @@ import SwiftUI
 struct HighlightedPhoto: View {
 
     //Variables described in SeeJourneyView struct.
-    @Binding var highlightedPhotoIndex: Int
     @Binding var showPicture: Bool
-    @Binding var highlightedPhoto: UIImage
+    @Binding var highlightedPhoto: SinglePhoto
     var photos: [SinglePhoto]
     var gold: Color {
         Color(uiColor: Colors.premiumColor)
@@ -23,21 +22,23 @@ struct HighlightedPhoto: View {
     
     var body: some View {
         VStack {
-            Image(uiImage: self.photos.sorted{$1.date > $0.date}.map{$0.photo}[self.highlightedPhotoIndex])
+            Image(uiImage: self.highlightedPhoto.photo)
                 .resizable()
                 .scaledToFill()
                 .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .local)
                     .onEnded({ value in
+                        guard let highlightedPhotoIndex = self.photos.firstIndex(where: { $0.photo == self.highlightedPhoto.photo }) else {
+                            return
+                        }
+
                         if value.translation.width > 0
                             && abs(value.translation.width) > abs(value.translation.height)
-                            && self.highlightedPhotoIndex > 0 {
-                            self.highlightedPhotoIndex -= 1
-                            self.highlightedPhoto = self.photos[highlightedPhotoIndex].photo
+                            && highlightedPhotoIndex > 0 {
+                            self.highlightedPhoto = self.photos[highlightedPhotoIndex - 1]
                         } else if value.translation.width < 0
                                     && abs(value.translation.width) > abs(value.translation.height)
-                                    && self.highlightedPhotoIndex < self.photos.count - 1 {
-                            self.highlightedPhotoIndex += 1
-                            self.highlightedPhoto = self.photos[highlightedPhotoIndex].photo
+                                    && highlightedPhotoIndex < self.photos.count - 1 {
+                            self.highlightedPhoto = self.photos[highlightedPhotoIndex + 1]
                         } else if value.translation.height > 0
                                     && abs(value.translation.height) > abs(value.translation.width) {
                             withAnimation(.linear(duration: FloatConstants.shortAnimationDuration)) {
@@ -61,12 +62,12 @@ struct HighlightedPhoto: View {
 
                 Spacer()
 
-                Text(String(self.highlightedPhotoIndex + 1))
+                Text(String((self.photos.firstIndex(where: { $0.photo == self.highlightedPhoto.photo }) ?? 0) + 1))
                     .foregroundColor(Color(Colors.systemImageColor ?? .white))
                     .font(.system(size: 40))
                 Spacer()
                 Button {
-                    CommunicationManager.sendPhotoViaSocialMedia(image: self.photos[self.highlightedPhotoIndex].photo)
+                    CommunicationManager.sendPhotoViaSocialMedia(image: self.highlightedPhoto.photo)
                 } label:{
                     Image(systemName: Icons.squareAndArrowUp)
                         .font(.system(size: 30))
@@ -89,8 +90,7 @@ struct PhotosAlbumView: View {
 
     //Variables are described in SumUpView struct.
     @Binding var showPicture: Bool
-    @Binding var photoIndex: Int
-    @Binding var highlightedPhoto: UIImage
+    @Binding var highlightedPhoto: SinglePhoto
     @Binding var photos: [SinglePhoto]
 
     var layout: [GridItem]
@@ -110,8 +110,7 @@ struct PhotosAlbumView: View {
                             .padding(.vertical, 5)
                             .onTapGesture {
                                 withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
-                                    self.photoIndex = self.photos.firstIndex(of: photo) ?? 0
-                                    self.highlightedPhoto = self.photos[photoIndex].photo
+                                    self.highlightedPhoto = photo
                                     self.showPicture = true
                                 }
                             }
@@ -138,7 +137,6 @@ struct PhotosAlbumView: View {
 
     func deletePhoto(photo: SinglePhoto) {
         withAnimation {
-            self.photoIndex = 0
             guard let annotationToRemove = self.currentLocationManager.mapView.annotations.first(where: { $0.coordinate == photo.coordinateLocation }) else {
                 return
             }
@@ -159,7 +157,6 @@ struct PhotosAlbumView: View {
 struct PhotoAnnotationView: View {
     
     //Variables are described in SumUpView struct.
-    @Binding var photoIndex: Int
     @Binding var highlightedPhoto: UIImage
     @Binding var showPicture: Bool
     var singleJourney: SingleJourney
@@ -175,7 +172,6 @@ struct PhotoAnnotationView: View {
                 .shadow(color: .gray, radius: 2)
                 .onTapGesture(count: 1) {
                     withAnimation(.easeInOut(duration: FloatConstants.shortAnimationDuration)) {
-                        self.photoIndex = self.location.id
                         self.highlightedPhoto = self.singleJourney.photos[location.id].photo
                         self.showPicture = true
                     }

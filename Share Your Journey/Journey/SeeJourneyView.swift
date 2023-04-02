@@ -38,7 +38,7 @@ struct SeeJourneyView: View {
     //Similar variables were described in SumUpView struct.
     @State private var currentPhotoIndex = 0
     @State private var showPicture = false
-    @State private var highlightedPhoto: UIImage = UIImage()
+    @State private var highlightedPhoto = SinglePhoto()
     @State private var downloadedPhotos = false
     @State private var showDownloadAlert = false
     //Variable controls if the journey can be found in user's downloaded journeys in the server.
@@ -89,8 +89,7 @@ struct SeeJourneyView: View {
 
 
             if self.showPicture {
-                HighlightedPhoto(highlightedPhotoIndex: self.$currentPhotoIndex,
-                                 showPicture: self.$showPicture,
+                HighlightedPhoto(showPicture: self.$showPicture,
                                  highlightedPhoto: self.$highlightedPhoto,
                                  photos: self.journey.photos)
 
@@ -125,7 +124,6 @@ struct SeeJourneyView: View {
                                 Spacer()
                             } else {
                                 PhotosAlbumView(showPicture: self.$showPicture,
-                                                photoIndex: self.$currentPhotoIndex,
                                                 highlightedPhoto: self.$highlightedPhoto,
                                                 photos: self.$journey.photos,
                                                 layout: self.layout)
@@ -160,14 +158,14 @@ struct SeeJourneyView: View {
                             ZStack {
                                 MapView(walking: self.$walking,
                                         showPhoto: self.$showPicture,
-                                        photoIndex: self.$currentPhotoIndex,
                                         showWeather: self.$showWeather,
                                         showDirections: self.$showWeather,
                                         expandWeather: self.$expandWeather,
                                         weatherLatitude: self.$weatherLatitude,
                                         weatherLongitude: self.$weatherLongitude,
                                         routeIsDisplayed: self.$routeIsDisplayed,
-                                        photosLocations: self.journey.photos.map{$0.coordinateLocation})
+                                        selectedPhoto: self.$highlightedPhoto,
+                                        photos: self.journey.photos)
                                 .edgesIgnoringSafeArea(.all)
                                 .environmentObject(self.currentLocationManager)
 
@@ -250,8 +248,8 @@ struct SeeJourneyView: View {
                                         if self.journey.numberOfPhotos > 1 {
                                             JourneyControlView(numberOfPhotos: self.journey.photos.count,
                                                                currentLocationManager: self.currentLocationManager,
-                                                               currentPhotoIndex: self.$currentPhotoIndex,
-                                                               mapType: self.$currentLocationManager.mapView.mapType)
+                                                               currentPhoto: self.$highlightedPhoto,
+                                                               mapType: self.$currentLocationManager.mapView.mapType, photos: self.journey.photos)
                                         }
                                     }
                                     .padding(.horizontal, 5)
