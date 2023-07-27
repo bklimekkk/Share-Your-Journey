@@ -11,7 +11,7 @@ import SwiftUI
 
 //Struct contains code that generates enlarged photo picked by user.
 struct HighlightedPhoto: View {
-
+    
     //Variables described in SeeJourneyView struct.
     @Binding var highlightedPhotoIndex: Int
     @Binding var showPicture: Bool
@@ -45,7 +45,7 @@ struct HighlightedPhoto: View {
                             }
                         }
                     }))
-
+            
             Spacer()
             //This HStack contains code responsible for generating functionality provided along with highlighted image: Ability to go back to the map, number of image and ability to download the image.
             HStack {
@@ -58,9 +58,9 @@ struct HighlightedPhoto: View {
                         .font(.system(size: 30))
                         .foregroundColor(Color(Colors.systemImageColor ?? .gray))
                 }
-
+                
                 Spacer()
-
+                
                 Text(String(self.highlightedPhotoIndex + 1))
                     .foregroundColor(Color(Colors.systemImageColor ?? .white))
                     .font(.system(size: 40))
@@ -86,13 +86,13 @@ struct PhotosAlbumView: View {
     @EnvironmentObject var currentLocationManager: CurrentLocationManager
     @FetchRequest(sortDescriptors: []) var currentImages: FetchedResults<CurrentImage>
     @Environment(\.managedObjectContext) var moc
-
+    
     //Variables are described in SumUpView struct.
     @Binding var showPicture: Bool
     @Binding var photoIndex: Int
     @Binding var highlightedPhoto: UIImage
     @Binding var photos: [SinglePhoto]
-
+    
     var layout: [GridItem]
     @Environment(\.dismiss) var dismiss
     
@@ -115,62 +115,29 @@ struct PhotosAlbumView: View {
                                     self.showPicture = true
                                 }
                             }
-                        VStack {
-                            HStack {
-                                Button {
-                                    self.deletePhoto(photo: photo)
-                                } label: {
-                                    Image(systemName: "xmark.bin.fill")
-                                        .foregroundColor(.red)
-                                }
-                                .padding(5)
-
-                                Spacer()
-                            }
-                            Spacer()
-                        }
                     }
                 }
             }
         }
         .opacity(self.showPicture ? 0 : 1)
     }
-
-    func deletePhoto(photo: SinglePhoto) {
-        withAnimation {
-            self.photoIndex = 0
-            guard let annotationToRemove = self.currentLocationManager.mapView.annotations.first(where: { $0.coordinate == photo.coordinateLocation }) else {
-                return
-            }
-
-            self.currentLocationManager.mapView.removeAnnotation(annotationToRemove)
-            self.photos.removeAll(where: { $0.number == photo.number })
-            if let image = self.currentImages.first(where: { $0.getId == photo.number }) {
-                self.moc.delete(image)
-            }
-            self.resetPhotosNumeration()
-            if self.moc.hasChanges {
-                try? self.moc.save()
-            }
-        }
-    }
-
+    
     func resetPhotosNumeration() {
         var annotationIndex = 1
-
+        
         self.currentLocationManager.mapView.annotations.filter({ $0.title != "My Location" }).forEach { annotation in
             let newAnnotation = MKPointAnnotation()
             newAnnotation.title = String(annotationIndex)
             newAnnotation.coordinate = annotation.coordinate
-              self.currentLocationManager.mapView.removeAnnotation(annotation)
-              self.currentLocationManager.mapView.addAnnotation(newAnnotation)
+            self.currentLocationManager.mapView.removeAnnotation(annotation)
+            self.currentLocationManager.mapView.addAnnotation(newAnnotation)
             annotationIndex += 1
         }
-
+        
         for number in 0...self.photos.count - 1 {
             self.photos[number].number = number
         }
-
+        
         for number in 0...self.currentImages.count - 1 {
             self.currentImages[number].id = Int16(number)
         }

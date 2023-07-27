@@ -13,15 +13,15 @@ struct DirectionsView: View {
     var location: CLLocationCoordinate2D
     var body: some View {
         HStack {
-                Button{
+                Button {
                     UIApplication.shared.open(URL(string: "http://maps.apple.com/?saddr=&daddr=\(self.location.latitude),\(self.location.longitude)&dirflg=d")!)
-                }label: {
+                } label: {
                     MapTextButton(imageName: Icons.locationNorthCircleFill, text: UIStrings.apple)
                         .foregroundColor(self.colorScheme == .light ? .blue : .white)
                 }
-                Button{
+                Button {
                     UIApplication.shared.open(URL(string: "comgooglemaps://?saddr=&daddr=\(self.location.latitude),\(self.location.longitude)&directionsmode=driving")!)
-                }label: {
+                } label: {
                     MapTextButton(imageName: Icons.locationNorthCircleFill, text: UIStrings.google)
                         .foregroundColor(self.colorScheme == .light ? .blue : .white)
                 }
