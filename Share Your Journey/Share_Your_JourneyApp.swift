@@ -26,7 +26,6 @@ struct Share_Your_JourneyApp: App {
 class AppDelegate: NSObject, UIApplicationDelegate {
     let gcmMessageIDKey = "gcm.messagge_id"
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        print("Babcia na zawsze")
         UITabBar.appearance().backgroundColor = Colors.tabViewColor
         self.setupRevenueCat()
         FirebaseApp.configure()

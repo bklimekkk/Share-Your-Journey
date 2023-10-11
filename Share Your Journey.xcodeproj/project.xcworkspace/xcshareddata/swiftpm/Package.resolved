@@ -1,21 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "abseil-cpp-swiftpm",
+      "identity" : "abseil-cpp-binary",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/abseil-cpp-SwiftPM.git",
+      "location" : "https://github.com/google/abseil-cpp-binary.git",
       "state" : {
-        "revision" : "fffc3c2729be5747390ad02d5100291a0d9ad26a",
-        "version" : "0.20200225.4"
-      }
-    },
-    {
-      "identity" : "boringssl-swiftpm",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/boringssl-SwiftPM.git",
-      "state" : {
-        "revision" : "734a8247442fde37df4364c21f6a0085b6a36728",
-        "version" : "0.7.2"
+        "revision" : "bfc0b6f81adc06ce5121eb23f628473638d67c5c",
+        "version" : "1.2022062300.0"
       }
     },
     {
@@ -24,7 +15,7 @@
       "location" : "https://github.com/firebase/firebase-ios-sdk",
       "state" : {
         "branch" : "master",
-        "revision" : "0b3b2c1b240b7059666333ee563563e7c63a5cfc"
+        "revision" : "8b46c6a5d5ee096b7dc0da67baba405c400597af"
       }
     },
     {
@@ -32,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleAppMeasurement.git",
       "state" : {
-        "revision" : "6cc2991c11872510a5314bc112cc7558dd9d046a",
-        "version" : "8.12.0"
+        "revision" : "56f681586ff006a7982b53dc94082eea31971acf",
+        "version" : "10.16.0"
       }
     },
     {
@@ -41,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleDataTransport.git",
       "state" : {
-        "revision" : "15ccdfd25ac55b9239b82809531ff26605e7556e",
-        "version" : "9.1.2"
+        "revision" : "aae45a320fd0d11811820335b1eabc8753902a40",
+        "version" : "9.2.5"
       }
     },
     {
@@ -50,17 +41,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleUtilities.git",
       "state" : {
-        "revision" : "b3bb0c5551fb3f80ca939829639ab5b093edd14f",
-        "version" : "7.7.0"
+        "revision" : "c38ce365d77b04a9a300c31061c5227589e5597b",
+        "version" : "7.11.5"
       }
     },
     {
-      "identity" : "grpc-swiftpm",
+      "identity" : "grpc-binary",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/firebase/grpc-SwiftPM.git",
+      "location" : "https://github.com/google/grpc-binary.git",
       "state" : {
-        "revision" : "fb405dd2c7901485f7e158b24e3a0a47e4efd8b5",
-        "version" : "1.28.4"
+        "revision" : "a673bc2937fbe886dd1f99c401b01b6d977a9c98",
+        "version" : "1.49.1"
       }
     },
     {
@@ -68,8 +59,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/gtm-session-fetcher.git",
       "state" : {
-        "revision" : "bc6a19702ac76ac4e488b68148710eb815f9bc56",
-        "version" : "1.7.0"
+        "revision" : "d415594121c9e8a4f9d79cecee0965cf35e74dbd",
+        "version" : "3.1.1"
+      }
+    },
+    {
+      "identity" : "interop-ios-for-google-sdks",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google/interop-ios-for-google-sdks.git",
+      "state" : {
+        "revision" : "2d12673670417654f08f5f90fdd62926dc3a2648",
+        "version" : "100.0.0"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/nanopb.git",
       "state" : {
-        "revision" : "7ee9ef9f627d85cbe1b8c4f49a3ed26eed216c77",
-        "version" : "2.30908.0"
+        "revision" : "819d0a2173aff699fb8c364b6fb906f7cdb1a692",
+        "version" : "2.30909.0"
       }
     },
     {
@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/promises.git",
       "state" : {
-        "revision" : "611337c330350c9c1823ad6d671e7f936af5ee13",
-        "version" : "2.0.0"
+        "revision" : "e70e889c0196c76d22759eb50d6a0270ca9f1d9e",
+        "version" : "2.3.1"
       }
     },
     {

@@ -12,11 +12,9 @@ struct ImagesView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var currentLocationManager: CurrentLocationManager
     @Binding var showPicture: Bool
-    @Binding var photoIndex: Int
-    @Binding var highlightedPhoto: UIImage
+    @Binding var highlightedPhoto: SinglePhoto
     @Binding var takeAPhoto: Bool
     @Binding var photos: [SinglePhoto]
-
     @State var showPhotoDetails = false
     var numberOfPhotos: Int
     var layout: [GridItem]
@@ -52,7 +50,6 @@ struct ImagesView: View {
                 } else {
                     ZStack {
                         ImagesGrid(showPicture: self.$showPicture,
-                                   photoIndex: self.$photoIndex,
                                    highlightedPhoto: self.$highlightedPhoto,
                                    photos: self.$photos,
                                    layout: self.layout)
@@ -73,7 +70,7 @@ struct ImagesView: View {
                                         self.showPicture = false
                                         self.currentLocationManager.mapView.deselectAnnotation(self.currentLocationManager.mapView.selectedAnnotations.first,
                                                                                                animated: true)
-                                        let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: {$0.title == String(self.photoIndex + 1)}) ??
+                                        let annotationToSelect = self.currentLocationManager.mapView.annotations.first(where: { $0.title == String((self.photos.firstIndex(of: self.highlightedPhoto) ?? 0) + 1) }) ??
                                         self.currentLocationManager.mapView.userLocation
                                         self.currentLocationManager.mapView.selectAnnotation(annotationToSelect, animated: true)
                                         self.dismiss()
@@ -82,7 +79,6 @@ struct ImagesView: View {
                                             Text(UIStrings.viewInTheMap)
                                             Image(systemName: Icons.map)
                                         }
-
                                     }
                                     Button {
                                         self.showPhotoDetails = true
@@ -93,7 +89,7 @@ struct ImagesView: View {
                                         }
                                     }
                                     Button {
-                                        CommunicationManager.sendPhotoViaSocialMedia(image: self.photos[self.photoIndex].photo)
+                                        CommunicationManager.sendPhotoViaSocialMedia(image: self.highlightedPhoto.photo)
                                     } label: {
                                         HStack {
                                             Text(UIStrings.sendViaSocialMedia)
@@ -113,7 +109,7 @@ struct ImagesView: View {
                         }
                     }
                     .sheet(isPresented: $showPhotoDetails) {
-                        PhotoDetailsView(photo: self.photos[self.photoIndex])
+                        PhotoDetailsView(photo: self.photos.first(where: { $0.photo == self.highlightedPhoto.photo }) ?? SinglePhoto())
                     }
                 }
             }

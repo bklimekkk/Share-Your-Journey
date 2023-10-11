@@ -11,8 +11,7 @@ import MapKit
 struct ImagesGrid: View {
     @EnvironmentObject var currentLocationManager: CurrentLocationManager
     @Binding var showPicture: Bool
-    @Binding var photoIndex: Int
-    @Binding var highlightedPhoto: UIImage
+    @Binding var highlightedPhoto: SinglePhoto
     @Binding var photos: [SinglePhoto]
 
     var layout: [GridItem]
@@ -20,13 +19,11 @@ struct ImagesGrid: View {
 
     var body: some View {
         if self.showPicture {
-            HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
-                             showPicture: self.$showPicture,
+            HighlightedPhoto(showPicture: self.$showPicture,
                              highlightedPhoto: self.$highlightedPhoto,
                              photos: self.photos)
         } else {
             PhotosAlbumView(showPicture: self.$showPicture,
-                            photoIndex: self.$photoIndex,
                             highlightedPhoto: self.$highlightedPhoto,
                             photos: self.$photos,
                             layout: self.layout)

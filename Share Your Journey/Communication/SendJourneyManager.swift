@@ -31,10 +31,9 @@ struct SendJourneyManager {
                 print(error!.localizedDescription)
             } else {
                 //All photos details are stored inside document representing particular journey.
-                for photo in querySnapshot!.documents.sorted(by: { $0["photoNumber"] as? Int ?? IntConstants.defaultValue > $1["photoNumber"] as? Int ?? IntConstants.defaultValue }) {
+                for photo in querySnapshot!.documents.sorted(by: { $0["date"] as? Int ?? IntConstants.defaultValue > $1["date"] as? Int ?? IntConstants.defaultValue }) {
                     Firestore.firestore().document("\(FirestorePaths.getFriends(uid: Auth.auth().currentUser?.uid ?? ""))/\(targetUID)/journeys/\(journey.name)/photos/\(photo.documentID)").setData([
                         "photoUrl": photo.get("photoUrl") as? String ?? UIStrings.emptyString,
-                        "photoNumber": photo.get("photoNumber") as? Int ?? IntConstants.defaultValue,
                         "latitude": photo.get("latitude") as? CLLocationDegrees ?? CLLocationDegrees(),
                         "longitude": photo.get("longitude") as? CLLocationDegrees ?? CLLocationDegrees(),
                         "location": photo.get("location") as? String ?? UIStrings.emptyString,

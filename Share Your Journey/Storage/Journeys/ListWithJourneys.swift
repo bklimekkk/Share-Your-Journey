@@ -7,7 +7,7 @@
 
 import SwiftUI
 import Firebase
-
+import FirebaseStorage
 //Struct contains code responsible for displaying list of user's journeys.
 struct ListWithJourneys: View {
 

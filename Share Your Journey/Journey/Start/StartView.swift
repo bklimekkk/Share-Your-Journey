@@ -43,7 +43,6 @@ class JourneyStateController: ObservableObject {
 }
 
 class CurrentImagesCollection: ObservableObject {
-    @Published var highlightedPhoto: UIImage = UIImage()
     @Published var showPicture: Bool = false
     @Published var savedToCameraRoll: Bool = false
     @Published var layout = [
@@ -84,8 +83,7 @@ struct StartView: View {
     @StateObject private var currentImagesCollection = CurrentImagesCollection()
     @StateObject private var subscription = Subscription()
     @State private var showPhoto = false
-    @State private var photoIndex = 0
-    @State private var highlightedPhoto: UIImage = UIImage()
+    @State private var highlightedPhoto = SinglePhoto()
     @State private var showDirections = false
     @State private var routeIsDisplayed = false
     @State private var deletedAccount = false
@@ -108,8 +106,7 @@ struct StartView: View {
 
 
 
-                HighlightedPhoto(highlightedPhotoIndex: self.$photoIndex,
-                                 showPicture: self.$showPhoto,
+                HighlightedPhoto(showPicture: self.$showPhoto,
                                  highlightedPhoto: self.$highlightedPhoto,
                                  photos: self.arrayOfPhotos)
 
@@ -143,14 +140,14 @@ struct StartView: View {
                     //This struct contains MapView struct, which means that during they journey, users are able to use 3D map.
                     MapView(walking: self.$journeyStateController.walking,
                             showPhoto: self.$showPhoto,
-                            photoIndex: self.$photoIndex,
                             showWeather: self.$weatherController.showWeather,
                             showDirections: self.$showDirections,
                             expandWeather: self.$weatherController.expandWeather,
                             weatherLatitude: self.$weatherController.weatherLatitude,
                             weatherLongitude: self.$weatherController.weatherLongitude,
                             routeIsDisplayed: self.$routeIsDisplayed,
-                            photosLocations: self.arrayOfPhotos.map{$0.coordinateLocation})
+                            selectedPhoto: self.$highlightedPhoto,
+                            photos: self.arrayOfPhotos)
                     .environmentObject(self.currentLocationManager)
                     .edgesIgnoringSafeArea(.all)
 
@@ -162,7 +159,7 @@ struct StartView: View {
                                 MapButton(imageName: "arrow.backward")
                             }
                             if self.showDirections && !self.arrayOfPhotos.isEmpty {
-                                DirectionsView(location: self.arrayOfPhotos[self.photoIndex].coordinateLocation)
+                                DirectionsView(location: self.arrayOfPhotos.first(where: { $0.photo == self.highlightedPhoto.photo })?.coordinateLocation ?? CLLocationCoordinate2D())
                             }
                             Spacer()
                         }
@@ -214,8 +211,9 @@ struct StartView: View {
                             if self.arrayOfPhotos.count > 1 {
                                 JourneyControlView(numberOfPhotos: self.arrayOfPhotos.count,
                                                    currentLocationManager: self.currentLocationManager,
-                                                   currentPhotoIndex: self.$photoIndex,
-                                                   mapType: self.$currentLocationManager.mapView.mapType)
+                                                   currentPhoto: self.$highlightedPhoto,
+                                                   mapType: self.$currentLocationManager.mapView.mapType,
+                                                   photos: self.arrayOfPhotos)
                             }
                         }
                         .padding(.bottom, 10)
@@ -254,7 +252,6 @@ struct StartView: View {
             if !self.currentImages.isEmpty && self.arrayOfPhotos.isEmpty {
                 self.currentImages.forEach { image in
                     self.arrayOfPhotos.append(SinglePhoto(date: image.getDate,
-                                                          number: image.getId,
                                                           photo: image.getImage,
                                                           coordinateLocation: CLLocationCoordinate2D(latitude: image.latitude, longitude: image.longitude),
                                                           location: image.getLocation,
@@ -288,8 +285,7 @@ struct StartView: View {
         })
         .fullScreenCover(isPresented: self.$journeyStateController.showImages, content: {
             ImagesView(showPicture: self.$currentImagesCollection.showPicture,
-                       photoIndex: self.$photoIndex,
-                       highlightedPhoto: self.$currentImagesCollection.highlightedPhoto,
+                       highlightedPhoto: self.$highlightedPhoto,
                        takeAPhoto: self.$journeyStateController.takeAPhoto,
                        photos: self.$arrayOfPhotos,
                        numberOfPhotos: self.$arrayOfPhotos.count,
@@ -401,7 +397,6 @@ struct StartView: View {
         }
 
         let image = CurrentImage(context: self.moc)
-        image.id = Int16(lastPhoto.number)
         image.image = lastPhoto.photo.jpegData(compressionQuality: 0.5)
         image.latitude = self.journeyStateController.currentLocation.center.latitude
         image.longitude = self.journeyStateController.currentLocation.center.longitude

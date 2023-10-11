@@ -18,7 +18,6 @@ struct PhotoLocation: Identifiable {
 //Struct represents a single photo.
 struct SinglePhoto: Hashable {
     var date: Date
-    var number: Int
     var photo: UIImage
     var coordinateLocation: CLLocationCoordinate2D
     var location: String
@@ -34,7 +33,6 @@ struct SinglePhoto: Hashable {
 
     init() {
         self.date = Date()
-        self.number = 0
         self.photo = UIImage()
         self.coordinateLocation = CLLocationCoordinate2D()
         self.location = ""
@@ -49,9 +47,8 @@ struct SinglePhoto: Hashable {
         self.areasOfInterest = []
     }
 
-    init(number: Int, photo: UIImage) {
+    init(photo: UIImage) {
         self.date = Date()
-        self.number = number
         self.photo = photo
         self.coordinateLocation = CLLocationCoordinate2D()
         self.location = ""
@@ -66,9 +63,8 @@ struct SinglePhoto: Hashable {
         self.areasOfInterest = []
     }
 
-    init(number: Int, photo: UIImage, coordinateLocation: CLLocationCoordinate2D) {
+    init(photo: UIImage, coordinateLocation: CLLocationCoordinate2D) {
         self.date = Date()
-        self.number = number
         self.photo = photo
         self.coordinateLocation = coordinateLocation
         self.location = ""
@@ -85,7 +81,6 @@ struct SinglePhoto: Hashable {
 
     init(
         date: Date,
-        number: Int,
          photo: UIImage,
          coordinateLocation: CLLocationCoordinate2D,
          location: String,
@@ -99,7 +94,6 @@ struct SinglePhoto: Hashable {
          inlandWater: String,
          areasOfInterest: [String]) {
         self.date = date
-        self.number = number
         self.photo = photo
         self.coordinateLocation = coordinateLocation
         self.location = location

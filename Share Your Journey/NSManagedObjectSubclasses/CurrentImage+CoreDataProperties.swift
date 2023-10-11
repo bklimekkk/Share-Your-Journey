@@ -18,7 +18,6 @@ extension CurrentImage {
 
     @NSManaged public var date: Date?
     @NSManaged public var image: Data?
-    @NSManaged public var id: Int16
     @NSManaged public var latitude: Double
     @NSManaged public var location: String?
     @NSManaged public var longitude: Double
@@ -34,10 +33,6 @@ extension CurrentImage {
     
     public var getImage: UIImage {
         return UIImage(data: self.image ?? Data()) ?? UIImage()
-    }
-    
-    public var getId: Int {
-        return Int(self.id)
     }
 
     public var getLocation: String {

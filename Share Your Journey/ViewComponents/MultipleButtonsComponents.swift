@@ -126,44 +126,46 @@ struct SumUpFunctionalityButtonsView: View {
             "date" : Date(),
             "deletedJourney" : false
         ])
-        for index in 0...journey.photos.count - 1 {
-            self.uploadPhoto(journey: journey, name: journey.name, index: index)
+
+        self.journey.photos.forEach { photo in
+            self.uploadPhoto(journey: journey, name: journey.name, photo: photo)
         }
     }
 
     /**
      Function is responsible for uploading an image to the firebase storage and adding its details to firestore database.
      */
-    func uploadPhoto(journey: SingleJourney, name: String, index: Int) {
-        guard let photo = journey.photos.sorted(by: {$1.number > $0.number}).map({$0.photo})[index].jpegData(compressionQuality: 0.2) else {
+    func uploadPhoto(journey: SingleJourney, name: String, photo: SinglePhoto) {
+        guard let photoData = photo.photo.jpegData(compressionQuality: 0.2) else {
             return
         }
+
+        let uuid = UUID()
         let metaData = StorageMetadata()
         metaData.contentType = "image/jpeg"
-        let photoReference = "\(Auth.auth().currentUser?.uid ?? "")/\(name)/\(index)"
+        let photoReference = "\(Auth.auth().currentUser?.uid ?? "")/\(name)/\(uuid)"
         let storageReference = Storage.storage().reference(withPath: photoReference)
         //Storage is populated with the image.
-        storageReference.putData(photo, metadata: metaData) { metaData, error in
+        storageReference.putData(photoData, metadata: metaData) { metaData, error in
             if let error = error {
                 print(error.localizedDescription)
             }
             //Image's details are added to appropriate collection in firetore's database.
-            Firestore.firestore().document("\(FirestorePaths.myJourneys(uid: Auth.auth().currentUser?.uid ?? ""))/\(name)/photos/\(index)").setData([
-                "latitude": journey.photos[index].coordinateLocation.latitude,
-                "longitude": journey.photos[index].coordinateLocation.longitude,
+            Firestore.firestore().document("\(FirestorePaths.myJourneys(uid: Auth.auth().currentUser?.uid ?? ""))/\(name)/photos/\(uuid)").setData([
+                "latitude": photo.coordinateLocation.latitude,
+                "longitude": photo.coordinateLocation.longitude,
                 "photoUrl": photoReference,
-                "photoNumber": index,
-                "date": journey.photos[index].date,
-                "location": journey.photos[index].location,
-                "subLocation": journey.photos[index].subLocation,
-                "administrativeArea": journey.photos[index].administrativeArea,
-                "country": journey.photos[index].country,
-                "isoCountryCode": journey.photos[index].isoCountryCode,
-                "name": journey.photos[index].name,
-                "postalCode": journey.photos[index].postalCode,
-                "ocean": journey.photos[index].ocean,
-                "inlandWater": journey.photos[index].inlandWater,
-                "areasOfInterest": journey.photos[index].areasOfInterest.joined(separator: ",")
+                "date": photo.date,
+                "location": photo.location,
+                "subLocation": photo.subLocation,
+                "administrativeArea": photo.administrativeArea,
+                "country": photo.country,
+                "isoCountryCode": photo.isoCountryCode,
+                "name": photo.name,
+                "postalCode": photo.postalCode,
+                "ocean": photo.ocean,
+                "inlandWater": photo.inlandWater,
+                "areasOfInterest": photo.areasOfInterest.joined(separator: ",")
             ])
         }
     }

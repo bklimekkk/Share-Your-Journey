@@ -25,7 +25,7 @@ struct PhotoPickerView: UIViewControllerRepresentable {
             
             if let photo = info[.originalImage] as? UIImage {
                 let photoArraySize = self.photoPickerView.photosArray.count
-                self.photoPickerView.photosArray.append(SinglePhoto(number: photoArraySize,photo: photo))
+                self.photoPickerView.photosArray.append(SinglePhoto(photo: photo))
             }
             picker.dismiss(animated:true)
         }

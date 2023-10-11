@@ -14,18 +14,17 @@ struct MapView: UIViewRepresentable {
     
     @Binding var walking: Bool
     @Binding var showPhoto: Bool
-    @Binding var photoIndex: Int
     @Binding var showWeather: Bool
     @Binding var showDirections: Bool
     @Binding var expandWeather: Bool
     @Binding var weatherLatitude: Double
     @Binding var weatherLongitude: Double
     @Binding var routeIsDisplayed: Bool
-
+    @Binding var selectedPhoto: SinglePhoto
     var tintColor: UIColor {
         self.colorScheme == .light ? Colors.darkTintColor : .white
     }
-    @State var photosLocations: [CLLocationCoordinate2D]
+    @State var photos: [SinglePhoto]
     
     //This object is annotated as environmental in order to be called from many views.
     @EnvironmentObject var clManager: CurrentLocationManager
@@ -39,11 +38,10 @@ struct MapView: UIViewRepresentable {
         }
         
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-            if let title = view.annotation?.title, title != UIStrings.myLocationString {
-                if let validTitle = Int(title!) {
-                    self.parent.photoIndex = validTitle - 1
-                }
-                self.parent.clManager.mapView.setCenter(view.annotation!.coordinate, animated: true)
+            if let annotation = view.annotation
+            {
+                self.parent.selectedPhoto = self.parent.photos.first(where: { $0.coordinateLocation == annotation.coordinate }) ?? SinglePhoto()
+                self.parent.clManager.mapView.selectAnnotation(annotation, animated: true)
                 self.parent.showDirections = true
             } else {
                 self.parent.showDirections = false
@@ -176,9 +174,9 @@ struct MapView: UIViewRepresentable {
         //        LOCATION FUNCTIONALITY DOESN'T WORK YET
         //        addUserLocations(mapView: mapView)
         self.addPhotos(mapView: mapView)
-        if self.photosLocations.count > 0 {
-            self.clManager.mapView.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: self.photosLocations[0].latitude,
-                                                                                               longitude: self.photosLocations[0].longitude),
+        if self.photos.count > 0 {
+            self.clManager.mapView.setRegion(MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: self.photos[0].coordinateLocation.latitude,
+                                                                                               longitude: self.photos[0].coordinateLocation.longitude),
                                                                 latitudinalMeters: CLLocationDistance(IntConstants.initialMapVisibleMeters),
                                                                 longitudinalMeters: CLLocationDistance(IntConstants.initialMapVisibleMeters)),
                                              animated: false)
@@ -190,13 +188,16 @@ struct MapView: UIViewRepresentable {
      Function is responsible for adding photo's annotation to the map.
      */
     func addPhotos(mapView: MKMapView) {
-        var index = 0
-        while index < self.photosLocations.count {
+
+        self.photos.forEach { photo in
+            guard let index = self.photos.firstIndex(of: photo) else {
+                return
+            }
+
             let photoPin = MKPointAnnotation()
             photoPin.title = String(index + 1)
-            photoPin.coordinate = self.photosLocations[index]
+            photoPin.coordinate = self.photos[index].coordinateLocation
             mapView.addAnnotation(photoPin)
-            index+=1
         }
     }
     
